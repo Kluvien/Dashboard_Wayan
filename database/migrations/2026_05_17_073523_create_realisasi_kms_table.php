@@ -11,16 +11,17 @@ class CreateRealisasiKmsTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('realisasi_km', function (Blueprint $table) {
-            $table->id('id_realisasi');
-            $table->unsignedBigInteger('id_km');
-            $table->string('indikator');
-            $table->integer('realisasi');
+            $table->id('id_realisasi'); // Primary Key
+        
+            $table->integer('id_target'); 
+            $table->integer('id_dosen');
+        
+            $table->integer('realisasi')->default(0);
+            $table->string('status_realisasi')->default('Belum Tercapai');
             $table->timestamps();
-
-            $table->foreign('id_km')->references('id_km')->on('kontrak_manajemen')->onDelete('cascade');
         });
     }
 

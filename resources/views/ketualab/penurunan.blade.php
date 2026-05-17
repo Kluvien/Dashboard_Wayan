@@ -3,6 +3,12 @@
 @section('title', 'Penurunan Kontrak Manajemen')
 
 @section('content')
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
 <div class="card shadow-sm border-0">
     <div class="card-header bg-white py-3">
         <h6 class="m-0 fw-bold text-primary">Daftar Target dari Ketua KK (Untuk Distribusi Lab)</h6>
@@ -26,9 +32,9 @@
                         <td>{{ $t->indikator }}</td>
                         <td><span class="badge bg-secondary fs-6">{{ $t->target }}</span></td>
                         <td>
-                            <button class="btn btn-primary btn-sm w-100">
+                            <a href="/ketualab/penurunan-km/{{ $t->id_target }}/plot" class="btn btn-primary btn-sm w-100">
                                 <i class="bi bi-diagram-3 me-1"></i> Plot Anggota
-                            </button>
+                            </a>
                         </td>
                     </tr>
                     @empty

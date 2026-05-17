@@ -43,6 +43,8 @@ Route::middleware(['auth'])->group(function () {
         });
 
         Route::get('/ketualab/penurunan-km', [KetuaLabController::class, 'penurunanKm']);
+        Route::get('/ketualab/penurunan-km/{id}/plot', [KetuaLabController::class, 'createPlot']);
+        Route::post('/ketualab/penurunan-km/{id}/plot', [KetuaLabController::class, 'storePlot']);
     });
 
     // RUANG KHUSUS ANGGOTA
