@@ -8,7 +8,7 @@
         <div class="card bg-info text-white shadow-sm border-0">
             <div class="card-body">
                 <h6 class="card-title text-uppercase text-white-50">Total Anggota Lab</h6>
-                <h2 class="mb-0 display-5 fw-bold">5</h2>
+                <h2 class="mb-0 display-5 fw-bold">{{ $totalAnggota }}</h2>
             </div>
         </div>
     </div>
@@ -16,7 +16,7 @@
         <div class="card bg-secondary text-white shadow-sm border-0">
             <div class="card-body">
                 <h6 class="card-title text-uppercase text-white-50">Target Kontrak Manajemen</h6>
-                <h2 class="mb-0 display-5 fw-bold">15 Indikator</h2>
+                <h2 class="mb-0 display-5 fw-bold">{{ $totalTarget }}</h2>
             </div>
         </div>
     </div>

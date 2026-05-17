@@ -9,6 +9,17 @@ use App\Models\RealisasiKm;
 
 class KetuaLabController extends Controller
 {
+    public function dashboard()
+    {
+        // Menghitung jumlah dosen yang jabatannya Anggota
+        $totalAnggota = User::where('role', 'Anggota')->count();
+        
+        // Menghitung total target KM yang sudah dibuat oleh Ketua KK
+        $totalTarget = TargetKm::count();
+
+        return view('ketualab.dashboard', compact('totalAnggota', 'totalTarget'));
+    }
+
     public function penurunanKm()
     {
         $targets = TargetKm::all();

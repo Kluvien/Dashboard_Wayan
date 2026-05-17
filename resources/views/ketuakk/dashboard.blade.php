@@ -8,7 +8,7 @@
         <div class="card bg-primary text-white shadow-sm border-0">
             <div class="card-body">
                 <h6 class="card-title text-uppercase text-white-50">Total Laboratorium</h6>
-                <h2 class="mb-0 display-5 fw-bold">4</h2>
+                <h2 class="mb-0 display-5 fw-bold">{{ $totalLab }}</h2>
             </div>
         </div>
     </div>
@@ -16,7 +16,7 @@
         <div class="card bg-success text-white shadow-sm border-0">
             <div class="card-body">
                 <h6 class="card-title text-uppercase text-white-50">Dosen Anggota</h6>
-                <h2 class="mb-0 display-5 fw-bold">12</h2>
+                <h2 class="mb-0 display-5 fw-bold">{{ $totalDosen }}</h2>
             </div>
         </div>
     </div>
@@ -24,7 +24,7 @@
         <div class="card bg-warning text-dark shadow-sm border-0">
             <div class="card-body">
                 <h6 class="card-title text-uppercase text-black-50">Rata-rata Capaian KM</h6>
-                <h2 class="mb-0 display-5 fw-bold">78%</h2>
+                <h2 class="mb-0 display-5 fw-bold">{{ $rataCapaian }}%</h2>
             </div>
         </div>
     </div>
