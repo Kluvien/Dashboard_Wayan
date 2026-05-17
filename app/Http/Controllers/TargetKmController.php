@@ -14,13 +14,11 @@ class TargetKmController extends Controller
         return view('ketuakk.target', compact('targets'));
     }
 
-    // Menampilkan halaman form
     public function create()
     {
         return view('ketuakk.target_create');
     }
 
-    // Memproses data dari form ke database
     public function store(Request $request)
     {
         $request->validate([
@@ -34,7 +32,7 @@ class TargetKmController extends Controller
             $id_km = DB::table('kontrak_manajemen')->insertGetId([
                 'id_dosen'   => auth()->user()->id_dosen,
                 'tahun_km'   => date('Y'),
-                'status_km'  => 'Draft', // <--- INI SUDAH DITAMBAHKAN AGAR TIDAK ERROR
+                'status_km'  => 'Draft',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -49,5 +47,35 @@ class TargetKmController extends Controller
         ]);
 
         return redirect('/ketuakk/target-km')->with('success', 'Target KM berhasil ditambahkan!');
+    }
+
+    public function edit($id)
+    {
+        $target = TargetKm::findOrFail($id);
+        return view('ketuakk.target_edit', compact('target'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'indikator' => 'required',
+            'target' => 'required|integer'
+        ]);
+
+        $target = TargetKm::findOrFail($id);
+        $target->update([
+            'indikator' => $request->indikator,
+            'target' => $request->target
+        ]);
+
+        return redirect('/ketuakk/target-km')->with('success', 'Target KM berhasil diperbarui!');
+    }
+
+    public function destroy($id)
+    {
+        $target = TargetKm::findOrFail($id);
+        $target->delete();
+
+        return redirect('/ketuakk/target-km')->with('success', 'Target KM berhasil dihapus!');
     }
 }

@@ -38,10 +38,19 @@
                         <td>{{ $t->indikator }}</td>
                         <td>{{ $t->target }}</td>
                         <td>
-                            <button class="btn btn-warning btn-sm text-white"><i class="bi bi-pencil-square"></i></button>
-                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                            <a href="/ketuakk/target-km/{{ $t->id_target }}/edit" class="btn btn-warning btn-sm text-white">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+
+                            <form action="/ketuakk/target-km/{{ $t->id_target }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus target ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
                         </td>
-                    </tr>
+                        </tr>
                     @empty
                     <tr>
                         <td colspan="4" class="text-center text-muted py-4">

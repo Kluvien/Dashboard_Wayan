@@ -28,7 +28,7 @@
                     <a href="#"><i class="bi bi-display me-2"></i> Monitoring Lab</a>
                 @elseif(auth()->user()->role == 'Ketua Lab')
                     <a href="/ketualab/dashboard"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
-                    <a href="#"><i class="bi bi-diagram-3 me-2"></i> Penurunan KM</a>
+                    <a href="/ketualab/penurunan-km"><i class="bi bi-diagram-3 me-2"></i> Penurunan KM</a>
                     <a href="#"><i class="bi bi-people me-2"></i> Monitoring Anggota</a>
                 @elseif(auth()->user()->role == 'Anggota')
                     <a href="/anggota/dashboard"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>

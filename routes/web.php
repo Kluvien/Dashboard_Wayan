@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TargetKmController;
+use App\Http\Controllers\KetuaLabController;
 
 Route::get('/', function () {
     return view('welcome'); // Halaman awal bawaan Laravel
@@ -26,9 +27,11 @@ Route::middleware(['auth'])->group(function () {
         });
 
         Route::get('/ketuakk/target-km', [TargetKmController::class, 'index']);
-        Route::get('/ketuakk/target-km', [TargetKmController::class, 'index']);
         Route::get('/ketuakk/target-km/create', [TargetKmController::class, 'create']);
         Route::post('/ketuakk/target-km', [TargetKmController::class, 'store']);
+        Route::get('/ketuakk/target-km/{id}/edit', [TargetKmController::class, 'edit']);
+        Route::put('/ketuakk/target-km/{id}', [TargetKmController::class, 'update']);
+        Route::delete('/ketuakk/target-km/{id}', [TargetKmController::class, 'destroy']);
     });
 
 
@@ -38,6 +41,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ketualab/dashboard', function () {
             return view('ketualab.dashboard');
         });
+
+        Route::get('/ketualab/penurunan-km', [KetuaLabController::class, 'penurunanKm']);
     });
 
     // RUANG KHUSUS ANGGOTA
