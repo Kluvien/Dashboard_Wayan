@@ -31,6 +31,6 @@ class CreateTargetKmsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('target_kms');
+        Schema::dropIfExists('target_km');
     }
 }
