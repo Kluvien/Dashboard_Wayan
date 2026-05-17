@@ -32,7 +32,7 @@
                     <a href="#"><i class="bi bi-people me-2"></i> Monitoring Anggota</a>
                 @elseif(auth()->user()->role == 'Anggota')
                     <a href="/anggota/dashboard"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
-                    <a href="#"><i class="bi bi-pencil-square me-2"></i> Input Realisasi</a>
+                    <a href="/anggota/realisasi-km"><i class="bi bi-pencil-square me-2"></i> Input Realisasi</a>
                 @endif
             </div>
         </div>

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TargetKmController;
 use App\Http\Controllers\KetuaLabController;
+use App\Http\Controllers\AnggotaController;
 
 Route::get('/', function () {
     return view('welcome'); // Halaman awal bawaan Laravel
@@ -52,6 +53,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/anggota/dashboard', function () {
             return view('anggota.dashboard');
         });
+
+        Route::get('/anggota/realisasi-km', [AnggotaController::class, 'indexRealisasi']);
+        Route::get('/anggota/realisasi-km/{id}/edit', [AnggotaController::class, 'editRealisasi']);
+        Route::put('/anggota/realisasi-km/{id}', [AnggotaController::class, 'updateRealisasi']);
     });
 
 });
