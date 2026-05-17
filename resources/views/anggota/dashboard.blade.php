@@ -8,10 +8,19 @@
         <div class="card border-primary shadow-sm border-0 border-start border-5">
             <div class="card-body">
                 <h5 class="card-title text-primary fw-bold">Status Realisasi KM Anda</h5>
-                <div class="progress mt-3" style="height: 25px;">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 45%;" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">45% Selesai</div>
+                
+                <div class="progress mb-2" style="height: 25px;">
+                    <div class="progress-bar bg-success" role="progressbar" 
+                        style="width: {{ $averagePercentage }}%;" 
+                        aria-valuenow="{{ $averagePercentage }}" 
+                        aria-valuemin="0" aria-valuemax="100">
+                        {{ $averagePercentage }}% Selesai
+                    </div>
                 </div>
-                <p class="text-muted mt-2 mb-0 small">Batas akhir pengisian: Desember 2026</p>
+
+                <p class="text-muted small m-0">
+                    Anda memiliki <strong>{{ $totalTasks }}</strong> target tugas. Batas akhir pengisian: Desember 2026
+                </p>
             </div>
         </div>
     </div>

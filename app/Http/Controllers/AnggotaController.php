@@ -9,7 +9,39 @@ use Illuminate\Support\Facades\Auth;
 
 class AnggotaController extends Controller
 {
-    // 1. Menampilkan daftar realisasi di tabel
+    // 1. FUNGSI UNTUK MENAMPILKAN DASHBOARD DINAMIS
+    public function dashboard()
+    {
+        // Ambil semua tugas milik dosen yang login
+        $realisasis = RealisasiKm::join('target_km', 'realisasi_km.id_target', '=', 'target_km.id_target')
+                        ->where('realisasi_km.id_dosen', Auth::user()->id_dosen)
+                        ->get();
+
+        $totalTasks = $realisasis->count();
+        $totalPercentage = 0;
+
+        // Hitung rata-rata persentase penyelesaian
+        if ($totalTasks > 0) {
+            foreach ($realisasis as $r) {
+                // Cegah pembagian dengan nol jika targetnya 0
+                $targetVal = $r->target > 0 ? $r->target : 1; 
+                $percent = ($r->realisasi / $targetVal) * 100;
+                
+                // Batasi maksimal 100% per tugas
+                if ($percent > 100) {
+                    $percent = 100; 
+                }
+                $totalPercentage += $percent;
+            }
+            $averagePercentage = round($totalPercentage / $totalTasks);
+        } else {
+            $averagePercentage = 0;
+        }
+
+        return view('anggota.dashboard', compact('averagePercentage', 'totalTasks'));
+    }
+
+    // 2. FUNGSI UNTUK MENAMPILKAN TABEL REALISASI
     public function indexRealisasi()
     {
         $realisasis = RealisasiKm::join('target_km', 'realisasi_km.id_target', '=', 'target_km.id_target')
@@ -19,7 +51,7 @@ class AnggotaController extends Controller
         return view('anggota.realisasi', compact('realisasis'));
     }
 
-    // 2. Menampilkan form edit realisasi
+    // 3. FUNGSI UNTUK MENAMPILKAN FORM EDIT
     public function editRealisasi($id)
     {
         $realisasi = RealisasiKm::join('target_km', 'realisasi_km.id_target', '=', 'target_km.id_target')
@@ -29,7 +61,7 @@ class AnggotaController extends Controller
         return view('anggota.realisasi_edit', compact('realisasi'));
     }
 
-    // 3. Memproses data inputan realisasi baru dari form ke database
+    // 4. FUNGSI UNTUK MENYIMPAN PROGRESS KE DATABASE
     public function updateRealisasi(Request $request, $id)
     {
         $request->validate([
@@ -39,7 +71,6 @@ class AnggotaController extends Controller
         $realisasi = RealisasiKm::findOrFail($id);
         $realisasi->realisasi = $request->realisasi;
 
-        // Logika Otomatis: Cek apakah capaian sudah memenuhi target
         $target = TargetKm::findOrFail($realisasi->id_target);
         
         if ($request->realisasi >= $target->target) {

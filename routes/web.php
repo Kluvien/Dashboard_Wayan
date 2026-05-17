@@ -50,9 +50,7 @@ Route::middleware(['auth'])->group(function () {
 
     // RUANG KHUSUS ANGGOTA
     Route::middleware(['role:Anggota'])->group(function () {
-        Route::get('/anggota/dashboard', function () {
-            return view('anggota.dashboard');
-        });
+        Route::get('/anggota/dashboard', [AnggotaController::class, 'dashboard']);
 
         Route::get('/anggota/realisasi-km', [AnggotaController::class, 'indexRealisasi']);
         Route::get('/anggota/realisasi-km/{id}/edit', [AnggotaController::class, 'editRealisasi']);
