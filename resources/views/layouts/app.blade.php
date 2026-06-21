@@ -32,6 +32,7 @@
                     <a href="/ketuakk/target-km">Kelola Target KM</a>
 
                     <h4>Data Master</h4>
+                    <a href="/ketuakk/data-dosen">Data Dosen</a>
                     <a href="/ketuakk/data-lab-riset">Data Lab Riset</a>
                 @elseif(auth()->user()->role == 'Ketua Lab')
                     <a href="/ketualab/dashboard"></i> Dashboard</a>

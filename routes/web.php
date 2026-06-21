@@ -25,16 +25,33 @@ Route::middleware(['auth'])->group(function () {
     // RUANG KHUSUS KETUA KK
     Route::middleware(['auth', 'role:Ketua KK'])->group(function () {
         Route::get('/ketuakk/dashboard', [KetuaKkController::class, 'dashboard']);
+
         Route::get('/ketuakk/target-km', [TargetKmController::class, 'index']);
         Route::get('/ketuakk/target-km/create', [TargetKmController::class, 'create']);
         Route::post('/ketuakk/target-km', [TargetKmController::class, 'store']);
         Route::get('/ketuakk/target-km/{id}/edit', [TargetKmController::class, 'edit']);
         Route::put('/ketuakk/target-km/{id}', [TargetKmController::class, 'update']);
         Route::delete('/ketuakk/target-km/{id}', [TargetKmController::class, 'destroy']);
+        
         Route::get('/ketuakk/data-lab-riset', function () {
-    $laboratorium = \Illuminate\Support\Facades\DB::table('laboratorium_riset')->get();
+            $laboratorium = \Illuminate\Support\Facades\DB::table('laboratorium_riset')->get();
 
-    return view('ketuakk.data-master.lab-riset', compact('laboratorium'));
+            return view('ketuakk.data-master.lab-riset', compact('laboratorium'));
+        });
+
+        Route::get('/ketuakk/data-dosen', function () {
+            $dosens = \Illuminate\Support\Facades\DB::table('dosen')
+                ->leftJoin('laboratorium_riset', 'dosen.id_lab', '=', 'laboratorium_riset.id_lab')
+                ->select(
+                    'dosen.id_dosen',
+                    'dosen.nama_dosen',
+                    'dosen.nidn',
+                    'dosen.email',
+                    'laboratorium_riset.nama_lab'
+                )
+                ->get();
+
+            return view('ketuakk.data-master.dosen', compact('dosens'));
         });
     });
 
