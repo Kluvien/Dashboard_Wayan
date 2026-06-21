@@ -23,10 +23,6 @@
                 <p class="px-3 text-secondary text-uppercase fw-bold" style="font-size: 0.75rem;">Menu Utama</p>
                 
                 @if(auth()->user()->role == 'Ketua KK')
-                    <a href="/ketuakk/dashboard"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
-                    <a href="/ketuakk/target-km"><i class="bi bi-file-earmark-text me-2"></i> Kelola Target KM</a>
-                    <a href="#"><i class="bi bi-display me-2"></i> Monitoring Lab</a>
-                    
                     <h4>Ketua KK</h4>
                     <a href="/ketuakk/dashboard">Dashboard</a>
                     <a href="/ketuakk/target-km">Kelola Target KM</a>
