@@ -34,6 +34,9 @@
                     <h4>Data Master</h4>
                     <a href="/ketuakk/data-dosen">Data Dosen</a>
                     <a href="/ketuakk/data-lab-riset">Data Lab Riset</a>
+                    <a href="/ketuakk/data-kelompok-keahlian">Data Kelompok Keahlian</a>
+                
+                
                 @elseif(auth()->user()->role == 'Ketua Lab')
                     <a href="/ketualab/dashboard"></i> Dashboard</a>
                     <a href="/ketualab/penurunan-km"></i> Target KM Anggota</a>
@@ -41,9 +44,14 @@
                     <a href="/ketualab/monitoring-anggota"></i> Monitoring Anggota</a>
                     <a href="/ketualab/laporan"></i> Laporan</a>
                     <a href="/ketualab/profil"></i> Profil</a>
+                
+
                 @elseif(auth()->user()->role == 'Anggota')
                     <a href="/anggota/dashboard"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
                     <a href="/anggota/realisasi-km"><i class="bi bi-pencil-square me-2"></i> Input Realisasi</a>
+                    <a href="/anggota/aktivitas-km">Aktivitas KM</a>
+                    <a href="/anggota/riwayat-realisasi">Riwayat Realisasi</a>
+                    <a href="/anggota/profil">Profil</a>
                 @endif
             </div>
         </div>

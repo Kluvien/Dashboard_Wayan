@@ -9,6 +9,16 @@ class MasterDataSeeder extends Seeder
 {
     public function run(): void
     {
+        DB::table('users')->where('username', 'ketualab')->update([
+            'id_lab' => 1,
+            'updated_at' => now(),
+        ]);
+
+        DB::table('users')->where('username', 'anggota')->update([
+            'id_lab' => 1,
+            'updated_at' => now(),
+        ]);
+        
         DB::table('kelompok_keahlian')->updateOrInsert(
             ['id_kk' => 1],
             [
