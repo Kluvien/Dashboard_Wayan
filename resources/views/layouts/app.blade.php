@@ -459,5 +459,113 @@
 @endauth
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+@if(session('success') || session('error'))
+<div class="modal fade" id="statusModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0" style="border-radius: 18px;">
+            <div class="modal-body text-center p-5">
+                @if(session('success'))
+                    <div class="mx-auto mb-3 d-flex align-items-center justify-content-center"
+                         style="width: 72px; height: 72px; border-radius: 50%; background:#E9F8EF; color:#28A745;">
+                        <i class="bi bi-check-lg" style="font-size: 38px;"></i>
+                    </div>
+
+                    <h4 class="fw-bold mb-2">Data Berhasil Diproses</h4>
+                    <p class="text-muted mb-4">{{ session('success') }}</p>
+
+                    <button type="button" class="btn btn-primary px-4" data-bs-dismiss="modal">
+                        Oke
+                    </button>
+                @endif
+
+                @if(session('error'))
+                    <div class="mx-auto mb-3 d-flex align-items-center justify-content-center"
+                         style="width: 72px; height: 72px; border-radius: 50%; background:#FDECEC; color:#DC3545;">
+                        <i class="bi bi-x-lg" style="font-size: 32px;"></i>
+                    </div>
+
+                    <h4 class="fw-bold mb-2">Data Gagal Diproses</h4>
+                    <p class="text-muted mb-4">{{ session('error') }}</p>
+
+                    <button type="button" class="btn btn-primary px-4" data-bs-dismiss="modal">
+                        Oke
+                    </button>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0" style="border-radius: 18px;">
+            <div class="modal-body text-center p-5">
+                <div class="mx-auto mb-3 d-flex align-items-center justify-content-center"
+                     style="width: 72px; height: 72px; border-radius: 50%; background:#FDECEC; color:#DC3545;">
+                    <i class="bi bi-trash3" style="font-size: 34px;"></i>
+                </div>
+
+                <h4 class="fw-bold mb-2">Konfirmasi Hapus Data</h4>
+                <p class="text-muted mb-4" id="deleteConfirmText">
+                    Apakah Anda yakin ingin menghapus data ini?
+                </p>
+
+                <div class="d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+                        Batal
+                    </button>
+
+                    <button type="button" class="btn btn-delete px-4" id="deleteConfirmButton">
+                        Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const statusModalElement = document.getElementById('statusModal');
+
+        if (statusModalElement && window.bootstrap) {
+            const statusModal = new bootstrap.Modal(statusModalElement);
+            statusModal.show();
+        }
+
+        const deleteModalElement = document.getElementById('deleteConfirmModal');
+        const deleteButton = document.getElementById('deleteConfirmButton');
+        const deleteText = document.getElementById('deleteConfirmText');
+
+        let selectedDeleteForm = null;
+
+        document.querySelectorAll('.js-delete-form').forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                selectedDeleteForm = form;
+
+                const message = form.getAttribute('data-message') || 'Apakah Anda yakin ingin menghapus data ini?';
+                deleteText.textContent = message;
+
+                if (window.bootstrap) {
+                    const deleteModal = new bootstrap.Modal(deleteModalElement);
+                    deleteModal.show();
+                }
+            });
+        });
+
+        if (deleteButton) {
+            deleteButton.addEventListener('click', function () {
+                if (selectedDeleteForm) {
+                    selectedDeleteForm.submit();
+                }
+            });
+        }
+    });
+</script>
+
 </body>
 </html>
