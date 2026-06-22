@@ -3,83 +3,461 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title') - Dashboard KM</title>
+    <title>@yield('title') - SIKM Wayan</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
     <style>
-        .sidebar { min-height: 100vh; background-color: #2c3e50; }
-        .sidebar a { color: #ecf0f1; text-decoration: none; padding: 12px 20px; display: block; transition: 0.3s; }
-        .sidebar a:hover { background-color: #34495e; border-left: 4px solid #3498db; }
-        .content-area { background-color: #f8f9fa; }
+        :root {
+            --blue: #477EF7;
+            --blue-soft: #EAF1FF;
+            --page-bg: #F4F6FB;
+            --text-dark: #20242A;
+            --text-muted: #8A8D91;
+            --border: #E2E5EA;
+            --green-soft: #C9F3EE;
+            --green-text: #00A990;
+            --pink-soft: #FFD0E8;
+            --pink-text: #FF2F8A;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--page-bg);
+            color: var(--text-dark);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .app-wrapper {
+            display: flex;
+            min-height: 100vh;
+            min-width: 1100px;
+            background: var(--page-bg);
+        }
+
+        .sidebar {
+            width: 270px;
+            min-height: 100vh;
+            background: #ffffff;
+            border-right: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .brand {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .brand .brand-blue {
+            color: var(--blue);
+            margin-right: 4px;
+        }
+
+        .sidebar-menu {
+            padding-top: 8px;
+        }
+
+        .sidebar-link,
+        .sidebar-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 52px;
+            padding: 0 30px;
+            color: #171A1F;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .sidebar-link:hover {
+            background: #F3F6FF;
+            color: var(--blue);
+        }
+
+        .sidebar-link.active {
+            background: var(--blue);
+            color: #ffffff;
+        }
+
+        .sidebar-sub {
+            padding-left: 20px;
+        }
+
+        .sidebar-sub .sidebar-link {
+            padding-left: 30px;
+            font-size: 15px;
+        }
+
+        .main-area {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topbar {
+            height: 70px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px 0 50px;
+        }
+
+        .search-box {
+            width: 295px;
+            height: 48px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: #F6F7FB;
+            display: flex;
+            align-items: center;
+            padding: 0 18px;
+            color: var(--text-muted);
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            background: transparent;
+            width: 100%;
+            margin-left: 10px;
+            color: var(--text-dark);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .role-pill {
+            border: 1px solid #BFC3CA;
+            border-radius: 10px;
+            padding: 8px 14px;
+            background: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFB4D8, #8B5CF6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 800;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .content-wrapper {
+            padding: 32px 28px;
+        }
+
+        .page-heading {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 26px;
+        }
+
+        .page-heading .muted {
+            color: #8C8C8C;
+        }
+
+        .card {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: #ffffff;
+            box-shadow: none;
+            padding: 22px;
+        }
+
+        table {
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid var(--border) !important;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        table th {
+            background: #ffffff;
+            color: #34383F;
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 18px 22px !important;
+            border-bottom: 1px solid var(--border) !important;
+        }
+
+        table td {
+            padding: 18px 22px !important;
+            border-bottom: 1px solid var(--border) !important;
+            vertical-align: middle;
+        }
+
+        .table-blue th {
+            background: var(--blue) !important;
+            color: #ffffff !important;
+            text-transform: none;
+            font-size: 18px;
+        }
+
+        .btn {
+            border-radius: 8px;
+            font-weight: 700;
+            padding: 8px 18px;
+        }
+
+        .btn-primary {
+            background: var(--blue);
+            border-color: var(--blue);
+        }
+
+        .btn-edit {
+            background: var(--green-soft);
+            color: var(--green-text);
+            border: none;
+            min-width: 92px;
+        }
+
+        .btn-delete {
+            background: var(--pink-soft);
+            color: var(--pink-text);
+            border: none;
+            min-width: 92px;
+        }
+
+        .status-success {
+            color: #39B52A;
+            font-weight: 800;
+        }
+
+        .status-danger {
+            color: #FF2F2F;
+            font-weight: 800;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 0;
+            min-height: 46px;
+            border: 1px solid #BFC3CA;
+        }
+
+        .dropdown-menu {
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
     </style>
 </head>
 <body>
-    <div class="d-flex">
-        <div class="sidebar text-white shadow" style="width: 250px;">
-            <div class="p-3 fs-5 fw-bold border-bottom border-secondary text-center">
-                <i class="bi bi-bar-chart-fill me-2"></i>SIKM Wayan
+@auth
+    @php
+        $role = auth()->user()->role;
+
+        $profileUrl = '#';
+
+        if ($role === 'Ketua Lab') {
+            $profileUrl = '/ketualab/profil';
+        } elseif ($role === 'Anggota') {
+            $profileUrl = '/anggota/profil';
+        } elseif ($role === 'Ketua KK') {
+            $profileUrl = '/ketuakk/dashboard';
+        }
+    @endphp
+
+    <div class="app-wrapper">
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="brand-blue">KM</span> EIMS
             </div>
-            <div class="mt-3">
-                <p class="px-3 text-secondary text-uppercase fw-bold" style="font-size: 0.75rem;">Menu Utama</p>
-                
-                @if(auth()->user()->role == 'Ketua KK')
-                    <a href="/ketuakk/dashboard">Dashboard</a>
-                    <a href="/ketuakk/target-km">Kelola Target KM</a>
 
-                    <a href="/ketuakk/data-dosen">Data Dosen</a>
-                    <a href="/ketuakk/data-lab-riset">Data Lab Riset</a>
-                    <a href="/ketuakk/data-kelompok-keahlian">Data Kelompok Keahlian</a>
-                
-                
-                @elseif(auth()->user()->role == 'Ketua Lab')
-                    <a href="/ketualab/dashboard"></i> Dashboard</a>
-                    <a href="/ketualab/penurunan-km"></i> Target KM Anggota</a>
-                    <a href="/ketualab/monitoring-lab"></i> Monitoring KM Lab</a>
-                    <a href="/ketualab/monitoring-anggota"></i> Monitoring Anggota</a>
-                    <a href="/ketualab/laporan"></i> Laporan</a>
-                    <a href="/ketualab/profil"></i> Profil</a>
-                
+            <nav class="sidebar-menu">
+                @if($role === 'Ketua KK')
+                    <a class="sidebar-link {{ request()->is('ketuakk/dashboard') ? 'active' : '' }}" href="/ketuakk/dashboard">
+                        <span>Dashboard</span>
+                    </a>
 
-                @elseif(auth()->user()->role == 'Anggota')
-                    <a href="/anggota/dashboard"></i> Dashboard</a>
-                    <a href="/anggota/profil">Profil</a>
-                    <a href="/anggota/realisasi-km">Input Realisasi</a>
-                    <a href="/anggota/aktivitas-km">Aktivitas KM</a>
-                    <a href="/anggota/riwayat-realisasi">Riwayat Realisasi</a>
-                    <a href="/anggota/progress-km">Progress KM</a>
+                    <div class="sidebar-heading">
+                        <span>Data Master</span>
+                        <i class="bi bi-chevron-down"></i>
+                    </div>
+
+                    <div class="sidebar-sub">
+                        <a class="sidebar-link {{ request()->is('ketuakk/data-lab-riset') ? 'active' : '' }}" href="/ketuakk/data-lab-riset">
+                            <span>Data Lab. Riset</span>
+                        </a>
+
+                        <a class="sidebar-link {{ request()->is('ketuakk/data-dosen') ? 'active' : '' }}" href="/ketuakk/data-dosen">
+                            <span>Data Anggota KK</span>
+                        </a>
+                    </div>
+
+                    <div class="sidebar-heading">
+                        <span>Kontrak Manajemen</span>
+                        <i class="bi bi-chevron-down"></i>
+                    </div>
+
+                    <div class="sidebar-sub">
+                        <a class="sidebar-link {{ request()->is('ketuakk/target-km*') ? 'active' : '' }}" href="/ketuakk/target-km">
+                            <span>Kelompok Keahlian</span>
+                        </a>
+
+                        <a class="sidebar-link" href="/ketuakk/target-km">
+                            <span>Lab. Riset</span>
+                        </a>
+
+                        <a class="sidebar-link" href="/ketuakk/target-km">
+                            <span>Anggota KK</span>
+                        </a>
+                    </div>
+
+                    <div class="sidebar-heading">
+                        <span>Monitoring</span>
+                        <i class="bi bi-chevron-down"></i>
+                    </div>
+
+                    <div class="sidebar-sub">
+                        <a class="sidebar-link" href="/ketuakk/dashboard">
+                            <span>Monitoring Lab. Riset</span>
+                        </a>
+
+                        <a class="sidebar-link" href="/ketuakk/dashboard">
+                            <span>Monitoring Anggota KK</span>
+                        </a>
+                    </div>
+                @elseif($role === 'Ketua Lab')
+                    <a class="sidebar-link {{ request()->is('ketualab/dashboard') ? 'active' : '' }}" href="/ketualab/dashboard">
+                        <span>Dashboard</span>
+                    </a>
+
+                    <a class="sidebar-link {{ request()->is('ketualab/penurunan-km*') ? 'active' : '' }}" href="/ketualab/penurunan-km">
+                        <span>Target KM Anggota</span>
+                    </a>
+
+                    <a class="sidebar-link {{ request()->is('ketualab/monitoring-lab') ? 'active' : '' }}" href="/ketualab/monitoring-lab">
+                        <span>Monitoring KM Lab</span>
+                    </a>
+
+                    <a class="sidebar-link {{ request()->is('ketualab/monitoring-anggota') || request()->is('ketualab/detail-anggota*') ? 'active' : '' }}" href="/ketualab/monitoring-anggota">
+                        <span>Monitoring Anggota</span>
+                    </a>
+
+                    <a class="sidebar-link {{ request()->is('ketualab/laporan') ? 'active' : '' }}" href="/ketualab/laporan">
+                        <span>Laporan</span>
+                    </a>
+
+                    <a class="sidebar-link {{ request()->is('ketualab/profil') ? 'active' : '' }}" href="/ketualab/profil">
+                        <span>Profil</span>
+                    </a>
+                @elseif($role === 'Anggota')
+                    <a class="sidebar-link {{ request()->is('anggota/dashboard') ? 'active' : '' }}" href="/anggota/dashboard">
+                        <span>Dashboard</span>
+                    </a>
+
+                    <a class="sidebar-link {{ request()->is('anggota/profil') ? 'active' : '' }}" href="/anggota/profil">
+                        <span>Profil</span>
+                    </a>
+
+                    <a class="sidebar-link {{ request()->is('anggota/aktivitas-km*') ? 'active' : '' }}" href="/anggota/aktivitas-km">
+                        <span>Aktivitas KM</span>
+                    </a>
+
+                    <a class="sidebar-link {{ request()->is('anggota/riwayat-realisasi') ? 'active' : '' }}" href="/anggota/riwayat-realisasi">
+                        <span>Riwayat Realisasi</span>
+                    </a>
+
+                    <a class="sidebar-link {{ request()->is('anggota/progress-km') ? 'active' : '' }}" href="/anggota/progress-km">
+                        <span>Progress KM</span>
+                    </a>
                 @endif
-            </div>
-        </div>
+            </nav>
+        </aside>
 
-        <div class="flex-grow-1 content-area">
-            <div class="bg-white p-3 d-flex justify-content-between align-items-center shadow-sm">
-                <h4 class="mb-0 fw-bold text-secondary">@yield('title')</h4>
-                <div class="dropdown">
-                    <button class="btn btn-light dropdown-toggle border" type="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-person-circle me-1"></i> 
-                        {{ auth()->user()->username }} ({{ auth()->user()->role }})
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow">
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Profil</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <form action="/logout" method="POST">
-                                @csrf
-                                <button class="dropdown-item text-danger" type="submit">
-                                    <i class="bi bi-box-arrow-right me-2"></i>Logout
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
+        <main class="main-area">
+            <header class="topbar">
+                <div class="search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text" placeholder="Cari">
                 </div>
-            </div>
 
-            <div class="p-4">
+                <div class="topbar-right">
+                    <div class="role-pill">{{ auth()->user()->role }} EIMS</div>
+
+                    <div class="dropdown">
+                        <button class="btn p-0 border-0 bg-transparent dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <div class="user-box">
+                                <div class="avatar">
+                                    {{ strtoupper(substr(auth()->user()->username, 0, 1)) }}
+                                </div>
+
+                                <div class="text-start">
+                                    <div class="user-name">{{ auth()->user()->username }}</div>
+                                    <div class="user-role">{{ auth()->user()->role }}</div>
+                                </div>
+                            </div>
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end shadow">
+                            <li>
+                                <a class="dropdown-item" href="{{ $profileUrl }}">
+                                    Profil
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <form action="/logout" method="POST">
+                                    @csrf
+                                    <button class="dropdown-item text-danger" type="submit">
+                                        Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+
+            <section class="content-wrapper">
                 @yield('content')
-            </div>
-        </div>
+            </section>
+        </main>
     </div>
+@else
+    @yield('content')
+@endauth
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
