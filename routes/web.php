@@ -19,7 +19,21 @@ Route::middleware(['auth'])->group(function () {
     
     // Halaman Utama Pembagi
     Route::get('/', function () {
-        return view('welcome');
+        $role = auth()->user()->role;
+
+        if ($role === 'Ketua KK') {
+            return redirect('/ketuakk/dashboard');
+        }
+
+        if ($role === 'Ketua Lab') {
+            return redirect('/ketualab/dashboard');
+        }
+
+        if ($role === 'Anggota') {
+            return redirect('/anggota/dashboard');
+        }
+
+        return redirect('/login');
     });
 
     // RUANG KHUSUS KETUA KK
@@ -37,7 +51,9 @@ Route::middleware(['auth'])->group(function () {
 
             return view('ketuakk.data-master.lab-riset', compact('laboratorium'));
         });
-        Route::get('/ketuakk/data-dosen', function () {
+        Route::get('/ketuakk/data-dosen', function (\Illuminate\Http\Request $request) {
+            $q = $request->query('q');
+
             $dosens = \Illuminate\Support\Facades\DB::table('dosen')
                 ->leftJoin('laboratorium_riset', 'dosen.id_lab', '=', 'laboratorium_riset.id_lab')
                 ->select(
@@ -47,9 +63,101 @@ Route::middleware(['auth'])->group(function () {
                     'dosen.email',
                     'laboratorium_riset.nama_lab'
                 )
+                ->when($q, function ($query) use ($q) {
+                    $query->where(function ($subQuery) use ($q) {
+                        $subQuery->where('dosen.nama_dosen', 'like', '%' . $q . '%')
+                            ->orWhere('dosen.nidn', 'like', '%' . $q . '%')
+                            ->orWhere('dosen.email', 'like', '%' . $q . '%')
+                            ->orWhere('laboratorium_riset.nama_lab', 'like', '%' . $q . '%');
+                    });
+                })
+                ->orderBy('dosen.id_dosen', 'asc')
                 ->get();
 
-            return view('ketuakk.data-master.dosen', compact('dosens'));
+            return view('ketuakk.data-master.dosen', compact('dosens', 'q'));
+        });
+
+        Route::get('/ketuakk/data-dosen/create', function () {
+            $labs = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+                ->orderBy('id_lab')
+                ->get();
+
+            return view('ketuakk.data-master.dosen-create', compact('labs'));
+        });
+
+        Route::post('/ketuakk/data-dosen', function (\Illuminate\Http\Request $request) {
+            $request->validate([
+                'nama_dosen' => 'required|string|max:255',
+                'nidn' => 'required|string|max:50',
+                'email' => 'required|email|max:255',
+                'id_lab' => 'required|exists:laboratorium_riset,id_lab',
+            ]);
+
+            $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+                ->where('id_lab', $request->id_lab)
+                ->first();
+
+            \Illuminate\Support\Facades\DB::table('dosen')->insert([
+                'id_kk' => $lab->id_kk ?? 1,
+                'id_lab' => $request->id_lab,
+                'nama_dosen' => $request->nama_dosen,
+                'nidn' => $request->nidn,
+                'email' => $request->email,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            return redirect('/ketuakk/data-dosen')->with('success', 'Data dosen berhasil ditambahkan.');
+        });
+
+        Route::get('/ketuakk/data-dosen/{id}/edit', function ($id) {
+            $dosen = \Illuminate\Support\Facades\DB::table('dosen')
+                ->where('id_dosen', $id)
+                ->first();
+
+            if (!$dosen) {
+                abort(404);
+            }
+
+            $labs = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+                ->orderBy('id_lab')
+                ->get();
+
+            return view('ketuakk.data-master.dosen-edit', compact('dosen', 'labs'));
+        });
+
+        Route::put('/ketuakk/data-dosen/{id}', function (\Illuminate\Http\Request $request, $id) {
+            $request->validate([
+                'nama_dosen' => 'required|string|max:255',
+                'nidn' => 'required|string|max:50',
+                'email' => 'required|email|max:255',
+                'id_lab' => 'required|exists:laboratorium_riset,id_lab',
+            ]);
+
+            $dosen = \Illuminate\Support\Facades\DB::table('dosen')
+                ->where('id_dosen', $id)
+                ->first();
+
+            if (!$dosen) {
+                abort(404);
+            }
+
+            $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+                ->where('id_lab', $request->id_lab)
+                ->first();
+
+            \Illuminate\Support\Facades\DB::table('dosen')
+                ->where('id_dosen', $id)
+                ->update([
+                    'id_kk' => $lab->id_kk ?? 1,
+                    'id_lab' => $request->id_lab,
+                    'nama_dosen' => $request->nama_dosen,
+                    'nidn' => $request->nidn,
+                    'email' => $request->email,
+                    'updated_at' => now(),
+                ]);
+
+            return redirect('/ketuakk/data-dosen')->with('success', 'Data dosen berhasil diperbarui.');
         });
         Route::get('/ketuakk/data-kelompok-keahlian', function () {
             $kelompokKeahlian = \Illuminate\Support\Facades\DB::table('kelompok_keahlian')->get();
@@ -690,6 +798,50 @@ Route::middleware(['auth'])->group(function () {
                 'rekapLab'
             ));
         });
+
+        Route::delete('/ketuakk/data-dosen/{id}', function ($id) {
+            try {
+                $dosen = \Illuminate\Support\Facades\DB::table('dosen')
+                    ->where('id_dosen', $id)
+                    ->first();
+
+                if (!$dosen) {
+                    return redirect('/ketuakk/data-dosen')
+                        ->with('error', 'Data dosen tidak ditemukan.');
+                }
+
+                $dipakaiUser = \Illuminate\Support\Facades\DB::table('users')
+                    ->where('id_dosen', $id)
+                    ->exists();
+
+                if ($dipakaiUser) {
+                    return redirect('/ketuakk/data-dosen')
+                        ->with('error', 'Data dosen tidak bisa dihapus karena masih terhubung dengan akun user.');
+                }
+
+                \Illuminate\Support\Facades\DB::table('target_km')
+                    ->whereIn('id_km', function ($query) use ($id) {
+                        $query->select('id_km')
+                            ->from('kontrak_manajemen')
+                            ->where('id_dosen', $id);
+                    })
+                    ->delete();
+
+                \Illuminate\Support\Facades\DB::table('kontrak_manajemen')
+                    ->where('id_dosen', $id)
+                    ->delete();
+
+                \Illuminate\Support\Facades\DB::table('dosen')
+                    ->where('id_dosen', $id)
+                    ->delete();
+
+                return redirect('/ketuakk/data-dosen')
+                    ->with('success', 'Data dosen berhasil dihapus.');
+            } catch (\Exception $e) {
+                return redirect('/ketuakk/data-dosen')
+                    ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            }
+        });
     });
 
 
@@ -1135,23 +1287,6 @@ Route::middleware(['auth'])->group(function () {
 
             return redirect('/anggota/aktivitas-km')->with('success', 'Aktivitas KM berhasil diperbarui.');
         });
-        Route::delete('/anggota/aktivitas-km/{id}', function ($id) {
-            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
-                ->where('id_aktivitas', $id)
-                ->where('id_user', auth()->user()->id_user)
-                ->first();
-
-            if (!$aktivitas) {
-                abort(404);
-            }
-
-            \Illuminate\Support\Facades\DB::table('aktivitas_km')
-                ->where('id_aktivitas', $id)
-                ->where('id_user', auth()->user()->id_user)
-                ->delete();
-
-            return redirect('/anggota/aktivitas-km')->with('success', 'Aktivitas KM berhasil dihapus.');
-        });
         Route::get('/anggota/progress-km', function () {
             /** @var \App\Models\User $user */
             $user = auth()->user();
@@ -1211,5 +1346,4 @@ Route::middleware(['auth'])->group(function () {
             ));
         });
     });
-
 });

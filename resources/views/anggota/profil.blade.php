@@ -13,6 +13,7 @@
             <i class="bi bi-arrow-left me-1"></i> Kembali
         </a>
     </div>
+    
     <h2>Profil Anggota</h2>
     <p>
         Halaman ini menampilkan informasi profil anggota Kelompok Keahlian.
