@@ -47,9 +47,68 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/ketuakk/target-km/{id}', [TargetKmController::class, 'update']);
         Route::delete('/ketuakk/target-km/{id}', [TargetKmController::class, 'destroy']);
         Route::get('/ketuakk/data-lab-riset', function () {
-            $laboratorium = \Illuminate\Support\Facades\DB::table('laboratorium_riset')->get();
+            $laboratorium = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+                ->orderBy('id_lab')
+                ->get();
 
-            return view('ketuakk.data-master.lab-riset', compact('laboratorium'));
+            $dataLab = [];
+
+            foreach ($laboratorium as $lab) {
+                $jumlahDosen = \Illuminate\Support\Facades\DB::table('dosen')
+                    ->where('id_lab', $lab->id_lab)
+                    ->count();
+
+                $jumlahAktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                    ->where('id_lab', $lab->id_lab)
+                    ->count();
+
+                $dataLab[] = [
+                    'id_lab' => $lab->id_lab,
+                    'nama_lab' => $lab->nama_lab,
+                    'jumlah_dosen' => $jumlahDosen,
+                    'jumlah_aktivitas' => $jumlahAktivitas,
+                ];
+            }
+
+            return view('ketuakk.data-master.lab-riset', compact('dataLab'));
+        });
+
+        Route::get('/ketuakk/data-lab-riset/{id}', function ($id) {
+            $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+                ->where('id_lab', $id)
+                ->first();
+
+            if (!$lab) {
+                abort(404);
+            }
+
+            $dosen = \Illuminate\Support\Facades\DB::table('dosen')
+                ->where('id_lab', $id)
+                ->orderBy('nama_dosen')
+                ->get();
+
+            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                ->leftJoin('users', 'aktivitas_km.id_user', '=', 'users.id_user')
+                ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
+                ->where('aktivitas_km.id_lab', $id)
+                ->select(
+                    'aktivitas_km.kategori_km',
+                    'aktivitas_km.judul_aktivitas',
+                    'aktivitas_km.deskripsi_singkat',
+                    'aktivitas_km.tanggal_mulai',
+                    'aktivitas_km.tanggal_selesai',
+                    'users.username',
+                    'dosen.nama_dosen',
+                    'dosen.nidn'
+                )
+                ->orderBy('aktivitas_km.tanggal_mulai', 'desc')
+                ->get();
+
+            return view('ketuakk.data-master.lab-riset-detail', compact(
+                'lab',
+                'dosen',
+                'aktivitas'
+            ));
         });
         Route::get('/ketuakk/data-dosen', function (\Illuminate\Http\Request $request) {
             $q = $request->query('q');
