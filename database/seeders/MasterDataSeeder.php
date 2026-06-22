@@ -15,6 +15,7 @@ class MasterDataSeeder extends Seeder
         ]);
 
         DB::table('users')->where('username', 'anggota')->update([
+            'id_dosen'=> 1,
             'id_lab' => 1,
             'updated_at' => now(),
         ]);
