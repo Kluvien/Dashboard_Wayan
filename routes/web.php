@@ -66,27 +66,48 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ketualab/penurunan-km/{id}/plot', [KetuaLabController::class, 'createPlot']);
         Route::post('/ketualab/penurunan-km/{id}/plot', [KetuaLabController::class, 'storePlot']);
         Route::get('/ketualab/monitoring-lab', function () {
+            /** @var \App\Models\User $user */
             $user = auth()->user();
+
             $idLab = $user->id_lab;
+            $tahun = now()->year;
 
             $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
                 ->where('id_lab', $idLab)
                 ->first();
 
-            $targets = [
-                'Pendidikan' => 4,
-                'Penelitian' => 5,
-                'Publikasi' => 2,
-                'Pengabdian' => 3,
-                'Penunjang' => 2,
-            ];
-
-            $jumlahAnggota = \Illuminate\Support\Facades\DB::table('users')
+            $anggota = \Illuminate\Support\Facades\DB::table('users')
                 ->where('role', 'Anggota')
                 ->where('id_lab', $idLab)
-                ->count();
+                ->get();
 
-            $totalTargetLab = array_sum($targets) * max($jumlahAnggota, 1);
+            $jumlahAnggota = $anggota->count();
+
+            $targetLabPerKategori = [
+                'Pendidikan' => 0,
+                'Penelitian' => 0,
+                'Publikasi' => 0,
+                'Pengabdian' => 0,
+                'Penunjang' => 0,
+            ];
+
+            foreach ($anggota as $item) {
+                $targets = \Illuminate\Support\Facades\DB::table('target_km')
+                    ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+                    ->where('kontrak_manajemen.id_dosen', $item->id_dosen)
+                    ->where('kontrak_manajemen.tahun_km', $tahun)
+                    ->where('kontrak_manajemen.status_km', 'Aktif')
+                    ->pluck('target', 'indikator')
+                    ->toArray();
+
+                foreach ($targets as $kategori => $target) {
+                    if (!isset($targetLabPerKategori[$kategori])) {
+                        $targetLabPerKategori[$kategori] = 0;
+                    }
+
+                    $targetLabPerKategori[$kategori] += $target;
+                }
+            }
 
             $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
                 ->select('kategori_km', \Illuminate\Support\Facades\DB::raw('COUNT(*) as total'))
@@ -96,8 +117,7 @@ Route::middleware(['auth'])->group(function () {
 
             $rekap = [];
 
-            foreach ($targets as $kategori => $targetPerAnggota) {
-                $targetLab = $targetPerAnggota * max($jumlahAnggota, 1);
+            foreach ($targetLabPerKategori as $kategori => $targetLab) {
                 $realisasi = $aktivitas[$kategori] ?? 0;
                 $persentase = $targetLab > 0 ? round(($realisasi / $targetLab) * 100) : 0;
 
@@ -106,11 +126,13 @@ Route::middleware(['auth'])->group(function () {
                     'target' => $targetLab,
                     'realisasi' => $realisasi,
                     'persentase' => min($persentase, 100),
-                    'status' => $realisasi >= $targetLab ? 'Tercapai' : 'Belum Tercapai',
+                    'status' => $targetLab > 0 && $realisasi >= $targetLab ? 'Tercapai' : 'Belum Tercapai',
                 ];
             }
 
+            $totalTargetLab = array_sum($targetLabPerKategori);
             $totalRealisasiLab = array_sum($aktivitas->toArray());
+
             $persentaseTotal = $totalTargetLab > 0
                 ? round(($totalRealisasiLab / $totalTargetLab) * 100)
                 : 0;
@@ -125,18 +147,11 @@ Route::middleware(['auth'])->group(function () {
             ));
         });
         Route::get('/ketualab/monitoring-anggota', function () {
+            /** @var \App\Models\User $user */
             $user = auth()->user();
+
             $idLab = $user->id_lab;
-
-            $targets = [
-                'Pendidikan' => 4,
-                'Penelitian' => 5,
-                'Publikasi' => 2,
-                'Pengabdian' => 3,
-                'Penunjang' => 2,
-            ];
-
-            $totalTarget = array_sum($targets);
+            $tahun = now()->year;
 
             $anggota = \Illuminate\Support\Facades\DB::table('users')
                 ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
@@ -145,6 +160,7 @@ Route::middleware(['auth'])->group(function () {
                 ->where('users.id_lab', $idLab)
                 ->select(
                     'users.id_user',
+                    'users.id_dosen',
                     'users.username',
                     'users.role',
                     'users.id_lab',
@@ -158,6 +174,26 @@ Route::middleware(['auth'])->group(function () {
             $dataMonitoring = [];
 
             foreach ($anggota as $item) {
+                $targets = \Illuminate\Support\Facades\DB::table('target_km')
+                    ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+                    ->where('kontrak_manajemen.id_dosen', $item->id_dosen)
+                    ->where('kontrak_manajemen.tahun_km', $tahun)
+                    ->where('kontrak_manajemen.status_km', 'Aktif')
+                    ->pluck('target', 'indikator')
+                    ->toArray();
+
+                if (empty($targets)) {
+                    $targets = [
+                        'Pendidikan' => 0,
+                        'Penelitian' => 0,
+                        'Publikasi' => 0,
+                        'Pengabdian' => 0,
+                        'Penunjang' => 0,
+                    ];
+                }
+
+                $totalTarget = array_sum($targets);
+
                 $totalRealisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
                     ->where('id_user', $item->id_user)
                     ->count();
@@ -176,14 +212,17 @@ Route::middleware(['auth'])->group(function () {
                     'total_target' => $totalTarget,
                     'total_realisasi' => $totalRealisasi,
                     'persentase' => min($persentase, 100),
-                    'status' => $totalRealisasi >= $totalTarget ? 'Tercapai' : 'Belum Tercapai',
+                    'status' => $totalTarget > 0 && $totalRealisasi >= $totalTarget ? 'Tercapai' : 'Belum Tercapai',
                 ];
             }
 
             return view('ketualab.monitoring-anggota', compact('dataMonitoring'));
         });
         Route::get('/ketualab/detail-anggota/{id}', function ($id) {
+            /** @var \App\Models\User $ketuaLab */
             $ketuaLab = auth()->user();
+
+            $tahun = now()->year;
 
             $anggota = \Illuminate\Support\Facades\DB::table('users')
                 ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
@@ -193,6 +232,7 @@ Route::middleware(['auth'])->group(function () {
                 ->where('users.id_lab', $ketuaLab->id_lab)
                 ->select(
                     'users.id_user',
+                    'users.id_dosen',
                     'users.username',
                     'dosen.nama_dosen',
                     'dosen.nidn',
@@ -210,13 +250,23 @@ Route::middleware(['auth'])->group(function () {
                 ->orderBy('tanggal_mulai', 'desc')
                 ->get();
 
-            $targets = [
-                'Pendidikan' => 4,
-                'Penelitian' => 5,
-                'Publikasi' => 2,
-                'Pengabdian' => 3,
-                'Penunjang' => 2,
-            ];
+            $targets = \Illuminate\Support\Facades\DB::table('target_km')
+                ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+                ->where('kontrak_manajemen.id_dosen', $anggota->id_dosen)
+                ->where('kontrak_manajemen.tahun_km', $tahun)
+                ->where('kontrak_manajemen.status_km', 'Aktif')
+                ->pluck('target', 'indikator')
+                ->toArray();
+
+            if (empty($targets)) {
+                $targets = [
+                    'Pendidikan' => 0,
+                    'Penelitian' => 0,
+                    'Publikasi' => 0,
+                    'Pengabdian' => 0,
+                    'Penunjang' => 0,
+                ];
+            }
 
             $rekap = [];
 
@@ -229,34 +279,55 @@ Route::middleware(['auth'])->group(function () {
                     'target' => $target,
                     'realisasi' => $realisasi,
                     'persentase' => min($persentase, 100),
-                    'status' => $realisasi >= $target ? 'Tercapai' : 'Belum Tercapai',
+                    'status' => $target > 0 && $realisasi >= $target ? 'Tercapai' : 'Belum Tercapai',
                 ];
             }
 
             return view('ketualab.detail-anggota', compact('anggota', 'aktivitas', 'rekap'));
         });
         Route::get('/ketualab/laporan', function () {
+            /** @var \App\Models\User $user */
             $user = auth()->user();
+
             $idLab = $user->id_lab;
+            $tahun = now()->year;
 
             $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
                 ->where('id_lab', $idLab)
                 ->first();
 
-            $targets = [
-                'Pendidikan' => 4,
-                'Penelitian' => 5,
-                'Publikasi' => 2,
-                'Pengabdian' => 3,
-                'Penunjang' => 2,
-            ];
-
-            $jumlahAnggota = \Illuminate\Support\Facades\DB::table('users')
+            $anggota = \Illuminate\Support\Facades\DB::table('users')
                 ->where('role', 'Anggota')
                 ->where('id_lab', $idLab)
-                ->count();
+                ->get();
 
-            $totalTargetLab = array_sum($targets) * max($jumlahAnggota, 1);
+            $jumlahAnggota = $anggota->count();
+
+            $targetLabPerKategori = [
+                'Pendidikan' => 0,
+                'Penelitian' => 0,
+                'Publikasi' => 0,
+                'Pengabdian' => 0,
+                'Penunjang' => 0,
+            ];
+
+            foreach ($anggota as $item) {
+                $targets = \Illuminate\Support\Facades\DB::table('target_km')
+                    ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+                    ->where('kontrak_manajemen.id_dosen', $item->id_dosen)
+                    ->where('kontrak_manajemen.tahun_km', $tahun)
+                    ->where('kontrak_manajemen.status_km', 'Aktif')
+                    ->pluck('target', 'indikator')
+                    ->toArray();
+
+                foreach ($targets as $kategori => $target) {
+                    if (!isset($targetLabPerKategori[$kategori])) {
+                        $targetLabPerKategori[$kategori] = 0;
+                    }
+
+                    $targetLabPerKategori[$kategori] += $target;
+                }
+            }
 
             $aktivitasPerKategori = \Illuminate\Support\Facades\DB::table('aktivitas_km')
                 ->select('kategori_km', \Illuminate\Support\Facades\DB::raw('COUNT(*) as total'))
@@ -266,8 +337,7 @@ Route::middleware(['auth'])->group(function () {
 
             $rekapKategori = [];
 
-            foreach ($targets as $kategori => $targetPerAnggota) {
-                $targetLab = $targetPerAnggota * max($jumlahAnggota, 1);
+            foreach ($targetLabPerKategori as $kategori => $targetLab) {
                 $realisasi = $aktivitasPerKategori[$kategori] ?? 0;
                 $persentase = $targetLab > 0 ? round(($realisasi / $targetLab) * 100) : 0;
 
@@ -276,11 +346,13 @@ Route::middleware(['auth'])->group(function () {
                     'target' => $targetLab,
                     'realisasi' => $realisasi,
                     'persentase' => min($persentase, 100),
-                    'status' => $realisasi >= $targetLab ? 'Tercapai' : 'Belum Tercapai',
+                    'status' => $targetLab > 0 && $realisasi >= $targetLab ? 'Tercapai' : 'Belum Tercapai',
                 ];
             }
 
+            $totalTargetLab = array_sum($targetLabPerKategori);
             $totalRealisasiLab = array_sum($aktivitasPerKategori->toArray());
+
             $persentaseTotal = $totalTargetLab > 0
                 ? round(($totalRealisasiLab / $totalTargetLab) * 100)
                 : 0;
@@ -447,15 +519,30 @@ Route::middleware(['auth'])->group(function () {
             return redirect('/anggota/aktivitas-km')->with('success', 'Aktivitas KM berhasil dihapus.');
         });
         Route::get('/anggota/progress-km', function () {
-            $idUser = auth()->user()->id_user;
+            /** @var \App\Models\User $user */
+            $user = auth()->user();
 
-            $targets = [
-                'Pendidikan' => 4,
-                'Penelitian' => 5,
-                'Publikasi' => 2,
-                'Pengabdian' => 3,
-                'Penunjang' => 2,
-            ];
+            $idUser = $user->id_user;
+            $idDosen = $user->id_dosen;
+            $tahun = now()->year;
+
+            $targets = \Illuminate\Support\Facades\DB::table('target_km')
+                ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+                ->where('kontrak_manajemen.id_dosen', $idDosen)
+                ->where('kontrak_manajemen.tahun_km', $tahun)
+                ->where('kontrak_manajemen.status_km', 'Aktif')
+                ->pluck('target', 'indikator')
+                ->toArray();
+
+            if (empty($targets)) {
+                $targets = [
+                    'Pendidikan' => 0,
+                    'Penelitian' => 0,
+                    'Publikasi' => 0,
+                    'Pengabdian' => 0,
+                    'Penunjang' => 0,
+                ];
+            }
 
             $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
                 ->select('kategori_km', \Illuminate\Support\Facades\DB::raw('COUNT(*) as total'))
@@ -474,7 +561,7 @@ Route::middleware(['auth'])->group(function () {
                     'target' => $target,
                     'realisasi' => $realisasi,
                     'persentase' => min($persentase, 100),
-                    'status' => $realisasi >= $target ? 'Tercapai' : 'Belum Tercapai',
+                    'status' => $target > 0 && $realisasi >= $target ? 'Tercapai' : 'Belum Tercapai',
                 ];
             }
 
