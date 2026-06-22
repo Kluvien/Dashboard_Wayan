@@ -347,11 +347,11 @@
                     </div>
 
                     <div class="sidebar-sub">
-                        <a class="sidebar-link" href="/ketuakk/dashboard">
+                        <a class="sidebar-link {{ request()->is('ketuakk/monitoring-lab-riset*') ? 'active' : '' }}" href="/ketuakk/monitoring-lab-riset">
                             <span>Monitoring Lab. Riset</span>
                         </a>
 
-                        <a class="sidebar-link" href="/ketuakk/dashboard">
+                        <a class="sidebar-link {{ request()->is('ketuakk/monitoring-anggota-kk*') ? 'active' : '' }}" href="/ketuakk/monitoring-anggota-kk">
                             <span>Monitoring Anggota KK</span>
                         </a>
                     </div>

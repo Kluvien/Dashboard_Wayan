@@ -56,6 +56,274 @@ Route::middleware(['auth'])->group(function () {
 
             return view('ketuakk.data-master.kelompok-keahlian', compact('kelompokKeahlian'));
         });
+        Route::get('/ketuakk/monitoring-lab-riset', function () {
+            $tahun = now()->year;
+
+            $labs = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+                ->orderBy('id_lab')
+                ->get();
+
+            $monitoringLabs = [];
+
+            foreach ($labs as $lab) {
+                $dosenIds = \Illuminate\Support\Facades\DB::table('dosen')
+                    ->where('id_lab', $lab->id_lab)
+                    ->pluck('id_dosen');
+
+                $totalTarget = 0;
+
+                if ($dosenIds->count() > 0) {
+                    $totalTarget = \Illuminate\Support\Facades\DB::table('target_km')
+                        ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+                        ->whereIn('kontrak_manajemen.id_dosen', $dosenIds)
+                        ->where('kontrak_manajemen.tahun_km', $tahun)
+                        ->where('kontrak_manajemen.status_km', 'Aktif')
+                        ->sum('target');
+                }
+
+                $totalRealisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                    ->where('id_lab', $lab->id_lab)
+                    ->count();
+
+                $persentase = $totalTarget > 0
+                    ? round(($totalRealisasi / $totalTarget) * 100)
+                    : 0;
+
+                $monitoringLabs[] = [
+                    'id_lab' => $lab->id_lab,
+                    'nama_lab' => $lab->nama_lab,
+                    'jumlah_dosen' => $dosenIds->count(),
+                    'total_target' => $totalTarget,
+                    'total_realisasi' => $totalRealisasi,
+                    'persentase' => min($persentase, 100),
+                    'status' => $totalTarget > 0 && $totalRealisasi >= $totalTarget
+                        ? 'Tercapai'
+                        : 'Belum Tercapai',
+                ];
+            }
+
+            return view('ketuakk.monitoring-lab-riset.index', compact('monitoringLabs', 'tahun'));
+        });
+        Route::get('/ketuakk/monitoring-lab-riset/{id}', function ($id) {
+            $tahun = now()->year;
+
+            $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+                ->where('id_lab', $id)
+                ->first();
+
+            if (!$lab) {
+                abort(404);
+            }
+
+            $kategoriDefault = [
+                'Pendidikan',
+                'Penelitian',
+                'Publikasi',
+                'Pengabdian',
+                'Penunjang',
+            ];
+
+            $dosenIds = \Illuminate\Support\Facades\DB::table('dosen')
+                ->where('id_lab', $id)
+                ->pluck('id_dosen');
+
+            $targetPerKategori = collect();
+
+            if ($dosenIds->count() > 0) {
+                $targetPerKategori = \Illuminate\Support\Facades\DB::table('target_km')
+                    ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+                    ->select('target_km.indikator', \Illuminate\Support\Facades\DB::raw('SUM(target_km.target) as total_target'))
+                    ->whereIn('kontrak_manajemen.id_dosen', $dosenIds)
+                    ->where('kontrak_manajemen.tahun_km', $tahun)
+                    ->where('kontrak_manajemen.status_km', 'Aktif')
+                    ->groupBy('target_km.indikator')
+                    ->pluck('total_target', 'indikator');
+            }
+
+            $realisasiPerKategori = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                ->select('kategori_km', \Illuminate\Support\Facades\DB::raw('COUNT(*) as total_realisasi'))
+                ->where('id_lab', $id)
+                ->groupBy('kategori_km')
+                ->pluck('total_realisasi', 'kategori_km');
+
+            $rekapKategori = [];
+
+            foreach ($kategoriDefault as $kategori) {
+                $target = $targetPerKategori[$kategori] ?? 0;
+                $realisasi = $realisasiPerKategori[$kategori] ?? 0;
+                $persentase = $target > 0 ? round(($realisasi / $target) * 100) : 0;
+
+                $rekapKategori[] = [
+                    'kategori' => $kategori,
+                    'target' => $target,
+                    'realisasi' => $realisasi,
+                    'persentase' => min($persentase, 100),
+                    'status' => $target > 0 && $realisasi >= $target ? 'Tercapai' : 'Belum Tercapai',
+                ];
+            }
+
+            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                ->leftJoin('users', 'aktivitas_km.id_user', '=', 'users.id_user')
+                ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
+                ->where('aktivitas_km.id_lab', $id)
+                ->select(
+                    'aktivitas_km.kategori_km',
+                    'aktivitas_km.judul_aktivitas',
+                    'aktivitas_km.deskripsi_singkat',
+                    'aktivitas_km.tanggal_mulai',
+                    'aktivitas_km.tanggal_selesai',
+                    'users.username',
+                    'dosen.nama_dosen',
+                    'dosen.nidn'
+                )
+                ->orderBy('aktivitas_km.tanggal_mulai', 'desc')
+                ->get();
+
+            return view('ketuakk.monitoring-lab-riset.detail', compact(
+                'lab',
+                'tahun',
+                'rekapKategori',
+                'aktivitas'
+            ));
+        });
+        Route::get('/ketuakk/monitoring-anggota-kk', function () {
+            $tahun = now()->year;
+
+            $anggota = \Illuminate\Support\Facades\DB::table('users')
+                ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
+                ->leftJoin('laboratorium_riset', 'users.id_lab', '=', 'laboratorium_riset.id_lab')
+                ->where('users.role', 'Anggota')
+                ->select(
+                    'users.id_user',
+                    'users.id_dosen',
+                    'users.username',
+                    'users.role',
+                    'users.id_lab',
+                    'dosen.nama_dosen',
+                    'dosen.nidn',
+                    'dosen.email',
+                    'laboratorium_riset.nama_lab'
+                )
+                ->orderBy('laboratorium_riset.nama_lab')
+                ->orderBy('dosen.nama_dosen')
+                ->get();
+
+            $dataMonitoring = [];
+
+            foreach ($anggota as $item) {
+                $targets = \Illuminate\Support\Facades\DB::table('target_km')
+                    ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+                    ->where('kontrak_manajemen.id_dosen', $item->id_dosen)
+                    ->where('kontrak_manajemen.tahun_km', $tahun)
+                    ->where('kontrak_manajemen.status_km', 'Aktif')
+                    ->pluck('target', 'indikator')
+                    ->toArray();
+
+                if (empty($targets)) {
+                    $targets = [
+                        'Pendidikan' => 0,
+                        'Penelitian' => 0,
+                        'Publikasi' => 0,
+                        'Pengabdian' => 0,
+                        'Penunjang' => 0,
+                    ];
+                }
+
+                $totalTarget = array_sum($targets);
+
+                $totalRealisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                    ->where('id_user', $item->id_user)
+                    ->count();
+
+                $persentase = $totalTarget > 0
+                    ? round(($totalRealisasi / $totalTarget) * 100)
+                    : 0;
+
+                $dataMonitoring[] = [
+                    'id_user' => $item->id_user,
+                    'username' => $item->username,
+                    'nama_dosen' => $item->nama_dosen ?? $item->username,
+                    'nidn' => $item->nidn ?? '-',
+                    'email' => $item->email ?? '-',
+                    'nama_lab' => $item->nama_lab ?? '-',
+                    'total_target' => $totalTarget,
+                    'total_realisasi' => $totalRealisasi,
+                    'persentase' => min($persentase, 100),
+                    'status' => $totalTarget > 0 && $totalRealisasi >= $totalTarget
+                        ? 'Tercapai'
+                        : 'Belum Tercapai',
+                ];
+            }
+
+            return view('ketuakk.monitoring-anggota-kk.index', compact('dataMonitoring', 'tahun'));
+        });
+        Route::get('/ketuakk/monitoring-anggota-kk/{id}', function ($id) {
+            $tahun = now()->year;
+
+            $kategoriDefault = [
+                'Pendidikan',
+                'Penelitian',
+                'Publikasi',
+                'Pengabdian',
+                'Penunjang',
+            ];
+
+            $anggota = \Illuminate\Support\Facades\DB::table('users')
+                ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
+                ->leftJoin('laboratorium_riset', 'users.id_lab', '=', 'laboratorium_riset.id_lab')
+                ->where('users.id_user', $id)
+                ->where('users.role', 'Anggota')
+                ->select(
+                    'users.id_user',
+                    'users.id_dosen',
+                    'users.username',
+                    'dosen.nama_dosen',
+                    'dosen.nidn',
+                    'dosen.email',
+                    'laboratorium_riset.nama_lab'
+                )
+                ->first();
+
+            if (!$anggota) {
+                abort(404);
+            }
+
+            $targets = \Illuminate\Support\Facades\DB::table('target_km')
+                ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+                ->where('kontrak_manajemen.id_dosen', $anggota->id_dosen)
+                ->where('kontrak_manajemen.tahun_km', $tahun)
+                ->where('kontrak_manajemen.status_km', 'Aktif')
+                ->pluck('target', 'indikator')
+                ->toArray();
+
+            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                ->where('id_user', $anggota->id_user)
+                ->orderBy('tanggal_mulai', 'desc')
+                ->get();
+
+            $rekap = [];
+
+            foreach ($kategoriDefault as $kategori) {
+                $target = $targets[$kategori] ?? 0;
+                $realisasi = $aktivitas->where('kategori_km', $kategori)->count();
+                $persentase = $target > 0 ? round(($realisasi / $target) * 100) : 0;
+
+                $rekap[] = [
+                    'kategori' => $kategori,
+                    'target' => $target,
+                    'realisasi' => $realisasi,
+                    'persentase' => min($persentase, 100),
+                    'status' => $target > 0 && $realisasi >= $target ? 'Tercapai' : 'Belum Tercapai',
+                ];
+            }
+
+            return view('ketuakk.monitoring-anggota-kk.detail', compact(
+                'anggota',
+                'tahun',
+                'aktivitas',
+                'rekap'
+            ));
+        });
     });
 
 
