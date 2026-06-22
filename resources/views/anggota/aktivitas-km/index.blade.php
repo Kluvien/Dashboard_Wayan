@@ -4,6 +4,22 @@
 
 @section('content')
 <div class="card">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div class="page-heading mb-0">
+            Aktivitas <span class="muted">KM</span>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a href="/anggota/dashboard" class="btn btn-secondary">
+                <i class="bi bi-arrow-left me-1"></i> Kembali
+            </a>
+
+            <a href="/anggota/aktivitas-km/create" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-1"></i> Tambah Aktivitas
+            </a>
+        </div>
+    </div>
+    
     <h2>Aktivitas KM Saya</h2>
     <p>
         Halaman ini digunakan anggota untuk melihat daftar aktivitas Kontrak Manajemen

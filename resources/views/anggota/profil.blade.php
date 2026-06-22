@@ -4,6 +4,15 @@
 
 @section('content')
 <div class="card">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div class="page-heading mb-0">
+            Profil <span class="muted">Anggota</span>
+        </div>
+
+        <a href="/anggota/dashboard" class="btn btn-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Kembali
+        </a>
+    </div>
     <h2>Profil Anggota</h2>
     <p>
         Halaman ini menampilkan informasi profil anggota Kelompok Keahlian.

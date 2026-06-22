@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\RealisasiKm;
 use App\Models\TargetKm; 
 use Illuminate\Support\Facades\Auth;
@@ -12,33 +13,94 @@ class AnggotaController extends Controller
     // 1. FUNGSI UNTUK MENAMPILKAN DASHBOARD DINAMIS
     public function dashboard()
     {
-        // Ambil semua tugas milik dosen yang login
-        $realisasis = RealisasiKm::join('target_km', 'realisasi_km.id_target', '=', 'target_km.id_target')
-                        ->where('realisasi_km.id_dosen', Auth::user()->id_dosen)
-                        ->get();
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
 
-        $totalTasks = $realisasis->count();
-        $totalPercentage = 0;
+        $tahun = now()->year;
+        $idUser = $user->id_user;
+        $idDosen = $user->id_dosen;
 
-        // Hitung rata-rata persentase penyelesaian
-        if ($totalTasks > 0) {
-            foreach ($realisasis as $r) {
-                // Cegah pembagian dengan nol jika targetnya 0
-                $targetVal = $r->target > 0 ? $r->target : 1; 
-                $percent = ($r->realisasi / $targetVal) * 100;
-                
-                // Batasi maksimal 100% per tugas
-                if ($percent > 100) {
-                    $percent = 100; 
-                }
-                $totalPercentage += $percent;
-            }
-            $averagePercentage = round($totalPercentage / $totalTasks);
-        } else {
-            $averagePercentage = 0;
+        $dosen = null;
+
+        if ($idDosen) {
+            $dosen = DB::table('dosen')
+                ->leftJoin('laboratorium_riset', 'dosen.id_lab', '=', 'laboratorium_riset.id_lab')
+                ->where('dosen.id_dosen', $idDosen)
+                ->select(
+                    'dosen.nama_dosen',
+                    'dosen.nidn',
+                    'dosen.email',
+                    'laboratorium_riset.nama_lab'
+                )
+                ->first();
         }
 
-        return view('anggota.dashboard', compact('averagePercentage', 'totalTasks'));
+        $kategoriDefault = [
+            'Pendidikan',
+            'Penelitian',
+            'Publikasi',
+            'Pengabdian',
+            'Penunjang',
+        ];
+
+        $targets = DB::table('target_km')
+            ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+            ->where('kontrak_manajemen.id_dosen', $idDosen)
+            ->where('kontrak_manajemen.tahun_km', $tahun)
+            ->where('kontrak_manajemen.status_km', 'Aktif')
+            ->pluck('target', 'indikator')
+            ->toArray();
+
+        $aktivitasPerKategori = DB::table('aktivitas_km')
+            ->select('kategori_km', DB::raw('COUNT(*) as total'))
+            ->where('id_user', $idUser)
+            ->groupBy('kategori_km')
+            ->pluck('total', 'kategori_km');
+
+        $progress = [];
+
+        foreach ($kategoriDefault as $kategori) {
+            $target = $targets[$kategori] ?? 0;
+            $realisasi = $aktivitasPerKategori[$kategori] ?? 0;
+            $persentase = $target > 0 ? round(($realisasi / $target) * 100) : 0;
+
+            $progress[] = [
+                'kategori' => $kategori,
+                'target' => $target,
+                'realisasi' => $realisasi,
+                'persentase' => min($persentase, 100),
+                'status' => $target > 0 && $realisasi >= $target ? 'Tercapai' : 'Belum Tercapai',
+            ];
+        }
+
+        $totalTarget = array_sum($targets);
+        $totalRealisasi = array_sum($aktivitasPerKategori->toArray());
+
+        $persentaseTotal = $totalTarget > 0
+            ? round(($totalRealisasi / $totalTarget) * 100)
+            : 0;
+
+        $kategoriTerbaik = collect($progress)
+            ->sortByDesc('persentase')
+            ->first();
+
+        $aktivitasTerbaru = DB::table('aktivitas_km')
+            ->where('id_user', $idUser)
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
+        return view('anggota.dashboard', compact(
+            'tahun',
+            'user',
+            'dosen',
+            'progress',
+            'totalTarget',
+            'totalRealisasi',
+            'persentaseTotal',
+            'kategoriTerbaik',
+            'aktivitasTerbaru'
+        ));
     }
 
     // 2. FUNGSI UNTUK MENAMPILKAN TABEL REALISASI

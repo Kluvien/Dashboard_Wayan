@@ -585,6 +585,111 @@ Route::middleware(['auth'])->group(function () {
                 'aktivitas'
             ));
         });
+        Route::get('/ketuakk/km-kk', function () {
+            $tahun = now()->year;
+
+            $kategoriDefault = [
+                'Pendidikan',
+                'Penelitian',
+                'Publikasi',
+                'Pengabdian',
+                'Penunjang',
+            ];
+
+            $totalTargetKm = \Illuminate\Support\Facades\DB::table('target_km')
+                ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+                ->where('kontrak_manajemen.tahun_km', $tahun)
+                ->where('kontrak_manajemen.status_km', 'Aktif')
+                ->sum('target');
+
+            $totalRealisasiKm = \Illuminate\Support\Facades\DB::table('aktivitas_km')->count();
+
+            $persentaseTotal = $totalTargetKm > 0
+                ? round(($totalRealisasiKm / $totalTargetKm) * 100)
+                : 0;
+
+            $targetPerKategori = \Illuminate\Support\Facades\DB::table('target_km')
+                ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+                ->select(
+                    'target_km.indikator',
+                    \Illuminate\Support\Facades\DB::raw('SUM(target_km.target) as total_target')
+                )
+                ->where('kontrak_manajemen.tahun_km', $tahun)
+                ->where('kontrak_manajemen.status_km', 'Aktif')
+                ->groupBy('target_km.indikator')
+                ->pluck('total_target', 'indikator');
+
+            $realisasiPerKategori = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                ->select(
+                    'kategori_km',
+                    \Illuminate\Support\Facades\DB::raw('COUNT(*) as total_realisasi')
+                )
+                ->groupBy('kategori_km')
+                ->pluck('total_realisasi', 'kategori_km');
+
+            $rekapKategori = [];
+
+            foreach ($kategoriDefault as $kategori) {
+                $target = $targetPerKategori[$kategori] ?? 0;
+                $realisasi = $realisasiPerKategori[$kategori] ?? 0;
+                $persentase = $target > 0 ? round(($realisasi / $target) * 100) : 0;
+
+                $rekapKategori[] = [
+                    'kategori' => $kategori,
+                    'target' => $target,
+                    'realisasi' => $realisasi,
+                    'persentase' => min($persentase, 100),
+                    'status' => $target > 0 && $realisasi >= $target
+                        ? 'Tercapai'
+                        : 'Belum Tercapai',
+                ];
+            }
+
+            $rekapLab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+                ->orderBy('id_lab')
+                ->get()
+                ->map(function ($lab) use ($tahun) {
+                    $dosenIds = \Illuminate\Support\Facades\DB::table('dosen')
+                        ->where('id_lab', $lab->id_lab)
+                        ->pluck('id_dosen');
+
+                    $target = 0;
+
+                    if ($dosenIds->count() > 0) {
+                        $target = \Illuminate\Support\Facades\DB::table('target_km')
+                            ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+                            ->whereIn('kontrak_manajemen.id_dosen', $dosenIds)
+                            ->where('kontrak_manajemen.tahun_km', $tahun)
+                            ->where('kontrak_manajemen.status_km', 'Aktif')
+                            ->sum('target');
+                    }
+
+                    $realisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                        ->where('id_lab', $lab->id_lab)
+                        ->count();
+
+                    $persentase = $target > 0 ? round(($realisasi / $target) * 100) : 0;
+
+                    return [
+                        'nama_lab' => $lab->nama_lab,
+                        'target' => $target,
+                        'realisasi' => $realisasi,
+                        'persentase' => min($persentase, 100),
+                        'status' => $target > 0 && $realisasi >= $target
+                            ? 'Tercapai'
+                            : 'Belum Tercapai',
+                    ];
+                });
+
+            return view('ketuakk.km-kk.index', compact(
+                'tahun',
+                'totalTargetKm',
+                'totalRealisasiKm',
+                'persentaseTotal',
+                'rekapKategori',
+                'rekapLab'
+            ));
+        });
     });
 
 

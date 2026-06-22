@@ -328,7 +328,7 @@
                     </div>
 
                     <div class="sidebar-sub">
-                        <a class="sidebar-link {{ request()->is('ketuakk/target-km*') ? 'active' : '' }}" href="/ketuakk/target-km">
+                        <a class="sidebar-link {{ request()->is('ketuakk/km-kk*') ? 'active' : '' }}" href="/ketuakk/km-kk">
                             <span>Kelompok Keahlian</span>
                         </a>
 

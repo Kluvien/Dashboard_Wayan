@@ -10,6 +10,16 @@
         yang telah diinput oleh anggota.
     </p>
 
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div class="page-heading mb-0">
+            Riwayat <span class="muted">Realisasi</span>
+        </div>
+
+        <a href="/anggota/dashboard" class="btn btn-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Kembali
+        </a>
+    </div>
+
     <table border="1" cellpadding="10" cellspacing="0" width="100%">
         <thead>
             <tr>
