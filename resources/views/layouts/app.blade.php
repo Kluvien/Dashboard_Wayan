@@ -332,11 +332,11 @@
                             <span>Kelompok Keahlian</span>
                         </a>
 
-                        <a class="sidebar-link" href="/ketuakk/target-km">
+                        <a class="sidebar-link {{ request()->is('ketuakk/km-lab-riset*') ? 'active' : '' }}" href="/ketuakk/km-lab-riset">
                             <span>Lab. Riset</span>
                         </a>
 
-                        <a class="sidebar-link" href="/ketuakk/target-km">
+                        <a class="sidebar-link {{ request()->is('ketuakk/km-anggota-kk*') ? 'active' : '' }}" href="/ketuakk/km-anggota-kk">
                             <span>Anggota KK</span>
                         </a>
                     </div>
