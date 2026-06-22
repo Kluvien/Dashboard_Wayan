@@ -23,11 +23,9 @@
                 <p class="px-3 text-secondary text-uppercase fw-bold" style="font-size: 0.75rem;">Menu Utama</p>
                 
                 @if(auth()->user()->role == 'Ketua KK')
-                    <h4>Ketua KK</h4>
                     <a href="/ketuakk/dashboard">Dashboard</a>
                     <a href="/ketuakk/target-km">Kelola Target KM</a>
 
-                    <h4>Data Master</h4>
                     <a href="/ketuakk/data-dosen">Data Dosen</a>
                     <a href="/ketuakk/data-lab-riset">Data Lab Riset</a>
                     <a href="/ketuakk/data-kelompok-keahlian">Data Kelompok Keahlian</a>
@@ -43,11 +41,12 @@
                 
 
                 @elseif(auth()->user()->role == 'Anggota')
-                    <a href="/anggota/dashboard"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
-                    <a href="/anggota/realisasi-km"><i class="bi bi-pencil-square me-2"></i> Input Realisasi</a>
+                    <a href="/anggota/dashboard"></i> Dashboard</a>
+                    <a href="/anggota/profil">Profil</a>
+                    <a href="/anggota/realisasi-km">Input Realisasi</a>
                     <a href="/anggota/aktivitas-km">Aktivitas KM</a>
                     <a href="/anggota/riwayat-realisasi">Riwayat Realisasi</a>
-                    <a href="/anggota/profil">Profil</a>
+                    <a href="/anggota/progress-km">Progress KM</a>
                 @endif
             </div>
         </div>

@@ -1,37 +1,23 @@
 @extends('layouts.app')
 
-@section('title', 'Monitoring KM Lab')
+@section('title', 'Progress KM Saya')
 
 @section('content')
 <div class="card">
-    <h2>Monitoring KM Laboratorium</h2>
+    <h2>Progress KM Saya</h2>
     <p>
-        Halaman ini menampilkan capaian Kontrak Manajemen laboratorium berdasarkan
-        aktivitas KM anggota pada lab yang dipimpin Ketua Lab.
+        Halaman ini menampilkan progress capaian Kontrak Manajemen berdasarkan aktivitas KM yang telah diinput.
     </p>
-
-    <table border="1" cellpadding="10" cellspacing="0" width="100%">
-        <tr>
-            <th>Laboratorium Riset</th>
-            <td>{{ $lab->nama_lab ?? '-' }}</td>
-        </tr>
-        <tr>
-            <th>Jumlah Anggota</th>
-            <td>{{ $jumlahAnggota }}</td>
-        </tr>
-    </table>
-
-    <br>
 
     <div style="display: flex; gap: 16px; margin-bottom: 20px;">
         <div style="border: 1px solid #ddd; padding: 16px; width: 33%;">
-            <h3>Total Target Lab</h3>
-            <p style="font-size: 24px;">{{ $totalTargetLab }}</p>
+            <h3>Total Target</h3>
+            <p style="font-size: 24px;">{{ $totalTarget }}</p>
         </div>
 
         <div style="border: 1px solid #ddd; padding: 16px; width: 33%;">
-            <h3>Total Realisasi Lab</h3>
-            <p style="font-size: 24px;">{{ $totalRealisasiLab }}</p>
+            <h3>Total Realisasi</h3>
+            <p style="font-size: 24px;">{{ $totalRealisasi }}</p>
         </div>
 
         <div style="border: 1px solid #ddd; padding: 16px; width: 33%;">
@@ -40,21 +26,21 @@
         </div>
     </div>
 
-    <h3>Rekap Capaian Per Kategori</h3>
+    <h3>Progress Per Kategori</h3>
 
     <table border="1" cellpadding="10" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>No</th>
                 <th>Kategori KM</th>
-                <th>Target Lab</th>
-                <th>Realisasi Lab</th>
+                <th>Target</th>
+                <th>Realisasi</th>
                 <th>Progress</th>
                 <th>Status</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($rekap as $index => $item)
+            @foreach($progress as $index => $item)
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $item['kategori'] }}</td>
@@ -71,5 +57,18 @@
             @endforeach
         </tbody>
     </table>
+
+    <br>
+
+    <h3>Status Capaian</h3>
+    <ul>
+        @foreach($progress as $item)
+            @if($item['status'] == 'Tercapai')
+                <li>✔ {{ $item['kategori'] }} telah mencapai target.</li>
+            @else
+                <li>⚠ {{ $item['kategori'] }} belum mencapai target.</li>
+            @endif
+        @endforeach
+    </ul>
 </div>
 @endsection
