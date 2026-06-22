@@ -120,6 +120,7 @@ Route::middleware(['auth'])->group(function () {
                     'dosen.nama_dosen',
                     'dosen.nidn',
                     'dosen.email',
+                    'dosen.jad',
                     'laboratorium_riset.nama_lab'
                 )
                 ->when($q, function ($query) use ($q) {
@@ -127,6 +128,7 @@ Route::middleware(['auth'])->group(function () {
                         $subQuery->where('dosen.nama_dosen', 'like', '%' . $q . '%')
                             ->orWhere('dosen.nidn', 'like', '%' . $q . '%')
                             ->orWhere('dosen.email', 'like', '%' . $q . '%')
+                            ->orWhere('dosen.jad', 'like', '%' . $q . '%')
                             ->orWhere('laboratorium_riset.nama_lab', 'like', '%' . $q . '%');
                     });
                 })
@@ -150,6 +152,7 @@ Route::middleware(['auth'])->group(function () {
                 'nidn' => 'required|string|max:50',
                 'email' => 'required|email|max:255',
                 'id_lab' => 'required|exists:laboratorium_riset,id_lab',
+                'jad' => 'required|in:GB,LK,L,AA',
             ]);
 
             $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
@@ -162,6 +165,7 @@ Route::middleware(['auth'])->group(function () {
                 'nama_dosen' => $request->nama_dosen,
                 'nidn' => $request->nidn,
                 'email' => $request->email,
+                'jad' => $request->jad,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -191,6 +195,7 @@ Route::middleware(['auth'])->group(function () {
                 'nidn' => 'required|string|max:50',
                 'email' => 'required|email|max:255',
                 'id_lab' => 'required|exists:laboratorium_riset,id_lab',
+                'jad' => 'required|in:GB,LK,L,AA',
             ]);
 
             $dosen = \Illuminate\Support\Facades\DB::table('dosen')
@@ -213,6 +218,7 @@ Route::middleware(['auth'])->group(function () {
                     'nama_dosen' => $request->nama_dosen,
                     'nidn' => $request->nidn,
                     'email' => $request->email,
+                    'jad' => $request->jad,
                     'updated_at' => now(),
                 ]);
 
@@ -1289,6 +1295,7 @@ Route::middleware(['auth'])->group(function () {
                 'judul_aktivitas' => 'required',
                 'tanggal_mulai' => 'required|date',
                 'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
+                'jad' => 'required|in:GB,LK,L,AA',
             ]);
             \Illuminate\Support\Facades\DB::table('aktivitas_km')->insert([
                 'id_user' => auth()->user()->id_user,

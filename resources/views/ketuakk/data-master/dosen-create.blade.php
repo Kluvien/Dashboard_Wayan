@@ -37,17 +37,46 @@
 
         <div class="mb-3">
             <label class="form-label fw-bold">Nama Dosen</label>
-            <input type="text" name="nama_dosen" value="{{ old('nama_dosen') }}" class="form-control" placeholder="Masukkan nama dosen">
+            <input 
+                type="text" 
+                name="nama_dosen" 
+                value="{{ old('nama_dosen') }}" 
+                class="form-control" 
+                placeholder="Masukkan nama dosen"
+            >
         </div>
 
         <div class="mb-3">
             <label class="form-label fw-bold">NIDN</label>
-            <input type="text" name="nidn" value="{{ old('nidn') }}" class="form-control" placeholder="Masukkan NIDN">
+            <input 
+                type="text" 
+                name="nidn" 
+                value="{{ old('nidn') }}" 
+                class="form-control" 
+                placeholder="Masukkan NIDN"
+            >
         </div>
 
         <div class="mb-3">
             <label class="form-label fw-bold">Email</label>
-            <input type="email" name="email" value="{{ old('email') }}" class="form-control" placeholder="Masukkan email">
+            <input 
+                type="email" 
+                name="email" 
+                value="{{ old('email') }}" 
+                class="form-control" 
+                placeholder="Masukkan email"
+            >
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label fw-bold">Jabatan Akademik Dosen</label>
+            <select name="jad" class="form-select">
+                <option value="">-- Pilih JAD --</option>
+                <option value="GB" {{ old('jad') == 'GB' ? 'selected' : '' }}>Guru Besar (GB)</option>
+                <option value="LK" {{ old('jad') == 'LK' ? 'selected' : '' }}>Lektor Kepala (LK)</option>
+                <option value="L" {{ old('jad') == 'L' ? 'selected' : '' }}>Lektor (L)</option>
+                <option value="AA" {{ old('jad') == 'AA' ? 'selected' : '' }}>Asisten Ahli (AA)</option>
+            </select>
         </div>
 
         <div class="mb-4">
