@@ -536,22 +536,16 @@ Route::middleware(['auth'])->group(function () {
                 'Penunjang',
             ];
 
-            $dosenIds = \Illuminate\Support\Facades\DB::table('dosen')
+            $targetPerKategori = \Illuminate\Support\Facades\DB::table('km_lab')
+                ->select(
+                    'kategori_km',
+                    \Illuminate\Support\Facades\DB::raw('SUM(jumlah_km) as total_target')
+                )
                 ->where('id_lab', $id)
-                ->pluck('id_dosen');
-
-            $targetPerKategori = collect();
-
-            if ($dosenIds->count() > 0) {
-                $targetPerKategori = \Illuminate\Support\Facades\DB::table('target_km')
-                    ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
-                    ->select('target_km.indikator', \Illuminate\Support\Facades\DB::raw('SUM(target_km.target) as total_target'))
-                    ->whereIn('kontrak_manajemen.id_dosen', $dosenIds)
-                    ->where('kontrak_manajemen.tahun_km', $tahun)
-                    ->where('kontrak_manajemen.status_km', 'Aktif')
-                    ->groupBy('target_km.indikator')
-                    ->pluck('total_target', 'indikator');
-            }
+                ->where('tahun_km', $tahun)
+                ->where('status_km', 'Aktif')
+                ->groupBy('kategori_km')
+                ->pluck('total_target', 'kategori_km');
 
             $realisasiPerKategori = \Illuminate\Support\Facades\DB::table('aktivitas_km')
                 ->select('kategori_km', \Illuminate\Support\Facades\DB::raw('COUNT(*) as total_realisasi'))
@@ -1451,19 +1445,6 @@ Route::middleware(['auth'])->group(function () {
                     return redirect('/ketuakk/data-dosen')
                         ->with('error', 'Data dosen tidak bisa dihapus karena masih terhubung dengan akun user.');
                 }
-
-                \Illuminate\Support\Facades\DB::table('target_km')
-                    ->whereIn('id_km', function ($query) use ($id) {
-                        $query->select('id_km')
-                            ->from('kontrak_manajemen')
-                            ->where('id_dosen', $id);
-                    })
-                    ->delete();
-
-                \Illuminate\Support\Facades\DB::table('kontrak_manajemen')
-                    ->where('id_dosen', $id)
-                    ->delete();
-
                 \Illuminate\Support\Facades\DB::table('dosen')
                     ->where('id_dosen', $id)
                     ->delete();
