@@ -8,68 +8,203 @@
 </div>
 
 <div class="card mb-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
         <div>
-            <h4 class="fw-bold mb-1">Monitoring Capaian KM Anggota KK</h4>
+            <h4 class="fw-bold mb-1">Filter Periode Monitoring Anggota KK</h4>
             <p class="text-muted mb-0">
-                Menampilkan capaian target dan realisasi seluruh anggota KK tahun {{ $tahun }}.
+                Monitoring saat ini:
+                <strong>{{ $labelPeriode ?? 'Tahunan' }}</strong>
+
+                @if(isset($tanggalMulai) && isset($tanggalSelesai))
+                | {{ $tanggalMulai->format('d/m/Y') }} - {{ $tanggalSelesai->format('d/m/Y') }}
+                @endif
             </p>
         </div>
 
-        <a href="/ketuakk/dashboard" class="btn btn-primary">
-            Kembali ke Dashboard
+        <a href="/ketuakk/dashboard" class="btn btn-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Kembali
         </a>
     </div>
 
+    <form action="/ketuakk/monitoring-anggota-kk" method="GET">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Jenis Periode</label>
+                <select name="periode" class="form-select">
+                    <option value="tahun" {{ ($periode ?? 'tahun') == 'tahun' ? 'selected' : '' }}>Tahunan</option>
+                    <option value="bulan" {{ ($periode ?? '') == 'bulan' ? 'selected' : '' }}>Bulanan</option>
+                    <option value="triwulan" {{ ($periode ?? '') == 'triwulan' ? 'selected' : '' }}>Triwulan</option>
+                    <option value="semester" {{ ($periode ?? '') == 'semester' ? 'selected' : '' }}>Semester</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label fw-bold">Tahun</label>
+                <input type="number" name="tahun" class="form-control" value="{{ $tahun ?? now()->year }}">
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label fw-bold">Bulan</label>
+                <select name="bulan" class="form-select">
+                    @for($i = 1; $i <= 12; $i++)
+                        <option value="{{ $i }}" {{ ($bulan ?? now()->month) == $i ? 'selected' : '' }}>
+                        {{ $i }}
+                        </option>
+                        @endfor
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label fw-bold">Triwulan</label>
+                <select name="triwulan" class="form-select">
+                    <option value="1" {{ ($triwulan ?? 1) == 1 ? 'selected' : '' }}>Triwulan 1</option>
+                    <option value="2" {{ ($triwulan ?? 1) == 2 ? 'selected' : '' }}>Triwulan 2</option>
+                    <option value="3" {{ ($triwulan ?? 1) == 3 ? 'selected' : '' }}>Triwulan 3</option>
+                    <option value="4" {{ ($triwulan ?? 1) == 4 ? 'selected' : '' }}>Triwulan 4</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label fw-bold">Semester</label>
+                <select name="semester" class="form-select">
+                    <option value="1" {{ ($semester ?? 1) == 1 ? 'selected' : '' }}>Semester 1</option>
+                    <option value="2" {{ ($semester ?? 1) == 2 ? 'selected' : '' }}>Semester 2</option>
+                </select>
+            </div>
+
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-primary w-100">
+                    Filter
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card h-100">
+            <p class="text-muted mb-1">Jumlah Anggota</p>
+            <h3 class="fw-bold mb-0">{{ $jumlahAnggota ?? 0 }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card h-100">
+            <p class="text-muted mb-1">Total KM Assign</p>
+            <h3 class="fw-bold mb-0">{{ $totalKmAssignAll ?? 0 }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card h-100">
+            <p class="text-muted mb-1">Target Periode</p>
+            <h3 class="fw-bold mb-0">{{ $totalTargetPeriode ?? 0 }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card h-100">
+            <p class="text-muted mb-1">Realisasi Periode</p>
+            <h3 class="fw-bold mb-0">{{ $totalRealisasiPeriode ?? 0 }}</h3>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <p class="text-muted mb-1">Sisa Target Periode</p>
+            <h3 class="fw-bold mb-0">{{ $totalSisa ?? 0 }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100">
+            <p class="text-muted mb-1">Progress Total</p>
+            <h3 class="fw-bold mb-0">{{ min($persentaseTotal ?? 0, 100) }}%</h3>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h4 class="fw-bold mb-3">Monitoring Progress Anggota KK</h4>
+
     <div class="table-responsive">
-        <table class="table align-middle mb-0">
+        <table class="table align-middle mb-0" style="width: 100%; font-size: 14px;">
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Nama Anggota</th>
-                    <th>NIDN</th>
-                    <th>Email</th>
-                    <th>Lab Riset</th>
-                    <th>Total Target</th>
-                    <th>Total Realisasi</th>
-                    <th>Progress</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
+                    <th style="width: 5%;">No</th>
+                    <th style="width: 20%;">Nama Anggota</th>
+                    <th style="width: 18%;">Lab Riset</th>
+                    <th style="width: 10%;">JAD</th>
+                    <th style="width: 11%;">KM Assign</th>
+                    <th style="width: 11%;">Target Periode</th>
+                    <th style="width: 10%;">Realisasi</th>
+                    <th style="width: 10%;">Progress</th>
+                    <th style="width: 5%;">Aksi</th>
                 </tr>
             </thead>
+
             <tbody>
                 @forelse($dataMonitoring as $index => $item)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td class="fw-bold">{{ $item['nama_dosen'] }}</td>
-                        <td>{{ $item['nidn'] }}</td>
-                        <td>{{ $item['email'] }}</td>
-                        <td>{{ $item['nama_lab'] }}</td>
-                        <td>{{ $item['total_target'] }}</td>
-                        <td>{{ $item['total_realisasi'] }}</td>
-                        <td style="min-width: 180px;">
-                            <div class="progress" style="height: 10px;">
-                                <div class="progress-bar" style="width: {{ $item['persentase'] }}%;"></div>
-                            </div>
-                            <div class="small mt-1">{{ $item['persentase'] }}%</div>
-                        </td>
-                        <td>
-                            @if($item['status'] === 'Tercapai')
-                                <span class="status-success">Tercapai</span>
-                            @else
-                                <span class="status-danger">Belum Tercapai</span>
-                            @endif
-                        </td>
-                        <td>
-                            <a href="/ketuakk/monitoring-anggota-kk/{{ $item['id_user'] }}" class="btn btn-primary btn-sm">
-                                Detail
-                            </a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+
+                    <td class="fw-bold">
+                        {{ $item['nama_dosen'] }}
+                        <div class="small text-muted">
+                            {{ $item['nidn'] }}
+                        </div>
+                    </td>
+
+                    <td>
+                        {{ $item['nama_lab'] }}
+                    </td>
+
+                    <td>
+                        <span class="badge bg-primary">
+                            {{ $item['jad'] }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {{ $item['total_km_assign'] }}
+                    </td>
+
+                    <td>
+                        {{ $item['target_periode'] }}
+                    </td>
+
+                    <td>
+                        {{ $item['total_realisasi'] }}
+                    </td>
+
+                    <td>
+                        <div class="progress mb-1" style="height: 8px;">
+                            <div
+                                class="progress-bar"
+                                role="progressbar"
+                                style="width: {{ min($item['persentase'], 100) }}%;"></div>
+                        </div>
+
+                        <div class="small text-muted">
+                            {{ $item['persentase'] }}%
+                        </div>
+                    </td>
+
+                    <td>
+                        <a href="/ketuakk/monitoring-anggota-kk/{{ $item['id_user'] }}" class="btn btn-primary btn-sm">
+                            Detail
+                        </a>
+                    </td>
+                </tr>
                 @empty
-                    <tr>
-                        <td colspan="10">Belum ada akun anggota KK.</td>
-                    </tr>
+                <tr>
+                    <td colspan="9" class="text-center text-muted py-4">
+                        Belum ada data anggota KK.
+                    </td>
+                </tr>
                 @endforelse
             </tbody>
         </table>
