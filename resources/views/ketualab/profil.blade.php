@@ -24,4 +24,9 @@
         </tr>
     </table>
 </div>
+<div class="mt-4">
+    <a href="{{ url()->previous() }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Kembali
+    </a>
+</div>
 @endsection

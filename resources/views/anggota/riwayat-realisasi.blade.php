@@ -3,49 +3,86 @@
 @section('title', 'Riwayat Realisasi')
 
 @section('content')
-<div class="card">
-    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-        <div class="page-heading mb-0">
-            Riwayat <span class="muted">Realisasi</span>
+<style>
+    .km-table th {
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+
+    .km-table td {
+        vertical-align: middle;
+    }
+</style>
+
+<div class="page-heading">
+    Riwayat <span class="muted">Realisasi KM</span>
+</div>
+
+<div class="card mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h4 class="fw-bold mb-1">Riwayat Realisasi KM Saya</h4>
+            <p class="text-muted mb-0">
+                Menampilkan seluruh aktivitas KM yang telah Anda input sebagai realisasi Kontrak Manajemen.
+            </p>
         </div>
 
         <a href="/anggota/dashboard" class="btn btn-secondary">
             <i class="bi bi-arrow-left me-1"></i> Kembali
         </a>
     </div>
-    <h2>Riwayat Realisasi KM</h2>
-    <p>
-        Halaman ini menampilkan riwayat aktivitas atau realisasi Kontrak Manajemen
-        yang telah diinput oleh anggota.
-    </p>
+</div>
 
-    <table border="1" cellpadding="10" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Kategori KM</th>
-                <th>Judul Aktivitas</th>
-                <th>Deskripsi</th>
-                <th>Tanggal Mulai</th>
-                <th>Tanggal Selesai</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($aktivitas as $index => $item)
+<div class="card">
+    <h4 class="fw-bold mb-3">Daftar Riwayat Realisasi</h4>
+
+    <div class="table-responsive">
+        <table class="table align-middle mb-0 km-table" style="width: 100%; font-size: 14px;">
+            <thead>
+                <tr>
+                    <th style="width: 6%;">No</th>
+                    <th style="width: 18%;">Kategori KM</th>
+                    <th style="width: 24%;">Judul Aktivitas</th>
+                    <th style="width: 28%;">Deskripsi</th>
+                    <th style="width: 12%;">Tanggal Mulai</th>
+                    <th style="width: 12%;">Tanggal Selesai</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @forelse($aktivitas as $index => $item)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $item->kategori_km }}</td>
-                    <td>{{ $item->judul_aktivitas }}</td>
-                    <td>{{ $item->deskripsi_singkat ?? '-' }}</td>
-                    <td>{{ $item->tanggal_mulai }}</td>
-                    <td>{{ $item->tanggal_selesai }}</td>
+
+                    <td class="fw-bold">
+                        {{ $item->kategori_km ?? '-' }}
+                    </td>
+
+                    <td>
+                        {{ $item->judul_aktivitas ?? '-' }}
+                    </td>
+
+                    <td>
+                        {{ $item->deskripsi_singkat ?? '-' }}
+                    </td>
+
+                    <td>
+                        {{ \Carbon\Carbon::parse($item->tanggal_mulai)->format('d/m/Y') }}
+                    </td>
+
+                    <td>
+                        {{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d/m/Y') }}
+                    </td>
                 </tr>
-            @empty
+                @empty
                 <tr>
-                    <td colspan="6">Belum ada riwayat realisasi KM.</td>
+                    <td colspan="6" class="text-center text-muted py-4">
+                        Belum ada riwayat realisasi KM.
+                    </td>
                 </tr>
-            @endforelse
-        </tbody>
-    </table>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 </div>
 @endsection

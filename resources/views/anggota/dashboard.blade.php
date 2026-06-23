@@ -195,12 +195,8 @@
             Aktivitas KM
         </a>
 
-        <a href="/anggota/riwayat-realisasi" class="btn btn-secondary">
+        <a href="/anggota/riwayat-realisasi" class="btn btn-primary">
             Riwayat Realisasi
-        </a>
-
-        <a href="/anggota/profil" class="btn btn-secondary">
-            Profil
         </a>
     </div>
 </div>

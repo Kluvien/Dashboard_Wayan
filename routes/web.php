@@ -38,6 +38,27 @@ Route::middleware(['auth'])->group(function () {
 
     // RUANG KHUSUS KETUA KK
     Route::middleware(['auth', 'role:Ketua KK'])->group(function () {
+        Route::get('/ketuakk/profil', function () {
+            /** @var \App\Models\User $user */
+            $user = auth()->user();
+
+            $dosen = null;
+            $lab = null;
+
+            if (!empty($user->id_dosen)) {
+                $dosen = \Illuminate\Support\Facades\DB::table('dosen')
+                    ->where('id_dosen', $user->id_dosen)
+                    ->first();
+            }
+
+            if (!empty($user->id_lab)) {
+                $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+                    ->where('id_lab', $user->id_lab)
+                    ->first();
+            }
+
+            return view('ketuakk.profil', compact('user', 'dosen', 'lab'));
+        });
         Route::get('/ketuakk/dashboard', function () {
             $tahun = now()->year;
 
@@ -2569,6 +2590,28 @@ Route::middleware(['auth'])->group(function () {
                 ]);
 
             return redirect('/anggota/aktivitas-km')->with('success', 'Aktivitas KM berhasil diperbarui.');
+        });
+        Route::delete('/anggota/aktivitas-km/{id}', function ($id) {
+            /** @var \App\Models\User $user */
+            $user = auth()->user();
+
+            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                ->where('id_aktivitas', $id)
+                ->where('id_user', $user->id_user)
+                ->first();
+
+            if (!$aktivitas) {
+                return redirect('/anggota/aktivitas-km')
+                    ->with('error', 'Aktivitas KM tidak ditemukan atau bukan milik Anda.');
+            }
+
+            \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                ->where('id_aktivitas', $id)
+                ->where('id_user', $user->id_user)
+                ->delete();
+
+            return redirect('/anggota/aktivitas-km')
+                ->with('success', 'Aktivitas KM berhasil dihapus.');
         });
         Route::get('/anggota/progress-km', function () {
             /** @var \App\Models\User $user */

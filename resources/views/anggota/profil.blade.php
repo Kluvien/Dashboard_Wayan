@@ -8,12 +8,8 @@
         <div class="page-heading mb-0">
             Profil <span class="muted">Anggota</span>
         </div>
-
-        <a href="/anggota/dashboard" class="btn btn-secondary">
-            <i class="bi bi-arrow-left me-1"></i> Kembali
-        </a>
     </div>
-    
+
     <h2>Profil Anggota</h2>
     <p>
         Halaman ini menampilkan informasi profil anggota Kelompok Keahlian.
@@ -45,5 +41,11 @@
             <td>{{ $lab->nama_lab ?? '-' }}</td>
         </tr>
     </table>
+</div>
+
+<div class="mt-4">
+    <a href="{{ url()->previous() }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Kembali
+    </a>
 </div>
 @endsection

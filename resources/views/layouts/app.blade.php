@@ -110,29 +110,8 @@
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-end;
             padding: 0 28px 0 50px;
-        }
-
-        .search-box {
-            width: 295px;
-            height: 48px;
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            background: #F6F7FB;
-            display: flex;
-            align-items: center;
-            padding: 0 18px;
-            color: var(--text-muted);
-        }
-
-        .search-box input {
-            border: none;
-            outline: none;
-            background: transparent;
-            width: 100%;
-            margin-left: 10px;
-            color: var(--text-dark);
         }
 
         .topbar-right {
@@ -288,12 +267,12 @@
 
     $profileUrl = '#';
 
-    if ($role === 'Ketua Lab') {
+    if ($role === 'Ketua KK') {
+    $profileUrl = '/ketuakk/profil';
+    } elseif ($role === 'Ketua Lab') {
     $profileUrl = '/ketualab/profil';
     } elseif ($role === 'Anggota') {
     $profileUrl = '/anggota/profil';
-    } elseif ($role === 'Ketua KK') {
-    $profileUrl = '/ketuakk/dashboard';
     }
     @endphp
 
@@ -378,16 +357,9 @@
                     <span>Laporan</span>
                 </a>
 
-                <a class="sidebar-link {{ request()->is('ketualab/profil') ? 'active' : '' }}" href="/ketualab/profil">
-                    <span>Profil</span>
-                </a>
                 @elseif($role === 'Anggota')
                 <a class="sidebar-link {{ request()->is('anggota/dashboard') ? 'active' : '' }}" href="/anggota/dashboard">
                     <span>Dashboard</span>
-                </a>
-
-                <a class="sidebar-link {{ request()->is('anggota/profil') ? 'active' : '' }}" href="/anggota/profil">
-                    <span>Profil</span>
                 </a>
 
                 <a class="sidebar-link {{ request()->is('anggota/aktivitas-km*') ? 'active' : '' }}" href="/anggota/aktivitas-km">
@@ -407,11 +379,6 @@
 
         <main class="main-area">
             <header class="topbar">
-                <div class="search-box">
-                    <i class="bi bi-search"></i>
-                    <input type="text" placeholder="Cari">
-                </div>
-
                 <div class="topbar-right">
                     <div class="role-pill">{{ auth()->user()->role }} EIMS</div>
 
@@ -432,17 +399,19 @@
                         <ul class="dropdown-menu dropdown-menu-end shadow">
                             <li>
                                 <a class="dropdown-item" href="{{ $profileUrl }}">
-                                    Profil
+                                    <i class="bi bi-person me-2"></i> Profil
                                 </a>
                             </li>
+
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
+
                             <li>
                                 <form action="/logout" method="POST">
                                     @csrf
                                     <button class="dropdown-item text-danger" type="submit">
-                                        Logout
+                                        <i class="bi bi-box-arrow-right me-2"></i> Logout
                                     </button>
                                 </form>
                             </li>
