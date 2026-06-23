@@ -197,11 +197,34 @@ class KetuaLabController extends Controller
             ->orderBy('dosen.nama_dosen')
             ->get();
 
+        $riwayatAssign = DB::table('km_anggota')
+            ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
+            ->leftJoin('users', 'km_anggota.id_user', '=', 'users.id_user')
+            ->leftJoin('dosen', 'km_anggota.id_dosen', '=', 'dosen.id_dosen')
+            ->where('km_lab.id_lab', $idLab)
+            ->where('km_lab.tahun_km', $tahun)
+            ->select(
+                'km_anggota.id_km_anggota',
+                'km_anggota.jumlah_km',
+                'km_anggota.created_at',
+                'km_lab.kategori_km',
+                'km_lab.tahun_km',
+                'users.username',
+                'dosen.nama_dosen',
+                'dosen.nidn',
+                'dosen.email',
+                'dosen.jad'
+            )
+            ->orderBy('km_anggota.created_at', 'desc')
+            ->get();
+
+
         return view('ketualab.pembagian-km-anggota', compact(
             'lab',
             'tahun',
             'dataKmLab',
-            'anggota'
+            'anggota',
+            'riwayatAssign'
         ));
     }
 

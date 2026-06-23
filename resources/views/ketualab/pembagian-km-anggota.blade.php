@@ -40,13 +40,13 @@
         <table class="table align-middle mb-0" style="table-layout: fixed; width: 100%; font-size: 14px;">
             <thead>
                 <tr>
-                    <th style="width: 5%;">No</th>
-                    <th style="width: 18%;">Kategori KM</th>
-                    <th style="width: 12%;">Total KM</th>
-                    <th style="width: 12%;">Sudah Assign</th>
-                    <th style="width: 12%;">Sisa KM</th>
-                    <th style="width: 13%;">Status</th>
-                    <th style="width: 28%;">Assign ke Anggota</th>
+                    <th style="width: 6%;">No</th>
+                    <th style="width: 22%;">Kategori KM</th>
+                    <th style="width: 13%;">Total KM</th>
+                    <th style="width: 14%;">Sudah Assign</th>
+                    <th style="width: 13%;">Sisa KM</th>
+                    <th style="width: 16%;">Status</th>
+                    <th style="width: 16%;">Aksi</th>
                 </tr>
             </thead>
 
@@ -81,39 +81,18 @@
 
                     <td>
                         @if($km['sisa_km'] > 0)
-                        <form action="/ketualab/penurunan-km" method="POST">
-                            @csrf
-
-                            <input type="hidden" name="id_km_lab" value="{{ $km['id_km_lab'] }}">
-
-                            <div class="d-flex gap-2">
-                                <select name="id_user" class="form-select form-select-sm">
-                                    <option value="">Pilih Anggota</option>
-
-                                    @foreach($anggota as $item)
-                                    <option value="{{ $item->id_user }}">
-                                        {{ $item->nama_dosen ?? $item->username }}
-                                        - {{ $item->jad ?? 'AA' }}
-                                    </option>
-                                    @endforeach
-                                </select>
-
-                                <input
-                                    type="number"
-                                    name="jumlah_km"
-                                    class="form-control form-control-sm"
-                                    min="1"
-                                    max="{{ $km['sisa_km'] }}"
-                                    placeholder="Jumlah"
-                                    style="width: 90px;">
-
-                                <button type="submit" class="btn btn-primary btn-sm">
-                                    Bagi
-                                </button>
-                            </div>
-                        </form>
+                        <button
+                            type="button"
+                            class="btn btn-primary btn-sm js-open-assign-modal"
+                            data-id-km-lab="{{ $km['id_km_lab'] }}"
+                            data-kategori="{{ $km['kategori_km'] }}"
+                            data-sisa="{{ $km['sisa_km'] }}"
+                            data-bs-toggle="modal"
+                            data-bs-target="#assignKmModal">
+                            Bagi
+                        </button>
                         @else
-                        <span class="text-muted">Semua KM sudah dibagi</span>
+                        <span class="text-muted">Selesai</span>
                         @endif
                     </td>
                 </tr>
@@ -121,6 +100,66 @@
                 <tr>
                     <td colspan="7" class="text-center text-muted py-4">
                         Belum ada KM yang diturunkan Ketua KK ke lab ini.
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <h4 class="fw-bold mb-3">Riwayat Assign KM ke Anggota</h4>
+
+    <div class="table-responsive">
+        <table class="table align-middle mb-0" style="table-layout: fixed; width: 100%; font-size: 14px;">
+            <thead>
+                <tr>
+                    <th style="width: 5%;">No</th>
+                    <th style="width: 18%;">Kategori KM</th>
+                    <th style="width: 25%;">Nama Anggota</th>
+                    <th style="width: 13%;">NIDN</th>
+                    <th style="width: 12%;">JAD</th>
+                    <th style="width: 12%;">Jumlah KM</th>
+                    <th style="width: 15%;">Tanggal Assign</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @forelse($riwayatAssign as $index => $assign)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+
+                    <td class="fw-bold">
+                        {{ $assign->kategori_km }}
+                    </td>
+
+                    <td>
+                        {{ $assign->nama_dosen ?? $assign->username }}
+                    </td>
+
+                    <td>
+                        {{ $assign->nidn ?? '-' }}
+                    </td>
+
+                    <td>
+                        <span class="badge bg-primary">
+                            {{ $assign->jad ?? 'AA' }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {{ $assign->jumlah_km }}
+                    </td>
+
+                    <td>
+                        {{ \Carbon\Carbon::parse($assign->created_at)->format('d/m/Y') }}
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">
+                        Belum ada KM yang dibagikan ke anggota.
                     </td>
                 </tr>
                 @endforelse
@@ -202,4 +241,96 @@
         </table>
     </div>
 </div>
+
+<div class="modal fade" id="assignKmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0" style="border-radius: 18px;">
+            <form action="/ketualab/penurunan-km" method="POST">
+                @csrf
+
+                <input type="hidden" name="id_km_lab" id="modalIdKmLab">
+
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <h5 class="modal-title fw-bold">Bagi KM ke Anggota</h5>
+                        <p class="text-muted mb-0 small">
+                            Kategori: <span id="modalKategoriKm">-</span>
+                        </p>
+                    </div>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body pt-3">
+                    <div class="alert alert-info py-2">
+                        Sisa KM tersedia:
+                        <strong><span id="modalSisaKm">0</span></strong>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Pilih Anggota</label>
+                        <select name="id_user" class="form-select" required>
+                            <option value="">-- Pilih Anggota --</option>
+
+                            @foreach($anggota as $item)
+                            <option value="{{ $item->id_user }}">
+                                {{ $item->nama_dosen ?? $item->username }}
+                                - {{ $item->jad ?? 'AA' }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Jumlah KM</label>
+                        <input
+                            type="number"
+                            name="jumlah_km"
+                            id="modalJumlahKm"
+                            class="form-control"
+                            min="1"
+                            required
+                            placeholder="Masukkan jumlah KM">
+                    </div>
+                </div>
+
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Batal
+                    </button>
+
+                    <button type="submit" class="btn btn-primary">
+                        Simpan Pembagian
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const buttons = document.querySelectorAll('.js-open-assign-modal');
+
+        const inputIdKmLab = document.getElementById('modalIdKmLab');
+        const textKategori = document.getElementById('modalKategoriKm');
+        const textSisa = document.getElementById('modalSisaKm');
+        const inputJumlah = document.getElementById('modalJumlahKm');
+
+        buttons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                const idKmLab = button.getAttribute('data-id-km-lab');
+                const kategori = button.getAttribute('data-kategori');
+                const sisa = button.getAttribute('data-sisa');
+
+                inputIdKmLab.value = idKmLab;
+                textKategori.textContent = kategori;
+                textSisa.textContent = sisa;
+
+                inputJumlah.value = '';
+                inputJumlah.setAttribute('max', sisa);
+            });
+        });
+    });
+</script>
 @endsection
