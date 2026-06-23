@@ -4,34 +4,16 @@
 
 @section('content')
 <style>
-    .dashboard-compact-table {
-        table-layout: fixed;
+    .dashboard-chart-box {
+        position: relative;
         width: 100%;
-        font-size: 13px;
+        height: 340px;
     }
 
-    .dashboard-compact-table th,
-    .dashboard-compact-table td {
-        padding: 12px 10px !important;
-        white-space: normal;
-        word-break: normal;
-        vertical-align: middle;
-    }
-
-    .dashboard-compact-table .progress {
-        height: 9px;
-        background: #E5E7EB;
-    }
-
-    .dashboard-status-badge {
-        font-size: 12px;
-        padding: 6px 8px;
-        white-space: normal;
-        line-height: 1.2;
-    }
-
-    .notification-box {
-        min-height: 96px;
+    .dashboard-chart-box-small {
+        position: relative;
+        width: 100%;
+        height: 300px;
     }
 </style>
 
@@ -42,14 +24,14 @@
 <div class="card mb-4">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
         <div>
-            <h4 class="fw-bold mb-1">{{ $lab->nama_lab ?? 'Laboratorium Riset' }}</h4>
+            <h4 class="fw-bold mb-1">Ringkasan KM Lab Tahun {{ $tahun }}</h4>
             <p class="text-muted mb-0">
-                Ringkasan capaian Kontrak Manajemen laboratorium riset tahun {{ $tahun }}.
+                Lab: {{ $lab->nama_lab ?? '-' }}
             </p>
         </div>
 
-        <a href="/ketualab/monitoring-lab" class="btn btn-primary">
-            Lihat Monitoring Lab
+        <a href="/ketualab/penurunan-km" class="btn btn-primary">
+            Bagi KM ke Anggota
         </a>
     </div>
 </div>
@@ -57,152 +39,249 @@
 <div class="row g-4 mb-4">
     <div class="col-md-3">
         <div class="card h-100">
-            <div class="text-muted fw-bold mb-2">Jumlah Anggota</div>
-            <div class="fs-2 fw-bold">{{ $jumlahAnggota }}</div>
-            <div class="text-muted small">Anggota pada lab ini</div>
+            <p class="text-muted mb-1">Jumlah Anggota</p>
+            <h3 class="fw-bold mb-0">{{ $jumlahAnggota ?? 0 }}</h3>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="card h-100">
-            <div class="text-muted fw-bold mb-2">Total Target</div>
-            <div class="fs-2 fw-bold">{{ $totalTargetLab }}</div>
-            <div class="text-muted small">Target KM tahun {{ $tahun }}</div>
+            <p class="text-muted mb-1">KM Turun ke Lab</p>
+            <h3 class="fw-bold mb-0">{{ $totalKmTurun ?? 0 }}</h3>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="card h-100">
-            <div class="text-muted fw-bold mb-2">Total Realisasi</div>
-            <div class="fs-2 fw-bold">{{ $totalRealisasiLab }}</div>
-            <div class="text-muted small">Aktivitas KM tercatat</div>
+            <p class="text-muted mb-1">KM Sudah Assign</p>
+            <h3 class="fw-bold mb-0">{{ $totalKmAssign ?? 0 }}</h3>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="card h-100">
-            <div class="text-muted fw-bold mb-2">Persentase Capaian</div>
-            <div class="fs-2 fw-bold">{{ min($persentaseTotal, 100) }}%</div>
-            <div class="text-muted small">Capaian lab riset</div>
+            <p class="text-muted mb-1">Sisa Assign</p>
+            <h3 class="fw-bold mb-0">{{ $totalSisaAssign ?? 0 }}</h3>
         </div>
     </div>
 </div>
 
 <div class="row g-4 mb-4">
-    <div class="col-xl-8 col-lg-8">
+    <div class="col-md-4">
         <div class="card h-100">
-            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
-                <h4 class="fw-bold mb-0">Progress KM Per Kategori</h4>
-
-                <a href="/ketualab/laporan" class="btn btn-primary btn-sm">
-                    Lihat Laporan
-                </a>
-            </div>
-
-            <table class="table align-middle mb-0 dashboard-compact-table">
-                <thead>
-                    <tr>
-                        <th style="width: 7%;">No</th>
-                        <th style="width: 22%;">Kategori</th>
-                        <th style="width: 13%;">Target</th>
-                        <th style="width: 16%;">Realisasi</th>
-                        <th style="width: 27%;">Progress</th>
-                        <th style="width: 23%;">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($rekapKategori as $index => $item)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td class="fw-bold">{{ $item['kategori'] }}</td>
-                        <td>{{ $item['target'] }}</td>
-                        <td>{{ $item['realisasi'] }}</td>
-                        <td>
-                            <div class="progress">
-                                <div class="progress-bar" style="width: {{ $item['persentase'] }}%;"></div>
-                            </div>
-                            <div class="small mt-1">{{ $item['persentase'] }}%</div>
-                        </td>
-                        <td>
-                            @if($item['status'] === 'Tercapai')
-                            <span class="badge bg-success dashboard-status-badge">Tercapai</span>
-                            @else
-                            <span class="badge bg-danger dashboard-status-badge">Belum Tercapai</span>
-                            @endif
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <p class="text-muted mb-1">Total Realisasi</p>
+            <h3 class="fw-bold mb-0">{{ $totalRealisasi ?? 0 }}</h3>
         </div>
     </div>
 
-    <div class="col-xl-4 col-lg-4">
+    <div class="col-md-4">
         <div class="card h-100">
-            <h4 class="fw-bold mb-3">Pemberitahuan Sistem</h4>
+            <p class="text-muted mb-1">Progress Assign</p>
+            <h3 class="fw-bold mb-0">{{ min($persentaseAssign ?? 0, 100) }}%</h3>
+        </div>
+    </div>
 
-            <div class="p-3 mb-3 rounded notification-box" style="background:#EAF1FF;">
-                <div class="fw-bold">Monitoring lab aktif</div>
-                <div class="text-muted small">
-                    Data dashboard dihitung dari target KM dan aktivitas KM anggota.
-                </div>
-            </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <p class="text-muted mb-1">Progress Realisasi</p>
+            <h3 class="fw-bold mb-0">{{ min($persentaseRealisasi ?? 0, 100) }}%</h3>
+        </div>
+    </div>
+</div>
 
-            <div class="p-3 mb-3 rounded notification-box" style="background:#FFF7E6;">
-                <div class="fw-bold">Target dari database</div>
-                <div class="text-muted small">
-                    Target diambil dari tabel target_km dan kontrak_manajemen.
-                </div>
-            </div>
-
-            <div class="p-3 rounded notification-box" style="background:#EFFFFB;">
-                <div class="fw-bold">Realisasi berjalan</div>
-                <div class="text-muted small">
-                    Saat ini ada {{ $totalRealisasiLab }} aktivitas KM pada lab ini.
-                </div>
+<div class="row g-4 mb-4">
+    <div class="col-md-8">
+        <div class="card h-100">
+            <h4 class="fw-bold mb-3">Grafik KM per Kategori</h4>
+            <div class="dashboard-chart-box">
+                <canvas id="chartKategoriLab"></canvas>
             </div>
         </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <h4 class="fw-bold mb-3">Status Assign KM</h4>
+            <div class="dashboard-chart-box-small">
+                <canvas id="chartStatusAssign"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <h4 class="fw-bold mb-3">Grafik Progress Anggota Lab</h4>
+    <div class="dashboard-chart-box">
+        <canvas id="chartAnggotaLab"></canvas>
     </div>
 </div>
 
 <div class="card">
-    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
-        <h4 class="fw-bold mb-0">Aktivitas KM Terbaru</h4>
+    <h4 class="fw-bold mb-3">Akses Cepat</h4>
 
-        <a href="/ketualab/monitoring-anggota" class="btn btn-primary btn-sm">
+    <div class="d-flex gap-2 flex-wrap">
+        <a href="/ketualab/monitoring-lab" class="btn btn-primary">
+            Monitoring Lab
+        </a>
+
+        <a href="/ketualab/monitoring-anggota" class="btn btn-primary">
             Monitoring Anggota
         </a>
-    </div>
 
-    <table class="table align-middle mb-0" style="table-layout: fixed; width: 100%; font-size: 14px;">
-        <thead>
-            <tr>
-                <th style="width: 7%;">No</th>
-                <th style="width: 20%;">Nama Anggota</th>
-                <th style="width: 15%;">Kategori</th>
-                <th style="width: 28%;">Judul Aktivitas</th>
-                <th style="width: 15%;">Tanggal Mulai</th>
-                <th style="width: 15%;">Tanggal Selesai</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($aktivitasTerbaru as $index => $item)
-            <tr>
-                <td>{{ $index + 1 }}</td>
-                <td>{{ $item->nama_dosen ?? $item->username }}</td>
-                <td>{{ $item->kategori_km }}</td>
-                <td class="fw-bold">{{ $item->judul_aktivitas }}</td>
-                <td>{{ $item->tanggal_mulai }}</td>
-                <td>{{ $item->tanggal_selesai }}</td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan="6" class="text-center text-muted py-4">
-                    Belum ada aktivitas KM terbaru.
-                </td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
+        <a href="/ketualab/penurunan-km" class="btn btn-primary">
+            Pembagian KM
+        </a>
+
+        <a href="/ketualab/laporan" class="btn btn-secondary">
+            Laporan
+        </a>
+    </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const kategoriLabels = @json($kategoriLabels ?? []);
+        const kategoriKmTurun = @json($kategoriKmTurun ?? []);
+        const kategoriKmAssign = @json($kategoriKmAssign ?? []);
+        const kategoriRealisasi = @json($kategoriRealisasi ?? []);
+
+        const anggotaLabels = @json($anggotaLabels ?? []);
+        const anggotaKmAssign = @json($anggotaKmAssign ?? []);
+        const anggotaRealisasi = @json($anggotaRealisasi ?? []);
+
+        const statusAssignLabels = @json($statusAssignLabels ?? []);
+        const statusAssignData = @json($statusAssignData ?? []);
+
+        const chartKategoriElement = document.getElementById('chartKategoriLab');
+
+        if (chartKategoriElement) {
+            new Chart(chartKategoriElement, {
+                type: 'bar',
+                data: {
+                    labels: kategoriLabels,
+                    datasets: [{
+                            label: 'KM Turun',
+                            data: kategoriKmTurun,
+                            backgroundColor: '#3b82f6'
+                        },
+                        {
+                            label: 'KM Assign',
+                            data: kategoriKmAssign,
+                            backgroundColor: '#22c55e'
+                        },
+                        {
+                            label: 'Realisasi',
+                            data: kategoriRealisasi,
+                            backgroundColor: '#f59e0b'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            top: 20,
+                            bottom: 10
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            min: 0,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        const chartAnggotaElement = document.getElementById('chartAnggotaLab');
+
+        if (chartAnggotaElement) {
+            new Chart(chartAnggotaElement, {
+                type: 'bar',
+                data: {
+                    labels: anggotaLabels,
+                    datasets: [{
+                            label: 'KM Assign',
+                            data: anggotaKmAssign,
+                            backgroundColor: '#3b82f6'
+                        },
+                        {
+                            label: 'Realisasi',
+                            data: anggotaRealisasi,
+                            backgroundColor: '#22c55e'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            top: 20,
+                            bottom: 10
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            min: 0,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        const chartStatusElement = document.getElementById('chartStatusAssign');
+
+        if (chartStatusElement) {
+            new Chart(chartStatusElement, {
+                type: 'doughnut',
+                data: {
+                    labels: statusAssignLabels,
+                    datasets: [{
+                        data: statusAssignData,
+                        backgroundColor: ['#22c55e', '#ef4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
 @endsection

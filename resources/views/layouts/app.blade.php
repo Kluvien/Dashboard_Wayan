@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -279,20 +280,21 @@
         }
     </style>
 </head>
+
 <body>
-@auth
+    @auth
     @php
-        $role = auth()->user()->role;
+    $role = auth()->user()->role;
 
-        $profileUrl = '#';
+    $profileUrl = '#';
 
-        if ($role === 'Ketua Lab') {
-            $profileUrl = '/ketualab/profil';
-        } elseif ($role === 'Anggota') {
-            $profileUrl = '/anggota/profil';
-        } elseif ($role === 'Ketua KK') {
-            $profileUrl = '/ketuakk/dashboard';
-        }
+    if ($role === 'Ketua Lab') {
+    $profileUrl = '/ketualab/profil';
+    } elseif ($role === 'Anggota') {
+    $profileUrl = '/anggota/profil';
+    } elseif ($role === 'Ketua KK') {
+    $profileUrl = '/ketuakk/dashboard';
+    }
     @endphp
 
     <div class="app-wrapper">
@@ -303,102 +305,102 @@
 
             <nav class="sidebar-menu">
                 @if($role === 'Ketua KK')
-                    <a class="sidebar-link {{ request()->is('ketuakk/dashboard') ? 'active' : '' }}" href="/ketuakk/dashboard">
-                        <span>Dashboard</span>
+                <a class="sidebar-link {{ request()->is('ketuakk/dashboard') ? 'active' : '' }}" href="/ketuakk/dashboard">
+                    <span>Dashboard</span>
+                </a>
+
+                <div class="sidebar-heading">
+                    <span>Data Master</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+
+                <div class="sidebar-sub">
+                    <a class="sidebar-link {{ request()->is('ketuakk/data-lab-riset') ? 'active' : '' }}" href="/ketuakk/data-lab-riset">
+                        <span>Data Lab. Riset</span>
                     </a>
 
-                    <div class="sidebar-heading">
-                        <span>Data Master</span>
-                        <i class="bi bi-chevron-down"></i>
-                    </div>
+                    <a class="sidebar-link {{ request()->is('ketuakk/data-dosen') ? 'active' : '' }}" href="/ketuakk/data-dosen">
+                        <span>Data Anggota KK</span>
+                    </a>
+                </div>
 
-                    <div class="sidebar-sub">
-                        <a class="sidebar-link {{ request()->is('ketuakk/data-lab-riset') ? 'active' : '' }}" href="/ketuakk/data-lab-riset">
-                            <span>Data Lab. Riset</span>
-                        </a>
+                <div class="sidebar-heading">
+                    <span>Kontrak Manajemen</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
 
-                        <a class="sidebar-link {{ request()->is('ketuakk/data-dosen') ? 'active' : '' }}" href="/ketuakk/data-dosen">
-                            <span>Data Anggota KK</span>
-                        </a>
-                    </div>
+                <div class="sidebar-sub">
+                    <a class="sidebar-link {{ request()->is('ketuakk/km-kk*') ? 'active' : '' }}" href="/ketuakk/km-kk">
+                        <span>Kelompok Keahlian</span>
+                    </a>
 
-                    <div class="sidebar-heading">
-                        <span>Kontrak Manajemen</span>
-                        <i class="bi bi-chevron-down"></i>
-                    </div>
+                    <a class="sidebar-link {{ request()->is('ketuakk/km-lab-riset*') ? 'active' : '' }}" href="/ketuakk/km-lab-riset">
+                        <span>Lab. Riset</span>
+                    </a>
 
-                    <div class="sidebar-sub">
-                        <a class="sidebar-link {{ request()->is('ketuakk/km-kk*') ? 'active' : '' }}" href="/ketuakk/km-kk">
-                            <span>Kelompok Keahlian</span>
-                        </a>
+                    <a class="sidebar-link {{ request()->is('ketuakk/km-anggota-kk*') ? 'active' : '' }}" href="/ketuakk/km-anggota-kk">
+                        <span>Anggota KK</span>
+                    </a>
+                </div>
 
-                        <a class="sidebar-link {{ request()->is('ketuakk/km-lab-riset*') ? 'active' : '' }}" href="/ketuakk/km-lab-riset">
-                            <span>Lab. Riset</span>
-                        </a>
+                <div class="sidebar-heading">
+                    <span>Monitoring</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
 
-                        <a class="sidebar-link {{ request()->is('ketuakk/km-anggota-kk*') ? 'active' : '' }}" href="/ketuakk/km-anggota-kk">
-                            <span>Anggota KK</span>
-                        </a>
-                    </div>
+                <div class="sidebar-sub">
+                    <a class="sidebar-link {{ request()->is('ketuakk/monitoring-lab-riset*') ? 'active' : '' }}" href="/ketuakk/monitoring-lab-riset">
+                        <span>Monitoring Lab. Riset</span>
+                    </a>
 
-                    <div class="sidebar-heading">
-                        <span>Monitoring</span>
-                        <i class="bi bi-chevron-down"></i>
-                    </div>
-
-                    <div class="sidebar-sub">
-                        <a class="sidebar-link {{ request()->is('ketuakk/monitoring-lab-riset*') ? 'active' : '' }}" href="/ketuakk/monitoring-lab-riset">
-                            <span>Monitoring Lab. Riset</span>
-                        </a>
-
-                        <a class="sidebar-link {{ request()->is('ketuakk/monitoring-anggota-kk*') ? 'active' : '' }}" href="/ketuakk/monitoring-anggota-kk">
-                            <span>Monitoring Anggota KK</span>
-                        </a>
-                    </div>
+                    <a class="sidebar-link {{ request()->is('ketuakk/monitoring-anggota-kk*') ? 'active' : '' }}" href="/ketuakk/monitoring-anggota-kk">
+                        <span>Monitoring Anggota KK</span>
+                    </a>
+                </div>
                 @elseif($role === 'Ketua Lab')
-                    <a class="sidebar-link {{ request()->is('ketualab/dashboard') ? 'active' : '' }}" href="/ketualab/dashboard">
-                        <span>Dashboard</span>
-                    </a>
+                <a class="sidebar-link {{ request()->is('ketualab/dashboard') ? 'active' : '' }}" href="/ketualab/dashboard">
+                    <span>Dashboard</span>
+                </a>
 
-                    <a class="sidebar-link {{ request()->is('ketualab/penurunan-km*') ? 'active' : '' }}" href="/ketualab/penurunan-km">
-                        <span>Target KM Anggota</span>
-                    </a>
+                <a class="sidebar-link {{ request()->is('ketualab/penurunan-km*') ? 'active' : '' }}" href="/ketualab/penurunan-km">
+                    <span>Target KM Anggota</span>
+                </a>
 
-                    <a class="sidebar-link {{ request()->is('ketualab/monitoring-lab') ? 'active' : '' }}" href="/ketualab/monitoring-lab">
-                        <span>Monitoring KM Lab</span>
-                    </a>
+                <a class="sidebar-link {{ request()->is('ketualab/monitoring-lab') ? 'active' : '' }}" href="/ketualab/monitoring-lab">
+                    <span>Monitoring KM Lab</span>
+                </a>
 
-                    <a class="sidebar-link {{ request()->is('ketualab/monitoring-anggota') || request()->is('ketualab/detail-anggota*') ? 'active' : '' }}" href="/ketualab/monitoring-anggota">
-                        <span>Monitoring Anggota</span>
-                    </a>
+                <a class="sidebar-link {{ request()->is('ketualab/monitoring-anggota') || request()->is('ketualab/detail-anggota*') ? 'active' : '' }}" href="/ketualab/monitoring-anggota">
+                    <span>Monitoring Anggota</span>
+                </a>
 
-                    <a class="sidebar-link {{ request()->is('ketualab/laporan') ? 'active' : '' }}" href="/ketualab/laporan">
-                        <span>Laporan</span>
-                    </a>
+                <a class="sidebar-link {{ request()->is('ketualab/laporan') ? 'active' : '' }}" href="/ketualab/laporan">
+                    <span>Laporan</span>
+                </a>
 
-                    <a class="sidebar-link {{ request()->is('ketualab/profil') ? 'active' : '' }}" href="/ketualab/profil">
-                        <span>Profil</span>
-                    </a>
+                <a class="sidebar-link {{ request()->is('ketualab/profil') ? 'active' : '' }}" href="/ketualab/profil">
+                    <span>Profil</span>
+                </a>
                 @elseif($role === 'Anggota')
-                    <a class="sidebar-link {{ request()->is('anggota/dashboard') ? 'active' : '' }}" href="/anggota/dashboard">
-                        <span>Dashboard</span>
-                    </a>
+                <a class="sidebar-link {{ request()->is('anggota/dashboard') ? 'active' : '' }}" href="/anggota/dashboard">
+                    <span>Dashboard</span>
+                </a>
 
-                    <a class="sidebar-link {{ request()->is('anggota/profil') ? 'active' : '' }}" href="/anggota/profil">
-                        <span>Profil</span>
-                    </a>
+                <a class="sidebar-link {{ request()->is('anggota/profil') ? 'active' : '' }}" href="/anggota/profil">
+                    <span>Profil</span>
+                </a>
 
-                    <a class="sidebar-link {{ request()->is('anggota/aktivitas-km*') ? 'active' : '' }}" href="/anggota/aktivitas-km">
-                        <span>Aktivitas KM</span>
-                    </a>
+                <a class="sidebar-link {{ request()->is('anggota/aktivitas-km*') ? 'active' : '' }}" href="/anggota/aktivitas-km">
+                    <span>Aktivitas KM</span>
+                </a>
 
-                    <a class="sidebar-link {{ request()->is('anggota/riwayat-realisasi') ? 'active' : '' }}" href="/anggota/riwayat-realisasi">
-                        <span>Riwayat Realisasi</span>
-                    </a>
+                <a class="sidebar-link {{ request()->is('anggota/riwayat-realisasi') ? 'active' : '' }}" href="/anggota/riwayat-realisasi">
+                    <span>Riwayat Realisasi</span>
+                </a>
 
-                    <a class="sidebar-link {{ request()->is('anggota/progress-km') ? 'active' : '' }}" href="/anggota/progress-km">
-                        <span>Progress KM</span>
-                    </a>
+                <a class="sidebar-link {{ request()->is('anggota/progress-km') ? 'active' : '' }}" href="/anggota/progress-km">
+                    <span>Progress KM</span>
+                </a>
                 @endif
             </nav>
         </aside>
@@ -454,20 +456,20 @@
             </section>
         </main>
     </div>
-@else
+    @else
     @yield('content')
-@endauth
+    @endauth
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-@if(session('success') || session('error'))
-<div class="modal fade" id="statusModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0" style="border-radius: 18px;">
-            <div class="modal-body text-center p-5">
-                @if(session('success'))
+    @if(session('success') || session('error'))
+    <div class="modal fade" id="statusModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0" style="border-radius: 18px;">
+                <div class="modal-body text-center p-5">
+                    @if(session('success'))
                     <div class="mx-auto mb-3 d-flex align-items-center justify-content-center"
-                         style="width: 72px; height: 72px; border-radius: 50%; background:#E9F8EF; color:#28A745;">
+                        style="width: 72px; height: 72px; border-radius: 50%; background:#E9F8EF; color:#28A745;">
                         <i class="bi bi-check-lg" style="font-size: 38px;"></i>
                     </div>
 
@@ -477,11 +479,11 @@
                     <button type="button" class="btn btn-primary px-4" data-bs-dismiss="modal">
                         Oke
                     </button>
-                @endif
+                    @endif
 
-                @if(session('error'))
+                    @if(session('error'))
                     <div class="mx-auto mb-3 d-flex align-items-center justify-content-center"
-                         style="width: 72px; height: 72px; border-radius: 50%; background:#FDECEC; color:#DC3545;">
+                        style="width: 72px; height: 72px; border-radius: 50%; background:#FDECEC; color:#DC3545;">
                         <i class="bi bi-x-lg" style="font-size: 32px;"></i>
                     </div>
 
@@ -491,81 +493,82 @@
                     <button type="button" class="btn btn-primary px-4" data-bs-dismiss="modal">
                         Oke
                     </button>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
-@endif
-
-<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0" style="border-radius: 18px;">
-            <div class="modal-body text-center p-5">
-                <div class="mx-auto mb-3 d-flex align-items-center justify-content-center"
-                     style="width: 72px; height: 72px; border-radius: 50%; background:#FDECEC; color:#DC3545;">
-                    <i class="bi bi-trash3" style="font-size: 34px;"></i>
-                </div>
-
-                <h4 class="fw-bold mb-2">Konfirmasi Hapus Data</h4>
-                <p class="text-muted mb-4" id="deleteConfirmText">
-                    Apakah Anda yakin ingin menghapus data ini?
-                </p>
-
-                <div class="d-flex justify-content-center gap-2">
-                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
-                        Batal
-                    </button>
-
-                    <button type="button" class="btn btn-delete px-4" id="deleteConfirmButton">
-                        Hapus
-                    </button>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
-</div>
+    @endif
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const statusModalElement = document.getElementById('statusModal');
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0" style="border-radius: 18px;">
+                <div class="modal-body text-center p-5">
+                    <div class="mx-auto mb-3 d-flex align-items-center justify-content-center"
+                        style="width: 72px; height: 72px; border-radius: 50%; background:#FDECEC; color:#DC3545;">
+                        <i class="bi bi-trash3" style="font-size: 34px;"></i>
+                    </div>
 
-        if (statusModalElement && window.bootstrap) {
-            const statusModal = new bootstrap.Modal(statusModalElement);
-            statusModal.show();
-        }
+                    <h4 class="fw-bold mb-2">Konfirmasi Hapus Data</h4>
+                    <p class="text-muted mb-4" id="deleteConfirmText">
+                        Apakah Anda yakin ingin menghapus data ini?
+                    </p>
 
-        const deleteModalElement = document.getElementById('deleteConfirmModal');
-        const deleteButton = document.getElementById('deleteConfirmButton');
-        const deleteText = document.getElementById('deleteConfirmText');
+                    <div class="d-flex justify-content-center gap-2">
+                        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+                            Batal
+                        </button>
 
-        let selectedDeleteForm = null;
+                        <button type="button" class="btn btn-delete px-4" id="deleteConfirmButton">
+                            Hapus
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        document.querySelectorAll('.js-delete-form').forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusModalElement = document.getElementById('statusModal');
 
-                selectedDeleteForm = form;
+            if (statusModalElement && window.bootstrap) {
+                const statusModal = new bootstrap.Modal(statusModalElement);
+                statusModal.show();
+            }
 
-                const message = form.getAttribute('data-message') || 'Apakah Anda yakin ingin menghapus data ini?';
-                deleteText.textContent = message;
+            const deleteModalElement = document.getElementById('deleteConfirmModal');
+            const deleteButton = document.getElementById('deleteConfirmButton');
+            const deleteText = document.getElementById('deleteConfirmText');
 
-                if (window.bootstrap) {
-                    const deleteModal = new bootstrap.Modal(deleteModalElement);
-                    deleteModal.show();
-                }
+            let selectedDeleteForm = null;
+
+            document.querySelectorAll('.js-delete-form').forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+
+                    selectedDeleteForm = form;
+
+                    const message = form.getAttribute('data-message') || 'Apakah Anda yakin ingin menghapus data ini?';
+                    deleteText.textContent = message;
+
+                    if (window.bootstrap) {
+                        const deleteModal = new bootstrap.Modal(deleteModalElement);
+                        deleteModal.show();
+                    }
+                });
             });
+
+            if (deleteButton) {
+                deleteButton.addEventListener('click', function() {
+                    if (selectedDeleteForm) {
+                        selectedDeleteForm.submit();
+                    }
+                });
+            }
         });
-
-        if (deleteButton) {
-            deleteButton.addEventListener('click', function () {
-                if (selectedDeleteForm) {
-                    selectedDeleteForm.submit();
-                }
-            });
-        }
-    });
-</script>
-
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
+
 </html>

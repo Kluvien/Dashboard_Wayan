@@ -38,7 +38,125 @@ Route::middleware(['auth'])->group(function () {
 
     // RUANG KHUSUS KETUA KK
     Route::middleware(['auth', 'role:Ketua KK'])->group(function () {
-        Route::get('/ketuakk/dashboard', [KetuaKkController::class, 'dashboard']);
+        Route::get('/ketuakk/dashboard', function () {
+            $tahun = now()->year;
+
+            $labs = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+                ->orderBy('id_lab')
+                ->get();
+
+            $kategoriDefault = [
+                'Pendidikan',
+                'Penelitian',
+                'Publikasi',
+                'Pengabdian',
+                'Penunjang',
+            ];
+
+            $labChartLabels = [];
+            $labKmTurun = [];
+            $labKmAssign = [];
+            $labRealisasi = [];
+
+            foreach ($labs as $lab) {
+                $kmTurun = \Illuminate\Support\Facades\DB::table('km_lab')
+                    ->where('id_lab', $lab->id_lab)
+                    ->where('tahun_km', $tahun)
+                    ->where('status_km', 'Aktif')
+                    ->sum('jumlah_km');
+
+                $kmAssign = \Illuminate\Support\Facades\DB::table('km_anggota')
+                    ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
+                    ->where('km_lab.id_lab', $lab->id_lab)
+                    ->where('km_lab.tahun_km', $tahun)
+                    ->where('km_lab.status_km', 'Aktif')
+                    ->sum('km_anggota.jumlah_km');
+
+                $realisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                    ->where('id_lab', $lab->id_lab)
+                    ->whereYear('tanggal_mulai', $tahun)
+                    ->count();
+
+                $labChartLabels[] = $lab->nama_lab;
+                $labKmTurun[] = $kmTurun;
+                $labKmAssign[] = $kmAssign;
+                $labRealisasi[] = $realisasi;
+            }
+
+            $kategoriLabels = [];
+            $kategoriKmTurun = [];
+            $kategoriKmAssign = [];
+            $kategoriRealisasi = [];
+
+            foreach ($kategoriDefault as $kategori) {
+                $kmTurun = \Illuminate\Support\Facades\DB::table('km_lab')
+                    ->where('kategori_km', $kategori)
+                    ->where('tahun_km', $tahun)
+                    ->where('status_km', 'Aktif')
+                    ->sum('jumlah_km');
+
+                $kmAssign = \Illuminate\Support\Facades\DB::table('km_anggota')
+                    ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
+                    ->where('km_lab.kategori_km', $kategori)
+                    ->where('km_lab.tahun_km', $tahun)
+                    ->where('km_lab.status_km', 'Aktif')
+                    ->sum('km_anggota.jumlah_km');
+
+                $realisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                    ->where('kategori_km', $kategori)
+                    ->whereYear('tanggal_mulai', $tahun)
+                    ->count();
+
+                $kategoriLabels[] = $kategori;
+                $kategoriKmTurun[] = $kmTurun;
+                $kategoriKmAssign[] = $kmAssign;
+                $kategoriRealisasi[] = $realisasi;
+            }
+
+            $totalLab = $labs->count();
+
+            $totalAnggota = \Illuminate\Support\Facades\DB::table('users')
+                ->where('role', 'Anggota')
+                ->count();
+
+            $totalKmTurun = array_sum($labKmTurun);
+            $totalKmAssign = array_sum($labKmAssign);
+            $totalRealisasi = array_sum($labRealisasi);
+            $totalSisaAssign = max($totalKmTurun - $totalKmAssign, 0);
+
+            $persentaseAssign = $totalKmTurun > 0
+                ? round(($totalKmAssign / $totalKmTurun) * 100)
+                : 0;
+
+            $persentaseRealisasi = $totalKmAssign > 0
+                ? round(($totalRealisasi / $totalKmAssign) * 100)
+                : 0;
+
+            $statusAssignLabels = ['Sudah Assign', 'Sisa Assign'];
+            $statusAssignData = [$totalKmAssign, $totalSisaAssign];
+
+            return view('ketuakk.dashboard', compact(
+                'tahun',
+                'totalLab',
+                'totalAnggota',
+                'totalKmTurun',
+                'totalKmAssign',
+                'totalSisaAssign',
+                'totalRealisasi',
+                'persentaseAssign',
+                'persentaseRealisasi',
+                'labChartLabels',
+                'labKmTurun',
+                'labKmAssign',
+                'labRealisasi',
+                'kategoriLabels',
+                'kategoriKmTurun',
+                'kategoriKmAssign',
+                'kategoriRealisasi',
+                'statusAssignLabels',
+                'statusAssignData'
+            ));
+        });
 
         Route::get('/ketuakk/target-km', [TargetKmController::class, 'index']);
         Route::get('/ketuakk/target-km/create', [TargetKmController::class, 'create']);
@@ -1269,7 +1387,131 @@ Route::middleware(['auth'])->group(function () {
 
     // RUANG KHUSUS KETUA LAB
     Route::middleware(['auth', 'role:Ketua Lab'])->group(function () {
-        Route::get('/ketualab/dashboard', [KetuaLabController::class, 'dashboard']);
+        Route::get('/ketualab/dashboard', function () {
+            /** @var \App\Models\User $user */
+            $user = auth()->user();
+
+            $idLab = $user->id_lab;
+            $tahun = now()->year;
+
+            $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+                ->where('id_lab', $idLab)
+                ->first();
+
+            $kategoriDefault = [
+                'Pendidikan',
+                'Penelitian',
+                'Publikasi',
+                'Pengabdian',
+                'Penunjang',
+            ];
+
+            $kategoriLabels = [];
+            $kategoriKmTurun = [];
+            $kategoriKmAssign = [];
+            $kategoriRealisasi = [];
+
+            foreach ($kategoriDefault as $kategori) {
+                $kmTurun = \Illuminate\Support\Facades\DB::table('km_lab')
+                    ->where('id_lab', $idLab)
+                    ->where('kategori_km', $kategori)
+                    ->where('tahun_km', $tahun)
+                    ->where('status_km', 'Aktif')
+                    ->sum('jumlah_km');
+
+                $kmAssign = \Illuminate\Support\Facades\DB::table('km_anggota')
+                    ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
+                    ->where('km_lab.id_lab', $idLab)
+                    ->where('km_lab.kategori_km', $kategori)
+                    ->where('km_lab.tahun_km', $tahun)
+                    ->where('km_lab.status_km', 'Aktif')
+                    ->sum('km_anggota.jumlah_km');
+
+                $realisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                    ->where('id_lab', $idLab)
+                    ->where('kategori_km', $kategori)
+                    ->whereYear('tanggal_mulai', $tahun)
+                    ->count();
+
+                $kategoriLabels[] = $kategori;
+                $kategoriKmTurun[] = $kmTurun;
+                $kategoriKmAssign[] = $kmAssign;
+                $kategoriRealisasi[] = $realisasi;
+            }
+
+            $anggota = \Illuminate\Support\Facades\DB::table('users')
+                ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
+                ->where('users.role', 'Anggota')
+                ->where('users.id_lab', $idLab)
+                ->select(
+                    'users.id_user',
+                    'users.username',
+                    'dosen.nama_dosen'
+                )
+                ->orderBy('dosen.nama_dosen')
+                ->get();
+
+            $anggotaLabels = [];
+            $anggotaKmAssign = [];
+            $anggotaRealisasi = [];
+
+            foreach ($anggota as $item) {
+                $totalAssign = \Illuminate\Support\Facades\DB::table('km_anggota')
+                    ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
+                    ->where('km_anggota.id_user', $item->id_user)
+                    ->where('km_lab.id_lab', $idLab)
+                    ->where('km_lab.tahun_km', $tahun)
+                    ->where('km_lab.status_km', 'Aktif')
+                    ->sum('km_anggota.jumlah_km');
+
+                $totalRealisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                    ->where('id_user', $item->id_user)
+                    ->whereYear('tanggal_mulai', $tahun)
+                    ->count();
+
+                $anggotaLabels[] = $item->nama_dosen ?? $item->username;
+                $anggotaKmAssign[] = $totalAssign;
+                $anggotaRealisasi[] = $totalRealisasi;
+            }
+
+            $jumlahAnggota = $anggota->count();
+            $totalKmTurun = array_sum($kategoriKmTurun);
+            $totalKmAssign = array_sum($kategoriKmAssign);
+            $totalRealisasi = array_sum($kategoriRealisasi);
+            $totalSisaAssign = max($totalKmTurun - $totalKmAssign, 0);
+
+            $persentaseAssign = $totalKmTurun > 0
+                ? round(($totalKmAssign / $totalKmTurun) * 100)
+                : 0;
+
+            $persentaseRealisasi = $totalKmAssign > 0
+                ? round(($totalRealisasi / $totalKmAssign) * 100)
+                : 0;
+
+            $statusAssignLabels = ['Sudah Assign', 'Sisa Assign'];
+            $statusAssignData = [$totalKmAssign, $totalSisaAssign];
+
+            return view('ketualab.dashboard', compact(
+                'tahun',
+                'lab',
+                'jumlahAnggota',
+                'totalKmTurun',
+                'totalKmAssign',
+                'totalSisaAssign',
+                'totalRealisasi',
+                'persentaseAssign',
+                'persentaseRealisasi',
+                'kategoriLabels',
+                'kategoriKmTurun',
+                'kategoriKmAssign',
+                'kategoriRealisasi',
+                'anggotaLabels',
+                'anggotaKmAssign',
+                'anggotaRealisasi',
+                'statusAssignLabels',
+                'statusAssignData'
+            ));
+        });
         Route::get('/ketualab/penurunan-km', [KetuaLabController::class, 'pembagianKmAnggota']);
         Route::post('/ketualab/penurunan-km', [KetuaLabController::class, 'simpanPembagianKmAnggota']);
         Route::get('/ketualab/penurunan-km/{id}/plot', [KetuaLabController::class, 'createPlot']);
@@ -1876,7 +2118,148 @@ Route::middleware(['auth'])->group(function () {
 
     // RUANG KHUSUS ANGGOTA
     Route::middleware(['auth', 'role:Anggota'])->group(function () {
-        Route::get('/anggota/dashboard', [AnggotaController::class, 'dashboard']);
+        Route::get('/anggota/dashboard', function () {
+            /** @var \App\Models\User $user */
+            $user = auth()->user();
+
+            $idUser = $user->id_user;
+            $tahun = now()->year;
+
+            $anggota = \Illuminate\Support\Facades\DB::table('users')
+                ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
+                ->leftJoin('laboratorium_riset', 'users.id_lab', '=', 'laboratorium_riset.id_lab')
+                ->where('users.id_user', $idUser)
+                ->select(
+                    'users.id_user',
+                    'users.username',
+                    'users.id_dosen',
+                    'users.id_lab',
+                    'dosen.nama_dosen',
+                    'dosen.nidn',
+                    'dosen.email',
+                    'dosen.jad',
+                    'laboratorium_riset.nama_lab'
+                )
+                ->first();
+
+            $kategoriDefault = [
+                'Pendidikan',
+                'Penelitian',
+                'Publikasi',
+                'Pengabdian',
+                'Penunjang',
+            ];
+
+            $kategoriLabels = [];
+            $kategoriTarget = [];
+            $kategoriRealisasi = [];
+            $kategoriSisa = [];
+
+            foreach ($kategoriDefault as $kategori) {
+                $target = \Illuminate\Support\Facades\DB::table('km_anggota')
+                    ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
+                    ->where('km_anggota.id_user', $idUser)
+                    ->where('km_lab.kategori_km', $kategori)
+                    ->where('km_lab.tahun_km', $tahun)
+                    ->where('km_lab.status_km', 'Aktif')
+                    ->sum('km_anggota.jumlah_km');
+
+                $realisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                    ->where('id_user', $idUser)
+                    ->where('kategori_km', $kategori)
+                    ->whereYear('tanggal_mulai', $tahun)
+                    ->count();
+
+                $sisa = max($target - $realisasi, 0);
+
+                $kategoriLabels[] = $kategori;
+                $kategoriTarget[] = $target;
+                $kategoriRealisasi[] = $realisasi;
+                $kategoriSisa[] = $sisa;
+            }
+
+            $bulanLabels = [
+                'Jan',
+                'Feb',
+                'Mar',
+                'Apr',
+                'Mei',
+                'Jun',
+                'Jul',
+                'Agu',
+                'Sep',
+                'Okt',
+                'Nov',
+                'Des'
+            ];
+
+            $aktivitasBulanan = [];
+
+            for ($bulan = 1; $bulan <= 12; $bulan++) {
+                $jumlahAktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                    ->where('id_user', $idUser)
+                    ->whereYear('tanggal_mulai', $tahun)
+                    ->whereMonth('tanggal_mulai', $bulan)
+                    ->count();
+
+                $aktivitasBulanan[] = $jumlahAktivitas;
+            }
+
+            $totalTarget = array_sum($kategoriTarget);
+            $totalRealisasi = array_sum($kategoriRealisasi);
+            $totalSisa = max($totalTarget - $totalRealisasi, 0);
+
+            $persentaseTotal = $totalTarget > 0
+                ? round(($totalRealisasi / $totalTarget) * 100)
+                : 0;
+
+            $statusProgressLabels = ['Realisasi', 'Sisa'];
+            $statusProgressData = [
+                min($totalRealisasi, $totalTarget),
+                $totalSisa
+            ];
+
+            $riwayatAssign = \Illuminate\Support\Facades\DB::table('km_anggota')
+                ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
+                ->where('km_anggota.id_user', $idUser)
+                ->where('km_lab.tahun_km', $tahun)
+                ->select(
+                    'km_anggota.jumlah_km',
+                    'km_anggota.created_at',
+                    'km_lab.kategori_km',
+                    'km_lab.tahun_km',
+                    'km_lab.status_km'
+                )
+                ->orderBy('km_anggota.created_at', 'desc')
+                ->limit(5)
+                ->get();
+
+            $aktivitasTerbaru = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                ->where('id_user', $idUser)
+                ->whereYear('tanggal_mulai', $tahun)
+                ->orderBy('tanggal_mulai', 'desc')
+                ->limit(5)
+                ->get();
+
+            return view('anggota.dashboard', compact(
+                'tahun',
+                'anggota',
+                'totalTarget',
+                'totalRealisasi',
+                'totalSisa',
+                'persentaseTotal',
+                'kategoriLabels',
+                'kategoriTarget',
+                'kategoriRealisasi',
+                'kategoriSisa',
+                'bulanLabels',
+                'aktivitasBulanan',
+                'statusProgressLabels',
+                'statusProgressData',
+                'riwayatAssign',
+                'aktivitasTerbaru'
+            ));
+        });
         Route::get('/anggota/realisasi-km', [AnggotaController::class, 'indexRealisasi']);
         Route::get('/anggota/realisasi-km/{id}/edit', [AnggotaController::class, 'editRealisasi']);
         Route::put('/anggota/realisasi-km/{id}', [AnggotaController::class, 'updateRealisasi']);

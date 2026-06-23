@@ -4,28 +4,16 @@
 
 @section('content')
 <style>
-    .anggota-dashboard-table {
-        table-layout: fixed;
+    .dashboard-chart-box {
+        position: relative;
         width: 100%;
-        font-size: 14px;
+        height: 340px;
     }
 
-    .anggota-dashboard-table th,
-    .anggota-dashboard-table td {
-        padding: 12px 10px !important;
-        white-space: normal;
-        vertical-align: middle;
-    }
-
-    .anggota-dashboard-table .progress {
-        height: 9px;
-        background: #E5E7EB;
-    }
-
-    .status-badge {
-        font-size: 12px;
-        padding: 6px 8px;
-        line-height: 1.2;
+    .dashboard-chart-box-small {
+        position: relative;
+        width: 100%;
+        height: 300px;
     }
 </style>
 
@@ -37,15 +25,18 @@
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
         <div>
             <h4 class="fw-bold mb-1">
-                {{ $dosen->nama_dosen ?? $user->username }}
+                {{ $anggota->nama_dosen ?? $anggota->username ?? 'Anggota' }}
             </h4>
+
             <p class="text-muted mb-0">
-                {{ $dosen->nama_lab ?? 'Lab Riset belum terhubung' }} · Tahun KM {{ $tahun }}
+                Lab: {{ $anggota->nama_lab ?? '-' }} |
+                NIDN: {{ $anggota->nidn ?? '-' }} |
+                JAD: {{ $anggota->jad ?? 'AA' }}
             </p>
         </div>
 
-        <a href="/anggota/aktivitas-km/create" class="btn btn-primary">
-            Tambah Aktivitas KM
+        <a href="/anggota/aktivitas-km" class="btn btn-primary">
+            Input Aktivitas KM
         </a>
     </div>
 </div>
@@ -53,125 +44,139 @@
 <div class="row g-4 mb-4">
     <div class="col-md-3">
         <div class="card h-100">
-            <div class="text-muted fw-bold mb-2">Total Target</div>
-            <div class="fs-2 fw-bold">{{ $totalTarget }}</div>
-            <div class="text-muted small">Target KM tahun {{ $tahun }}</div>
+            <p class="text-muted mb-1">KM Ditugaskan</p>
+            <h3 class="fw-bold mb-0">{{ $totalTarget ?? 0 }}</h3>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="card h-100">
-            <div class="text-muted fw-bold mb-2">Total Realisasi</div>
-            <div class="fs-2 fw-bold">{{ $totalRealisasi }}</div>
-            <div class="text-muted small">Aktivitas KM tercatat</div>
+            <p class="text-muted mb-1">Realisasi</p>
+            <h3 class="fw-bold mb-0">{{ $totalRealisasi ?? 0 }}</h3>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="card h-100">
-            <div class="text-muted fw-bold mb-2">Persentase Capaian</div>
-            <div class="fs-2 fw-bold">{{ min($persentaseTotal, 100) }}%</div>
-            <div class="text-muted small">Capaian keseluruhan</div>
+            <p class="text-muted mb-1">Sisa KM</p>
+            <h3 class="fw-bold mb-0">{{ $totalSisa ?? 0 }}</h3>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="card h-100">
-            <div class="text-muted fw-bold mb-2">Kategori Terbaik</div>
-            <div class="fs-4 fw-bold">
-                {{ $kategoriTerbaik['kategori'] ?? '-' }}
-            </div>
-            <div class="text-muted small">
-                {{ $kategoriTerbaik['persentase'] ?? 0 }}% capaian
-            </div>
+            <p class="text-muted mb-1">Progress Total</p>
+            <h3 class="fw-bold mb-0">{{ min($persentaseTotal ?? 0, 100) }}%</h3>
         </div>
     </div>
 </div>
 
 <div class="row g-4 mb-4">
-    <div class="col-xl-8 col-lg-8">
+    <div class="col-md-8">
         <div class="card h-100">
-            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
-                <h4 class="fw-bold mb-0">Progress KM Saya</h4>
+            <h4 class="fw-bold mb-3">Grafik KM Saya per Kategori</h4>
 
-                <a href="/anggota/progress-km" class="btn btn-primary btn-sm">
-                    Lihat Detail Progress
-                </a>
+            <div class="dashboard-chart-box">
+                <canvas id="chartKategoriAnggota"></canvas>
             </div>
-
-            <table class="table align-middle mb-0 anggota-dashboard-table">
-                <thead>
-                    <tr>
-                        <th style="width: 7%;">No</th>
-                        <th style="width: 23%;">Kategori</th>
-                        <th style="width: 12%;">Target</th>
-                        <th style="width: 14%;">Realisasi</th>
-                        <th style="width: 26%;">Progress</th>
-                        <th style="width: 18%;">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($progress as $index => $item)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td class="fw-bold">{{ $item['kategori'] }}</td>
-                            <td>{{ $item['target'] }}</td>
-                            <td>{{ $item['realisasi'] }}</td>
-                            <td>
-                                <div class="progress">
-                                    <div class="progress-bar" style="width: {{ $item['persentase'] }}%;"></div>
-                                </div>
-                                <div class="small mt-1">{{ $item['persentase'] }}%</div>
-                            </td>
-                            <td>
-                                @if($item['status'] === 'Tercapai')
-                                    <span class="badge bg-success status-badge">Tercapai</span>
-                                @else
-                                    <span class="badge bg-danger status-badge">Belum Tercapai</span>
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
         </div>
     </div>
 
-    <div class="col-xl-4 col-lg-4">
+    <div class="col-md-4">
         <div class="card h-100">
-            <h4 class="fw-bold mb-3">Informasi Akun</h4>
+            <h4 class="fw-bold mb-3">Status Progress KM</h4>
 
-            <table class="table align-middle mb-0">
-                <tbody>
-                    <tr>
-                        <th>Username</th>
-                        <td>{{ $user->username }}</td>
-                    </tr>
-                    <tr>
-                        <th>Role</th>
-                        <td>{{ $user->role }}</td>
-                    </tr>
-                    <tr>
-                        <th>NIDN</th>
-                        <td>{{ $dosen->nidn ?? '-' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Email</th>
-                        <td>{{ $dosen->email ?? '-' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Lab Riset</th>
-                        <td>{{ $dosen->nama_lab ?? '-' }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="dashboard-chart-box-small">
+                <canvas id="chartStatusProgress"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
 
-            <div class="mt-3 d-grid gap-2">
-                <a href="/anggota/profil" class="btn btn-primary btn-sm">
-                    Lihat Profil
+<div class="card mb-4">
+    <h4 class="fw-bold mb-3">Grafik Aktivitas Bulanan Tahun {{ $tahun }}</h4>
+
+    <div class="dashboard-chart-box">
+        <canvas id="chartAktivitasBulanan"></canvas>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <h4 class="fw-bold mb-3">Riwayat KM yang Diberikan</h4>
+
+            <div class="table-responsive">
+                <table class="table align-middle mb-0" style="width: 100%; font-size: 14px;">
+                    <thead>
+                        <tr>
+                            <th>Kategori</th>
+                            <th>Jumlah</th>
+                            <th>Tanggal</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @forelse($riwayatAssign as $assign)
+                        <tr>
+                            <td class="fw-bold">{{ $assign->kategori_km }}</td>
+                            <td>{{ $assign->jumlah_km }}</td>
+                            <td>{{ \Carbon\Carbon::parse($assign->created_at)->format('d/m/Y') }}</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="3" class="text-center text-muted py-4">
+                                Belum ada KM yang diberikan.
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-3">
+                <a href="/anggota/progress-km" class="btn btn-primary btn-sm">
+                    Lihat Progress KM
                 </a>
-                <a href="/anggota/riwayat-realisasi" class="btn btn-secondary btn-sm">
-                    Riwayat Realisasi
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100">
+            <h4 class="fw-bold mb-3">Aktivitas KM Terbaru</h4>
+
+            <div class="table-responsive">
+                <table class="table align-middle mb-0" style="width: 100%; font-size: 14px;">
+                    <thead>
+                        <tr>
+                            <th>Kategori</th>
+                            <th>Judul</th>
+                            <th>Tanggal</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @forelse($aktivitasTerbaru as $aktivitas)
+                        <tr>
+                            <td class="fw-bold">{{ $aktivitas->kategori_km }}</td>
+                            <td>{{ $aktivitas->judul_aktivitas }}</td>
+                            <td>{{ \Carbon\Carbon::parse($aktivitas->tanggal_mulai)->format('d/m/Y') }}</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="3" class="text-center text-muted py-4">
+                                Belum ada aktivitas KM.
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-3">
+                <a href="/anggota/aktivitas-km" class="btn btn-primary btn-sm">
+                    Kelola Aktivitas
                 </a>
             </div>
         </div>
@@ -179,43 +184,162 @@
 </div>
 
 <div class="card">
-    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
-        <h4 class="fw-bold mb-0">Aktivitas KM Terbaru</h4>
+    <h4 class="fw-bold mb-3">Akses Cepat</h4>
 
-        <a href="/anggota/aktivitas-km" class="btn btn-primary btn-sm">
-            Kelola Aktivitas
+    <div class="d-flex gap-2 flex-wrap">
+        <a href="/anggota/progress-km" class="btn btn-primary">
+            Progress KM
+        </a>
+
+        <a href="/anggota/aktivitas-km" class="btn btn-primary">
+            Aktivitas KM
+        </a>
+
+        <a href="/anggota/riwayat-realisasi" class="btn btn-secondary">
+            Riwayat Realisasi
+        </a>
+
+        <a href="/anggota/profil" class="btn btn-secondary">
+            Profil
         </a>
     </div>
-
-    <table class="table align-middle mb-0" style="table-layout: fixed; width: 100%; font-size: 14px;">
-        <thead>
-            <tr>
-                <th style="width: 7%;">No</th>
-                <th style="width: 18%;">Kategori</th>
-                <th style="width: 28%;">Judul Aktivitas</th>
-                <th style="width: 25%;">Deskripsi</th>
-                <th style="width: 11%;">Mulai</th>
-                <th style="width: 11%;">Selesai</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($aktivitasTerbaru as $index => $item)
-                <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ $item->kategori_km }}</td>
-                    <td class="fw-bold">{{ $item->judul_aktivitas }}</td>
-                    <td>{{ $item->deskripsi_singkat ?? '-' }}</td>
-                    <td>{{ $item->tanggal_mulai }}</td>
-                    <td>{{ $item->tanggal_selesai }}</td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="6" class="text-center text-muted py-4">
-                        Belum ada aktivitas KM terbaru.
-                    </td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const kategoriLabels = @json($kategoriLabels ?? []);
+        const kategoriTarget = @json($kategoriTarget ?? []);
+        const kategoriRealisasi = @json($kategoriRealisasi ?? []);
+        const kategoriSisa = @json($kategoriSisa ?? []);
+
+        const bulanLabels = @json($bulanLabels ?? []);
+        const aktivitasBulanan = @json($aktivitasBulanan ?? []);
+
+        const statusProgressLabels = @json($statusProgressLabels ?? []);
+        const statusProgressData = @json($statusProgressData ?? []);
+
+        const chartKategoriElement = document.getElementById('chartKategoriAnggota');
+
+        if (chartKategoriElement) {
+            new Chart(chartKategoriElement, {
+                type: 'bar',
+                data: {
+                    labels: kategoriLabels,
+                    datasets: [{
+                            label: 'KM Ditugaskan',
+                            data: kategoriTarget,
+                            backgroundColor: '#3b82f6'
+                        },
+                        {
+                            label: 'Realisasi',
+                            data: kategoriRealisasi,
+                            backgroundColor: '#22c55e'
+                        },
+                        {
+                            label: 'Sisa',
+                            data: kategoriSisa,
+                            backgroundColor: '#ef4444'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            top: 20,
+                            bottom: 10
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            min: 0,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        const chartAktivitasElement = document.getElementById('chartAktivitasBulanan');
+
+        if (chartAktivitasElement) {
+            new Chart(chartAktivitasElement, {
+                type: 'line',
+                data: {
+                    labels: bulanLabels,
+                    datasets: [{
+                        label: 'Aktivitas KM',
+                        data: aktivitasBulanan,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.15)',
+                        fill: true,
+                        tension: 0.35
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            top: 20,
+                            bottom: 10
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            min: 0,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        const chartStatusElement = document.getElementById('chartStatusProgress');
+
+        if (chartStatusElement) {
+            new Chart(chartStatusElement, {
+                type: 'doughnut',
+                data: {
+                    labels: statusProgressLabels,
+                    datasets: [{
+                        data: statusProgressData,
+                        backgroundColor: ['#22c55e', '#ef4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
 @endsection

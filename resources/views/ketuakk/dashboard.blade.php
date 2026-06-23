@@ -3,200 +3,287 @@
 @section('title', 'Dashboard Ketua KK')
 
 @section('content')
+<style>
+    .dashboard-chart-box {
+        position: relative;
+        width: 100%;
+        height: 340px;
+    }
+
+    .dashboard-chart-box-small {
+        position: relative;
+        width: 100%;
+        height: 300px;
+    }
+</style>
 <div class="page-heading">
     Dashboard <span class="muted">Ketua KK</span>
 </div>
 
+<div class="card mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h4 class="fw-bold mb-1">Ringkasan Kontrak Manajemen Tahun {{ $tahun }}</h4>
+            <p class="text-muted mb-0">
+                Menampilkan grafik penurunan KM, pembagian KM, dan realisasi aktivitas seluruh lab riset.
+            </p>
+        </div>
+
+        <a href="/ketuakk/km-lab-riset/create" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Turunkan KM ke Lab
+        </a>
+    </div>
+</div>
+
 <div class="row g-4 mb-4">
     <div class="col-md-3">
-        <div class="card">
-            <div class="text-muted fw-bold mb-2">Jumlah Lab Riset</div>
-            <div class="fs-2 fw-bold">{{ $totalLab }}</div>
-            <div class="text-muted small">Total laboratorium riset aktif</div>
+        <div class="card h-100">
+            <p class="text-muted mb-1">Total Lab Riset</p>
+            <h3 class="fw-bold mb-0">{{ $totalLab ?? 0 }}</h3>
         </div>
     </div>
 
     <div class="col-md-3">
-        <div class="card">
-            <div class="text-muted fw-bold mb-2">Jumlah Dosen</div>
-            <div class="fs-2 fw-bold">{{ $totalDosen }}</div>
-            <div class="text-muted small">Total dosen anggota KK</div>
+        <div class="card h-100">
+            <p class="text-muted mb-1">Total Anggota</p>
+            <h3 class="fw-bold mb-0">{{ $totalAnggota ?? 0 }}</h3>
         </div>
     </div>
 
     <div class="col-md-3">
-        <div class="card">
-            <div class="text-muted fw-bold mb-2">Target KM</div>
-            <div class="fs-2 fw-bold">{{ $totalTargetKm }}</div>
-            <div class="text-muted small">Total target tahun {{ $tahun }}</div>
+        <div class="card h-100">
+            <p class="text-muted mb-1">Total KM Turun</p>
+            <h3 class="fw-bold mb-0">{{ $totalKmTurun ?? 0 }}</h3>
         </div>
     </div>
 
     <div class="col-md-3">
-        <div class="card">
-            <div class="text-muted fw-bold mb-2">Capaian KM</div>
-            <div class="fs-2 fw-bold">{{ min($rataCapaian, 100) }}%</div>
-            <div class="text-muted small">{{ $totalRealisasiKm }} realisasi dari {{ $totalTargetKm }} target</div>
+        <div class="card h-100">
+            <p class="text-muted mb-1">Total KM Assign</p>
+            <h3 class="fw-bold mb-0">{{ $totalKmAssign ?? 0 }}</h3>
         </div>
     </div>
 </div>
 
 <div class="row g-4 mb-4">
-    <div class="col-lg-7">
-        <div class="card">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="fw-bold mb-0">Pencapaian Kontrak Manajemen KK</h4>
-                <span class="badge bg-primary">Tahun {{ $tahun }}</span>
-            </div>
+    <div class="col-md-3">
+        <div class="card h-100">
+            <p class="text-muted mb-1">Sisa Assign</p>
+            <h3 class="fw-bold mb-0">{{ $totalSisaAssign ?? 0 }}</h3>
+        </div>
+    </div>
 
-            <div class="table-responsive">
-                <table class="table align-middle mb-0">
-                    <thead>
-                        <tr>
-                            <th>Kategori</th>
-                            <th>Target</th>
-                            <th>Realisasi</th>
-                            <th>Progress</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($rekapKategori as $item)
-                            <tr>
-                                <td class="fw-bold">{{ $item['kategori'] }}</td>
-                                <td>{{ $item['target'] }}</td>
-                                <td>{{ $item['realisasi'] }}</td>
-                                <td style="min-width: 180px;">
-                                    <div class="progress" style="height: 10px;">
-                                        <div class="progress-bar" style="width: {{ $item['persentase'] }}%;"></div>
-                                    </div>
-                                    <div class="small mt-1">{{ $item['persentase'] }}%</div>
-                                </td>
-                                <td>
-                                    @if($item['status'] === 'Tercapai')
-                                        <span class="status-success">Tercapai</span>
-                                    @else
-                                        <span class="status-danger">Belum Tercapai</span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+    <div class="col-md-3">
+        <div class="card h-100">
+            <p class="text-muted mb-1">Total Realisasi</p>
+            <h3 class="fw-bold mb-0">{{ $totalRealisasi ?? 0 }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card h-100">
+            <p class="text-muted mb-1">Progress Assign</p>
+            <h3 class="fw-bold mb-0">{{ min($persentaseAssign ?? 0, 100) }}%</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card h-100">
+            <p class="text-muted mb-1">Progress Realisasi</p>
+            <h3 class="fw-bold mb-0">{{ min($persentaseRealisasi ?? 0, 100) }}%</h3>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-8">
+        <div class="card h-100">
+            <h4 class="fw-bold mb-3">Grafik KM per Lab Riset</h4>
+            <div class="dashboard-chart-box">
+                <canvas id="chartLabKm"></canvas>
             </div>
         </div>
     </div>
 
-    <div class="col-lg-5">
+    <div class="col-md-4">
         <div class="card h-100">
-            <h4 class="fw-bold mb-3">Pemberitahuan Sistem</h4>
-
-            <div class="p-3 mb-3 rounded" style="background:#EAF1FF;">
-                <div class="fw-bold">Monitoring KM aktif</div>
-                <div class="text-muted small">
-                    Sistem menghitung capaian berdasarkan aktivitas KM anggota dan target KM aktif tahun {{ $tahun }}.
-                </div>
-            </div>
-
-            <div class="p-3 mb-3 rounded" style="background:#FFF7E6;">
-                <div class="fw-bold">Target dari database</div>
-                <div class="text-muted small">
-                    Data target diambil dari tabel target_km dan kontrak_manajemen.
-                </div>
-            </div>
-
-            <div class="p-3 rounded" style="background:#EFFFFB;">
-                <div class="fw-bold">Total realisasi</div>
-                <div class="text-muted small">
-                    Saat ini terdapat {{ $totalRealisasiKm }} aktivitas KM yang sudah tercatat.
-                </div>
+            <h4 class="fw-bold mb-3">Status Assign KM</h4>
+            <div class="dashboard-chart-box-small">
+                <canvas id="chartStatusAssign"></canvas>
             </div>
         </div>
     </div>
 </div>
 
 <div class="card mb-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="fw-bold mb-0">Pencapaian Kontrak Manajemen Lab Riset</h4>
-        <a href="/ketuakk/data-lab-riset" class="btn btn-primary">Lihat Data Lab</a>
-    </div>
-
-    <div class="table-responsive">
-        <table class="table align-middle mb-0">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Lab Riset</th>
-                    <th>Jumlah Dosen</th>
-                    <th>Target</th>
-                    <th>Realisasi</th>
-                    <th>Progress</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($rekapLab as $index => $lab)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td class="fw-bold">{{ $lab['nama_lab'] }}</td>
-                        <td>{{ $lab['jumlah_dosen'] }}</td>
-                        <td>{{ $lab['target'] }}</td>
-                        <td>{{ $lab['realisasi'] }}</td>
-                        <td style="min-width: 180px;">
-                            <div class="progress" style="height: 10px;">
-                                <div class="progress-bar" style="width: {{ $lab['persentase'] }}%;"></div>
-                            </div>
-                            <div class="small mt-1">{{ $lab['persentase'] }}%</div>
-                        </td>
-                        <td>
-                            @if($lab['status'] === 'Tercapai')
-                                <span class="status-success">Tercapai</span>
-                            @else
-                                <span class="status-danger">Belum Tercapai</span>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+    <h4 class="fw-bold mb-3">Grafik KM per Kategori</h4>
+    <div class="dashboard-chart-box">
+        <canvas id="chartKategoriKm"></canvas>
     </div>
 </div>
 
 <div class="card">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="fw-bold mb-0">Kontrak Manajemen Masuk</h4>
-        <a href="/ketuakk/target-km" class="btn btn-primary">Kelola Target</a>
-    </div>
-
-    <div class="table-responsive">
-        <table class="table align-middle mb-0">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Dosen</th>
-                    <th>Lab Riset</th>
-                    <th>Tahun</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($kontrakMasuk as $index => $item)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $item->nama_dosen ?? '-' }}</td>
-                        <td>{{ $item->nama_lab ?? '-' }}</td>
-                        <td>{{ $item->tahun_km }}</td>
-                        <td>
-                            <span class="badge bg-primary">{{ $item->status_km }}</span>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5">Belum ada kontrak manajemen.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+    <h4 class="fw-bold mb-3">Catatan Dashboard</h4>
+    <p class="text-muted mb-0">
+        Grafik ini membaca data dari tabel KM baru:
+        <strong>km_lab</strong>, <strong>km_anggota</strong>, dan <strong>aktivitas_km</strong>.
+    </p>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const labLabels = @json($labChartLabels ?? []);
+        const labKmTurun = @json($labKmTurun ?? []);
+        const labKmAssign = @json($labKmAssign ?? []);
+        const labRealisasi = @json($labRealisasi ?? []);
+
+        const kategoriLabels = @json($kategoriLabels ?? []);
+        const kategoriKmTurun = @json($kategoriKmTurun ?? []);
+        const kategoriKmAssign = @json($kategoriKmAssign ?? []);
+        const kategoriRealisasi = @json($kategoriRealisasi ?? []);
+
+        const statusAssignLabels = @json($statusAssignLabels ?? []);
+        const statusAssignData = @json($statusAssignData ?? []);
+
+        const chartLabElement = document.getElementById('chartLabKm');
+
+        if (chartLabElement) {
+            new Chart(chartLabElement, {
+                type: 'bar',
+                data: {
+                    labels: labLabels,
+                    datasets: [{
+                            label: 'KM Turun',
+                            data: labKmTurun,
+                            backgroundColor: '#3b82f6'
+                        },
+                        {
+                            label: 'KM Assign',
+                            data: labKmAssign,
+                            backgroundColor: '#22c55e'
+                        },
+                        {
+                            label: 'Realisasi',
+                            data: labRealisasi,
+                            backgroundColor: '#f59e0b'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            top: 20,
+                            bottom: 10
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                maxRotation: 20,
+                                minRotation: 0
+                            },
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            min: 0,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        const chartKategoriElement = document.getElementById('chartKategoriKm');
+
+        if (chartKategoriElement) {
+            new Chart(chartKategoriElement, {
+                type: 'bar',
+                data: {
+                    labels: kategoriLabels,
+                    datasets: [{
+                            label: 'KM Turun',
+                            data: kategoriKmTurun,
+                            backgroundColor: '#3b82f6'
+                        },
+                        {
+                            label: 'KM Assign',
+                            data: kategoriKmAssign,
+                            backgroundColor: '#22c55e'
+                        },
+                        {
+                            label: 'Realisasi',
+                            data: kategoriRealisasi,
+                            backgroundColor: '#f59e0b'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            top: 20,
+                            bottom: 10
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            min: 0,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        const chartStatusElement = document.getElementById('chartStatusAssign');
+
+        if (chartStatusElement) {
+            new Chart(chartStatusElement, {
+                type: 'doughnut',
+                data: {
+                    labels: statusAssignLabels,
+                    datasets: [{
+                        data: statusAssignData,
+                        backgroundColor: ['#22c55e', '#ef4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
 @endsection
