@@ -12,7 +12,7 @@
         <div>
             <h4 class="fw-bold mb-1">KM Lab Riset Tahun {{ $tahun }}</h4>
             <p class="text-muted mb-0">
-                Menampilkan target, capaian, dan data penurunan Kontrak Manajemen berdasarkan masing-masing lab riset.
+                Menampilkan data penurunan Kontrak Manajemen dari Ketua KK ke masing-masing lab riset.
             </p>
         </div>
 
@@ -28,17 +28,17 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table align-middle mb-0" style="table-layout: fixed; width: 100%; font-size: 14px;">
+        <table class="table align-middle mb-0" style="width: 100%; font-size: 14px;">
             <thead>
                 <tr>
-                    <th style="width: 6%;">No</th>
-                    <th style="width: 22%;">Lab Riset</th>
-                    <th>Total KM Turun</th>
-                    <th>Sudah Assign</th>
-                    <th>Sisa KM</th>
-                    <th style="width: 16%;">Progress</th>
+                    <th style="width: 5%;">No</th>
+                    <th style="width: 27%;">Lab Riset</th>
+                    <th style="width: 13%;">Total KM Turun</th>
+                    <th style="width: 13%;">Sudah Assign</th>
+                    <th style="width: 10%;">Sisa KM</th>
+                    <th style="width: 14%;">Progress</th>
                     <th style="width: 10%;">Status</th>
-                    <th style="width: 8%;">Aksi</th>
+                    <th style="width: 8%; text-align: center;">Aksi</th>
                 </tr>
             </thead>
 
@@ -52,18 +52,15 @@
                     </td>
 
                     <td>
-                        {{ $lab['jumlah_dosen'] }}
+                        {{ $lab['total_target'] ?? 0 }}
                     </td>
 
                     <td>
-                        {{ $lab['total_target'] }}
+                        {{ $lab['total_realisasi'] ?? 0 }}
                     </td>
 
                     <td>
-                        {{ $lab['total_realisasi'] }}
-                    </td>
-                    <td>
-                        {{ $lab['sisa_km'] }}
+                        {{ $lab['sisa_km'] ?? 0 }}
                     </td>
 
                     <td>
@@ -71,27 +68,24 @@
                             <div
                                 class="progress-bar"
                                 role="progressbar"
-                                style="width: {{ min($lab['persentase'], 100) }}%;"
-                                aria-valuenow="{{ min($lab['persentase'], 100) }}"
-                                aria-valuemin="0"
-                                aria-valuemax="100"></div>
+                                style="width: {{ min($lab['persentase'] ?? 0, 100) }}%;"></div>
                         </div>
 
                         <div class="small text-muted">
-                            {{ $lab['persentase'] }}%
+                            {{ $lab['persentase'] ?? 0 }}%
                         </div>
                     </td>
 
                     <td>
-                        @if($lab['status'] === 'Tercapai')
-                        <span class="badge bg-success">Tercapai</span>
+                        @if(($lab['status'] ?? '') === 'Sudah Dibagi')
+                        <span class="badge bg-success">Selesai</span>
                         @else
                         <span class="badge bg-warning text-dark">Belum</span>
                         @endif
                     </td>
 
-                    <td>
-                        <a href="/ketuakk/km-lab-riset/{{ $lab['id_lab'] }}" class="btn btn-primary btn-sm">
+                    <td class="text-center">
+                        <a href="/ketuakk/km-lab-riset/{{ $lab['id_lab'] }}" class="btn btn-primary btn-sm px-3">
                             Detail
                         </a>
                     </td>
@@ -99,7 +93,7 @@
                 @empty
                 <tr>
                     <td colspan="8" class="text-center text-muted py-4">
-                        Belum ada data lab riset.
+                        Belum ada data KM Lab Riset.
                     </td>
                 </tr>
                 @endforelse
