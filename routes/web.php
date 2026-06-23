@@ -985,6 +985,29 @@ Route::middleware(['auth'])->group(function () {
 
             return view('ketuakk.km-lab-riset.index', compact('dataLab', 'tahun'));
         });
+        Route::delete('/ketuakk/km-lab-riset/{id}', function ($id) {
+            $kmLab = \Illuminate\Support\Facades\DB::table('km_lab')
+                ->where('id_km_lab', $id)
+                ->first();
+
+            if (!$kmLab) {
+                return redirect('/ketuakk/km-lab-riset')
+                    ->with('error', 'Data KM lab tidak ditemukan.');
+            }
+
+            \Illuminate\Support\Facades\DB::transaction(function () use ($id) {
+                \Illuminate\Support\Facades\DB::table('km_anggota')
+                    ->where('id_km_lab', $id)
+                    ->delete();
+
+                \Illuminate\Support\Facades\DB::table('km_lab')
+                    ->where('id_km_lab', $id)
+                    ->delete();
+            });
+
+            return redirect('/ketuakk/km-lab-riset')
+                ->with('success', 'KM yang diturunkan ke lab berhasil dihapus.');
+        });
         Route::get('/ketuakk/km-lab-riset/{id}', function ($id) {
             $tahun = now()->year;
 
@@ -1003,6 +1026,39 @@ Route::middleware(['auth'])->group(function () {
                 'Pengabdian',
                 'Penunjang',
             ];
+
+            $daftarKmTurunRaw = \Illuminate\Support\Facades\DB::table('km_lab')
+                ->where('id_lab', $id)
+                ->where('tahun_km', $tahun)
+                ->where('status_km', 'Aktif')
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            $daftarKmTurun = [];
+
+            foreach ($daftarKmTurunRaw as $km) {
+                $sudahAssign = \Illuminate\Support\Facades\DB::table('km_anggota')
+                    ->where('id_km_lab', $km->id_km_lab)
+                    ->sum('jumlah_km');
+
+                $sisaKm = max($km->jumlah_km - $sudahAssign, 0);
+
+                $persentase = $km->jumlah_km > 0
+                    ? round(($sudahAssign / $km->jumlah_km) * 100)
+                    : 0;
+
+                $daftarKmTurun[] = [
+                    'id_km_lab' => $km->id_km_lab,
+                    'kategori_km' => $km->kategori_km,
+                    'jumlah_km' => $km->jumlah_km,
+                    'tahun_km' => $km->tahun_km,
+                    'status_km' => $km->status_km,
+                    'created_at' => $km->created_at,
+                    'sudah_assign' => $sudahAssign,
+                    'sisa_km' => $sisaKm,
+                    'persentase' => min($persentase, 100),
+                ];
+            }
 
             $targetPerKategori = \Illuminate\Support\Facades\DB::table('km_lab')
                 ->select(
@@ -1032,7 +1088,7 @@ Route::middleware(['auth'])->group(function () {
             foreach ($kategoriDefault as $kategori) {
                 $totalKm = $targetPerKategori[$kategori] ?? 0;
                 $sudahAssign = $assignPerKategori[$kategori] ?? 0;
-                $sisaKm = $totalKm - $sudahAssign;
+                $sisaKm = max($totalKm - $sudahAssign, 0);
 
                 $persentase = $totalKm > 0
                     ? round(($sudahAssign / $totalKm) * 100)
@@ -1061,7 +1117,7 @@ Route::middleware(['auth'])->group(function () {
             $riwayatAssign = \Illuminate\Support\Facades\DB::table('km_anggota')
                 ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
                 ->leftJoin('users', 'km_anggota.id_user', '=', 'users.id_user')
-                ->leftJoin('dosen', 'km_anggota.id_dosen', '=', 'dosen.id_dosen')
+                ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
                 ->where('km_lab.id_lab', $id)
                 ->where('km_lab.tahun_km', $tahun)
                 ->select(
@@ -1097,6 +1153,7 @@ Route::middleware(['auth'])->group(function () {
             return view('ketuakk.km-lab-riset.detail', compact(
                 'lab',
                 'tahun',
+                'daftarKmTurun',
                 'rekapKategori',
                 'totalKmTurun',
                 'totalKmAssign',

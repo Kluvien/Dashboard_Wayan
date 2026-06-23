@@ -4,6 +4,7 @@
 
 @section('content')
 @php
+$daftarKmTurun = collect($daftarKmTurun ?? []);
 $rekapKategori = collect($rekapKategori ?? []);
 $riwayatAssign = collect($riwayatAssign ?? []);
 $anggota = collect($anggota ?? []);
@@ -13,6 +14,17 @@ $totalKmAssign = $totalKmAssign ?? $rekapKategori->sum(fn($item) => $item['sudah
 $totalSisaKm = $totalSisaKm ?? max($totalKmTurun - $totalKmAssign, 0);
 $persentaseTotal = $persentaseTotal ?? ($totalKmTurun > 0 ? round(($totalKmAssign / $totalKmTurun) * 100) : 0);
 @endphp
+
+<style>
+    .km-table th {
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+
+    .km-table td {
+        vertical-align: middle;
+    }
+</style>
 
 <div class="page-heading">
     Detail KM <span class="muted">Lab Riset</span>
@@ -64,10 +76,97 @@ $persentaseTotal = $persentaseTotal ?? ($totalKmTurun > 0 ? round(($totalKmAssig
 </div>
 
 <div class="card mb-4">
+    <h4 class="fw-bold mb-3">Daftar KM Turun dari Ketua KK</h4>
+
+    <div class="table-responsive">
+        <table class="table align-middle mb-0 km-table" style="width: 100%; font-size: 14px;">
+            <thead>
+                <tr>
+                    <th style="width: 5%;">No</th>
+                    <th style="width: 18%;">Kategori KM</th>
+                    <th style="width: 10%;">Total KM</th>
+                    <th style="width: 12%;">Sudah Assign</th>
+                    <th style="width: 10%;">Sisa KM</th>
+                    <th style="width: 13%;">Progress</th>
+                    <th style="width: 12%;">Status</th>
+                    <th style="width: 10%;">Tanggal</th>
+                    <th style="width: 10%;">Aksi</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @forelse($daftarKmTurun as $index => $km)
+                @php
+                $total = $km['jumlah_km'] ?? 0;
+                $assign = $km['sudah_assign'] ?? 0;
+                $sisa = $km['sisa_km'] ?? max($total - $assign, 0);
+                $persen = $km['persentase'] ?? ($total > 0 ? round(($assign / $total) * 100) : 0);
+                @endphp
+
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+
+                    <td class="fw-bold">
+                        {{ $km['kategori_km'] ?? '-' }}
+                    </td>
+
+                    <td>{{ $total }}</td>
+
+                    <td>{{ $assign }}</td>
+
+                    <td>{{ $sisa }}</td>
+
+                    <td>
+                        <div class="progress mb-1" style="height: 8px;">
+                            <div class="progress-bar" style="width: {{ min($persen, 100) }}%;"></div>
+                        </div>
+                        <div class="small text-muted">{{ min($persen, 100) }}%</div>
+                    </td>
+
+                    <td>
+                        @if($sisa <= 0)
+                            <span class="badge bg-success">Selesai</span>
+                            @else
+                            <span class="badge bg-warning text-dark">Belum</span>
+                            @endif
+                    </td>
+
+                    <td>
+                        {{ \Carbon\Carbon::parse($km['created_at'])->format('d/m/Y') }}
+                    </td>
+
+                    <td>
+                        <form
+                            action="/ketuakk/km-lab-riset/{{ $km['id_km_lab'] }}"
+                            method="POST"
+                            class="js-delete-form"
+                            data-message="Apakah Anda yakin ingin menghapus KM turun ini? Semua assign anggota yang terkait juga akan terhapus.">
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit" class="btn btn-delete btn-sm w-100">
+                                Hapus
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="9" class="text-center text-muted py-4">
+                        Belum ada KM yang diturunkan ke lab ini.
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card mb-4">
     <h4 class="fw-bold mb-3">Rekap KM per Kategori</h4>
 
     <div class="table-responsive">
-        <table class="table align-middle mb-0" style="width: 100%; font-size: 14px;">
+        <table class="table align-middle mb-0 km-table" style="width: 100%; font-size: 14px;">
             <thead>
                 <tr>
                     <th>No</th>
@@ -99,7 +198,7 @@ $persentaseTotal = $persentaseTotal ?? ($totalKmTurun > 0 ? round(($totalKmAssig
                         <div class="progress mb-1" style="height: 8px;">
                             <div class="progress-bar" style="width: {{ min($persen, 100) }}%;"></div>
                         </div>
-                        <div class="small text-muted">{{ $persen }}%</div>
+                        <div class="small text-muted">{{ min($persen, 100) }}%</div>
                     </td>
                     <td>
                         @if($total > 0 && $sisa <= 0)
@@ -125,7 +224,7 @@ $persentaseTotal = $persentaseTotal ?? ($totalKmTurun > 0 ? round(($totalKmAssig
     <h4 class="fw-bold mb-3">Riwayat Assign KM ke Anggota</h4>
 
     <div class="table-responsive">
-        <table class="table align-middle mb-0" style="width: 100%; font-size: 14px;">
+        <table class="table align-middle mb-0 km-table" style="width: 100%; font-size: 14px;">
             <thead>
                 <tr>
                     <th>No</th>
@@ -169,7 +268,7 @@ $persentaseTotal = $persentaseTotal ?? ($totalKmTurun > 0 ? round(($totalKmAssig
     <h4 class="fw-bold mb-3">Daftar Anggota Lab</h4>
 
     <div class="table-responsive">
-        <table class="table align-middle mb-0" style="width: 100%; font-size: 14px;">
+        <table class="table align-middle mb-0 km-table" style="width: 100%; font-size: 14px;">
             <thead>
                 <tr>
                     <th>No</th>
