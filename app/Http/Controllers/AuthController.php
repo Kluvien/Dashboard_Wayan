@@ -16,12 +16,12 @@ class AuthController extends Controller
     {
         $credentials = $request->validate([
             'username' => 'required',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            
+
             // Logika Redirect Otomatis Berdasarkan Role
             $role = Auth::user()->role;
 
@@ -32,7 +32,7 @@ class AuthController extends Controller
             } elseif ($role == 'Anggota') {
                 return redirect('/anggota/dashboard');
             } else {
-                return redirect('/'); 
+                return redirect('/');
             }
         }
 
@@ -44,6 +44,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect('/login');
     }
 }

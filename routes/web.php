@@ -1,11 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TargetKmController;
-use App\Http\Controllers\KetuaLabController;
 use App\Http\Controllers\AnggotaController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KetuaKkController;
+use App\Http\Controllers\KetuaLabController;
+use App\Http\Controllers\TargetKmController;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome'); // Halaman awal bawaan Laravel
@@ -16,7 +19,7 @@ Route::get('/login', [AuthController::class, 'index'])->name('login')->middlewar
 Route::post('/login', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::middleware(['auth'])->group(function () {
-    
+
     // Halaman Utama Pembagi
     Route::get('/', function () {
         $role = auth()->user()->role;
@@ -47,18 +50,18 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/ketuakk/target-km/{id}', [TargetKmController::class, 'update']);
         Route::delete('/ketuakk/target-km/{id}', [TargetKmController::class, 'destroy']);
         Route::get('/ketuakk/data-lab-riset', function () {
-            $laboratorium = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+            $laboratorium = DB::table('laboratorium_riset')
                 ->orderBy('id_lab')
                 ->get();
 
             $dataLab = [];
 
             foreach ($laboratorium as $lab) {
-                $jumlahDosen = \Illuminate\Support\Facades\DB::table('dosen')
+                $jumlahDosen = DB::table('dosen')
                     ->where('id_lab', $lab->id_lab)
                     ->count();
 
-                $jumlahAktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                $jumlahAktivitas = DB::table('aktivitas_km')
                     ->where('id_lab', $lab->id_lab)
                     ->count();
 
@@ -74,20 +77,20 @@ Route::middleware(['auth'])->group(function () {
         });
 
         Route::get('/ketuakk/data-lab-riset/{id}', function ($id) {
-            $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+            $lab = DB::table('laboratorium_riset')
                 ->where('id_lab', $id)
                 ->first();
 
-            if (!$lab) {
+            if (! $lab) {
                 abort(404);
             }
 
-            $dosen = \Illuminate\Support\Facades\DB::table('dosen')
+            $dosen = DB::table('dosen')
                 ->where('id_lab', $id)
                 ->orderBy('nama_dosen')
                 ->get();
 
-            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+            $aktivitas = DB::table('aktivitas_km')
                 ->leftJoin('users', 'aktivitas_km.id_user', '=', 'users.id_user')
                 ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
                 ->where('aktivitas_km.id_lab', $id)
@@ -110,10 +113,10 @@ Route::middleware(['auth'])->group(function () {
                 'aktivitas'
             ));
         });
-        Route::get('/ketuakk/data-dosen', function (\Illuminate\Http\Request $request) {
+        Route::get('/ketuakk/data-dosen', function (Request $request) {
             $q = $request->query('q');
 
-            $dosens = \Illuminate\Support\Facades\DB::table('dosen')
+            $dosens = DB::table('dosen')
                 ->leftJoin('laboratorium_riset', 'dosen.id_lab', '=', 'laboratorium_riset.id_lab')
                 ->select(
                     'dosen.id_dosen',
@@ -125,11 +128,11 @@ Route::middleware(['auth'])->group(function () {
                 )
                 ->when($q, function ($query) use ($q) {
                     $query->where(function ($subQuery) use ($q) {
-                        $subQuery->where('dosen.nama_dosen', 'like', '%' . $q . '%')
-                            ->orWhere('dosen.nidn', 'like', '%' . $q . '%')
-                            ->orWhere('dosen.email', 'like', '%' . $q . '%')
-                            ->orWhere('dosen.jad', 'like', '%' . $q . '%')
-                            ->orWhere('laboratorium_riset.nama_lab', 'like', '%' . $q . '%');
+                        $subQuery->where('dosen.nama_dosen', 'like', '%'.$q.'%')
+                            ->orWhere('dosen.nidn', 'like', '%'.$q.'%')
+                            ->orWhere('dosen.email', 'like', '%'.$q.'%')
+                            ->orWhere('dosen.jad', 'like', '%'.$q.'%')
+                            ->orWhere('laboratorium_riset.nama_lab', 'like', '%'.$q.'%');
                     });
                 })
                 ->orderBy('dosen.id_dosen', 'asc')
@@ -139,14 +142,14 @@ Route::middleware(['auth'])->group(function () {
         });
 
         Route::get('/ketuakk/data-dosen/create', function () {
-            $labs = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+            $labs = DB::table('laboratorium_riset')
                 ->orderBy('id_lab')
                 ->get();
 
             return view('ketuakk.data-master.dosen-create', compact('labs'));
         });
 
-        Route::post('/ketuakk/data-dosen', function (\Illuminate\Http\Request $request) {
+        Route::post('/ketuakk/data-dosen', function (Request $request) {
             $request->validate([
                 'nama_dosen' => 'required|string|max:255',
                 'nidn' => 'required|string|max:50',
@@ -155,11 +158,11 @@ Route::middleware(['auth'])->group(function () {
                 'jad' => 'required|in:GB,LK,L,AA',
             ]);
 
-            $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+            $lab = DB::table('laboratorium_riset')
                 ->where('id_lab', $request->id_lab)
                 ->first();
 
-            \Illuminate\Support\Facades\DB::table('dosen')->insert([
+            DB::table('dosen')->insert([
                 'id_kk' => $lab->id_kk ?? 1,
                 'id_lab' => $request->id_lab,
                 'nama_dosen' => $request->nama_dosen,
@@ -174,22 +177,22 @@ Route::middleware(['auth'])->group(function () {
         });
 
         Route::get('/ketuakk/data-dosen/{id}/edit', function ($id) {
-            $dosen = \Illuminate\Support\Facades\DB::table('dosen')
+            $dosen = DB::table('dosen')
                 ->where('id_dosen', $id)
                 ->first();
 
-            if (!$dosen) {
+            if (! $dosen) {
                 abort(404);
             }
 
-            $labs = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+            $labs = DB::table('laboratorium_riset')
                 ->orderBy('id_lab')
                 ->get();
 
             return view('ketuakk.data-master.dosen-edit', compact('dosen', 'labs'));
         });
 
-        Route::put('/ketuakk/data-dosen/{id}', function (\Illuminate\Http\Request $request, $id) {
+        Route::put('/ketuakk/data-dosen/{id}', function (Request $request, $id) {
             $request->validate([
                 'nama_dosen' => 'required|string|max:255',
                 'nidn' => 'required|string|max:50',
@@ -198,19 +201,19 @@ Route::middleware(['auth'])->group(function () {
                 'jad' => 'required|in:GB,LK,L,AA',
             ]);
 
-            $dosen = \Illuminate\Support\Facades\DB::table('dosen')
+            $dosen = DB::table('dosen')
                 ->where('id_dosen', $id)
                 ->first();
 
-            if (!$dosen) {
+            if (! $dosen) {
                 abort(404);
             }
 
-            $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+            $lab = DB::table('laboratorium_riset')
                 ->where('id_lab', $request->id_lab)
                 ->first();
 
-            \Illuminate\Support\Facades\DB::table('dosen')
+            DB::table('dosen')
                 ->where('id_dosen', $id)
                 ->update([
                     'id_kk' => $lab->id_kk ?? 1,
@@ -225,28 +228,28 @@ Route::middleware(['auth'])->group(function () {
             return redirect('/ketuakk/data-dosen')->with('success', 'Data dosen berhasil diperbarui.');
         });
         Route::get('/ketuakk/data-kelompok-keahlian', function () {
-            $kelompokKeahlian = \Illuminate\Support\Facades\DB::table('kelompok_keahlian')->get();
+            $kelompokKeahlian = DB::table('kelompok_keahlian')->get();
 
             return view('ketuakk.data-master.kelompok-keahlian', compact('kelompokKeahlian'));
         });
         Route::get('/ketuakk/monitoring-lab-riset', function () {
             $tahun = now()->year;
 
-            $labs = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+            $labs = DB::table('laboratorium_riset')
                 ->orderBy('id_lab')
                 ->get();
 
             $monitoringLabs = [];
 
             foreach ($labs as $lab) {
-                $dosenIds = \Illuminate\Support\Facades\DB::table('dosen')
+                $dosenIds = DB::table('dosen')
                     ->where('id_lab', $lab->id_lab)
                     ->pluck('id_dosen');
 
                 $totalTarget = 0;
 
                 if ($dosenIds->count() > 0) {
-                    $totalTarget = \Illuminate\Support\Facades\DB::table('target_km')
+                    $totalTarget = DB::table('target_km')
                         ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
                         ->whereIn('kontrak_manajemen.id_dosen', $dosenIds)
                         ->where('kontrak_manajemen.tahun_km', $tahun)
@@ -254,7 +257,7 @@ Route::middleware(['auth'])->group(function () {
                         ->sum('target');
                 }
 
-                $totalRealisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                $totalRealisasi = DB::table('aktivitas_km')
                     ->where('id_lab', $lab->id_lab)
                     ->count();
 
@@ -280,11 +283,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ketuakk/monitoring-lab-riset/{id}', function ($id) {
             $tahun = now()->year;
 
-            $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+            $lab = DB::table('laboratorium_riset')
                 ->where('id_lab', $id)
                 ->first();
 
-            if (!$lab) {
+            if (! $lab) {
                 abort(404);
             }
 
@@ -296,16 +299,16 @@ Route::middleware(['auth'])->group(function () {
                 'Penunjang',
             ];
 
-            $dosenIds = \Illuminate\Support\Facades\DB::table('dosen')
+            $dosenIds = DB::table('dosen')
                 ->where('id_lab', $id)
                 ->pluck('id_dosen');
 
             $targetPerKategori = collect();
 
             if ($dosenIds->count() > 0) {
-                $targetPerKategori = \Illuminate\Support\Facades\DB::table('target_km')
+                $targetPerKategori = DB::table('target_km')
                     ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
-                    ->select('target_km.indikator', \Illuminate\Support\Facades\DB::raw('SUM(target_km.target) as total_target'))
+                    ->select('target_km.indikator', DB::raw('SUM(target_km.target) as total_target'))
                     ->whereIn('kontrak_manajemen.id_dosen', $dosenIds)
                     ->where('kontrak_manajemen.tahun_km', $tahun)
                     ->where('kontrak_manajemen.status_km', 'Aktif')
@@ -313,8 +316,8 @@ Route::middleware(['auth'])->group(function () {
                     ->pluck('total_target', 'indikator');
             }
 
-            $realisasiPerKategori = \Illuminate\Support\Facades\DB::table('aktivitas_km')
-                ->select('kategori_km', \Illuminate\Support\Facades\DB::raw('COUNT(*) as total_realisasi'))
+            $realisasiPerKategori = DB::table('aktivitas_km')
+                ->select('kategori_km', DB::raw('COUNT(*) as total_realisasi'))
                 ->where('id_lab', $id)
                 ->groupBy('kategori_km')
                 ->pluck('total_realisasi', 'kategori_km');
@@ -335,7 +338,7 @@ Route::middleware(['auth'])->group(function () {
                 ];
             }
 
-            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+            $aktivitas = DB::table('aktivitas_km')
                 ->leftJoin('users', 'aktivitas_km.id_user', '=', 'users.id_user')
                 ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
                 ->where('aktivitas_km.id_lab', $id)
@@ -362,7 +365,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ketuakk/monitoring-anggota-kk', function () {
             $tahun = now()->year;
 
-            $anggota = \Illuminate\Support\Facades\DB::table('users')
+            $anggota = DB::table('users')
                 ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
                 ->leftJoin('laboratorium_riset', 'users.id_lab', '=', 'laboratorium_riset.id_lab')
                 ->where('users.role', 'Anggota')
@@ -384,7 +387,7 @@ Route::middleware(['auth'])->group(function () {
             $dataMonitoring = [];
 
             foreach ($anggota as $item) {
-                $targets = \Illuminate\Support\Facades\DB::table('target_km')
+                $targets = DB::table('target_km')
                     ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
                     ->where('kontrak_manajemen.id_dosen', $item->id_dosen)
                     ->where('kontrak_manajemen.tahun_km', $tahun)
@@ -404,7 +407,7 @@ Route::middleware(['auth'])->group(function () {
 
                 $totalTarget = array_sum($targets);
 
-                $totalRealisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                $totalRealisasi = DB::table('aktivitas_km')
                     ->where('id_user', $item->id_user)
                     ->count();
 
@@ -441,7 +444,7 @@ Route::middleware(['auth'])->group(function () {
                 'Penunjang',
             ];
 
-            $anggota = \Illuminate\Support\Facades\DB::table('users')
+            $anggota = DB::table('users')
                 ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
                 ->leftJoin('laboratorium_riset', 'users.id_lab', '=', 'laboratorium_riset.id_lab')
                 ->where('users.id_user', $id)
@@ -457,11 +460,11 @@ Route::middleware(['auth'])->group(function () {
                 )
                 ->first();
 
-            if (!$anggota) {
+            if (! $anggota) {
                 abort(404);
             }
 
-            $targets = \Illuminate\Support\Facades\DB::table('target_km')
+            $targets = DB::table('target_km')
                 ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
                 ->where('kontrak_manajemen.id_dosen', $anggota->id_dosen)
                 ->where('kontrak_manajemen.tahun_km', $tahun)
@@ -469,7 +472,7 @@ Route::middleware(['auth'])->group(function () {
                 ->pluck('target', 'indikator')
                 ->toArray();
 
-            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+            $aktivitas = DB::table('aktivitas_km')
                 ->where('id_user', $anggota->id_user)
                 ->orderBy('tanggal_mulai', 'desc')
                 ->get();
@@ -498,23 +501,23 @@ Route::middleware(['auth'])->group(function () {
             ));
         });
         Route::get('/ketuakk/km-lab-riset', function () {
-        $tahun = now()->year;
+            $tahun = now()->year;
 
-            $labs = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+            $labs = DB::table('laboratorium_riset')
                 ->orderBy('id_lab')
                 ->get();
 
             $dataLab = [];
 
             foreach ($labs as $lab) {
-                $dosenIds = \Illuminate\Support\Facades\DB::table('dosen')
+                $dosenIds = DB::table('dosen')
                     ->where('id_lab', $lab->id_lab)
                     ->pluck('id_dosen');
 
                 $totalTarget = 0;
 
                 if ($dosenIds->count() > 0) {
-                    $totalTarget = \Illuminate\Support\Facades\DB::table('target_km')
+                    $totalTarget = DB::table('target_km')
                         ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
                         ->whereIn('kontrak_manajemen.id_dosen', $dosenIds)
                         ->where('kontrak_manajemen.tahun_km', $tahun)
@@ -522,7 +525,7 @@ Route::middleware(['auth'])->group(function () {
                         ->sum('target');
                 }
 
-                $totalRealisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                $totalRealisasi = DB::table('aktivitas_km')
                     ->where('id_lab', $lab->id_lab)
                     ->count();
 
@@ -548,11 +551,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ketuakk/km-lab-riset/{id}', function ($id) {
             $tahun = now()->year;
 
-            $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+            $lab = DB::table('laboratorium_riset')
                 ->where('id_lab', $id)
                 ->first();
 
-            if (!$lab) {
+            if (! $lab) {
                 abort(404);
             }
 
@@ -564,18 +567,18 @@ Route::middleware(['auth'])->group(function () {
                 'Penunjang',
             ];
 
-            $dosenIds = \Illuminate\Support\Facades\DB::table('dosen')
+            $dosenIds = DB::table('dosen')
                 ->where('id_lab', $id)
                 ->pluck('id_dosen');
 
             $targetPerKategori = collect();
 
             if ($dosenIds->count() > 0) {
-                $targetPerKategori = \Illuminate\Support\Facades\DB::table('target_km')
+                $targetPerKategori = DB::table('target_km')
                     ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
                     ->select(
                         'target_km.indikator',
-                        \Illuminate\Support\Facades\DB::raw('SUM(target_km.target) as total_target')
+                        DB::raw('SUM(target_km.target) as total_target')
                     )
                     ->whereIn('kontrak_manajemen.id_dosen', $dosenIds)
                     ->where('kontrak_manajemen.tahun_km', $tahun)
@@ -584,10 +587,10 @@ Route::middleware(['auth'])->group(function () {
                     ->pluck('total_target', 'indikator');
             }
 
-                $realisasiPerKategori = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+            $realisasiPerKategori = DB::table('aktivitas_km')
                 ->select(
                     'kategori_km',
-                    \Illuminate\Support\Facades\DB::raw('COUNT(*) as total_realisasi')
+                    DB::raw('COUNT(*) as total_realisasi')
                 )
                 ->where('id_lab', $id)
                 ->groupBy('kategori_km')
@@ -611,7 +614,7 @@ Route::middleware(['auth'])->group(function () {
                 ];
             }
 
-            $anggota = \Illuminate\Support\Facades\DB::table('users')
+            $anggota = DB::table('users')
                 ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
                 ->where('users.role', 'Anggota')
                 ->where('users.id_lab', $id)
@@ -634,7 +637,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ketuakk/km-anggota-kk', function () {
             $tahun = now()->year;
 
-            $anggota = \Illuminate\Support\Facades\DB::table('users')
+            $anggota = DB::table('users')
                 ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
                 ->leftJoin('laboratorium_riset', 'users.id_lab', '=', 'laboratorium_riset.id_lab')
                 ->where('users.role', 'Anggota')
@@ -654,7 +657,7 @@ Route::middleware(['auth'])->group(function () {
             $dataAnggota = [];
 
             foreach ($anggota as $item) {
-                $targets = \Illuminate\Support\Facades\DB::table('target_km')
+                $targets = DB::table('target_km')
                     ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
                     ->where('kontrak_manajemen.id_dosen', $item->id_dosen)
                     ->where('kontrak_manajemen.tahun_km', $tahun)
@@ -664,7 +667,7 @@ Route::middleware(['auth'])->group(function () {
 
                 $totalTarget = array_sum($targets);
 
-                $totalRealisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                $totalRealisasi = DB::table('aktivitas_km')
                     ->where('id_user', $item->id_user)
                     ->count();
 
@@ -700,7 +703,7 @@ Route::middleware(['auth'])->group(function () {
                 'Penunjang',
             ];
 
-            $anggota = \Illuminate\Support\Facades\DB::table('users')
+            $anggota = DB::table('users')
                 ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
                 ->leftJoin('laboratorium_riset', 'users.id_lab', '=', 'laboratorium_riset.id_lab')
                 ->where('users.id_user', $id)
@@ -716,11 +719,11 @@ Route::middleware(['auth'])->group(function () {
                 )
                 ->first();
 
-            if (!$anggota) {
+            if (! $anggota) {
                 abort(404);
             }
 
-            $targets = \Illuminate\Support\Facades\DB::table('target_km')
+            $targets = DB::table('target_km')
                 ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
                 ->where('kontrak_manajemen.id_dosen', $anggota->id_dosen)
                 ->where('kontrak_manajemen.tahun_km', $tahun)
@@ -728,7 +731,7 @@ Route::middleware(['auth'])->group(function () {
                 ->pluck('target', 'indikator')
                 ->toArray();
 
-            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+            $aktivitas = DB::table('aktivitas_km')
                 ->where('id_user', $anggota->id_user)
                 ->orderBy('tanggal_mulai', 'desc')
                 ->get();
@@ -769,33 +772,33 @@ Route::middleware(['auth'])->group(function () {
                 'Penunjang',
             ];
 
-            $totalTargetKm = \Illuminate\Support\Facades\DB::table('target_km')
+            $totalTargetKm = DB::table('target_km')
                 ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
                 ->where('kontrak_manajemen.tahun_km', $tahun)
                 ->where('kontrak_manajemen.status_km', 'Aktif')
                 ->sum('target');
 
-            $totalRealisasiKm = \Illuminate\Support\Facades\DB::table('aktivitas_km')->count();
+            $totalRealisasiKm = DB::table('aktivitas_km')->count();
 
             $persentaseTotal = $totalTargetKm > 0
                 ? round(($totalRealisasiKm / $totalTargetKm) * 100)
                 : 0;
 
-            $targetPerKategori = \Illuminate\Support\Facades\DB::table('target_km')
+            $targetPerKategori = DB::table('target_km')
                 ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
                 ->select(
                     'target_km.indikator',
-                    \Illuminate\Support\Facades\DB::raw('SUM(target_km.target) as total_target')
+                    DB::raw('SUM(target_km.target) as total_target')
                 )
                 ->where('kontrak_manajemen.tahun_km', $tahun)
                 ->where('kontrak_manajemen.status_km', 'Aktif')
                 ->groupBy('target_km.indikator')
                 ->pluck('total_target', 'indikator');
 
-            $realisasiPerKategori = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+            $realisasiPerKategori = DB::table('aktivitas_km')
                 ->select(
                     'kategori_km',
-                    \Illuminate\Support\Facades\DB::raw('COUNT(*) as total_realisasi')
+                    DB::raw('COUNT(*) as total_realisasi')
                 )
                 ->groupBy('kategori_km')
                 ->pluck('total_realisasi', 'kategori_km');
@@ -818,18 +821,18 @@ Route::middleware(['auth'])->group(function () {
                 ];
             }
 
-            $rekapLab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+            $rekapLab = DB::table('laboratorium_riset')
                 ->orderBy('id_lab')
                 ->get()
                 ->map(function ($lab) use ($tahun) {
-                    $dosenIds = \Illuminate\Support\Facades\DB::table('dosen')
+                    $dosenIds = DB::table('dosen')
                         ->where('id_lab', $lab->id_lab)
                         ->pluck('id_dosen');
 
                     $target = 0;
 
                     if ($dosenIds->count() > 0) {
-                        $target = \Illuminate\Support\Facades\DB::table('target_km')
+                        $target = DB::table('target_km')
                             ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
                             ->whereIn('kontrak_manajemen.id_dosen', $dosenIds)
                             ->where('kontrak_manajemen.tahun_km', $tahun)
@@ -837,7 +840,7 @@ Route::middleware(['auth'])->group(function () {
                             ->sum('target');
                     }
 
-                    $realisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                    $realisasi = DB::table('aktivitas_km')
                         ->where('id_lab', $lab->id_lab)
                         ->count();
 
@@ -866,16 +869,16 @@ Route::middleware(['auth'])->group(function () {
 
         Route::delete('/ketuakk/data-dosen/{id}', function ($id) {
             try {
-                $dosen = \Illuminate\Support\Facades\DB::table('dosen')
+                $dosen = DB::table('dosen')
                     ->where('id_dosen', $id)
                     ->first();
 
-                if (!$dosen) {
+                if (! $dosen) {
                     return redirect('/ketuakk/data-dosen')
                         ->with('error', 'Data dosen tidak ditemukan.');
                 }
 
-                $dipakaiUser = \Illuminate\Support\Facades\DB::table('users')
+                $dipakaiUser = DB::table('users')
                     ->where('id_dosen', $id)
                     ->exists();
 
@@ -884,7 +887,7 @@ Route::middleware(['auth'])->group(function () {
                         ->with('error', 'Data dosen tidak bisa dihapus karena masih terhubung dengan akun user.');
                 }
 
-                \Illuminate\Support\Facades\DB::table('target_km')
+                DB::table('target_km')
                     ->whereIn('id_km', function ($query) use ($id) {
                         $query->select('id_km')
                             ->from('kontrak_manajemen')
@@ -892,42 +895,42 @@ Route::middleware(['auth'])->group(function () {
                     })
                     ->delete();
 
-                \Illuminate\Support\Facades\DB::table('kontrak_manajemen')
+                DB::table('kontrak_manajemen')
                     ->where('id_dosen', $id)
                     ->delete();
 
-                \Illuminate\Support\Facades\DB::table('dosen')
+                DB::table('dosen')
                     ->where('id_dosen', $id)
                     ->delete();
 
                 return redirect('/ketuakk/data-dosen')
                     ->with('success', 'Data dosen berhasil dihapus.');
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return redirect('/ketuakk/data-dosen')
-                    ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+                    ->with('error', 'Terjadi kesalahan: '.$e->getMessage());
             }
         });
     });
 
-
     // RUANG KHUSUS KETUA LAB
     Route::middleware(['auth', 'role:Ketua Lab'])->group(function () {
         Route::get('/ketualab/dashboard', [KetuaLabController::class, 'dashboard']);
-        Route::get('/ketualab/penurunan-km', [KetuaLabController::class, 'penurunanKm']);
+        Route::get('/ketualab/penurunan-km', [KetuaLabController::class, 'pembagianKmAnggota']);
+        Route::post('/ketualab/penurunan-km', [KetuaLabController::class, 'simpanPembagianKmAnggota']);
         Route::get('/ketualab/penurunan-km/{id}/plot', [KetuaLabController::class, 'createPlot']);
         Route::post('/ketualab/penurunan-km/{id}/plot', [KetuaLabController::class, 'storePlot']);
         Route::get('/ketualab/monitoring-lab', function () {
-            /** @var \App\Models\User $user */
+            /** @var User $user */
             $user = auth()->user();
 
             $idLab = $user->id_lab;
             $tahun = now()->year;
 
-            $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+            $lab = DB::table('laboratorium_riset')
                 ->where('id_lab', $idLab)
                 ->first();
 
-            $anggota = \Illuminate\Support\Facades\DB::table('users')
+            $anggota = DB::table('users')
                 ->where('role', 'Anggota')
                 ->where('id_lab', $idLab)
                 ->get();
@@ -943,7 +946,7 @@ Route::middleware(['auth'])->group(function () {
             ];
 
             foreach ($anggota as $item) {
-                $targets = \Illuminate\Support\Facades\DB::table('target_km')
+                $targets = DB::table('target_km')
                     ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
                     ->where('kontrak_manajemen.id_dosen', $item->id_dosen)
                     ->where('kontrak_manajemen.tahun_km', $tahun)
@@ -952,7 +955,7 @@ Route::middleware(['auth'])->group(function () {
                     ->toArray();
 
                 foreach ($targets as $kategori => $target) {
-                    if (!isset($targetLabPerKategori[$kategori])) {
+                    if (! isset($targetLabPerKategori[$kategori])) {
                         $targetLabPerKategori[$kategori] = 0;
                     }
 
@@ -960,8 +963,8 @@ Route::middleware(['auth'])->group(function () {
                 }
             }
 
-            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
-                ->select('kategori_km', \Illuminate\Support\Facades\DB::raw('COUNT(*) as total'))
+            $aktivitas = DB::table('aktivitas_km')
+                ->select('kategori_km', DB::raw('COUNT(*) as total'))
                 ->where('id_lab', $idLab)
                 ->groupBy('kategori_km')
                 ->pluck('total', 'kategori_km');
@@ -998,13 +1001,13 @@ Route::middleware(['auth'])->group(function () {
             ));
         });
         Route::get('/ketualab/monitoring-anggota', function () {
-            /** @var \App\Models\User $user */
+            /** @var User $user */
             $user = auth()->user();
 
             $idLab = $user->id_lab;
             $tahun = now()->year;
 
-            $anggota = \Illuminate\Support\Facades\DB::table('users')
+            $anggota = DB::table('users')
                 ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
                 ->leftJoin('laboratorium_riset', 'users.id_lab', '=', 'laboratorium_riset.id_lab')
                 ->where('users.role', 'Anggota')
@@ -1025,7 +1028,7 @@ Route::middleware(['auth'])->group(function () {
             $dataMonitoring = [];
 
             foreach ($anggota as $item) {
-                $targets = \Illuminate\Support\Facades\DB::table('target_km')
+                $targets = DB::table('target_km')
                     ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
                     ->where('kontrak_manajemen.id_dosen', $item->id_dosen)
                     ->where('kontrak_manajemen.tahun_km', $tahun)
@@ -1045,7 +1048,7 @@ Route::middleware(['auth'])->group(function () {
 
                 $totalTarget = array_sum($targets);
 
-                $totalRealisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                $totalRealisasi = DB::table('aktivitas_km')
                     ->where('id_user', $item->id_user)
                     ->count();
 
@@ -1070,12 +1073,12 @@ Route::middleware(['auth'])->group(function () {
             return view('ketualab.monitoring-anggota', compact('dataMonitoring'));
         });
         Route::get('/ketualab/detail-anggota/{id}', function ($id) {
-            /** @var \App\Models\User $ketuaLab */
+            /** @var User $ketuaLab */
             $ketuaLab = auth()->user();
 
             $tahun = now()->year;
 
-            $anggota = \Illuminate\Support\Facades\DB::table('users')
+            $anggota = DB::table('users')
                 ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
                 ->leftJoin('laboratorium_riset', 'users.id_lab', '=', 'laboratorium_riset.id_lab')
                 ->where('users.id_user', $id)
@@ -1092,16 +1095,16 @@ Route::middleware(['auth'])->group(function () {
                 )
                 ->first();
 
-            if (!$anggota) {
+            if (! $anggota) {
                 abort(404);
             }
 
-            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+            $aktivitas = DB::table('aktivitas_km')
                 ->where('id_user', $anggota->id_user)
                 ->orderBy('tanggal_mulai', 'desc')
                 ->get();
 
-            $targets = \Illuminate\Support\Facades\DB::table('target_km')
+            $targets = DB::table('target_km')
                 ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
                 ->where('kontrak_manajemen.id_dosen', $anggota->id_dosen)
                 ->where('kontrak_manajemen.tahun_km', $tahun)
@@ -1137,17 +1140,17 @@ Route::middleware(['auth'])->group(function () {
             return view('ketualab.detail-anggota', compact('anggota', 'aktivitas', 'rekap'));
         });
         Route::get('/ketualab/laporan', function () {
-            /** @var \App\Models\User $user */
+            /** @var User $user */
             $user = auth()->user();
 
             $idLab = $user->id_lab;
             $tahun = now()->year;
 
-            $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+            $lab = DB::table('laboratorium_riset')
                 ->where('id_lab', $idLab)
                 ->first();
 
-            $anggota = \Illuminate\Support\Facades\DB::table('users')
+            $anggota = DB::table('users')
                 ->where('role', 'Anggota')
                 ->where('id_lab', $idLab)
                 ->get();
@@ -1163,7 +1166,7 @@ Route::middleware(['auth'])->group(function () {
             ];
 
             foreach ($anggota as $item) {
-                $targets = \Illuminate\Support\Facades\DB::table('target_km')
+                $targets = DB::table('target_km')
                     ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
                     ->where('kontrak_manajemen.id_dosen', $item->id_dosen)
                     ->where('kontrak_manajemen.tahun_km', $tahun)
@@ -1172,7 +1175,7 @@ Route::middleware(['auth'])->group(function () {
                     ->toArray();
 
                 foreach ($targets as $kategori => $target) {
-                    if (!isset($targetLabPerKategori[$kategori])) {
+                    if (! isset($targetLabPerKategori[$kategori])) {
                         $targetLabPerKategori[$kategori] = 0;
                     }
 
@@ -1180,8 +1183,8 @@ Route::middleware(['auth'])->group(function () {
                 }
             }
 
-            $aktivitasPerKategori = \Illuminate\Support\Facades\DB::table('aktivitas_km')
-                ->select('kategori_km', \Illuminate\Support\Facades\DB::raw('COUNT(*) as total'))
+            $aktivitasPerKategori = DB::table('aktivitas_km')
+                ->select('kategori_km', DB::raw('COUNT(*) as total'))
                 ->where('id_lab', $idLab)
                 ->groupBy('kategori_km')
                 ->pluck('total', 'kategori_km');
@@ -1208,7 +1211,7 @@ Route::middleware(['auth'])->group(function () {
                 ? round(($totalRealisasiLab / $totalTargetLab) * 100)
                 : 0;
 
-            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+            $aktivitas = DB::table('aktivitas_km')
                 ->leftJoin('users', 'aktivitas_km.id_user', '=', 'users.id_user')
                 ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
                 ->where('aktivitas_km.id_lab', $idLab)
@@ -1238,14 +1241,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ketualab/profil', function () {
             $user = auth()->user();
 
-            $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+            $lab = DB::table('laboratorium_riset')
                 ->where('id_lab', $user->id_lab)
                 ->first();
 
             return view('ketualab.profil', compact('user', 'lab'));
         });
     });
-
 
     // RUANG KHUSUS ANGGOTA
     Route::middleware(['auth', 'role:Anggota'])->group(function () {
@@ -1254,7 +1256,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/anggota/realisasi-km/{id}/edit', [AnggotaController::class, 'editRealisasi']);
         Route::put('/anggota/realisasi-km/{id}', [AnggotaController::class, 'updateRealisasi']);
         Route::get('/anggota/aktivitas-km', function () {
-            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+            $aktivitas = DB::table('aktivitas_km')
                 ->where('id_user', auth()->user()->id_user)
                 ->orderBy('tanggal_mulai', 'desc')
                 ->get();
@@ -1262,7 +1264,7 @@ Route::middleware(['auth'])->group(function () {
             return view('anggota.aktivitas-km.index', compact('aktivitas'));
         });
         Route::get('/anggota/riwayat-realisasi', function () {
-            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+            $aktivitas = DB::table('aktivitas_km')
                 ->where('id_user', auth()->user()->id_user)
                 ->orderBy('tanggal_mulai', 'desc')
                 ->get();
@@ -1272,14 +1274,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/anggota/profil', function () {
             $user = auth()->user();
 
-            $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+            $lab = DB::table('laboratorium_riset')
                 ->where('id_lab', $user->id_lab)
                 ->first();
 
             $dosen = null;
 
             if ($user->id_dosen) {
-                $dosen = \Illuminate\Support\Facades\DB::table('dosen')
+                $dosen = DB::table('dosen')
                     ->where('id_dosen', $user->id_dosen)
                     ->first();
             }
@@ -1289,7 +1291,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/anggota/aktivitas-km/create', function () {
             return view('anggota.aktivitas-km.create');
         });
-        Route::post('/anggota/aktivitas-km', function (\Illuminate\Http\Request $request) {
+        Route::post('/anggota/aktivitas-km', function (Request $request) {
             $request->validate([
                 'kategori_km' => 'required',
                 'judul_aktivitas' => 'required',
@@ -1297,7 +1299,7 @@ Route::middleware(['auth'])->group(function () {
                 'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
                 'jad' => 'required|in:GB,LK,L,AA',
             ]);
-            \Illuminate\Support\Facades\DB::table('aktivitas_km')->insert([
+            DB::table('aktivitas_km')->insert([
                 'id_user' => auth()->user()->id_user,
                 'id_lab' => auth()->user()->id_lab ?? null,
                 'kategori_km' => $request->kategori_km,
@@ -1308,21 +1310,22 @@ Route::middleware(['auth'])->group(function () {
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
             return redirect('/anggota/aktivitas-km')->with('success', 'Aktivitas KM berhasil ditambahkan.');
         });
         Route::get('/anggota/aktivitas-km/{id}/edit', function ($id) {
-            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+            $aktivitas = DB::table('aktivitas_km')
                 ->where('id_aktivitas', $id)
                 ->where('id_user', auth()->user()->id_user)
                 ->first();
 
-            if (!$aktivitas) {
+            if (! $aktivitas) {
                 abort(404);
             }
 
             return view('anggota.aktivitas-km.edit', compact('aktivitas'));
         });
-        Route::put('/anggota/aktivitas-km/{id}', function (\Illuminate\Http\Request $request, $id) {
+        Route::put('/anggota/aktivitas-km/{id}', function (Request $request, $id) {
             $request->validate([
                 'kategori_km' => 'required',
                 'judul_aktivitas' => 'required',
@@ -1330,16 +1333,16 @@ Route::middleware(['auth'])->group(function () {
                 'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
             ]);
 
-            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+            $aktivitas = DB::table('aktivitas_km')
                 ->where('id_aktivitas', $id)
                 ->where('id_user', auth()->user()->id_user)
                 ->first();
 
-            if (!$aktivitas) {
+            if (! $aktivitas) {
                 abort(404);
             }
 
-            \Illuminate\Support\Facades\DB::table('aktivitas_km')
+            DB::table('aktivitas_km')
                 ->where('id_aktivitas', $id)
                 ->where('id_user', auth()->user()->id_user)
                 ->update([
@@ -1354,14 +1357,14 @@ Route::middleware(['auth'])->group(function () {
             return redirect('/anggota/aktivitas-km')->with('success', 'Aktivitas KM berhasil diperbarui.');
         });
         Route::get('/anggota/progress-km', function () {
-            /** @var \App\Models\User $user */
+            /** @var User $user */
             $user = auth()->user();
 
             $idUser = $user->id_user;
             $idDosen = $user->id_dosen;
             $tahun = now()->year;
 
-            $targets = \Illuminate\Support\Facades\DB::table('target_km')
+            $targets = DB::table('target_km')
                 ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
                 ->where('kontrak_manajemen.id_dosen', $idDosen)
                 ->where('kontrak_manajemen.tahun_km', $tahun)
@@ -1379,8 +1382,8 @@ Route::middleware(['auth'])->group(function () {
                 ];
             }
 
-            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
-                ->select('kategori_km', \Illuminate\Support\Facades\DB::raw('COUNT(*) as total'))
+            $aktivitas = DB::table('aktivitas_km')
+                ->select('kategori_km', DB::raw('COUNT(*) as total'))
                 ->where('id_user', $idUser)
                 ->groupBy('kategori_km')
                 ->pluck('total', 'kategori_km');

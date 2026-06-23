@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\RealisasiKm;
-use App\Models\TargetKm; 
+use App\Models\TargetKm;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AnggotaController extends Controller
 {
     // 1. FUNGSI UNTUK MENAMPILKAN DASHBOARD DINAMIS
     public function dashboard()
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = auth()->user();
 
         $tahun = now()->year;
@@ -107,8 +108,8 @@ class AnggotaController extends Controller
     public function indexRealisasi()
     {
         $realisasis = RealisasiKm::join('target_km', 'realisasi_km.id_target', '=', 'target_km.id_target')
-                        ->where('realisasi_km.id_dosen', Auth::user()->id_dosen)
-                        ->get();
+            ->where('realisasi_km.id_dosen', Auth::user()->id_dosen)
+            ->get();
 
         return view('anggota.realisasi', compact('realisasis'));
     }
@@ -117,9 +118,9 @@ class AnggotaController extends Controller
     public function editRealisasi($id)
     {
         $realisasi = RealisasiKm::join('target_km', 'realisasi_km.id_target', '=', 'target_km.id_target')
-                        ->where('realisasi_km.id_realisasi', $id)
-                        ->firstOrFail();
-                        
+            ->where('realisasi_km.id_realisasi', $id)
+            ->firstOrFail();
+
         return view('anggota.realisasi_edit', compact('realisasi'));
     }
 
@@ -127,14 +128,14 @@ class AnggotaController extends Controller
     public function updateRealisasi(Request $request, $id)
     {
         $request->validate([
-            'realisasi' => 'required|integer|min:0'
+            'realisasi' => 'required|integer|min:0',
         ]);
 
         $realisasi = RealisasiKm::findOrFail($id);
         $realisasi->realisasi = $request->realisasi;
 
         $target = TargetKm::findOrFail($realisasi->id_target);
-        
+
         if ($request->realisasi >= $target->target) {
             $realisasi->status_realisasi = 'Tercapai';
         } else {

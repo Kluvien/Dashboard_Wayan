@@ -16,6 +16,6 @@ class TargetKm extends Model
     protected $fillable = [
         'id_km',
         'indikator',
-        'target'
+        'target',
     ];
 }

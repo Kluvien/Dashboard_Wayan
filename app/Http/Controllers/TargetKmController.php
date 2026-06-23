@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\TargetKm;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class TargetKmController extends Controller
 {
     public function index()
     {
-        $targets = TargetKm::all(); 
+        $targets = TargetKm::all();
+
         return view('ketuakk.target', compact('targets'));
     }
 
@@ -23,16 +24,16 @@ class TargetKmController extends Controller
     {
         $request->validate([
             'indikator' => 'required',
-            'target' => 'required'
+            'target' => 'required',
         ]);
 
         $km = DB::table('kontrak_manajemen')->first();
-        
-        if (!$km) {
+
+        if (! $km) {
             $id_km = DB::table('kontrak_manajemen')->insertGetId([
-                'id_dosen'   => auth()->user()->id_dosen,
-                'tahun_km'   => date('Y'),
-                'status_km'  => 'Draft',
+                'id_dosen' => auth()->user()->id_dosen,
+                'tahun_km' => date('Y'),
+                'status_km' => 'Draft',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -41,9 +42,9 @@ class TargetKmController extends Controller
         }
 
         TargetKm::create([
-            'id_km'     => $id_km,
+            'id_km' => $id_km,
             'indikator' => $request->indikator,
-            'target'    => $request->target
+            'target' => $request->target,
         ]);
 
         return redirect('/ketuakk/target-km')->with('success', 'Target KM berhasil ditambahkan!');
@@ -52,6 +53,7 @@ class TargetKmController extends Controller
     public function edit($id)
     {
         $target = TargetKm::findOrFail($id);
+
         return view('ketuakk.target_edit', compact('target'));
     }
 
@@ -59,13 +61,13 @@ class TargetKmController extends Controller
     {
         $request->validate([
             'indikator' => 'required',
-            'target' => 'required|integer'
+            'target' => 'required|integer',
         ]);
 
         $target = TargetKm::findOrFail($id);
         $target->update([
             'indikator' => $request->indikator,
-            'target' => $request->target
+            'target' => $request->target,
         ]);
 
         return redirect('/ketuakk/target-km')->with('success', 'Target KM berhasil diperbarui!');

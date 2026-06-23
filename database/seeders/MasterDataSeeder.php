@@ -15,11 +15,11 @@ class MasterDataSeeder extends Seeder
         ]);
 
         DB::table('users')->where('username', 'anggota')->update([
-            'id_dosen'=> 1,
+            'id_dosen' => 1,
             'id_lab' => 1,
             'updated_at' => now(),
         ]);
-        
+
         DB::table('kelompok_keahlian')->updateOrInsert(
             ['id_kk' => 1],
             [
@@ -113,7 +113,7 @@ class MasterDataSeeder extends Seeder
         ];
 
         foreach ($dosens as $dosen) {
-        DB::table('dosen')->updateOrInsert(
+            DB::table('dosen')->updateOrInsert(
                 ['id_dosen' => $dosen['id_dosen']],
                 [
                     'id_kk' => $dosen['id_kk'],
