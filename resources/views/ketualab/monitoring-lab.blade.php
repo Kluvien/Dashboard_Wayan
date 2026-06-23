@@ -16,7 +16,7 @@
                 <strong>{{ $labelPeriode ?? 'Tahunan' }}</strong>
 
                 @if(isset($tanggalMulai) && isset($tanggalSelesai))
-                    | {{ $tanggalMulai->format('d/m/Y') }} - {{ $tanggalSelesai->format('d/m/Y') }}
+                | {{ $tanggalMulai->format('d/m/Y') }} - {{ $tanggalSelesai->format('d/m/Y') }}
                 @endif
             </p>
         </div>
@@ -31,18 +31,10 @@
             <div class="col-md-3">
                 <label class="form-label fw-bold">Jenis Periode</label>
                 <select name="periode" class="form-select">
-                    <option value="tahun" {{ ($periode ?? 'tahun') == 'tahun' ? 'selected' : '' }}>
-                        Tahunan
-                    </option>
-                    <option value="bulan" {{ ($periode ?? '') == 'bulan' ? 'selected' : '' }}>
-                        Bulanan
-                    </option>
-                    <option value="triwulan" {{ ($periode ?? '') == 'triwulan' ? 'selected' : '' }}>
-                        Triwulan
-                    </option>
-                    <option value="semester" {{ ($periode ?? '') == 'semester' ? 'selected' : '' }}>
-                        Semester
-                    </option>
+                    <option value="tahun" {{ ($periode ?? 'tahun') == 'tahun' ? 'selected' : '' }}>Tahunan</option>
+                    <option value="bulan" {{ ($periode ?? '') == 'bulan' ? 'selected' : '' }}>Bulanan</option>
+                    <option value="triwulan" {{ ($periode ?? '') == 'triwulan' ? 'selected' : '' }}>Triwulan</option>
+                    <option value="semester" {{ ($periode ?? '') == 'semester' ? 'selected' : '' }}>Semester</option>
                 </select>
             </div>
 
@@ -56,9 +48,9 @@
                 <select name="bulan" class="form-select">
                     @for($i = 1; $i <= 12; $i++)
                         <option value="{{ $i }}" {{ ($bulan ?? now()->month) == $i ? 'selected' : '' }}>
-                            {{ $i }}
+                        {{ $i }}
                         </option>
-                    @endfor
+                        @endfor
                 </select>
             </div>
 
@@ -92,7 +84,7 @@
 <div class="row g-4 mb-4">
     <div class="col-md-3">
         <div class="card h-100">
-            <p class="text-muted mb-1">Laboratorium Riset</p>
+            <p class="text-muted mb-1">Lab Riset</p>
             <h5 class="fw-bold mb-0">{{ $lab->nama_lab ?? '-' }}</h5>
         </div>
     </div>
@@ -106,95 +98,129 @@
 
     <div class="col-md-3">
         <div class="card h-100">
+            <p class="text-muted mb-1">KM Turun dari Ketua KK</p>
+            <h3 class="fw-bold mb-0">{{ $totalKmTurun ?? 0 }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card h-100">
+            <p class="text-muted mb-1">Sudah Assign ke Anggota</p>
+            <h3 class="fw-bold mb-0">{{ $totalKmAssign ?? 0 }}</h3>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card h-100">
+            <p class="text-muted mb-1">Sisa Belum Assign</p>
+            <h3 class="fw-bold mb-0">{{ $totalSisaAssign ?? 0 }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card h-100">
             <p class="text-muted mb-1">Target Periode</p>
-            <h3 class="fw-bold mb-0">{{ $totalTargetLab ?? 0 }}</h3>
+            <h3 class="fw-bold mb-0">{{ $totalTargetPeriode ?? 0 }}</h3>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="card h-100">
             <p class="text-muted mb-1">Realisasi Periode</p>
-            <h3 class="fw-bold mb-0">{{ $totalRealisasiLab ?? 0 }}</h3>
+            <h3 class="fw-bold mb-0">{{ $totalRealisasiPeriode ?? 0 }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card h-100">
+            <p class="text-muted mb-1">Progress Realisasi</p>
+            <h3 class="fw-bold mb-0">{{ min($persentaseTotal ?? 0, 100) }}%</h3>
         </div>
     </div>
 </div>
 
 <div class="card mb-4">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
-        <div>
-            <h4 class="fw-bold mb-1">Persentase Capaian Lab</h4>
-            <p class="text-muted mb-0">
-                Perhitungan berdasarkan periode yang dipilih.
-            </p>
-        </div>
-
-        <h3 class="fw-bold mb-0">{{ min($persentaseTotal ?? 0, 100) }}%</h3>
-    </div>
+    <h4 class="fw-bold mb-3">Progress Pembagian KM ke Anggota</h4>
 
     <div class="progress" style="height: 14px;">
         <div
             class="progress-bar"
             role="progressbar"
-            style="width: {{ min($persentaseTotal ?? 0, 100) }}%;"
-            aria-valuenow="{{ min($persentaseTotal ?? 0, 100) }}"
-            aria-valuemin="0"
-            aria-valuemax="100"
-        ></div>
+            style="width: {{ min($persentaseAssign ?? 0, 100) }}%;"></div>
+    </div>
+
+    <div class="small text-muted mt-2">
+        {{ $persentaseAssign ?? 0 }}% KM sudah dibagikan ke anggota.
     </div>
 </div>
 
 <div class="card">
-    <h4 class="fw-bold mb-3">Rekap Monitoring KM Lab</h4>
+    <h4 class="fw-bold mb-3">Rekap Monitoring KM Lab per Kategori</h4>
 
     <div class="table-responsive">
-        <table class="table align-middle mb-0" style="table-layout: fixed; width: 100%; font-size: 14px;">
+        <table class="table align-middle mb-0" style="width: 100%; font-size: 14px;">
             <thead>
                 <tr>
-                    <th style="width: 6%;">No</th>
-                    <th style="width: 22%;">Kategori KM</th>
-                    <th style="width: 16%;">Target Tahunan</th>
-                    <th style="width: 16%;">Target Periode</th>
-                    <th style="width: 16%;">Realisasi</th>
-                    <th style="width: 12%;">Progress</th>
-                    <th style="width: 12%;">Status</th>
+                    <th>No</th>
+                    <th>Kategori KM</th>
+                    <th>KM Turun</th>
+                    <th>Sudah Assign</th>
+                    <th>Sisa Assign</th>
+                    <th>Target Periode</th>
+                    <th>Realisasi</th>
+                    <th>Progress</th>
+                    <th>Status</th>
                 </tr>
             </thead>
 
             <tbody>
                 @forelse($rekap as $index => $item)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td class="fw-bold">{{ $item['kategori'] }}</td>
-                        <td>{{ $item['target_tahunan'] ?? $item['target'] }}</td>
-                        <td>{{ $item['target'] }}</td>
-                        <td>{{ $item['realisasi'] }}</td>
-                        <td>
-                            <div class="progress mb-1" style="height: 8px;">
-                                <div
-                                    class="progress-bar"
-                                    role="progressbar"
-                                    style="width: {{ min($item['persentase'], 100) }}%;"
-                                    aria-valuenow="{{ min($item['persentase'], 100) }}"
-                                    aria-valuemin="0"
-                                    aria-valuemax="100"
-                                ></div>
-                            </div>
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+
+                    <td class="fw-bold">
+                        {{ $item['kategori'] }}
+                    </td>
+
+                    <td>{{ $item['km_turun'] }}</td>
+
+                    <td>{{ $item['km_assign'] }}</td>
+
+                    <td>{{ $item['sisa_assign'] }}</td>
+
+                    <td>{{ $item['target_periode'] }}</td>
+
+                    <td>{{ $item['realisasi'] }}</td>
+
+                    <td style="min-width: 130px;">
+                        <div class="progress mb-1" style="height: 8px;">
+                            <div
+                                class="progress-bar"
+                                role="progressbar"
+                                style="width: {{ min($item['persentase'], 100) }}%;"></div>
+                        </div>
+
+                        <div class="small text-muted">
                             {{ $item['persentase'] }}%
-                        </td>
-                        <td>
-                            @if($item['status'] === 'Tercapai')
-                                <span class="badge bg-success">Tercapai</span>
-                            @else
-                                <span class="badge bg-warning text-dark">Belum</span>
-                            @endif
-                        </td>
-                    </tr>
+                        </div>
+                    </td>
+
+                    <td>
+                        @if($item['status'] === 'Tercapai')
+                        <span class="badge bg-success">Tercapai</span>
+                        @else
+                        <span class="badge bg-warning text-dark">Belum</span>
+                        @endif
+                    </td>
+                </tr>
                 @empty
-                    <tr>
-                        <td colspan="7" class="text-center text-muted py-4">
-                            Belum ada data monitoring.
-                        </td>
-                    </tr>
+                <tr>
+                    <td colspan="9" class="text-center text-muted py-4">
+                        Belum ada data monitoring.
+                    </td>
+                </tr>
                 @endforelse
             </tbody>
         </table>
