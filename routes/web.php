@@ -497,7 +497,7 @@ Route::middleware(['auth'])->group(function () {
                 'rekap'
             ));
         });
-                Route::get('/ketuakk/km-lab-riset/create', function () {
+        Route::get('/ketuakk/km-lab-riset/create', function () {
             $labs = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
                 ->orderBy('id_lab')
                 ->get();
@@ -537,39 +537,40 @@ Route::middleware(['auth'])->group(function () {
             $dataLab = [];
 
             foreach ($labs as $lab) {
-                $dosenIds = \Illuminate\Support\Facades\DB::table('dosen')
-                    ->where('id_lab', $lab->id_lab)
-                    ->pluck('id_dosen');
-
-                $totalTarget = 0;
-
-                if ($dosenIds->count() > 0) {
-                    $totalTarget = \Illuminate\Support\Facades\DB::table('target_km')
-                        ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
-                        ->whereIn('kontrak_manajemen.id_dosen', $dosenIds)
-                        ->where('kontrak_manajemen.tahun_km', $tahun)
-                        ->where('kontrak_manajemen.status_km', 'Aktif')
-                        ->sum('target');
-                }
-
-                $totalRealisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                $jumlahDosen = \Illuminate\Support\Facades\DB::table('dosen')
                     ->where('id_lab', $lab->id_lab)
                     ->count();
 
-                $persentase = $totalTarget > 0
-                    ? round(($totalRealisasi / $totalTarget) * 100)
+                $totalKmTurun = \Illuminate\Support\Facades\DB::table('km_lab')
+                    ->where('id_lab', $lab->id_lab)
+                    ->where('tahun_km', $tahun)
+                    ->where('status_km', 'Aktif')
+                    ->sum('jumlah_km');
+
+                $totalKmAssign = \Illuminate\Support\Facades\DB::table('km_anggota')
+                    ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
+                    ->where('km_lab.id_lab', $lab->id_lab)
+                    ->where('km_lab.tahun_km', $tahun)
+                    ->where('km_lab.status_km', 'Aktif')
+                    ->sum('km_anggota.jumlah_km');
+
+                $sisaKm = $totalKmTurun - $totalKmAssign;
+
+                $persentase = $totalKmTurun > 0
+                    ? round(($totalKmAssign / $totalKmTurun) * 100)
                     : 0;
 
                 $dataLab[] = [
                     'id_lab' => $lab->id_lab,
                     'nama_lab' => $lab->nama_lab,
-                    'jumlah_dosen' => $dosenIds->count(),
-                    'total_target' => $totalTarget,
-                    'total_realisasi' => $totalRealisasi,
+                    'jumlah_dosen' => $jumlahDosen,
+                    'total_target' => $totalKmTurun,
+                    'total_realisasi' => $totalKmAssign,
+                    'sisa_km' => $sisaKm,
                     'persentase' => min($persentase, 100),
-                    'status' => $totalTarget > 0 && $totalRealisasi >= $totalTarget
-                        ? 'Tercapai'
-                        : 'Belum Tercapai',
+                    'status' => $totalKmTurun > 0 && $sisaKm <= 0
+                        ? 'Sudah Dibagi'
+                        : 'Belum Selesai',
                 ];
             }
 

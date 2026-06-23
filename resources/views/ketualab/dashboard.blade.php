@@ -102,35 +102,35 @@
             <table class="table align-middle mb-0 dashboard-compact-table">
                 <thead>
                     <tr>
-                        <th style="width: 6%;">No</th>
+                        <th style="width: 7%;">No</th>
                         <th style="width: 22%;">Kategori</th>
-                        <th style="width: 10%;">Target</th>
-                        <th style="width: 12%;">Realisasi</th>
+                        <th style="width: 13%;">Target</th>
+                        <th style="width: 16%;">Realisasi</th>
                         <th style="width: 27%;">Progress</th>
                         <th style="width: 23%;">Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($rekapKategori as $index => $item)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td class="fw-bold">{{ $item['kategori'] }}</td>
-                            <td>{{ $item['target'] }}</td>
-                            <td>{{ $item['realisasi'] }}</td>
-                            <td>
-                                <div class="progress">
-                                    <div class="progress-bar" style="width: {{ $item['persentase'] }}%;"></div>
-                                </div>
-                                <div class="small mt-1">{{ $item['persentase'] }}%</div>
-                            </td>
-                            <td>
-                                @if($item['status'] === 'Tercapai')
-                                    <span class="badge bg-success dashboard-status-badge">Tercapai</span>
-                                @else
-                                    <span class="badge bg-danger dashboard-status-badge">Belum Tercapai</span>
-                                @endif
-                            </td>
-                        </tr>
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td class="fw-bold">{{ $item['kategori'] }}</td>
+                        <td>{{ $item['target'] }}</td>
+                        <td>{{ $item['realisasi'] }}</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: {{ $item['persentase'] }}%;"></div>
+                            </div>
+                            <div class="small mt-1">{{ $item['persentase'] }}%</div>
+                        </td>
+                        <td>
+                            @if($item['status'] === 'Tercapai')
+                            <span class="badge bg-success dashboard-status-badge">Tercapai</span>
+                            @else
+                            <span class="badge bg-danger dashboard-status-badge">Belum Tercapai</span>
+                            @endif
+                        </td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -187,20 +187,20 @@
         </thead>
         <tbody>
             @forelse($aktivitasTerbaru as $index => $item)
-                <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ $item->nama_dosen ?? $item->username }}</td>
-                    <td>{{ $item->kategori_km }}</td>
-                    <td class="fw-bold">{{ $item->judul_aktivitas }}</td>
-                    <td>{{ $item->tanggal_mulai }}</td>
-                    <td>{{ $item->tanggal_selesai }}</td>
-                </tr>
+            <tr>
+                <td>{{ $index + 1 }}</td>
+                <td>{{ $item->nama_dosen ?? $item->username }}</td>
+                <td>{{ $item->kategori_km }}</td>
+                <td class="fw-bold">{{ $item->judul_aktivitas }}</td>
+                <td>{{ $item->tanggal_mulai }}</td>
+                <td>{{ $item->tanggal_selesai }}</td>
+            </tr>
             @empty
-                <tr>
-                    <td colspan="6" class="text-center text-muted py-4">
-                        Belum ada aktivitas KM terbaru.
-                    </td>
-                </tr>
+            <tr>
+                <td colspan="6" class="text-center text-muted py-4">
+                    Belum ada aktivitas KM terbaru.
+                </td>
+            </tr>
             @endforelse
         </tbody>
     </table>

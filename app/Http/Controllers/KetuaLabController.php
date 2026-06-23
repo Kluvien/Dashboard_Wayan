@@ -148,12 +148,38 @@ class KetuaLabController extends Controller
     public function pembagianKmAnggota()
     {
         $user = auth()->user();
-        $tahun = now()->year;
         $idLab = $user->id_lab;
+        $tahun = now()->year;
 
         $lab = DB::table('laboratorium_riset')
             ->where('id_lab', $idLab)
             ->first();
+
+        $kmLab = DB::table('km_lab')
+            ->where('id_lab', $idLab)
+            ->where('tahun_km', $tahun)
+            ->where('status_km', 'Aktif')
+            ->orderBy('kategori_km')
+            ->get();
+
+        $dataKmLab = [];
+
+        foreach ($kmLab as $km) {
+            $sudahAssign = DB::table('km_anggota')
+                ->where('id_km_lab', $km->id_km_lab)
+                ->sum('jumlah_km');
+
+            $sisaKm = $km->jumlah_km - $sudahAssign;
+
+            $dataKmLab[] = [
+                'id_km_lab' => $km->id_km_lab,
+                'kategori_km' => $km->kategori_km,
+                'jumlah_km' => $km->jumlah_km,
+                'sudah_assign' => $sudahAssign,
+                'sisa_km' => $sisaKm,
+                'status' => $sisaKm <= 0 ? 'Sudah Dibagi' : 'Belum Selesai',
+            ];
+        }
 
         $anggota = DB::table('users')
             ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
@@ -161,8 +187,8 @@ class KetuaLabController extends Controller
             ->where('users.id_lab', $idLab)
             ->select(
                 'users.id_user',
-                'users.username',
                 'users.id_dosen',
+                'users.username',
                 'dosen.nama_dosen',
                 'dosen.nidn',
                 'dosen.email',
@@ -171,170 +197,82 @@ class KetuaLabController extends Controller
             ->orderBy('dosen.nama_dosen')
             ->get();
 
-        $bobotJad = [
-            'GB' => 1.4,
-            'LK' => 1.2,
-            'L' => 1.0,
-            'AA' => 0.8,
-        ];
-
-        $jadLabel = [
-            'GB' => 'Guru Besar',
-            'LK' => 'Lektor Kepala',
-            'L' => 'Lektor',
-            'AA' => 'Asisten Ahli',
-        ];
-
-        $kategori = [
-            'Pendidikan',
-            'Penelitian',
-            'Publikasi',
-            'Pengabdian',
-            'Penunjang',
-        ];
-
-        $dataAnggota = [];
-
-        foreach ($anggota as $item) {
-            $jad = $item->jad ?? 'AA';
-
-            $targets = DB::table('target_km')
-                ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
-                ->where('kontrak_manajemen.id_dosen', $item->id_dosen)
-                ->where('kontrak_manajemen.tahun_km', $tahun)
-                ->where('kontrak_manajemen.status_km', 'Aktif')
-                ->pluck('target_km.target', 'target_km.indikator')
-                ->toArray();
-
-            $totalTarget = array_sum($targets);
-
-            $totalRealisasi = DB::table('aktivitas_km')
-                ->where('id_user', $item->id_user)
-                ->count();
-
-            $dataAnggota[] = [
-                'id_user' => $item->id_user,
-                'id_dosen' => $item->id_dosen,
-                'nama_dosen' => $item->nama_dosen ?? $item->username,
-                'nidn' => $item->nidn ?? '-',
-                'email' => $item->email ?? '-',
-                'jad' => $jad,
-                'jad_label' => $jadLabel[$jad] ?? 'Asisten Ahli',
-                'bobot' => $bobotJad[$jad] ?? 0.8,
-                'targets' => $targets,
-                'total_target' => $totalTarget,
-                'total_realisasi' => $totalRealisasi,
-            ];
-        }
-
         return view('ketualab.pembagian-km-anggota', compact(
             'lab',
             'tahun',
-            'kategori',
-            'dataAnggota'
+            'dataKmLab',
+            'anggota'
         ));
     }
 
     public function simpanPembagianKmAnggota(Request $request)
     {
         $request->validate([
-            'tahun_km' => 'required|integer',
-            'target_pendidikan' => 'required|integer|min:0',
-            'target_penelitian' => 'required|integer|min:0',
-            'target_publikasi' => 'required|integer|min:0',
-            'target_pengabdian' => 'required|integer|min:0',
-            'target_penunjang' => 'required|integer|min:0',
+            'id_km_lab' => 'required|exists:km_lab,id_km_lab',
+            'id_user' => 'required|exists:users,id_user',
+            'jumlah_km' => 'required|integer|min:1',
         ]);
 
         $user = auth()->user();
         $idLab = $user->id_lab;
-        $tahun = $request->tahun_km;
 
-        $targetLab = [
-            'Pendidikan' => (int) $request->target_pendidikan,
-            'Penelitian' => (int) $request->target_penelitian,
-            'Publikasi' => (int) $request->target_publikasi,
-            'Pengabdian' => (int) $request->target_pengabdian,
-            'Penunjang' => (int) $request->target_penunjang,
-        ];
+        $kmLab = DB::table('km_lab')
+            ->where('id_km_lab', $request->id_km_lab)
+            ->where('id_lab', $idLab)
+            ->where('status_km', 'Aktif')
+            ->first();
+
+        if (!$kmLab) {
+            return redirect('/ketualab/penurunan-km')
+                ->with('error', 'KM Lab tidak ditemukan atau bukan milik lab Anda.');
+        }
 
         $anggota = DB::table('users')
-            ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
-            ->where('users.role', 'Anggota')
-            ->where('users.id_lab', $idLab)
-            ->whereNotNull('users.id_dosen')
-            ->select(
-                'users.id_user',
-                'users.id_dosen',
-                'dosen.jad'
-            )
-            ->get();
+            ->where('id_user', $request->id_user)
+            ->where('role', 'Anggota')
+            ->where('id_lab', $idLab)
+            ->first();
 
-        if ($anggota->isEmpty()) {
+        if (!$anggota) {
             return redirect('/ketualab/penurunan-km')
-                ->with('error', 'Belum ada anggota lab yang dapat menerima pembagian KM.');
+                ->with('error', 'Anggota tidak ditemukan atau bukan anggota lab Anda.');
         }
 
-        $bobotJad = [
-            'GB' => 1.4,
-            'LK' => 1.2,
-            'L' => 1.0,
-            'AA' => 0.8,
-        ];
+        $sudahAssign = DB::table('km_anggota')
+            ->where('id_km_lab', $kmLab->id_km_lab)
+            ->sum('jumlah_km');
 
-        $totalBobot = 0;
+        $sisaKm = $kmLab->jumlah_km - $sudahAssign;
 
-        foreach ($anggota as $item) {
-            $jad = $item->jad ?? 'AA';
-            $totalBobot += $bobotJad[$jad] ?? 0.8;
+        if ((int) $request->jumlah_km > $sisaKm) {
+            return redirect('/ketualab/penurunan-km')
+                ->with('error', 'Jumlah KM yang dibagikan melebihi sisa KM yang tersedia.');
         }
 
-        foreach ($anggota as $item) {
-            $jad = $item->jad ?? 'AA';
-            $bobot = $bobotJad[$jad] ?? 0.8;
+        $assignLama = DB::table('km_anggota')
+            ->where('id_km_lab', $kmLab->id_km_lab)
+            ->where('id_user', $anggota->id_user)
+            ->first();
 
-            $idKm = DB::table('kontrak_manajemen')
-                ->where('id_dosen', $item->id_dosen)
-                ->where('tahun_km', $tahun)
-                ->value('id_km');
-
-            if (! $idKm) {
-                $idKm = DB::table('kontrak_manajemen')->insertGetId([
-                    'id_dosen' => $item->id_dosen,
-                    'tahun_km' => $tahun,
-                    'status_km' => 'Aktif',
-                    'created_at' => now(),
+        if ($assignLama) {
+            DB::table('km_anggota')
+                ->where('id_km_anggota', $assignLama->id_km_anggota)
+                ->update([
+                    'jumlah_km' => $assignLama->jumlah_km + (int) $request->jumlah_km,
                     'updated_at' => now(),
                 ]);
-            } else {
-                DB::table('kontrak_manajemen')
-                    ->where('id_km', $idKm)
-                    ->update([
-                        'status_km' => 'Aktif',
-                        'updated_at' => now(),
-                    ]);
-            }
-
-            DB::table('target_km')
-                ->where('id_km', $idKm)
-                ->delete();
-
-            foreach ($targetLab as $indikator => $target) {
-                $porsi = $totalBobot > 0
-                    ? round(($target * $bobot) / $totalBobot)
-                    : 0;
-
-                DB::table('target_km')->insert([
-                    'id_km' => $idKm,
-                    'indikator' => $indikator,
-                    'target' => $porsi,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
+        } else {
+            DB::table('km_anggota')->insert([
+                'id_km_lab' => $kmLab->id_km_lab,
+                'id_user' => $anggota->id_user,
+                'id_dosen' => $anggota->id_dosen,
+                'jumlah_km' => (int) $request->jumlah_km,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         }
 
         return redirect('/ketualab/penurunan-km')
-            ->with('success', 'Pembagian KM anggota berdasarkan JAD berhasil disimpan.');
+            ->with('success', 'KM berhasil dibagikan ke anggota.');
     }
 }
