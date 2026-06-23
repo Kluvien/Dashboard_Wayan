@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Monitoring KM Lab')
+@section('title', 'Monitoring Anggota KK')
 
 @section('content')
 <div class="page-heading">
-    Monitoring <span class="muted">KM Lab</span>
+    Monitoring <span class="muted">Anggota KK</span>
 </div>
 
 <div class="card mb-4">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
         <div>
-            <h4 class="fw-bold mb-1">Filter Periode Monitoring</h4>
+            <h4 class="fw-bold mb-1">Filter Periode Monitoring Anggota KK</h4>
             <p class="text-muted mb-0">
                 Monitoring saat ini:
                 <strong>{{ $labelPeriode ?? 'Tahunan' }}</strong>
@@ -21,12 +21,12 @@
             </p>
         </div>
 
-        <a href="/ketualab/dashboard" class="btn btn-secondary">
+        <a href="/ketuakk/dashboard" class="btn btn-secondary">
             <i class="bi bi-arrow-left me-1"></i> Kembali
         </a>
     </div>
 
-    <form action="/ketualab/monitoring-lab" method="GET">
+    <form action="/ketuakk/monitoring-anggota-kk" method="GET">
         <div class="row g-3 align-items-end">
             <div class="col-md-3">
                 <label class="form-label fw-bold">Jenis Periode</label>
@@ -84,13 +84,6 @@
 <div class="row g-4 mb-4">
     <div class="col-md-3">
         <div class="card h-100">
-            <p class="text-muted mb-1">Lab Riset</p>
-            <h5 class="fw-bold mb-0">{{ $lab->nama_lab ?? '-' }}</h5>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card h-100">
             <p class="text-muted mb-1">Jumlah Anggota</p>
             <h3 class="fw-bold mb-0">{{ $jumlahAnggota ?? 0 }}</h3>
         </div>
@@ -98,24 +91,8 @@
 
     <div class="col-md-3">
         <div class="card h-100">
-            <p class="text-muted mb-1">KM Turun dari Ketua KK</p>
-            <h3 class="fw-bold mb-0">{{ $totalKmTurun ?? 0 }}</h3>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card h-100">
-            <p class="text-muted mb-1">Sudah Assign ke Anggota</p>
-            <h3 class="fw-bold mb-0">{{ $totalKmAssign ?? 0 }}</h3>
-        </div>
-    </div>
-</div>
-
-<div class="row g-4 mb-4">
-    <div class="col-md-3">
-        <div class="card h-100">
-            <p class="text-muted mb-1">Sisa Belum Assign</p>
-            <h3 class="fw-bold mb-0">{{ $totalSisaAssign ?? 0 }}</h3>
+            <p class="text-muted mb-1">Total KM Assign</p>
+            <h3 class="fw-bold mb-0">{{ $totalKmAssignAll ?? 0 }}</h3>
         </div>
     </div>
 
@@ -132,69 +109,78 @@
             <h3 class="fw-bold mb-0">{{ $totalRealisasiPeriode ?? 0 }}</h3>
         </div>
     </div>
+</div>
 
-    <div class="col-md-3">
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
         <div class="card h-100">
-            <p class="text-muted mb-1">Progress Realisasi</p>
+            <p class="text-muted mb-1">Sisa Target Periode</p>
+            <h3 class="fw-bold mb-0">{{ $totalSisa ?? 0 }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100">
+            <p class="text-muted mb-1">Progress Total</p>
             <h3 class="fw-bold mb-0">{{ min($persentaseTotal ?? 0, 100) }}%</h3>
         </div>
     </div>
 </div>
 
-<div class="card mb-4">
-    <h4 class="fw-bold mb-3">Progress Pembagian KM ke Anggota</h4>
-
-    <div class="progress" style="height: 14px;">
-        <div
-            class="progress-bar"
-            role="progressbar"
-            style="width: {{ min($persentaseAssign ?? 0, 100) }}%;"></div>
-    </div>
-
-    <div class="small text-muted mt-2">
-        {{ $persentaseAssign ?? 0 }}% KM sudah dibagikan ke anggota.
-    </div>
-</div>
-
 <div class="card">
-    <h4 class="fw-bold mb-3">Rekap Monitoring KM Lab per Kategori</h4>
+    <h4 class="fw-bold mb-3">Monitoring Progress Anggota KK</h4>
 
     <div class="table-responsive">
         <table class="table align-middle mb-0" style="width: 100%; font-size: 14px;">
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Kategori KM</th>
-                    <th>KM Turun</th>
-                    <th>Sudah Assign</th>
-                    <th>Sisa Assign</th>
-                    <th>Target Periode</th>
-                    <th>Realisasi</th>
-                    <th>Progress</th>
-                    <th>Status</th>
+                    <th style="width: 5%;">No</th>
+                    <th style="width: 20%;">Nama Anggota</th>
+                    <th style="width: 18%;">Lab Riset</th>
+                    <th style="width: 10%;">JAD</th>
+                    <th style="width: 11%;">KM Assign</th>
+                    <th style="width: 11%;">Target Periode</th>
+                    <th style="width: 10%;">Realisasi</th>
+                    <th style="width: 10%;">Progress</th>
+                    <th style="width: 5%;">Aksi</th>
                 </tr>
             </thead>
 
             <tbody>
-                @forelse($rekap as $index => $item)
+                @forelse($dataMonitoring as $index => $item)
                 <tr>
                     <td>{{ $index + 1 }}</td>
 
                     <td class="fw-bold">
-                        {{ $item['kategori'] }}
+                        {{ $item['nama_dosen'] }}
+                        <div class="small text-muted">
+                            {{ $item['nidn'] }}
+                        </div>
                     </td>
 
-                    <td>{{ $item['km_turun'] }}</td>
+                    <td>
+                        {{ $item['nama_lab'] }}
+                    </td>
 
-                    <td>{{ $item['km_assign'] }}</td>
+                    <td>
+                        <span class="badge bg-primary">
+                            {{ $item['jad'] }}
+                        </span>
+                    </td>
 
-                    <td>{{ $item['sisa_assign'] }}</td>
+                    <td>
+                        {{ $item['total_km_assign'] }}
+                    </td>
 
-                    <td>{{ $item['target_periode'] }}</td>
+                    <td>
+                        {{ $item['target_periode'] }}
+                    </td>
 
-                    <td>{{ $item['realisasi'] }}</td>
+                    <td>
+                        {{ $item['total_realisasi'] }}
+                    </td>
 
-                    <td style="min-width: 130px;">
+                    <td>
                         <div class="progress mb-1" style="height: 8px;">
                             <div
                                 class="progress-bar"
@@ -208,17 +194,15 @@
                     </td>
 
                     <td>
-                        @if($item['status'] === 'Tercapai')
-                        <span class="badge bg-success">Tercapai</span>
-                        @else
-                        <span class="badge bg-warning text-dark">Belum</span>
-                        @endif
+                        <a href="/ketuakk/monitoring-anggota-kk/{{ $item['id_user'] }}" class="btn btn-primary btn-sm">
+                            Detail
+                        </a>
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="9" class="text-center text-muted py-4">
-                        Belum ada data monitoring.
+                        Belum ada data anggota KK.
                     </td>
                 </tr>
                 @endforelse

@@ -4,6 +4,16 @@
 
 @section('content')
 <div class="card">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div class="page-heading mb-0">
+            Tambah <span class="muted">Aktivitas KM</span>
+        </div>
+
+        <a href="/anggota/dashboard" class="btn btn-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Kembali
+        </a>
+    </div> 
+
     <h2>Tambah Aktivitas KM</h2>
     <p>
         Form ini digunakan anggota untuk menambahkan aktivitas Kontrak Manajemen pribadi.
@@ -18,7 +28,7 @@
             </ul>
         </div>
     @endif
-
+    
     <form action="/anggota/aktivitas-km" method="POST">
         @csrf
 
