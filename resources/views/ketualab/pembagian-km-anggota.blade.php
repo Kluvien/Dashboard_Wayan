@@ -3,6 +3,21 @@
 @section('title', 'Pembagian KM Anggota')
 
 @section('content')
+<style>
+    .km-table th {
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+
+    .km-table td {
+        vertical-align: middle;
+    }
+
+    .km-table .text-small-muted {
+        font-size: 12px;
+        color: #6c757d;
+    }
+</style>
 <div class="page-heading">
     Pembagian <span class="muted">KM Anggota</span>
 </div>
@@ -37,69 +52,79 @@
     <h4 class="fw-bold mb-3">Daftar KM dari Ketua KK</h4>
 
     <div class="table-responsive">
-        <table class="table align-middle mb-0" style="table-layout: fixed; width: 100%; font-size: 14px;">
+        <table class="table align-middle mb-0 km-table" style="width: 100%; font-size: 14px;">
             <thead>
                 <tr>
-                    <th style="width: 6%;">No</th>
-                    <th style="width: 22%;">Kategori KM</th>
-                    <th style="width: 13%;">Total KM</th>
-                    <th style="width: 14%;">Sudah Assign</th>
-                    <th style="width: 13%;">Sisa KM</th>
-                    <th style="width: 16%;">Status</th>
-                    <th style="width: 16%;">Aksi</th>
+                    <th>No</th>
+                    <th>Kategori KM</th>
+                    <th>Nama Anggota</th>
+                    <th>NIDN</th>
+                    <th>JAD</th>
+                    <th>Jumlah KM</th>
+                    <th>Tanggal Assign</th>
                 </tr>
             </thead>
 
             <tbody>
                 @forelse($dataKmLab as $index => $km)
+                @php
+                $totalKm = $km['jumlah_km'] ?? $km['total_km'] ?? 0;
+                $sudahAssign = $km['sudah_assign'] ?? $km['total_assign'] ?? $km['jumlah_assign'] ?? 0;
+                $sisaKm = $km['sisa_km'] ?? $km['sisa'] ?? max($totalKm - $sudahAssign, 0);
+                $kategoriKm = $km['kategori_km'] ?? $km['kategori'] ?? '-';
+                $idKmLab = $km['id_km_lab'] ?? null;
+                @endphp
+
                 <tr>
                     <td>{{ $index + 1 }}</td>
 
                     <td class="fw-bold">
-                        {{ $km['kategori_km'] }}
+                        {{ $kategoriKm }}
                     </td>
 
                     <td>
-                        {{ $km['jumlah_km'] }}
+                        {{ $totalKm }}
                     </td>
 
                     <td>
-                        {{ $km['sudah_assign'] }}
+                        {{ $sudahAssign }}
                     </td>
 
                     <td>
-                        {{ $km['sisa_km'] }}
+                        {{ $sisaKm }}
                     </td>
 
                     <td>
-                        @if($km['status'] === 'Sudah Dibagi')
-                        <span class="badge bg-success">Sudah Dibagi</span>
-                        @else
-                        <span class="badge bg-warning text-dark">Belum Selesai</span>
-                        @endif
+                        @if($sisaKm <= 0)
+                            <span class="badge bg-success">Sudah Dibagi</span>
+                            @else
+                            <span class="badge bg-warning text-dark">Belum Selesai</span>
+                            @endif
                     </td>
 
                     <td>
-                        @if($km['sisa_km'] > 0)
+                        @if($sisaKm > 0)
                         <button
                             type="button"
-                            class="btn btn-primary btn-sm js-open-assign-modal"
-                            data-id-km-lab="{{ $km['id_km_lab'] }}"
-                            data-kategori="{{ $km['kategori_km'] }}"
-                            data-sisa="{{ $km['sisa_km'] }}"
+                            class="btn btn-primary btn-sm"
                             data-bs-toggle="modal"
-                            data-bs-target="#assignKmModal">
+                            data-bs-target="#assignKmModal"
+                            data-id-km-lab="{{ $idKmLab }}"
+                            data-kategori="{{ $kategoriKm }}"
+                            data-sisa="{{ $sisaKm }}">
                             Bagi
                         </button>
                         @else
-                        <span class="text-muted">Selesai</span>
+                        <button type="button" class="btn btn-secondary btn-sm" disabled>
+                            Selesai
+                        </button>
                         @endif
                     </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="7" class="text-center text-muted py-4">
-                        Belum ada KM yang diturunkan Ketua KK ke lab ini.
+                        Belum ada KM yang diturunkan ke lab.
                     </td>
                 </tr>
                 @endforelse
@@ -112,16 +137,17 @@
     <h4 class="fw-bold mb-3">Riwayat Assign KM ke Anggota</h4>
 
     <div class="table-responsive">
-        <table class="table align-middle mb-0" style="table-layout: fixed; width: 100%; font-size: 14px;">
+        <table class="table align-middle mb-0 km-table" style="width: 100%; font-size: 14px;">
             <thead>
                 <tr>
-                    <th style="width: 5%;">No</th>
-                    <th style="width: 18%;">Kategori KM</th>
-                    <th style="width: 25%;">Nama Anggota</th>
-                    <th style="width: 13%;">NIDN</th>
-                    <th style="width: 12%;">JAD</th>
-                    <th style="width: 12%;">Jumlah KM</th>
-                    <th style="width: 15%;">Tanggal Assign</th>
+                    <th>No</th>
+                    <th>Kategori KM</th>
+                    <th>Nama Anggota</th>
+                    <th>NIDN</th>
+                    <th>JAD</th>
+                    <th>Jumlah KM</th>
+                    <th>Tanggal Assign</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
 
@@ -135,7 +161,7 @@
                     </td>
 
                     <td>
-                        {{ $assign->nama_dosen ?? $assign->username }}
+                        {{ $assign->nama_dosen ?? $assign->username ?? '-' }}
                     </td>
 
                     <td>
@@ -155,11 +181,26 @@
                     <td>
                         {{ \Carbon\Carbon::parse($assign->created_at)->format('d/m/Y') }}
                     </td>
+
+                    <td>
+                        <form
+                            action="/ketualab/penurunan-km/assign/{{ $assign->id_km_anggota }}"
+                            method="POST"
+                            class="js-delete-form"
+                            data-message="Apakah Anda yakin ingin menghapus assign KM ini?">
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit" class="btn btn-delete btn-sm w-100">
+                                Hapus
+                            </button>
+                        </form>
+                    </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center text-muted py-4">
-                        Belum ada KM yang dibagikan ke anggota.
+                    <td colspan="8" class="text-center text-muted py-4">
+                        Belum ada riwayat assign KM.
                     </td>
                 </tr>
                 @endforelse
@@ -172,15 +213,15 @@
     <h4 class="fw-bold mb-3">Daftar Anggota Lab</h4>
 
     <div class="table-responsive">
-        <table class="table align-middle mb-0" style="table-layout: fixed; width: 100%; font-size: 14px;">
+        <table class="table align-middle mb-0 km-table" style="width: 100%; font-size: 14px;">
             <thead>
                 <tr>
-                    <th style="width: 5%;">No</th>
-                    <th style="width: 25%;">Nama Anggota</th>
-                    <th style="width: 15%;">NIDN</th>
-                    <th style="width: 25%;">Email</th>
-                    <th style="width: 15%;">JAD</th>
-                    <th style="width: 15%;">Bobot Saran</th>
+                    <th>No</th>
+                    <th>Nama Anggota</th>
+                    <th>NIDN</th>
+                    <th>Email</th>
+                    <th>JAD</th>
+                    <th>Bobot Saran</th>
                 </tr>
             </thead>
 

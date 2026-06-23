@@ -1514,6 +1514,29 @@ Route::middleware(['auth'])->group(function () {
         });
         Route::get('/ketualab/penurunan-km', [KetuaLabController::class, 'pembagianKmAnggota']);
         Route::post('/ketualab/penurunan-km', [KetuaLabController::class, 'simpanPembagianKmAnggota']);
+        Route::delete('/ketualab/penurunan-km/assign/{id}', function ($id) {
+            /** @var \App\Models\User $user */
+            $user = auth()->user();
+
+            $assign = \Illuminate\Support\Facades\DB::table('km_anggota')
+                ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
+                ->where('km_anggota.id_km_anggota', $id)
+                ->where('km_lab.id_lab', $user->id_lab)
+                ->select('km_anggota.id_km_anggota')
+                ->first();
+
+            if (!$assign) {
+                return redirect('/ketualab/penurunan-km')
+                    ->with('error', 'Data assign KM tidak ditemukan atau bukan milik lab Anda.');
+            }
+
+            \Illuminate\Support\Facades\DB::table('km_anggota')
+                ->where('id_km_anggota', $id)
+                ->delete();
+
+            return redirect('/ketualab/penurunan-km')
+                ->with('success', 'Assign KM anggota berhasil dihapus.');
+        });
         Route::get('/ketualab/penurunan-km/{id}/plot', [KetuaLabController::class, 'createPlot']);
         Route::post('/ketualab/penurunan-km/{id}/plot', [KetuaLabController::class, 'storePlot']);
         Route::get('/ketualab/monitoring-lab', function (\Illuminate\Http\Request $request) {
