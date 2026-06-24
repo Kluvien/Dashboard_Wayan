@@ -270,7 +270,7 @@
                     </td>
 
                     <td>
-                        {{ $bobotJad[$jad] ?? 0.8 }}
+                        {{ $bobotJad[$jad] ?? 0.6 }}
                     </td>
                 </tr>
                 @empty
@@ -318,7 +318,7 @@
                             @foreach($anggota as $item)
                             <option value="{{ $item->id_user }}">
                                 {{ $item->nama_dosen ?? $item->username }}
-                                - {{ $item->jad ?? 'AA' }}
+                                ({{ $item->username }}) - {{ $item->jad ?? 'AA' }}
                             </option>
                             @endforeach
                         </select>
