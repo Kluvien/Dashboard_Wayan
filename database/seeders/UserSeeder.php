@@ -5,83 +5,134 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 
 class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Buat Data Kelompok Keahlian
-        $id_kk = DB::table('kelompok_keahlian')->insertGetId([
-            'nama_kk' => 'Rekayasa Perangkat Lunak',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $now = now();
 
-        // 2. Buat Data Laboratorium Riset
-        $id_lab = DB::table('laboratorium_riset')->insertGetId([
-            'id_kk' => $id_kk,
-            'nama_lab' => 'Lab Pengembangan Game & Mobile',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        // 3. Buat 3 Data Dosen
-        $dosen_ketua_kk = DB::table('dosen')->insertGetId([
-            'id_kk' => $id_kk,
-            'id_lab' => null,
-            'nama_dosen' => 'Prof. Budi (Ketua KK)',
-            'nidn' => '11111111',
-            'email' => 'budikk@kampus.ac.id',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        $dosen_ketua_lab = DB::table('dosen')->insertGetId([
-            'id_kk' => $id_kk,
-            'id_lab' => $id_lab,
-            'nama_dosen' => 'Dr. Andi (Ketua Lab)',
-            'nidn' => '22222222',
-            'email' => 'andilab@kampus.ac.id',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        $dosen_anggota = DB::table('dosen')->insertGetId([
-            'id_kk' => $id_kk,
-            'id_lab' => $id_lab,
-            'nama_dosen' => 'Devan (Anggota)',
-            'nidn' => '33333333',
-            'email' => 'devan@kampus.ac.id',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        // 4. Buat 3 Akun User (Password semua sama: 'password123')
-        DB::table('users')->insert([
+        $users = [
             [
-                'id_dosen' => $dosen_ketua_kk,
                 'username' => 'ketuakk',
-                'password' => Hash::make('password123'),
                 'role' => 'Ketua KK',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'id_lab' => null,
+                'id_dosen' => 1,
             ],
+
+            /*
+            |--------------------------------------------------------------------------
+            | Akun default lama
+            |--------------------------------------------------------------------------
+            */
             [
-                'id_dosen' => $dosen_ketua_lab,
                 'username' => 'ketualab',
-                'password' => Hash::make('password123'),
                 'role' => 'Ketua Lab',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'id_lab' => 1,
+                'id_dosen' => 2,
             ],
             [
-                'id_dosen' => $dosen_anggota,
                 'username' => 'anggota',
-                'password' => Hash::make('password123'),
                 'role' => 'Anggota',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'id_lab' => 1,
+                'id_dosen' => 3,
             ],
-        ]);
+
+            /*
+            |--------------------------------------------------------------------------
+            | Akun Ketua Lab 1 - 5
+            |--------------------------------------------------------------------------
+            */
+            [
+                'username' => 'ketualab1',
+                'role' => 'Ketua Lab',
+                'id_lab' => 1,
+                'id_dosen' => 2,
+            ],
+            [
+                'username' => 'ketualab2',
+                'role' => 'Ketua Lab',
+                'id_lab' => 2,
+                'id_dosen' => 4,
+            ],
+            [
+                'username' => 'ketualab3',
+                'role' => 'Ketua Lab',
+                'id_lab' => 3,
+                'id_dosen' => 6,
+            ],
+            [
+                'username' => 'ketualab4',
+                'role' => 'Ketua Lab',
+                'id_lab' => 4,
+                'id_dosen' => 8,
+            ],
+            [
+                'username' => 'ketualab5',
+                'role' => 'Ketua Lab',
+                'id_lab' => 5,
+                'id_dosen' => 10,
+            ],
+
+            /*
+            |--------------------------------------------------------------------------
+            | Akun Anggota 1 - 5
+            |--------------------------------------------------------------------------
+            */
+            [
+                'username' => 'anggota1',
+                'role' => 'Anggota',
+                'id_lab' => 1,
+                'id_dosen' => 3,
+            ],
+            [
+                'username' => 'anggota2',
+                'role' => 'Anggota',
+                'id_lab' => 2,
+                'id_dosen' => 5,
+            ],
+            [
+                'username' => 'anggota3',
+                'role' => 'Anggota',
+                'id_lab' => 3,
+                'id_dosen' => 7,
+            ],
+            [
+                'username' => 'anggota4',
+                'role' => 'Anggota',
+                'id_lab' => 4,
+                'id_dosen' => 9,
+            ],
+            [
+                'username' => 'anggota5',
+                'role' => 'Anggota',
+                'id_lab' => 5,
+                'id_dosen' => 11,
+            ],
+        ];
+
+        foreach ($users as $user) {
+            $data = [
+                'username' => $user['username'],
+                'password' => Hash::make('password123'),
+                'role' => $user['role'],
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+
+            if (Schema::hasColumn('users', 'id_lab')) {
+                $data['id_lab'] = $user['id_lab'];
+            }
+
+            if (Schema::hasColumn('users', 'id_dosen')) {
+                $data['id_dosen'] = $user['id_dosen'];
+            }
+
+            DB::table('users')->updateOrInsert(
+                ['username' => $user['username']],
+                $data
+            );
+        }
     }
 }
