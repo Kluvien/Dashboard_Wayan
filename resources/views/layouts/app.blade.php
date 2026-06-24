@@ -412,7 +412,11 @@
         <main class="main-area">
             <header class="topbar">
                 <div class="topbar-right">
+                    @if(auth()->user()->role === 'Ketua KK')
+                    <div class="role-pill">Ketua KK EIMS</div>
+                    @else
                     <div class="role-pill">{{ auth()->user()->role }}</div>
+                    @endif
 
                     <div class="dropdown">
                         <button class="btn p-0 border-0 bg-transparent dropdown-toggle" type="button" data-bs-toggle="dropdown">
