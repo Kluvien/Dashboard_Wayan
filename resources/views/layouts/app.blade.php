@@ -17,10 +17,10 @@
             --text-dark: #20242A;
             --text-muted: #8A8D91;
             --border: #E2E5EA;
-            --green-soft: #C9F3EE;
-            --green-text: #00A990;
-            --pink-soft: #FFD0E8;
-            --pink-text: #FF2F8A;
+            --green-soft: #22C55E;
+            --green-text: #ffffff;
+            --pink-soft: #EF4444;
+            --pink-text: #ffffff;
         }
 
         * {
@@ -229,11 +229,21 @@
             min-width: 92px;
         }
 
+        .btn-edit:hover {
+            background: #16A34A;
+            color: #ffffff;
+        }
+
         .btn-delete {
             background: var(--pink-soft);
             color: var(--pink-text);
             border: none;
             min-width: 92px;
+        }
+
+        .btn-delete:hover {
+            background: #DC2626;
+            color: #ffffff;
         }
 
         .status-success {
@@ -309,10 +319,6 @@
                 </div>
 
                 <div class="sidebar-sub">
-                    <a class="sidebar-link {{ request()->is('ketuakk/km-kk*') ? 'active' : '' }}" href="/ketuakk/km-kk">
-                        <span>Kelompok Keahlian</span>
-                    </a>
-
                     <a class="sidebar-link {{ request()->is('ketuakk/km-lab-riset*') ? 'active' : '' }}" href="/ketuakk/km-lab-riset">
                         <span>Lab. Riset</span>
                     </a>
