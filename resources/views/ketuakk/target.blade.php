@@ -41,6 +41,7 @@
             <thead>
                 <tr>
                     <th width="5%">No</th>
+                    <th width="15%">Kategori KM</th>
                     <th>Indikator Target</th>
                     <th width="15%">Nilai Target</th>
                     <th width="15%">Aksi</th>
@@ -50,6 +51,13 @@
                 @forelse($targets as $index => $t)
                     <tr>
                         <td>{{ $index + 1 }}</td>
+                        <td>
+                            @if($t->kategori_km)
+                                <span class="badge bg-primary">{{ $t->kategori_km }}</span>
+                            @else
+                                <span class="text-muted small">-</span>
+                            @endif
+                        </td>
                         <td class="fw-bold">{{ $t->indikator }}</td>
                         <td>{{ $t->target }}</td>
                         <td>
@@ -68,7 +76,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center text-muted py-4">
+                        <td colspan="5" class="text-center text-muted py-4">
                             Belum ada data target KM yang ditambahkan.
                         </td>
                     </tr>

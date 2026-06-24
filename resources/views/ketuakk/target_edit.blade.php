@@ -22,6 +22,17 @@
                         <label class="form-label">Nilai Target (Angka Murni)</label>
                         <input type="number" name="target" class="form-control" value="{{ $target->target }}" required>
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">Kategori KM</label>
+                        <select name="kategori_km" class="form-select" required>
+                            <option value="">Pilih Kategori</option>
+                            <option value="Pendidikan" {{ $target->kategori_km === 'Pendidikan' ? 'selected' : '' }}>Pendidikan</option>
+                            <option value="Penelitian" {{ $target->kategori_km === 'Penelitian' ? 'selected' : '' }}>Penelitian</option>
+                            <option value="Publikasi" {{ $target->kategori_km === 'Publikasi' ? 'selected' : '' }}>Publikasi</option>
+                            <option value="Pengabdian" {{ $target->kategori_km === 'Pengabdian' ? 'selected' : '' }}>Pengabdian</option>
+                            <option value="Penunjang" {{ $target->kategori_km === 'Penunjang' ? 'selected' : '' }}>Penunjang</option>
+                        </select>
+                    </div>
                     <hr>
                     <button type="submit" class="btn btn-warning text-white">Perbarui Target</button>
                     <a href="/ketuakk/target-km" class="btn btn-light border">Batal</a>

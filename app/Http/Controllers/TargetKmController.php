@@ -25,6 +25,7 @@ class TargetKmController extends Controller
         $request->validate([
             'indikator' => 'required',
             'target' => 'required',
+            'kategori_km' => 'required',
         ]);
 
         $km = DB::table('kontrak_manajemen')->first();
@@ -45,6 +46,7 @@ class TargetKmController extends Controller
             'id_km' => $id_km,
             'indikator' => $request->indikator,
             'target' => $request->target,
+            'kategori_km' => $request->kategori_km,
         ]);
 
         return redirect('/ketuakk/target-km')->with('success', 'Target KM berhasil ditambahkan!');
@@ -62,12 +64,14 @@ class TargetKmController extends Controller
         $request->validate([
             'indikator' => 'required',
             'target' => 'required|integer',
+            'kategori_km' => 'required',
         ]);
 
         $target = TargetKm::findOrFail($id);
         $target->update([
             'indikator' => $request->indikator,
             'target' => $request->target,
+            'kategori_km' => $request->kategori_km,
         ]);
 
         return redirect('/ketuakk/target-km')->with('success', 'Target KM berhasil diperbarui!');

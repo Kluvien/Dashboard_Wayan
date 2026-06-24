@@ -24,7 +24,6 @@ class KetuaKkController extends Controller
         $totalTargetKm = DB::table('target_km')
             ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
             ->where('kontrak_manajemen.tahun_km', $tahun)
-            ->where('kontrak_manajemen.status_km', 'Aktif')
             ->sum('target');
 
         $totalRealisasiKm = DB::table('aktivitas_km')->count();
@@ -35,11 +34,10 @@ class KetuaKkController extends Controller
 
         $targetPerKategori = DB::table('target_km')
             ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
-            ->select('target_km.indikator', DB::raw('SUM(target_km.target) as total_target'))
+            ->select('target_km.kategori_km', DB::raw('SUM(target_km.target) as total_target'))
             ->where('kontrak_manajemen.tahun_km', $tahun)
-            ->where('kontrak_manajemen.status_km', 'Aktif')
-            ->groupBy('target_km.indikator')
-            ->pluck('total_target', 'indikator');
+            ->groupBy('target_km.kategori_km')
+            ->pluck('total_target', 'kategori_km');
 
         $realisasiPerKategori = DB::table('aktivitas_km')
             ->select('kategori_km', DB::raw('COUNT(*) as total_realisasi'))
@@ -69,20 +67,11 @@ class KetuaKkController extends Controller
         $rekapLab = [];
 
         foreach ($labRiset as $lab) {
-            $dosenIds = DB::table('dosen')
+            $targetLab = DB::table('km_lab')
                 ->where('id_lab', $lab->id_lab)
-                ->pluck('id_dosen');
-
-            $targetLab = 0;
-
-            if ($dosenIds->count() > 0) {
-                $targetLab = DB::table('target_km')
-                    ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
-                    ->whereIn('kontrak_manajemen.id_dosen', $dosenIds)
-                    ->where('kontrak_manajemen.tahun_km', $tahun)
-                    ->where('kontrak_manajemen.status_km', 'Aktif')
-                    ->sum('target');
-            }
+                ->where('tahun_km', $tahun)
+                ->where('status_km', 'Aktif')
+                ->sum('jumlah_km');
 
             $realisasiLab = DB::table('aktivitas_km')
                 ->where('id_lab', $lab->id_lab)
@@ -95,7 +84,6 @@ class KetuaKkController extends Controller
             $rekapLab[] = [
                 'id_lab' => $lab->id_lab,
                 'nama_lab' => $lab->nama_lab,
-                'jumlah_dosen' => $dosenIds->count(),
                 'target' => $targetLab,
                 'realisasi' => $realisasiLab,
                 'persentase' => min($persentaseLab, 100),

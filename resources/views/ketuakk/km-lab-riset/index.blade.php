@@ -7,6 +7,53 @@
     Kontrak Manajemen <span class="muted">Lab Riset</span>
 </div>
 
+<!-- Rekap Kategori KM -->
+<div class="row g-3 mb-4">
+    @foreach($rekapKategori as $kategori_data)
+    <div class="col-md-6 col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title fw-bold text-primary mb-3">{{ $kategori_data['kategori'] }}</h5>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted small">Total KM</span>
+                        <span class="fw-bold">{{ $kategori_data['total_km'] }}</span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted small">Sudah Diturunkan</span>
+                        <span class="fw-bold text-success">{{ $kategori_data['sudah_turun'] }}</span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted small">Belum Diturunkan</span>
+                        <span class="fw-bold text-warning">{{ $kategori_data['belum_turun'] }}</span>
+                    </div>
+                </div>
+
+                @if($kategori_data['total_km'] > 0)
+                <div class="progress mt-3" style="height: 8px;">
+                    <div class="progress-bar bg-success" 
+                        style="width: {{ ($kategori_data['sudah_turun'] / $kategori_data['total_km']) * 100 }}%;">
+                    </div>
+                </div>
+                <div class="small text-muted mt-2">
+                    {{ round(($kategori_data['sudah_turun'] / $kategori_data['total_km']) * 100) }}% selesai
+                </div>
+                @else
+                <div class="small text-muted mt-3">Belum ada target KM</div>
+                @endif
+            </div>
+        </div>
+    </div>
+    @endforeach
+</div>
+
 <div class="card mb-4">
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
         <div>

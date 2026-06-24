@@ -17,5 +17,6 @@ class TargetKm extends Model
         'id_km',
         'indikator',
         'target',
+        'kategori_km',
     ];
 }

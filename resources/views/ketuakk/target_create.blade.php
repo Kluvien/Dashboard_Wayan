@@ -20,6 +20,17 @@
                         <label class="form-label">Nilai Target (Angka / Teks)</label>
                         <input type="text" name="target" class="form-control" placeholder="Contoh: 5" required>
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">Kategori KM</label>
+                        <select name="kategori_km" class="form-select" required>
+                            <option value="">Pilih Kategori</option>
+                            <option value="Pendidikan">Pendidikan</option>
+                            <option value="Penelitian">Penelitian</option>
+                            <option value="Publikasi">Publikasi</option>
+                            <option value="Pengabdian">Pengabdian</option>
+                            <option value="Penunjang">Penunjang</option>
+                        </select>
+                    </div>
                     <hr>
                     <button type="submit" class="btn btn-primary">Simpan Target</button>
                     <a href="/ketuakk/target-km" class="btn btn-light border">Batal</a>
