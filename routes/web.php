@@ -263,6 +263,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ketuakk/data-dosen', function (\Illuminate\Http\Request $request) {
             $q = $request->query('q');
 
+            $allowedPerPage = [50, 100, 1000];
+            $perPage = (int) $request->query('per_page', 50);
+
+            if (!in_array($perPage, $allowedPerPage, true)) {
+                $perPage = 50;
+            }
+
             $dosens = \Illuminate\Support\Facades\DB::table('dosen')
                 ->leftJoin('laboratorium_riset', 'dosen.id_lab', '=', 'laboratorium_riset.id_lab')
                 ->select(
@@ -283,9 +290,10 @@ Route::middleware(['auth'])->group(function () {
                     });
                 })
                 ->orderBy('dosen.id_dosen', 'asc')
-                ->get();
+                ->paginate($perPage)
+                ->withQueryString();
 
-            return view('ketuakk.data-master.dosen', compact('dosens', 'q'));
+            return view('ketuakk.data-master.dosen', compact('dosens', 'q', 'perPage', 'allowedPerPage'));
         });
 
         Route::get('/ketuakk/data-dosen/create', function () {
