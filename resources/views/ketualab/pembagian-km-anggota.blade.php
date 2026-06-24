@@ -106,7 +106,7 @@
                         @if($sisaKm > 0)
                         <button
                             type="button"
-                            class="btn btn-primary btn-sm"
+                            class="btn btn-primary btn-sm js-open-assign-modal"
                             data-bs-toggle="modal"
                             data-bs-target="#assignKmModal"
                             data-id-km-lab="{{ $idKmLab }}"
@@ -235,6 +235,7 @@
                 'LK' => 'Lektor Kepala',
                 'L' => 'Lektor',
                 'AA' => 'Asisten Ahli',
+                'NJFA' => 'Non-Jabatan Fungsional Akademik',
                 ];
 
                 $bobotJad = [
@@ -242,6 +243,7 @@
                 'LK' => 1.2,
                 'L' => 1.0,
                 'AA' => 0.8,
+                'NJFA' => 0.6,
                 ];
                 @endphp
 
@@ -263,7 +265,7 @@
                     <td>
                         <span class="badge bg-primary">{{ $jad }}</span>
                         <div class="small text-muted mt-1">
-                            {{ $jadLabel[$jad] ?? 'Asisten Ahli' }}
+                            {{ $jadLabel[$jad] ?? 'Non-Jabatan Fungsional Akademik' }}
                         </div>
                     </td>
 
