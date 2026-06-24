@@ -94,6 +94,32 @@
             padding-left: 20px;
         }
 
+        .sidebar-heading {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .sidebar-heading i {
+            transition: transform 0.2s ease;
+        }
+
+        .sidebar-heading.collapsed i {
+            transform: rotate(-90deg);
+        }
+
+        .sidebar-sub {
+            overflow: hidden;
+            transition: max-height 0.25s ease;
+        }
+
+        .sidebar-sub.is-collapsed {
+            max-height: 0;
+        }
+
+        .sidebar-sub.is-open {
+            max-height: 500px;
+        }
+
         .sidebar-sub .sidebar-link {
             padding-left: 30px;
             font-size: 15px;
@@ -298,12 +324,12 @@
                     <span>Dashboard</span>
                 </a>
 
-                <div class="sidebar-heading">
+                <div class="sidebar-heading js-sidebar-toggle" data-target="dataMasterMenu">
                     <span>Data Master</span>
                     <i class="bi bi-chevron-down"></i>
                 </div>
 
-                <div class="sidebar-sub">
+                <div class="sidebar-sub is-open" id="dataMasterMenu">
                     <a class="sidebar-link {{ request()->is('ketuakk/data-lab-riset') ? 'active' : '' }}" href="/ketuakk/data-lab-riset">
                         <span>Data Lab. Riset</span>
                     </a>
@@ -313,12 +339,12 @@
                     </a>
                 </div>
 
-                <div class="sidebar-heading">
+                <div class="sidebar-heading js-sidebar-toggle" data-target="kontrakMenu">
                     <span>Kontrak Manajemen</span>
                     <i class="bi bi-chevron-down"></i>
                 </div>
 
-                <div class="sidebar-sub">
+                <div class="sidebar-sub is-open" id="kontrakMenu">
                     <a class="sidebar-link {{ request()->is('ketuakk/km-lab-riset*') ? 'active' : '' }}" href="/ketuakk/km-lab-riset">
                         <span>Lab. Riset</span>
                     </a>
@@ -328,12 +354,12 @@
                     </a>
                 </div>
 
-                <div class="sidebar-heading">
+                <div class="sidebar-heading js-sidebar-toggle" data-target="monitoringMenu">
                     <span>Monitoring</span>
                     <i class="bi bi-chevron-down"></i>
                 </div>
 
-                <div class="sidebar-sub">
+                <div class="sidebar-sub is-open" id="monitoringMenu">
                     <a class="sidebar-link {{ request()->is('ketuakk/monitoring-lab-riset*') ? 'active' : '' }}" href="/ketuakk/monitoring-lab-riset">
                         <span>Monitoring Lab. Riset</span>
                     </a>
@@ -386,7 +412,7 @@
         <main class="main-area">
             <header class="topbar">
                 <div class="topbar-right">
-                    <div class="role-pill">{{ auth()->user()->role }} EIMS</div>
+                    <div class="role-pill">{{ auth()->user()->role }}</div>
 
                     <div class="dropdown">
                         <button class="btn p-0 border-0 bg-transparent dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -541,6 +567,21 @@
                     }
                 });
             }
+
+            document.querySelectorAll('.js-sidebar-toggle').forEach(function(toggle) {
+                toggle.addEventListener('click', function() {
+                    const targetId = toggle.getAttribute('data-target');
+                    const target = document.getElementById(targetId);
+
+                    if (!target) {
+                        return;
+                    }
+
+                    target.classList.toggle('is-open');
+                    target.classList.toggle('is-collapsed');
+                    toggle.classList.toggle('collapsed');
+                });
+            });
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
