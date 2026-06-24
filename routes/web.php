@@ -70,64 +70,70 @@ Route::middleware(['auth'])->group(function () {
                 'Penunjang',
             ];
 
-            // ========================================
-            // KARTU RINGKASAN (5 Kartu)
-            // ========================================
-
-            // Kartu 1: Jumlah Anggota KK
-            // Ambil id_kk dari user yang login (Ketua KK)
+            /** @var \App\Models\User $userLogin */
             $userLogin = auth()->user();
+
             $ketuaKkData = \Illuminate\Support\Facades\DB::table('dosen')
                 ->where('id_dosen', $userLogin->id_dosen)
                 ->first();
 
-            // Hitung jumlah SEMUA anggota di KK dari tabel dosen
+            $idKk = $ketuaKkData->id_kk ?? 1;
+
+            /*
+    |--------------------------------------------------------------------------
+    | Kartu Ringkasan
+    |--------------------------------------------------------------------------
+    */
             $jumlahAnggota = \Illuminate\Support\Facades\DB::table('dosen')
-                ->where('id_kk', $ketuaKkData->id_kk ?? null)
+                ->where('id_kk', $idKk)
                 ->count();
 
-            // Kartu 2: Jumlah Lab Riset
             $jumlahLab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+                ->where('id_kk', $idKk)
                 ->count();
 
-            // Kartu 3: Target KM KK Terpenuhi (Realisasi / Total Target)
-            $totalTargetKm = \Illuminate\Support\Facades\DB::table('target_km')
-                ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
-                ->where('kontrak_manajemen.tahun_km', $tahun)
-                ->sum('target_km.target');
+            $totalTargetKm = \Illuminate\Support\Facades\DB::table('km_lab')
+                ->join('laboratorium_riset', 'km_lab.id_lab', '=', 'laboratorium_riset.id_lab')
+                ->where('laboratorium_riset.id_kk', $idKk)
+                ->where('km_lab.tahun_km', $tahun)
+                ->where('km_lab.status_km', 'Aktif')
+                ->sum('km_lab.jumlah_km');
 
             $totalRealisasiKm = \Illuminate\Support\Facades\DB::table('aktivitas_km')
-                ->whereYear('tanggal_mulai', $tahun)
+                ->join('laboratorium_riset', 'aktivitas_km.id_lab', '=', 'laboratorium_riset.id_lab')
+                ->where('laboratorium_riset.id_kk', $idKk)
+                ->whereYear('aktivitas_km.tanggal_mulai', $tahun)
                 ->count();
 
+            $totalSisaKm = max($totalTargetKm - $totalRealisasiKm, 0);
+
             $persentaseRealisasi = $totalTargetKm > 0
-                ? round(($totalRealisasiKm / $totalTargetKm) * 100, 2)
+                ? min(round(($totalRealisasiKm / $totalTargetKm) * 100, 1), 100)
                 : 0;
 
-            // Kartu 4 & 5: KM Belum & Sudah Diturunkan
-            $totalSudahTurun = \Illuminate\Support\Facades\DB::table('km_lab')
-                ->where('tahun_km', $tahun)
-                ->where('status_km', 'Aktif')
-                ->sum('jumlah_km');
+            /*
+    |--------------------------------------------------------------------------
+    | Grafik Ringkasan KK
+    |--------------------------------------------------------------------------
+    */
+            $chartKkLabel = ['Target KM', 'Realisasi KM', 'Sisa KM'];
+            $chartKkData = [$totalTargetKm, $totalRealisasiKm, $totalSisaKm];
 
-            $totalBelumTurun = max($totalTargetKm - $totalSudahTurun, 0);
-
-            // ========================================
-            // GRAFIK 1: TARGET & REALISASI KK (Baru)
-            // ========================================
-            $chartKkLabel = ['Target KM', 'Realisasi KM'];
-            $chartKkData = [$totalTargetKm, $totalRealisasiKm];
-
-            // ========================================
-            // GRAFIK 2: KM PER LAB (Target & Realisasi)
-            // ========================================
+            /*
+    |--------------------------------------------------------------------------
+    | Grafik dan Rekap per Lab Riset
+    |--------------------------------------------------------------------------
+    */
             $labs = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+                ->where('id_kk', $idKk)
                 ->orderBy('id_lab')
                 ->get();
 
             $labChartLabels = [];
+            $labShortLabels = [];
             $labTargets = [];
             $labRealisasi = [];
+            $rekapLab = [];
 
             foreach ($labs as $lab) {
                 $target = \Illuminate\Support\Facades\DB::table('km_lab')
@@ -141,28 +147,56 @@ Route::middleware(['auth'])->group(function () {
                     ->whereYear('tanggal_mulai', $tahun)
                     ->count();
 
+                $sisa = max($target - $realisasi, 0);
+
+                $persentase = $target > 0
+                    ? min(round(($realisasi / $target) * 100, 1), 100)
+                    : 0;
+
+                $shortName = $lab->nama_lab;
+
+                if (str_contains($lab->nama_lab, ' - ')) {
+                    $shortName = trim(explode(' - ', $lab->nama_lab)[0]);
+                }
+
                 $labChartLabels[] = $lab->nama_lab;
+                $labShortLabels[] = $shortName;
                 $labTargets[] = $target;
                 $labRealisasi[] = $realisasi;
+
+                $rekapLab[] = [
+                    'nama_lab' => $lab->nama_lab,
+                    'nama_singkat' => $shortName,
+                    'target' => $target,
+                    'realisasi' => $realisasi,
+                    'sisa' => $sisa,
+                    'persentase' => $persentase,
+                ];
             }
 
-            // ========================================
-            // GRAFIK 3: KM PER KATEGORI (Target & Realisasi)
-            // ========================================
+            /*
+    |--------------------------------------------------------------------------
+    | Grafik per Kategori KM
+    |--------------------------------------------------------------------------
+    */
             $kategoriLabels = [];
             $kategoriTargets = [];
             $kategoriRealisasi = [];
 
             foreach ($kategoriDefault as $kategori) {
-                $target = \Illuminate\Support\Facades\DB::table('target_km')
-                    ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
-                    ->where('target_km.kategori_km', $kategori)
-                    ->where('kontrak_manajemen.tahun_km', $tahun)
-                    ->sum('target_km.target');
+                $target = \Illuminate\Support\Facades\DB::table('km_lab')
+                    ->join('laboratorium_riset', 'km_lab.id_lab', '=', 'laboratorium_riset.id_lab')
+                    ->where('laboratorium_riset.id_kk', $idKk)
+                    ->where('km_lab.kategori_km', $kategori)
+                    ->where('km_lab.tahun_km', $tahun)
+                    ->where('km_lab.status_km', 'Aktif')
+                    ->sum('km_lab.jumlah_km');
 
                 $realisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
-                    ->where('kategori_km', $kategori)
-                    ->whereYear('tanggal_mulai', $tahun)
+                    ->join('laboratorium_riset', 'aktivitas_km.id_lab', '=', 'laboratorium_riset.id_lab')
+                    ->where('laboratorium_riset.id_kk', $idKk)
+                    ->where('aktivitas_km.kategori_km', $kategori)
+                    ->whereYear('aktivitas_km.tanggal_mulai', $tahun)
                     ->count();
 
                 $kategoriLabels[] = $kategori;
@@ -176,14 +210,15 @@ Route::middleware(['auth'])->group(function () {
                 'jumlahLab',
                 'totalTargetKm',
                 'totalRealisasiKm',
+                'totalSisaKm',
                 'persentaseRealisasi',
-                'totalBelumTurun',
-                'totalSudahTurun',
                 'chartKkLabel',
                 'chartKkData',
                 'labChartLabels',
+                'labShortLabels',
                 'labTargets',
                 'labRealisasi',
+                'rekapLab',
                 'kategoriLabels',
                 'kategoriTargets',
                 'kategoriRealisasi'
@@ -310,7 +345,7 @@ Route::middleware(['auth'])->group(function () {
                 'nidn' => 'required|string|max:50',
                 'email' => 'required|email|max:255',
                 'id_lab' => 'required|exists:laboratorium_riset,id_lab',
-                'jad' => 'required|in:GB,LK,L,AA',
+                'jad' => 'required|in:GB,LK,L,AA,NJFA',
             ]);
 
             $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
@@ -353,7 +388,7 @@ Route::middleware(['auth'])->group(function () {
                 'nidn' => 'required|string|max:50',
                 'email' => 'required|email|max:255',
                 'id_lab' => 'required|exists:laboratorium_riset,id_lab',
-                'jad' => 'required|in:GB,LK,L,AA',
+                'jad' => 'required|in:GB,LK,L,AA,NJFA',
             ]);
 
             $dosen = \Illuminate\Support\Facades\DB::table('dosen')
