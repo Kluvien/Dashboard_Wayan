@@ -4,10 +4,14 @@
 
 @section('content')
 @php
+$anggotaDetail = $anggota instanceof \Illuminate\Support\Collection
+? $anggota->firstWhere('id_user', (int) request()->route('id'))
+: $anggota;
+@endphp
+@php
 $daftarKmTurun = collect($daftarKmTurun ?? []);
 $rekapKategori = collect($rekapKategori ?? []);
 $riwayatAssign = collect($riwayatAssign ?? []);
-$anggota = collect($anggota ?? []);
 
 $totalKmTurun = $totalKmTurun ?? $rekapKategori->sum(fn($item) => $item['total_km'] ?? 0);
 $totalKmAssign = $totalKmAssign ?? $rekapKategori->sum(fn($item) => $item['sudah_assign'] ?? 0);
@@ -241,21 +245,37 @@ $persentaseTotal = $persentaseTotal ?? ($totalKmTurun > 0 ? round(($totalKmAssig
                 @forelse($riwayatAssign as $index => $assign)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td class="fw-bold">{{ $assign->kategori_km }}</td>
-                    <td>{{ $assign->nama_dosen ?? $assign->username }}</td>
-                    <td>{{ $assign->nidn ?? '-' }}</td>
+
+                    <td class="fw-bold">
+                        {{ $assign->kategori_km ?? '-' }}
+                    </td>
+
+                    <td>
+                        {{ $anggotaDetail->nama_dosen ?? $anggotaDetail->username ?? '-' }}
+                    </td>
+
+                    <td>
+                        {{ $anggotaDetail->nidn ?? '-' }}
+                    </td>
+
                     <td>
                         <span class="badge bg-primary">
-                            {{ $assign->jad ?? 'AA' }}
+                            {{ $anggotaDetail->jad ?? 'AA' }}
                         </span>
                     </td>
-                    <td>{{ $assign->jumlah_km }}</td>
-                    <td>{{ \Carbon\Carbon::parse($assign->created_at)->format('d/m/Y') }}</td>
+
+                    <td>
+                        {{ $assign->jumlah_km ?? 0 }}
+                    </td>
+
+                    <td>
+                        {{ !empty($assign->created_at) ? \Carbon\Carbon::parse($assign->created_at)->format('d/m/Y') : '-' }}
+                    </td>
                 </tr>
                 @empty
                 <tr>
                     <td colspan="7" class="text-center text-muted py-4">
-                        Belum ada KM yang dibagikan ke anggota.
+                        Belum ada riwayat assign KM.
                     </td>
                 </tr>
                 @endforelse
@@ -281,32 +301,35 @@ $persentaseTotal = $persentaseTotal ?? ($totalKmTurun > 0 ? round(($totalKmAssig
             </thead>
 
             <tbody>
-                @forelse($anggota as $index => $item)
                 @php
-                $totalAssignAnggota = $riwayatAssign
-                ->where('nidn', $item->nidn)
-                ->sum('jumlah_km');
+                $totalAssignAnggota = $riwayatAssign->sum('jumlah_km');
                 @endphp
 
                 <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td class="fw-bold">{{ $item->nama_dosen ?? $item->username }}</td>
-                    <td>{{ $item->nidn ?? '-' }}</td>
-                    <td>{{ $item->email ?? '-' }}</td>
+                    <td>1</td>
+
+                    <td class="fw-bold">
+                        {{ $anggotaDetail->nama_dosen ?? $anggotaDetail->username ?? '-' }}
+                    </td>
+
+                    <td>
+                        {{ $anggotaDetail->nidn ?? '-' }}
+                    </td>
+
+                    <td>
+                        {{ $anggotaDetail->email ?? '-' }}
+                    </td>
+
                     <td>
                         <span class="badge bg-primary">
-                            {{ $item->jad ?? 'AA' }}
+                            {{ $anggotaDetail->jad ?? 'AA' }}
                         </span>
                     </td>
-                    <td>{{ $totalAssignAnggota }}</td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="6" class="text-center text-muted py-4">
-                        Belum ada anggota pada lab ini.
+
+                    <td>
+                        {{ $totalAssignAnggota }}
                     </td>
                 </tr>
-                @endforelse
             </tbody>
         </table>
     </div>
