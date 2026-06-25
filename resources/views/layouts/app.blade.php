@@ -330,6 +330,10 @@
                 </div>
 
                 <div class="sidebar-sub is-open" id="dataMasterMenu">
+                    <a class="sidebar-link {{ request()->is('ketuakk/target-km*') ? 'active' : '' }}" href="/ketuakk/target-km">
+                        <span>Data Target KM</span>
+                    </a>
+
                     <a class="sidebar-link {{ request()->is('ketuakk/data-lab-riset') ? 'active' : '' }}" href="/ketuakk/data-lab-riset">
                         <span>Data Lab. Riset</span>
                     </a>
