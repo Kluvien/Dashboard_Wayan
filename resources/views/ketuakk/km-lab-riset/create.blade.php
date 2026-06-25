@@ -107,23 +107,6 @@
 
             <div class="row g-4">
                 <div class="col-md-6">
-                    <label for="tahun_km" class="form-label">Tahun KM</label>
-                    <div class="position-relative field-with-icon">
-                        <i class="bi bi-calendar3 field-icon"></i>
-                        <input
-                            type="number"
-                            name="tahun_km"
-                            id="tahun_km"
-                            class="form-control interactive-input"
-                            value="{{ old('tahun_km', now()->year) }}"
-                            min="2020"
-                            max="2100"
-                            required>
-                    </div>
-                    <div class="helper-text">Tahun pelaksanaan Kontrak Manajemen.</div>
-                </div>
-
-                <div class="col-md-6">
                     <label for="id_lab" class="form-label">Lab Riset Tujuan</label>
                     <div class="position-relative field-with-icon">
                         <i class="bi bi-building field-icon"></i>
@@ -139,23 +122,67 @@
                     <div class="helper-text">Pilih lab riset penerima target KM.</div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-12">
+                    <label for="id_target" class="form-label">Pilih Data Target KM</label>
+                    <div class="position-relative field-with-icon">
+                        <i class="bi bi-list-check field-icon"></i>
+                        <select name="id_target" id="id_target" class="form-select interactive-select" required>
+                            <option value="">-- Pilih Target KM --</option>
+                            @foreach($targetOptions as $target)
+                            <option
+                                value="{{ $target->id_target }}"
+                                data-tahun="{{ $target->tahun_km }}"
+                                data-kategori="{{ $target->kategori_km }}"
+                                data-sub="{{ $target->indikator }}"
+                                data-total="{{ $target->target }}"
+                                {{ old('id_target') == $target->id_target ? 'selected' : '' }}>
+                                {{ $target->tahun_km }} - {{ $target->kategori_km }} - {{ $target->indikator }} | Total: {{ $target->target }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="helper-text">
+                        Pilihan ini diambil dari Data Master → Data Target KM.
+                    </div>
+
+                    @if($targetOptions->isEmpty())
+                    <div class="alert alert-warning mt-3 mb-0">
+                        Belum ada Data Target KM. Silakan isi terlebih dahulu melalui menu Data Master → Data Target KM.
+                    </div>
+                    @endif
+                </div>
+
+                <div class="col-md-4">
+                    <label for="tahun_km" class="form-label">Tahun KM</label>
+                    <div class="position-relative field-with-icon">
+                        <i class="bi bi-calendar3 field-icon"></i>
+                        <input
+                            type="number"
+                            name="tahun_km"
+                            id="tahun_km"
+                            class="form-control interactive-input"
+                            value="{{ old('tahun_km') }}"
+                            readonly>
+                    </div>
+                    <div class="helper-text">Terisi otomatis dari Data Target KM.</div>
+                </div>
+
+                <div class="col-md-4">
                     <label for="kategori_km" class="form-label">Kategori KM</label>
                     <div class="position-relative field-with-icon">
                         <i class="bi bi-grid field-icon"></i>
-                        <select name="kategori_km" id="kategori_km" class="form-select interactive-select" required>
-                            <option value="">-- Pilih Kategori --</option>
-                            <option value="Pendidikan" {{ old('kategori_km') == 'Pendidikan' ? 'selected' : '' }}>Pendidikan</option>
-                            <option value="Penelitian" {{ old('kategori_km') == 'Penelitian' ? 'selected' : '' }}>Penelitian</option>
-                            <option value="Publikasi" {{ old('kategori_km') == 'Publikasi' ? 'selected' : '' }}>Publikasi</option>
-                            <option value="Pengabdian" {{ old('kategori_km') == 'Pengabdian' ? 'selected' : '' }}>Pengabdian</option>
-                            <option value="Penunjang" {{ old('kategori_km') == 'Penunjang' ? 'selected' : '' }}>Penunjang</option>
-                        </select>
+                        <input
+                            type="text"
+                            name="kategori_km"
+                            id="kategori_km"
+                            class="form-control interactive-input"
+                            value="{{ old('kategori_km') }}"
+                            readonly>
                     </div>
-                    <div class="helper-text">Kategori ini akan menjadi dasar pembagian ke anggota.</div>
+                    <div class="helper-text">Terisi otomatis dari Data Target KM.</div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label for="sub_kategori_km" class="form-label">Sub Kategori KM</label>
                     <div class="position-relative field-with-icon">
                         <i class="bi bi-tags field-icon"></i>
@@ -165,12 +192,9 @@
                             id="sub_kategori_km"
                             class="form-control interactive-input"
                             value="{{ old('sub_kategori_km') }}"
-                            placeholder="Contoh: Pendanaan Eksternal"
-                            required>
+                            readonly>
                     </div>
-                    <div class="helper-text">
-                        Jelaskan indikator target atau sub kategori dari kategori KM yang dipilih.
-                    </div>
+                    <div class="helper-text">Terisi otomatis dari Data Target KM.</div>
                 </div>
 
                 <div class="col-md-6">
@@ -187,7 +211,9 @@
                             placeholder="Contoh: 5"
                             required>
                     </div>
-                    <div class="helper-text">Masukkan jumlah target KM yang diturunkan.</div>
+                    <div class="helper-text">
+                        Otomatis mengikuti total target, tetapi masih bisa disesuaikan jika target dibagi ke beberapa lab.
+                    </div>
                 </div>
 
                 <div class="col-md-6">
@@ -215,4 +241,33 @@
         </div>
     </form>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const targetSelect = document.getElementById('id_target');
+        const tahunInput = document.getElementById('tahun_km');
+        const kategoriInput = document.getElementById('kategori_km');
+        const subKategoriInput = document.getElementById('sub_kategori_km');
+        const jumlahInput = document.getElementById('jumlah_km');
+
+        function fillTargetInfo() {
+            const selectedOption = targetSelect.options[targetSelect.selectedIndex];
+
+            if (!selectedOption || !selectedOption.value) {
+                tahunInput.value = '';
+                kategoriInput.value = '';
+                subKategoriInput.value = '';
+                jumlahInput.value = '';
+                return;
+            }
+
+            tahunInput.value = selectedOption.dataset.tahun || '';
+            kategoriInput.value = selectedOption.dataset.kategori || '';
+            subKategoriInput.value = selectedOption.dataset.sub || '';
+            jumlahInput.value = selectedOption.dataset.total || '';
+        }
+
+        targetSelect.addEventListener('change', fillTargetInfo);
+        fillTargetInfo();
+    });
+</script>
 @endsection

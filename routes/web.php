@@ -980,22 +980,58 @@ Route::middleware(['auth'])->group(function () {
                 ->orderBy('id_lab')
                 ->get();
 
-            return view('ketuakk.km-lab-riset.create', compact('labs'));
+            $targetOptions = \Illuminate\Support\Facades\DB::table('target_km')
+                ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+                ->select(
+                    'target_km.id_target',
+                    'target_km.kategori_km',
+                    'target_km.indikator',
+                    'target_km.target',
+                    'target_km.triwulan_1',
+                    'target_km.triwulan_2',
+                    'target_km.triwulan_3',
+                    'target_km.triwulan_4',
+                    'kontrak_manajemen.tahun_km'
+                )
+                ->orderBy('kontrak_manajemen.tahun_km', 'desc')
+                ->orderBy('target_km.kategori_km')
+                ->orderBy('target_km.indikator')
+                ->get();
+
+            return view('ketuakk.km-lab-riset.create', compact('labs', 'targetOptions'));
         });
 
         Route::post('/ketuakk/km-lab-riset', function (\Illuminate\Http\Request $request) {
             $request->validate([
                 'id_lab' => 'required|exists:laboratorium_riset,id_lab',
-                'tahun_km' => 'required|integer|min:2000',
-                'kategori_km' => 'required|string|max:100',
+                'id_target' => 'required|integer|exists:target_km,id_target',
                 'jumlah_km' => 'required|integer|min:1',
                 'status_km' => 'required|string|max:50',
             ]);
 
+            $target = \Illuminate\Support\Facades\DB::table('target_km')
+                ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+                ->select(
+                    'target_km.id_target',
+                    'target_km.kategori_km',
+                    'target_km.indikator',
+                    'target_km.target',
+                    'kontrak_manajemen.tahun_km'
+                )
+                ->where('target_km.id_target', $request->id_target)
+                ->first();
+
+            if (! $target) {
+                return back()
+                    ->withErrors(['id_target' => 'Data Target KM tidak ditemukan.'])
+                    ->withInput();
+            }
+
             \Illuminate\Support\Facades\DB::table('km_lab')->insert([
                 'id_lab' => $request->id_lab,
-                'tahun_km' => $request->tahun_km,
-                'kategori_km' => $request->kategori_km,
+                'tahun_km' => $target->tahun_km,
+                'kategori_km' => $target->kategori_km,
+                'sub_kategori_km' => $target->indikator,
                 'jumlah_km' => $request->jumlah_km,
                 'status_km' => $request->status_km,
                 'created_at' => now(),
