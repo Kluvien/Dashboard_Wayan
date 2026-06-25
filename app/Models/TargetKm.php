@@ -18,5 +18,9 @@ class TargetKm extends Model
         'indikator',
         'target',
         'kategori_km',
+        'triwulan_1',
+        'triwulan_2',
+        'triwulan_3',
+        'triwulan_4',
     ];
 }
