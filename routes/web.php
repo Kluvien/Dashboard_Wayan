@@ -2664,73 +2664,78 @@ Route::middleware(['auth'])->group(function () {
             return view('anggota.profil', compact('user', 'lab', 'dosen'));
         });
         Route::get('/anggota/aktivitas-km/create', function () {
-            return view('anggota.aktivitas-km.create');
+            $user = auth()->user();
+
+            $kmOptions = \Illuminate\Support\Facades\DB::table('km_anggota')
+                ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
+                ->leftJoin('laboratorium_riset', 'km_lab.id_lab', '=', 'laboratorium_riset.id_lab')
+                ->where('km_anggota.id_user', $user->id_user)
+                ->select(
+                    'km_anggota.id_km_anggota',
+                    'km_anggota.jumlah_km as jumlah_km_anggota',
+                    'km_lab.id_lab',
+                    'km_lab.tahun_km',
+                    'km_lab.kategori_km',
+                    'km_lab.sub_kategori_km',
+                    'laboratorium_riset.nama_lab'
+                )
+                ->orderByDesc('km_lab.tahun_km')
+                ->orderBy('km_lab.kategori_km')
+                ->get();
+
+            return view('anggota.aktivitas-km.create', compact('kmOptions'));
         });
+
         Route::post('/anggota/aktivitas-km', function (\Illuminate\Http\Request $request) {
             $request->validate([
-                'kategori_km' => 'required',
-                'judul_aktivitas' => 'required',
+                'id_km_anggota' => 'required|integer|exists:km_anggota,id_km_anggota',
+                'judul_aktivitas' => 'required|string|max:255',
+                'deskripsi_singkat' => 'nullable|string',
                 'tanggal_mulai' => 'required|date',
                 'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
+                'bukti_link' => 'nullable|url|max:255',
+                'status_progress' => 'required|in:On Progress,Submitted,Accepted,Rejected',
             ]);
+
+            $user = auth()->user();
+
+            $kmAnggota = \Illuminate\Support\Facades\DB::table('km_anggota')
+                ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
+                ->where('km_anggota.id_km_anggota', $request->id_km_anggota)
+                ->where('km_anggota.id_user', $user->id_user)
+                ->select(
+                    'km_anggota.id_km_anggota',
+                    'km_lab.id_lab',
+                    'km_lab.kategori_km',
+                    'km_lab.sub_kategori_km'
+                )
+                ->first();
+
+            if (! $kmAnggota) {
+                return back()
+                    ->withErrors(['id_km_anggota' => 'KM yang dipilih tidak ditemukan atau bukan milik Anda.'])
+                    ->withInput();
+            }
+
             \Illuminate\Support\Facades\DB::table('aktivitas_km')->insert([
-                'id_user' => auth()->user()->id_user,
-                'id_lab' => auth()->user()->id_lab ?? null,
-                'kategori_km' => $request->kategori_km,
+                'id_user' => $user->id_user,
+                'id_lab' => $kmAnggota->id_lab,
+                'id_km_anggota' => $kmAnggota->id_km_anggota,
+                'kategori_km' => $kmAnggota->kategori_km,
+                'sub_kategori_km' => $kmAnggota->sub_kategori_km,
                 'judul_aktivitas' => $request->judul_aktivitas,
                 'deskripsi_singkat' => $request->deskripsi_singkat,
                 'tanggal_mulai' => $request->tanggal_mulai,
                 'tanggal_selesai' => $request->tanggal_selesai,
+                'bukti_link' => $request->bukti_link,
+                'status_progress' => $request->status_progress,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
             return redirect('/anggota/aktivitas-km')->with('success', 'Aktivitas KM berhasil ditambahkan.');
         });
         Route::get('/anggota/aktivitas-km/{id}/edit', function ($id) {
-            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
-                ->where('id_aktivitas', $id)
-                ->where('id_user', auth()->user()->id_user)
-                ->first();
-
-            if (!$aktivitas) {
-                abort(404);
-            }
-
-            return view('anggota.aktivitas-km.edit', compact('aktivitas'));
-        });
-        Route::put('/anggota/aktivitas-km/{id}', function (\Illuminate\Http\Request $request, $id) {
-            $request->validate([
-                'kategori_km' => 'required',
-                'judul_aktivitas' => 'required',
-                'tanggal_mulai' => 'required|date',
-                'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
-            ]);
-
-            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
-                ->where('id_aktivitas', $id)
-                ->where('id_user', auth()->user()->id_user)
-                ->first();
-
-            if (!$aktivitas) {
-                abort(404);
-            }
-
-            \Illuminate\Support\Facades\DB::table('aktivitas_km')
-                ->where('id_aktivitas', $id)
-                ->where('id_user', auth()->user()->id_user)
-                ->update([
-                    'kategori_km' => $request->kategori_km,
-                    'judul_aktivitas' => $request->judul_aktivitas,
-                    'deskripsi_singkat' => $request->deskripsi_singkat,
-                    'tanggal_mulai' => $request->tanggal_mulai,
-                    'tanggal_selesai' => $request->tanggal_selesai,
-                    'updated_at' => now(),
-                ]);
-
-            return redirect('/anggota/aktivitas-km')->with('success', 'Aktivitas KM berhasil diperbarui.');
-        });
-        Route::delete('/anggota/aktivitas-km/{id}', function ($id) {
-            /** @var \App\Models\User $user */
             $user = auth()->user();
 
             $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
@@ -2738,18 +2743,88 @@ Route::middleware(['auth'])->group(function () {
                 ->where('id_user', $user->id_user)
                 ->first();
 
-            if (!$aktivitas) {
-                return redirect('/anggota/aktivitas-km')
-                    ->with('error', 'Aktivitas KM tidak ditemukan atau bukan milik Anda.');
+            if (! $aktivitas) {
+                abort(404);
+            }
+
+            $kmOptions = \Illuminate\Support\Facades\DB::table('km_anggota')
+                ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
+                ->leftJoin('laboratorium_riset', 'km_lab.id_lab', '=', 'laboratorium_riset.id_lab')
+                ->where('km_anggota.id_user', $user->id_user)
+                ->select(
+                    'km_anggota.id_km_anggota',
+                    'km_anggota.jumlah_km as jumlah_km_anggota',
+                    'km_lab.id_lab',
+                    'km_lab.tahun_km',
+                    'km_lab.kategori_km',
+                    'km_lab.sub_kategori_km',
+                    'laboratorium_riset.nama_lab'
+                )
+                ->orderByDesc('km_lab.tahun_km')
+                ->orderBy('km_lab.kategori_km')
+                ->get();
+
+            return view('anggota.aktivitas-km.edit', compact('aktivitas', 'kmOptions'));
+        });
+
+        Route::put('/anggota/aktivitas-km/{id}', function (\Illuminate\Http\Request $request, $id) {
+            $request->validate([
+                'id_km_anggota' => 'required|integer|exists:km_anggota,id_km_anggota',
+                'judul_aktivitas' => 'required|string|max:255',
+                'deskripsi_singkat' => 'nullable|string',
+                'tanggal_mulai' => 'required|date',
+                'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
+                'bukti_link' => 'nullable|url|max:255',
+                'status_progress' => 'required|in:On Progress,Submitted,Accepted,Rejected',
+            ]);
+
+            $user = auth()->user();
+
+            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                ->where('id_aktivitas', $id)
+                ->where('id_user', $user->id_user)
+                ->first();
+
+            if (! $aktivitas) {
+                abort(404);
+            }
+
+            $kmAnggota = \Illuminate\Support\Facades\DB::table('km_anggota')
+                ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
+                ->where('km_anggota.id_km_anggota', $request->id_km_anggota)
+                ->where('km_anggota.id_user', $user->id_user)
+                ->select(
+                    'km_anggota.id_km_anggota',
+                    'km_lab.id_lab',
+                    'km_lab.kategori_km',
+                    'km_lab.sub_kategori_km'
+                )
+                ->first();
+
+            if (! $kmAnggota) {
+                return back()
+                    ->withErrors(['id_km_anggota' => 'KM yang dipilih tidak ditemukan atau bukan milik Anda.'])
+                    ->withInput();
             }
 
             \Illuminate\Support\Facades\DB::table('aktivitas_km')
                 ->where('id_aktivitas', $id)
                 ->where('id_user', $user->id_user)
-                ->delete();
+                ->update([
+                    'id_lab' => $kmAnggota->id_lab,
+                    'id_km_anggota' => $kmAnggota->id_km_anggota,
+                    'kategori_km' => $kmAnggota->kategori_km,
+                    'sub_kategori_km' => $kmAnggota->sub_kategori_km,
+                    'judul_aktivitas' => $request->judul_aktivitas,
+                    'deskripsi_singkat' => $request->deskripsi_singkat,
+                    'tanggal_mulai' => $request->tanggal_mulai,
+                    'tanggal_selesai' => $request->tanggal_selesai,
+                    'bukti_link' => $request->bukti_link,
+                    'status_progress' => $request->status_progress,
+                    'updated_at' => now(),
+                ]);
 
-            return redirect('/anggota/aktivitas-km')
-                ->with('success', 'Aktivitas KM berhasil dihapus.');
+            return redirect('/anggota/aktivitas-km')->with('success', 'Aktivitas KM berhasil diperbarui.');
         });
         Route::get('/anggota/progress-km', function () {
             /** @var \App\Models\User $user */

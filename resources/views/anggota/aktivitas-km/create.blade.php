@@ -33,7 +33,7 @@
     }
 
     .interactive-textarea {
-        min-height: 140px;
+        min-height: 130px;
         resize: vertical;
     }
 
@@ -71,13 +71,6 @@
         color: #20242A;
     }
 
-    .sticky-action {
-        position: sticky;
-        bottom: 0;
-        background: #fff;
-        padding-top: 18px;
-    }
-
     .btn-light-custom {
         background: #EEF2F7;
         border: 1px solid #D8DEE8;
@@ -98,7 +91,7 @@
         <div>
             <h4 class="fw-bold mb-1">Form Tambah Aktivitas KM</h4>
             <p class="text-muted mb-0">
-                Isi data aktivitas Kontrak Manajemen yang sudah Anda kerjakan.
+                Pilih KM yang sudah ditugaskan kepada Anda, lalu isi progres aktivitasnya.
             </p>
         </div>
 
@@ -118,107 +111,212 @@
     </div>
     @endif
 
+    @if($kmOptions->isEmpty())
+    <div class="alert alert-warning rounded-4 mb-0">
+        Belum ada KM yang ditugaskan kepada akun Anda. Ketua Lab perlu membagikan KM terlebih dahulu.
+    </div>
+    @else
     <form action="/anggota/aktivitas-km" method="POST">
         @csrf
 
         <div class="mb-4">
-            <div class="form-section-title">Informasi Utama</div>
+            <div class="form-section-title">Pilih KM yang Dikerjakan</div>
+
             <div class="row g-4">
-                <div class="col-md-6">
-                    <label for="kategori_km" class="form-label">Kategori KM</label>
+                <div class="col-md-12">
+                    <label for="id_km_anggota" class="form-label">KM yang Diterima</label>
                     <div class="position-relative field-with-icon">
-                        <i class="bi bi-grid field-icon"></i>
-                        <select name="kategori_km" id="kategori_km"
-                            class="form-select interactive-select @error('kategori_km') is-invalid @enderror" required>
-                            <option value="">-- Pilih Kategori --</option>
-                            <option value="Pendidikan" {{ old('kategori_km') == 'Pendidikan' ? 'selected' : '' }}>Pendidikan</option>
-                            <option value="Penelitian" {{ old('kategori_km') == 'Penelitian' ? 'selected' : '' }}>Penelitian</option>
-                            <option value="Publikasi" {{ old('kategori_km') == 'Publikasi' ? 'selected' : '' }}>Publikasi</option>
-                            <option value="Pengabdian" {{ old('kategori_km') == 'Pengabdian' ? 'selected' : '' }}>Pengabdian</option>
-                            <option value="Penunjang" {{ old('kategori_km') == 'Penunjang' ? 'selected' : '' }}>Penunjang</option>
+                        <i class="bi bi-list-check field-icon"></i>
+                        <select name="id_km_anggota" id="id_km_anggota" class="form-select interactive-select" required>
+                            <option value="">-- Pilih KM --</option>
+                            @foreach($kmOptions as $km)
+                            <option
+                                value="{{ $km->id_km_anggota }}"
+                                data-tahun="{{ $km->tahun_km }}"
+                                data-lab="{{ $km->nama_lab }}"
+                                data-kategori="{{ $km->kategori_km }}"
+                                data-sub="{{ $km->sub_kategori_km }}"
+                                data-jumlah="{{ $km->jumlah_km_anggota }}"
+                                {{ old('id_km_anggota') == $km->id_km_anggota ? 'selected' : '' }}>
+                                {{ $km->tahun_km }} - {{ $km->kategori_km }} - {{ $km->sub_kategori_km }} | Target: {{ $km->jumlah_km_anggota }}
+                            </option>
+                            @endforeach
                         </select>
                     </div>
-                    <div class="helper-text">Pilih kategori sesuai KM yang ditugaskan kepada Anda.</div>
-                    @error('kategori_km')
-                    <div class="text-danger small mt-1">{{ $message }}</div>
-                    @enderror
+                    <div class="helper-text">
+                        Pilihan ini berasal dari KM yang sudah dibagikan oleh Ketua Lab kepada Anda.
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Tahun KM</label>
+                    <div class="position-relative field-with-icon">
+                        <i class="bi bi-calendar3 field-icon"></i>
+                        <input type="text" id="preview_tahun" class="form-control interactive-input" readonly>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Kategori KM</label>
+                    <div class="position-relative field-with-icon">
+                        <i class="bi bi-grid field-icon"></i>
+                        <input type="text" id="preview_kategori" class="form-control interactive-input" readonly>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Sub Kategori</label>
+                    <div class="position-relative field-with-icon">
+                        <i class="bi bi-tags field-icon"></i>
+                        <input type="text" id="preview_sub" class="form-control interactive-input" readonly>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Target KM</label>
+                    <div class="position-relative field-with-icon">
+                        <i class="bi bi-123 field-icon"></i>
+                        <input type="text" id="preview_jumlah" class="form-control interactive-input" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <div class="form-section-title">Detail Progres Aktivitas</div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label for="judul_aktivitas" class="form-label">Judul KM / Aktivitas</label>
+                    <div class="position-relative field-with-icon">
+                        <i class="bi bi-pencil-square field-icon"></i>
+                        <input
+                            type="text"
+                            name="judul_aktivitas"
+                            id="judul_aktivitas"
+                            class="form-control interactive-input"
+                            value="{{ old('judul_aktivitas') }}"
+                            placeholder="Contoh: Publikasi jurnal internasional bereputasi"
+                            required>
+                    </div>
+                    <div class="helper-text">Isi judul progres atau pekerjaan KM yang sedang dilakukan.</div>
                 </div>
 
                 <div class="col-md-6">
-                    <label for="judul_aktivitas" class="form-label">Judul Aktivitas</label>
+                    <label for="status_progress" class="form-label">Status Progress</label>
                     <div class="position-relative field-with-icon">
-                        <i class="bi bi-pencil-square field-icon"></i>
-                        <input type="text" name="judul_aktivitas" id="judul_aktivitas"
-                            class="form-control interactive-input @error('judul_aktivitas') is-invalid @enderror"
-                            value="{{ old('judul_aktivitas') }}"
-                            placeholder="Contoh: Menyusun laporan penelitian" required>
+                        <i class="bi bi-flag field-icon"></i>
+                        <select name="status_progress" id="status_progress" class="form-select interactive-select" required>
+                            <option value="On Progress" {{ old('status_progress') == 'On Progress' ? 'selected' : '' }}>On Progress</option>
+                            <option value="Submitted" {{ old('status_progress') == 'Submitted' ? 'selected' : '' }}>Submitted</option>
+                            <option value="Accepted" {{ old('status_progress') == 'Accepted' ? 'selected' : '' }}>Accepted</option>
+                            <option value="Rejected" {{ old('status_progress') == 'Rejected' ? 'selected' : '' }}>Rejected</option>
+                        </select>
                     </div>
-                    <div class="helper-text">Gunakan judul singkat, jelas, dan mudah dipahami.</div>
-                    @error('judul_aktivitas')
-                    <div class="text-danger small mt-1">{{ $message }}</div>
-                    @enderror
+                    <div class="helper-text">Pilih status perkembangan aktivitas KM.</div>
                 </div>
-            </div>
-        </div>
 
-        <div class="mb-4">
-            <div class="form-section-title">Deskripsi Aktivitas</div>
-            <div>
-                <label for="deskripsi_singkat" class="form-label">Deskripsi Singkat</label>
-                <textarea name="deskripsi_singkat" id="deskripsi_singkat"
-                    class="form-control interactive-textarea @error('deskripsi_singkat') is-invalid @enderror"
-                    placeholder="Jelaskan secara singkat aktivitas yang Anda lakukan...">{{ old('deskripsi_singkat') }}</textarea>
-                <div class="helper-text">
-                    Isi dengan ringkasan pekerjaan, output, atau tujuan aktivitas.
+                <div class="col-md-12">
+                    <label for="deskripsi_singkat" class="form-label">Deskripsi KM</label>
+                    <textarea
+                        name="deskripsi_singkat"
+                        id="deskripsi_singkat"
+                        class="form-control interactive-textarea"
+                        placeholder="Jelaskan progres, kendala, output, atau rencana lanjutan dari KM ini...">{{ old('deskripsi_singkat') }}</textarea>
                 </div>
-                @error('deskripsi_singkat')
-                <div class="text-danger small mt-1">{{ $message }}</div>
-                @enderror
-            </div>
-        </div>
 
-        <div class="mb-4">
-            <div class="form-section-title">Periode Pelaksanaan</div>
-            <div class="row g-4">
                 <div class="col-md-6">
                     <label for="tanggal_mulai" class="form-label">Tanggal Mulai</label>
                     <div class="position-relative field-with-icon">
                         <i class="bi bi-calendar-event field-icon"></i>
-                        <input type="date" name="tanggal_mulai" id="tanggal_mulai"
-                            class="form-control interactive-input @error('tanggal_mulai') is-invalid @enderror"
-                            value="{{ old('tanggal_mulai') }}" required>
+                        <input
+                            type="date"
+                            name="tanggal_mulai"
+                            id="tanggal_mulai"
+                            class="form-control interactive-input"
+                            value="{{ old('tanggal_mulai') }}"
+                            required>
                     </div>
-                    @error('tanggal_mulai')
-                    <div class="text-danger small mt-1">{{ $message }}</div>
-                    @enderror
                 </div>
 
                 <div class="col-md-6">
                     <label for="tanggal_selesai" class="form-label">Tanggal Selesai</label>
                     <div class="position-relative field-with-icon">
                         <i class="bi bi-calendar-check field-icon"></i>
-                        <input type="date" name="tanggal_selesai" id="tanggal_selesai"
-                            class="form-control interactive-input @error('tanggal_selesai') is-invalid @enderror"
-                            value="{{ old('tanggal_selesai') }}" required>
+                        <input
+                            type="date"
+                            name="tanggal_selesai"
+                            id="tanggal_selesai"
+                            class="form-control interactive-input"
+                            value="{{ old('tanggal_selesai') }}"
+                            required>
                     </div>
-                    @error('tanggal_selesai')
-                    <div class="text-danger small mt-1">{{ $message }}</div>
-                    @enderror
+                </div>
+
+                <div class="col-md-12">
+                    <label for="bukti_link" class="form-label">Bukti / Link Progress</label>
+                    <div class="position-relative field-with-icon">
+                        <i class="bi bi-link-45deg field-icon"></i>
+                        <input
+                            type="url"
+                            name="bukti_link"
+                            id="bukti_link"
+                            class="form-control interactive-input"
+                            value="{{ old('bukti_link') }}"
+                            placeholder="Contoh: https://drive.google.com/...">
+                    </div>
+                    <div class="helper-text">
+                        Bisa berupa link progress, publikasi, dokumentasi, Google Drive, atau bukti lainnya.
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="sticky-action">
-            <div class="d-flex flex-wrap gap-2 pt-2">
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-save me-1"></i> Simpan Aktivitas
-                </button>
+        <div class="d-flex flex-wrap gap-2 pt-2">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save me-1"></i> Simpan Aktivitas
+            </button>
 
-                <a href="/anggota/aktivitas-km" class="btn btn-light-custom">
-                    Batal
-                </a>
-            </div>
+            <a href="/anggota/aktivitas-km" class="btn btn-light-custom">
+                Batal
+            </a>
         </div>
     </form>
+    @endif
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const kmSelect = document.getElementById('id_km_anggota');
+
+        if (!kmSelect) {
+            return;
+        }
+
+        const tahunInput = document.getElementById('preview_tahun');
+        const kategoriInput = document.getElementById('preview_kategori');
+        const subInput = document.getElementById('preview_sub');
+        const jumlahInput = document.getElementById('preview_jumlah');
+
+        function fillKmInfo() {
+            const selectedOption = kmSelect.options[kmSelect.selectedIndex];
+
+            if (!selectedOption || !selectedOption.value) {
+                tahunInput.value = '';
+                kategoriInput.value = '';
+                subInput.value = '';
+                jumlahInput.value = '';
+                return;
+            }
+
+            tahunInput.value = selectedOption.dataset.tahun || '';
+            kategoriInput.value = selectedOption.dataset.kategori || '';
+            subInput.value = selectedOption.dataset.sub || '';
+            jumlahInput.value = selectedOption.dataset.jumlah || '';
+        }
+
+        kmSelect.addEventListener('change', fillKmInfo);
+        fillKmInfo();
+    });
+</script>
 @endsection
