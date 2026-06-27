@@ -1377,18 +1377,34 @@ Route::middleware(['auth'])->group(function () {
             ));
         });
         Route::get('/ketuakk/km-anggota-kk', function () {
-            $tahun = now()->year;
+            $tahun = (int) request('tahun', now()->year);
 
-            $tanggalMulai = \Carbon\Carbon::create($tahun, 1, 1)->startOfYear()->toDateString();
-            $tanggalSelesai = \Carbon\Carbon::create($tahun, 12, 31)->endOfYear()->toDateString();
+            $kategoriDefault = [
+                'Pendidikan',
+                'Penelitian',
+                'Publikasi',
+                'Pengabdian',
+                'Penunjang',
+            ];
 
-            // Ambil id_kk dari user yang login (Ketua KK)
+            $tahunOptions = collect(
+                \Illuminate\Support\Facades\DB::table('km_lab')
+                    ->select('tahun_km')
+                    ->distinct()
+                    ->orderBy('tahun_km', 'desc')
+                    ->pluck('tahun_km')
+            )
+                ->push(now()->year)
+                ->unique()
+                ->sortDesc()
+                ->values();
+
             $userLogin = auth()->user();
+
             $ketuaKkData = \Illuminate\Support\Facades\DB::table('dosen')
                 ->where('id_dosen', $userLogin->id_dosen)
                 ->first();
 
-            // Ambil SEMUA anggota KK dari tabel dosen (data master)
             $anggota = \Illuminate\Support\Facades\DB::table('dosen')
                 ->where('dosen.id_kk', $ketuaKkData->id_kk ?? null)
                 ->leftJoin('laboratorium_riset', 'dosen.id_lab', '=', 'laboratorium_riset.id_lab')
@@ -1401,6 +1417,7 @@ Route::middleware(['auth'])->group(function () {
                     'dosen.nama_dosen',
                     'dosen.nidn',
                     'dosen.email',
+                    'dosen.jad',
                     'laboratorium_riset.nama_lab'
                 )
                 ->orderBy('laboratorium_riset.nama_lab')
@@ -1410,38 +1427,48 @@ Route::middleware(['auth'])->group(function () {
             $dataAnggota = [];
 
             foreach ($anggota as $item) {
-                $totalTarget = \Illuminate\Support\Facades\DB::table('km_anggota')
-                    ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
-                    ->where('km_anggota.id_user', $item->id_user)
-                    ->where('km_lab.tahun_km', $tahun)
-                    ->where('km_lab.status_km', 'Aktif')
-                    ->sum('km_anggota.jumlah_km');
+                $jumlahKmPerKategori = [];
 
-                $totalRealisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
-                    ->where('id_user', $item->id_user)
-                    ->whereBetween('tanggal_mulai', [$tanggalMulai, $tanggalSelesai])
-                    ->count();
+                foreach ($kategoriDefault as $kategori) {
+                    $jumlahKmPerKategori[$kategori] = 0;
+                }
 
-                $persentase = $totalTarget > 0
-                    ? round(($totalRealisasi / $totalTarget) * 100)
-                    : 0;
+                if (!empty($item->id_user)) {
+                    $targetPerKategori = \Illuminate\Support\Facades\DB::table('km_anggota')
+                        ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
+                        ->select(
+                            'km_lab.kategori_km',
+                            \Illuminate\Support\Facades\DB::raw('SUM(km_anggota.jumlah_km) as total_km')
+                        )
+                        ->where('km_anggota.id_user', $item->id_user)
+                        ->where('km_lab.tahun_km', $tahun)
+                        ->where('km_lab.status_km', 'Aktif')
+                        ->groupBy('km_lab.kategori_km')
+                        ->pluck('total_km', 'kategori_km');
+
+                    foreach ($kategoriDefault as $kategori) {
+                        $jumlahKmPerKategori[$kategori] = (int) ($targetPerKategori[$kategori] ?? 0);
+                    }
+                }
 
                 $dataAnggota[] = [
                     'id_user' => $item->id_user,
-                    'nama_dosen' => $item->nama_dosen ?? $item->username,
+                    'nama_dosen' => $item->nama_dosen ?? $item->username ?? '-',
                     'nidn' => $item->nidn ?? '-',
+                    'jad' => $item->jad ?? '-',
                     'email' => $item->email ?? '-',
                     'nama_lab' => $item->nama_lab ?? '-',
-                    'total_target' => $totalTarget,
-                    'total_realisasi' => $totalRealisasi,
-                    'persentase' => min($persentase, 100),
-                    'status' => $totalTarget > 0 && $totalRealisasi >= $totalTarget
-                        ? 'Tercapai'
-                        : 'Belum Tercapai',
+                    'jumlah_km' => $jumlahKmPerKategori,
+                    'total_km' => array_sum($jumlahKmPerKategori),
                 ];
             }
 
-            return view('ketuakk.km-anggota-kk.index', compact('dataAnggota', 'tahun'));
+            return view('ketuakk.km-anggota-kk.index', compact(
+                'dataAnggota',
+                'tahun',
+                'tahunOptions',
+                'kategoriDefault'
+            ));
         });
         Route::get('/ketuakk/km-anggota-kk/{id}', function ($id) {
             $tahun = now()->year;
