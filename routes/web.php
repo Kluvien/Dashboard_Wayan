@@ -1042,7 +1042,7 @@ Route::middleware(['auth'])->group(function () {
                 ->with('success', 'KM berhasil diturunkan ke Lab Riset.');
         });
         Route::get('/ketuakk/km-lab-riset', function () {
-            $tahun = now()->year;
+            $tahun = (int) request('tahun', now()->year);
 
             $kategoriDefault = [
                 'Pendidikan',
@@ -1052,8 +1052,30 @@ Route::middleware(['auth'])->group(function () {
                 'Penunjang',
             ];
 
-            // Query untuk Total KM dari target_km
-            $totalKmPerKategori = \Illuminate\Support\Facades\DB::table('target_km')
+            $tahunOptions = collect()
+                ->merge(
+                    \Illuminate\Support\Facades\DB::table('kontrak_manajemen')
+                        ->select('tahun_km')
+                        ->distinct()
+                        ->pluck('tahun_km')
+                )
+                ->merge(
+                    \Illuminate\Support\Facades\DB::table('km_lab')
+                        ->select('tahun_km')
+                        ->distinct()
+                        ->pluck('tahun_km')
+                )
+                ->push(now()->year)
+                ->unique()
+                ->sortDesc()
+                ->values();
+
+            if (! $tahunOptions->contains($tahun)) {
+                $tahunOptions->push($tahun);
+                $tahunOptions = $tahunOptions->unique()->sortDesc()->values();
+            }
+
+            $totalKmKkPerKategori = \Illuminate\Support\Facades\DB::table('target_km')
                 ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
                 ->select(
                     'target_km.kategori_km',
@@ -1063,31 +1085,28 @@ Route::middleware(['auth'])->group(function () {
                 ->groupBy('target_km.kategori_km')
                 ->pluck('total_target', 'kategori_km');
 
-            // Query untuk Sudah Diturunkan dari km_lab
-            $sudahTurunPerKategori = \Illuminate\Support\Facades\DB::table('km_lab')
+            $kmTurunPerLabKategori = \Illuminate\Support\Facades\DB::table('km_lab')
                 ->select(
+                    'id_lab',
                     'kategori_km',
                     \Illuminate\Support\Facades\DB::raw('SUM(jumlah_km) as total_turun')
                 )
                 ->where('tahun_km', $tahun)
                 ->where('status_km', 'Aktif')
-                ->groupBy('kategori_km')
-                ->pluck('total_turun', 'kategori_km');
+                ->groupBy('id_lab', 'kategori_km')
+                ->get()
+                ->groupBy('id_lab');
 
-            // Buat recap kategori
-            $rekapKategori = [];
-            foreach ($kategoriDefault as $kategori) {
-                $totalKm = $totalKmPerKategori[$kategori] ?? 0;
-                $sudahTurun = $sudahTurunPerKategori[$kategori] ?? 0;
-                $belumTurun = $totalKm - $sudahTurun;
-
-                $rekapKategori[] = [
-                    'kategori' => $kategori,
-                    'total_km' => $totalKm,
-                    'sudah_turun' => $sudahTurun,
-                    'belum_turun' => $belumTurun,
-                ];
-            }
+            $assignPerLab = \Illuminate\Support\Facades\DB::table('km_anggota')
+                ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
+                ->select(
+                    'km_lab.id_lab',
+                    \Illuminate\Support\Facades\DB::raw('SUM(km_anggota.jumlah_km) as total_assign')
+                )
+                ->where('km_lab.tahun_km', $tahun)
+                ->where('km_lab.status_km', 'Aktif')
+                ->groupBy('km_lab.id_lab')
+                ->pluck('total_assign', 'id_lab');
 
             $labs = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
                 ->orderBy('id_lab')
@@ -1096,44 +1115,73 @@ Route::middleware(['auth'])->group(function () {
             $dataLab = [];
 
             foreach ($labs as $lab) {
-                $jumlahDosen = \Illuminate\Support\Facades\DB::table('dosen')
-                    ->where('id_lab', $lab->id_lab)
-                    ->count();
+                $turunGroup = $kmTurunPerLabKategori->get($lab->id_lab, collect());
 
-                $totalKmTurun = \Illuminate\Support\Facades\DB::table('km_lab')
-                    ->where('id_lab', $lab->id_lab)
-                    ->where('tahun_km', $tahun)
-                    ->where('status_km', 'Aktif')
-                    ->sum('jumlah_km');
+                $kkPerKategori = [];
+                $turunPerKategori = [];
 
-                $totalKmAssign = \Illuminate\Support\Facades\DB::table('km_anggota')
-                    ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
-                    ->where('km_lab.id_lab', $lab->id_lab)
-                    ->where('km_lab.tahun_km', $tahun)
-                    ->where('km_lab.status_km', 'Aktif')
-                    ->sum('km_anggota.jumlah_km');
+                foreach ($kategoriDefault as $kategori) {
+                    $kkPerKategori[$kategori] = (int) ($totalKmKkPerKategori[$kategori] ?? 0);
 
-                $sisaKm = $totalKmTurun - $totalKmAssign;
+                    $turunItem = $turunGroup->firstWhere('kategori_km', $kategori);
+                    $turunPerKategori[$kategori] = (int) ($turunItem->total_turun ?? 0);
+                }
 
-                $persentase = $totalKmTurun > 0
-                    ? round(($totalKmAssign / $totalKmTurun) * 100)
+                $totalTurun = array_sum($turunPerKategori);
+                $totalAssign = (int) ($assignPerLab[$lab->id_lab] ?? 0);
+                $sisaKm = max($totalTurun - $totalAssign, 0);
+
+                $persentase = $totalTurun > 0
+                    ? min(round(($totalAssign / $totalTurun) * 100), 100)
                     : 0;
+
+                if ($totalTurun <= 0) {
+                    $status = 'Belum Ada KM';
+                } elseif ($sisaKm <= 0) {
+                    $status = 'Selesai';
+                } else {
+                    $status = 'Belum Selesai';
+                }
 
                 $dataLab[] = [
                     'id_lab' => $lab->id_lab,
                     'nama_lab' => $lab->nama_lab,
-                    'jumlah_dosen' => $jumlahDosen,
-                    'total_target' => $totalKmTurun,
-                    'total_realisasi' => $totalKmAssign,
+                    'kk_per_kategori' => $kkPerKategori,
+                    'turun_per_kategori' => $turunPerKategori,
+                    'total_turun' => $totalTurun,
+                    'total_assign' => $totalAssign,
                     'sisa_km' => $sisaKm,
-                    'persentase' => min($persentase, 100),
-                    'status' => $totalKmTurun > 0 && $sisaKm <= 0
-                        ? 'Sudah Dibagi'
-                        : 'Belum Selesai',
+                    'persentase' => $persentase,
+                    'status' => $status,
                 ];
             }
 
-            return view('ketuakk.km-lab-riset.index', compact('dataLab', 'tahun', 'rekapKategori'));
+            $rekapKategori = [];
+
+            foreach ($kategoriDefault as $kategori) {
+                $totalKk = (int) ($totalKmKkPerKategori[$kategori] ?? 0);
+
+                $totalTurun = \Illuminate\Support\Facades\DB::table('km_lab')
+                    ->where('tahun_km', $tahun)
+                    ->where('status_km', 'Aktif')
+                    ->where('kategori_km', $kategori)
+                    ->sum('jumlah_km');
+
+                $rekapKategori[] = [
+                    'kategori' => $kategori,
+                    'total_km_kk' => $totalKk,
+                    'total_turun' => (int) $totalTurun,
+                    'sisa' => max($totalKk - (int) $totalTurun, 0),
+                ];
+            }
+
+            return view('ketuakk.km-lab-riset.index', compact(
+                'dataLab',
+                'tahun',
+                'tahunOptions',
+                'kategoriDefault',
+                'rekapKategori'
+            ));
         });
         Route::delete('/ketuakk/km-lab-riset/{id}', function ($id) {
             $kmLab = \Illuminate\Support\Facades\DB::table('km_lab')
