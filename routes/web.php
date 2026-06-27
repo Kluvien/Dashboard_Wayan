@@ -182,6 +182,7 @@ Route::middleware(['auth'])->group(function () {
             $kategoriLabels = [];
             $kategoriTargets = [];
             $kategoriRealisasi = [];
+            $kategoriCards = [];
 
             foreach ($kategoriDefault as $kategori) {
                 $target = \Illuminate\Support\Facades\DB::table('km_lab')
@@ -199,9 +200,23 @@ Route::middleware(['auth'])->group(function () {
                     ->whereYear('aktivitas_km.tanggal_mulai', $tahun)
                     ->count();
 
+                $sisa = max($target - $realisasi, 0);
+
+                $persentase = $target > 0
+                    ? min(round(($realisasi / $target) * 100), 100)
+                    : 0;
+
                 $kategoriLabels[] = $kategori;
                 $kategoriTargets[] = $target;
                 $kategoriRealisasi[] = $realisasi;
+
+                $kategoriCards[] = [
+                    'kategori' => $kategori,
+                    'target' => $target,
+                    'realisasi' => $realisasi,
+                    'sisa' => $sisa,
+                    'persentase' => $persentase,
+                ];
             }
 
             return view('ketuakk.dashboard', compact(
@@ -221,7 +236,8 @@ Route::middleware(['auth'])->group(function () {
                 'rekapLab',
                 'kategoriLabels',
                 'kategoriTargets',
-                'kategoriRealisasi'
+                'kategoriRealisasi',
+                'kategoriCards'
             ));
         });
 

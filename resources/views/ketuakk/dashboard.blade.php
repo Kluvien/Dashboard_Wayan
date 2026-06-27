@@ -42,6 +42,48 @@
         color: var(--text-muted);
     }
 
+    .dashboard-category-progress {
+        height: 8px;
+        border-radius: 999px;
+        background: #EEF1F6;
+        overflow: hidden;
+        margin: 12px 0 10px;
+    }
+
+    .dashboard-category-progress-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: var(--blue);
+    }
+
+    .dashboard-category-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 10px;
+    }
+
+    .dashboard-category-button {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 8px 10px;
+        border-radius: 10px;
+        background: var(--blue);
+        color: #fff;
+        font-size: 13px;
+        font-weight: 800;
+        text-decoration: none;
+    }
+
+    .dashboard-category-button:hover {
+        color: #fff;
+        opacity: 0.9;
+    }
+
     .dashboard-grid-main {
         display: grid;
         grid-template-columns: 1.5fr 1fr;
@@ -173,40 +215,36 @@
 </div>
 
 <div class="dashboard-stat-grid">
+    @forelse($kategoriCards ?? [] as $item)
     <div class="dashboard-stat-card">
-        <div class="dashboard-stat-label">Jumlah Anggota KK</div>
-        <div class="dashboard-stat-value">{{ $jumlahAnggota ?? 0 }}</div>
-        <div class="dashboard-stat-sub">Dosen terdaftar</div>
-    </div>
+        <div class="dashboard-stat-label">{{ $item['kategori'] }}</div>
 
+        <div class="dashboard-stat-value">
+            {{ $item['persentase'] }}%
+        </div>
+
+        <div class="dashboard-category-progress">
+            <div
+                class="dashboard-category-progress-fill"
+                style="width: {{ $item['persentase'] }}%;"></div>
+        </div>
+
+        <div class="dashboard-category-row">
+            <span>Target: {{ $item['target'] }}</span>
+            <span>Realisasi: {{ $item['realisasi'] }}</span>
+        </div>
+
+        <a href="/ketuakk/km-kk" class="dashboard-category-button">
+            Lihat Detail
+        </a>
+    </div>
+    @empty
     <div class="dashboard-stat-card">
-        <div class="dashboard-stat-label">Jumlah Lab Riset</div>
-        <div class="dashboard-stat-value">{{ $jumlahLab ?? 0 }}</div>
-        <div class="dashboard-stat-sub">Lab aktif</div>
+        <div class="dashboard-stat-label">Data kategori KM</div>
+        <div class="dashboard-stat-value">0</div>
+        <div class="dashboard-stat-sub">Belum ada data.</div>
     </div>
-
-    <div class="dashboard-stat-card">
-        <div class="dashboard-stat-label">Total Target KM</div>
-        <div class="dashboard-stat-value">{{ $totalTargetKm ?? 0 }}</div>
-        <div class="dashboard-stat-sub">KM diturunkan ke lab</div>
-    </div>
-
-    <div class="dashboard-stat-card">
-        <div class="dashboard-stat-label">Total Realisasi KM</div>
-        <div class="dashboard-stat-value text-success">{{ $totalRealisasiKm ?? 0 }}</div>
-        <div class="dashboard-stat-sub">{{ $persentaseRealisasi ?? 0 }}% dari target</div>
-    </div>
-
-    <div class="dashboard-stat-card">
-        <div class="dashboard-stat-label">Sisa KM</div>
-        <div class="dashboard-stat-value text-warning">{{ $totalSisaKm ?? 0 }}</div>
-
-        @if(($totalSisaKm ?? 0) > 0)
-        <span class="badge-soft-warning">Perlu realisasi</span>
-        @else
-        <span class="badge-soft-success">Selesai</span>
-        @endif
-    </div>
+    @endforelse
 </div>
 
 <div class="dashboard-grid-main">
