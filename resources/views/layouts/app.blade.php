@@ -349,6 +349,10 @@
                 </div>
 
                 <div class="sidebar-sub is-open" id="kontrakMenu">
+                    <a class="sidebar-link {{ request()->is('ketuakk/km-kk*') ? 'active' : '' }}" href="/ketuakk/km-kk">
+                        Kelompok Keahlian
+                    </a>
+
                     <a class="sidebar-link {{ request()->is('ketuakk/km-lab-riset*') ? 'active' : '' }}" href="/ketuakk/km-lab-riset">
                         <span>Lab. Riset</span>
                     </a>
