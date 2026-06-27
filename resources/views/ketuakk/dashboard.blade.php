@@ -188,6 +188,36 @@
         }
     }
 
+    .dashboard-chart-full {
+        margin-bottom: 18px;
+    }
+
+    .dashboard-category-chart-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .dashboard-category-chart-grid .card:last-child:nth-child(odd) {
+        grid-column: span 2;
+    }
+
+    .dashboard-chart-box-large {
+        position: relative;
+        width: 100%;
+        height: 320px;
+    }
+
+    @media (max-width: 992px) {
+        .dashboard-category-chart-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-category-chart-grid .card:last-child:nth-child(odd) {
+            grid-column: span 1;
+        }
+    }
+
     @media (max-width: 768px) {
         .dashboard-stat-grid {
             grid-template-columns: 1fr;
@@ -247,95 +277,40 @@
     @endforelse
 </div>
 
-<div class="dashboard-grid-main">
-    <div class="card">
-        <div class="dashboard-panel-title">Grafik Target dan Realisasi Lab. Riset</div>
-        <div class="dashboard-panel-subtitle">
-            Perbandingan target KM yang diturunkan dan realisasi aktivitas setiap lab.
-        </div>
-
-        <div class="dashboard-chart-box">
-            <canvas id="chartLab"></canvas>
-        </div>
+<div class="card dashboard-chart-full">
+    <div class="dashboard-panel-title">Diagram Pencapaian Lab Riset</div>
+    <div class="dashboard-panel-subtitle">
+        Persentase pencapaian realisasi KM pada masing-masing Lab Riset tahun {{ $tahun }}.
     </div>
 
-    <div class="card">
-        <div class="dashboard-panel-title">Capaian Lab Riset</div>
-        <div class="dashboard-panel-subtitle">
-            Ringkasan persentase realisasi per lab.
-        </div>
-
-        @forelse($rekapLab ?? [] as $lab)
-        <div class="lab-progress-item">
-            <div class="lab-progress-head">
-                <div>
-                    <div class="lab-name">{{ $lab['nama_singkat'] }}</div>
-                    <div class="lab-meta">
-                        Target {{ $lab['target'] }} |
-                        Realisasi {{ $lab['realisasi'] }} |
-                        Sisa {{ $lab['sisa'] }}
-                    </div>
-                </div>
-
-                <strong>{{ $lab['persentase'] }}%</strong>
-            </div>
-
-            <div class="progress">
-                <div
-                    class="progress-bar"
-                    role="progressbar"
-                    style="width: {{ $lab['persentase'] }}%;"
-                    aria-valuenow="{{ $lab['persentase'] }}"
-                    aria-valuemin="0"
-                    aria-valuemax="100"></div>
-            </div>
-        </div>
-        @empty
-        <p class="text-muted mb-0">Belum ada data lab riset.</p>
-        @endforelse
+    <div class="dashboard-chart-box-large">
+        <canvas id="chartLabAchievement"></canvas>
     </div>
 </div>
 
-<div class="dashboard-grid-bottom">
+<div class="dashboard-category-chart-grid">
+    @foreach($kategoriDetailCharts ?? [] as $index => $chart)
     <div class="card">
-        <div class="dashboard-panel-title">Ringkasan Target dan Realisasi KK</div>
+        <div class="dashboard-panel-title">{{ $chart['kategori'] }}</div>
         <div class="dashboard-panel-subtitle">
-            Total target, realisasi, dan sisa KM tahun {{ $tahun }}.
+            Target dan realisasi berdasarkan sub kategori KM.
         </div>
 
         <div class="dashboard-chart-box-small">
-            <canvas id="chartKk"></canvas>
+            <canvas id="chartKategoriDetail{{ $index }}"></canvas>
         </div>
     </div>
-
-    <div class="card">
-        <div class="dashboard-panel-title">Target dan Realisasi per Kategori</div>
-        <div class="dashboard-panel-subtitle">
-            Sebaran capaian KM berdasarkan kategori kegiatan.
-        </div>
-
-        <div class="dashboard-chart-box-small">
-            <canvas id="chartKategori"></canvas>
-        </div>
-    </div>
+    @endforeach
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const chartKkLabel = @json($chartKkLabel ?? []);
-        const chartKkData = @json($chartKkData ?? []);
-
         const labLabels = @json($labShortLabels ?? $labChartLabels ?? []);
-        const labTargets = @json($labTargets ?? []);
-        const labRealisasi = @json($labRealisasi ?? []);
-
-        const kategoriLabels = @json($kategoriLabels ?? []);
-        const kategoriTargets = @json($kategoriTargets ?? []);
-        const kategoriRealisasi = @json($kategoriRealisasi ?? []);
+        const labAchievementPercentages = @json($labAchievementPercentages ?? []);
+        const kategoriDetailCharts = @json($kategoriDetailCharts ?? []);
 
         const blue = '#477EF7';
         const green = '#22C55E';
-        const orange = '#F59E0B';
 
         const defaultOptions = {
             responsive: true,
@@ -364,64 +339,35 @@
             }
         };
 
-        const chartLabElement = document.getElementById('chartLab');
+        const chartLabAchievementElement = document.getElementById('chartLabAchievement');
 
-        if (chartLabElement) {
-            new Chart(chartLabElement, {
+        if (chartLabAchievementElement) {
+            new Chart(chartLabAchievementElement, {
                 type: 'bar',
                 data: {
                     labels: labLabels,
                     datasets: [{
-                            label: 'Target',
-                            data: labTargets,
-                            backgroundColor: blue,
-                            borderRadius: 8
-                        },
-                        {
-                            label: 'Realisasi',
-                            data: labRealisasi,
-                            backgroundColor: green,
-                            borderRadius: 8
-                        }
-                    ]
-                },
-                options: defaultOptions
-            });
-        }
-
-        const chartKkElement = document.getElementById('chartKk');
-
-        if (chartKkElement) {
-            new Chart(chartKkElement, {
-                type: 'bar',
-                data: {
-                    labels: chartKkLabel,
-                    datasets: [{
-                        label: 'Jumlah KM',
-                        data: chartKkData,
-                        backgroundColor: [blue, green, orange],
+                        label: 'Pencapaian (%)',
+                        data: labAchievementPercentages,
+                        backgroundColor: blue,
                         borderRadius: 8
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: 'y',
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
+                    ...defaultOptions,
                     scales: {
                         x: {
-                            beginAtZero: true,
-                            ticks: {
-                                precision: 0
+                            grid: {
+                                display: false
                             }
                         },
                         y: {
-                            grid: {
-                                display: false
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
                             }
                         }
                     }
@@ -429,22 +375,26 @@
             });
         }
 
-        const chartKategoriElement = document.getElementById('chartKategori');
+        kategoriDetailCharts.forEach(function(chart, index) {
+            const chartElement = document.getElementById('chartKategoriDetail' + index);
 
-        if (chartKategoriElement) {
-            new Chart(chartKategoriElement, {
+            if (!chartElement) {
+                return;
+            }
+
+            new Chart(chartElement, {
                 type: 'bar',
                 data: {
-                    labels: kategoriLabels,
+                    labels: chart.labels,
                     datasets: [{
                             label: 'Target',
-                            data: kategoriTargets,
+                            data: chart.targets,
                             backgroundColor: blue,
                             borderRadius: 8
                         },
                         {
                             label: 'Realisasi',
-                            data: kategoriRealisasi,
+                            data: chart.realisasi,
                             backgroundColor: green,
                             borderRadius: 8
                         }
@@ -452,7 +402,7 @@
                 },
                 options: defaultOptions
             });
-        }
+        });
     });
 </script>
 @endsection

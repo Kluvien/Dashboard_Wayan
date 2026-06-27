@@ -133,6 +133,7 @@ Route::middleware(['auth'])->group(function () {
             $labShortLabels = [];
             $labTargets = [];
             $labRealisasi = [];
+            $labAchievementPercentages = [];
             $rekapLab = [];
 
             foreach ($labs as $lab) {
@@ -163,6 +164,7 @@ Route::middleware(['auth'])->group(function () {
                 $labShortLabels[] = $shortName;
                 $labTargets[] = $target;
                 $labRealisasi[] = $realisasi;
+                $labAchievementPercentages[] = $persentase;
 
                 $rekapLab[] = [
                     'nama_lab' => $lab->nama_lab,
@@ -219,6 +221,72 @@ Route::middleware(['auth'])->group(function () {
                 ];
             }
 
+            $hasStatusProgress = \Illuminate\Support\Facades\Schema::hasColumn('aktivitas_km', 'status_progress');
+
+            $targetSubKategoriRows = \Illuminate\Support\Facades\DB::table('km_lab')
+                ->join('laboratorium_riset', 'km_lab.id_lab', '=', 'laboratorium_riset.id_lab')
+                ->select(
+                    'km_lab.kategori_km',
+                    'km_lab.sub_kategori_km',
+                    \Illuminate\Support\Facades\DB::raw('SUM(km_lab.jumlah_km) as total_target')
+                )
+                ->where('laboratorium_riset.id_kk', $idKk)
+                ->where('km_lab.tahun_km', $tahun)
+                ->where('km_lab.status_km', 'Aktif')
+                ->groupBy('km_lab.kategori_km', 'km_lab.sub_kategori_km')
+                ->get();
+
+            $queryRealisasiSubKategori = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                ->join('laboratorium_riset', 'aktivitas_km.id_lab', '=', 'laboratorium_riset.id_lab')
+                ->select(
+                    'aktivitas_km.kategori_km',
+                    'aktivitas_km.sub_kategori_km',
+                    \Illuminate\Support\Facades\DB::raw('COUNT(*) as total_realisasi')
+                )
+                ->where('laboratorium_riset.id_kk', $idKk)
+                ->whereYear('aktivitas_km.tanggal_mulai', $tahun);
+
+            if ($hasStatusProgress) {
+                $queryRealisasiSubKategori->where('aktivitas_km.status_progress', 'Accepted');
+            }
+
+            $realisasiSubKategoriRows = $queryRealisasiSubKategori
+                ->groupBy('aktivitas_km.kategori_km', 'aktivitas_km.sub_kategori_km')
+                ->get();
+
+            $kategoriDetailCharts = [];
+
+            foreach ($kategoriDefault as $kategori) {
+                $targetBySub = $targetSubKategoriRows
+                    ->where('kategori_km', $kategori)
+                    ->mapWithKeys(function ($row) {
+                        return [($row->sub_kategori_km ?: '-') => (int) $row->total_target];
+                    });
+
+                $realisasiBySub = $realisasiSubKategoriRows
+                    ->where('kategori_km', $kategori)
+                    ->mapWithKeys(function ($row) {
+                        return [($row->sub_kategori_km ?: '-') => (int) $row->total_realisasi];
+                    });
+
+                $labels = $targetBySub
+                    ->keys()
+                    ->merge($realisasiBySub->keys())
+                    ->unique()
+                    ->values();
+
+                if ($labels->isEmpty()) {
+                    $labels = collect(['Belum ada data']);
+                }
+
+                $kategoriDetailCharts[] = [
+                    'kategori' => $kategori,
+                    'labels' => $labels->toArray(),
+                    'targets' => $labels->map(fn($label) => (int) ($targetBySub[$label] ?? 0))->toArray(),
+                    'realisasi' => $labels->map(fn($label) => (int) ($realisasiBySub[$label] ?? 0))->toArray(),
+                ];
+            }
+
             return view('ketuakk.dashboard', compact(
                 'tahun',
                 'jumlahAnggota',
@@ -237,7 +305,9 @@ Route::middleware(['auth'])->group(function () {
                 'kategoriLabels',
                 'kategoriTargets',
                 'kategoriRealisasi',
-                'kategoriCards'
+                'kategoriCards',
+                'labAchievementPercentages',
+                'kategoriDetailCharts'
             ));
         });
 
