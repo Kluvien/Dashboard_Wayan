@@ -424,151 +424,246 @@ Route::middleware(['auth'])->group(function () {
         });
         Route::get('/ketuakk/monitoring-lab-riset', function (\Illuminate\Http\Request $request) {
             $tahun = (int) $request->query('tahun', now()->year);
-            $periode = $request->query('periode', 'tahun');
+            $periode = $request->query('periode', 'triwulan');
 
-            $bulan = (int) $request->query('bulan', now()->month);
-            $bulan = max(1, min(12, $bulan));
+            if (!in_array($periode, ['triwulan', 'semester'])) {
+                $periode = 'triwulan';
+            }
 
-            $triwulan = (int) $request->query('triwulan', ceil(now()->month / 3));
-            $triwulan = max(1, min(4, $triwulan));
+            $kategoriDefault = [
+                'Pendidikan',
+                'Penelitian',
+                'Publikasi',
+                'Pengabdian',
+                'Penunjang',
+            ];
 
-            $semester = (int) $request->query('semester', now()->month <= 6 ? 1 : 2);
-            $semester = max(1, min(2, $semester));
+            $periodeColumns = $periode === 'semester'
+                ? [
+                    1 => 'Semester 1',
+                    2 => 'Semester 2',
+                ]
+                : [
+                    1 => 'TW1',
+                    2 => 'TW2',
+                    3 => 'TW3',
+                    4 => 'TW4',
+                ];
 
-            if ($periode === 'bulan') {
-                $tanggalMulai = \Carbon\Carbon::create($tahun, $bulan, 1)->startOfMonth();
-                $tanggalSelesai = \Carbon\Carbon::create($tahun, $bulan, 1)->endOfMonth();
-                $jumlahBulan = 1;
-                $labelPeriode = 'Bulanan - Bulan ' . $bulan . ' Tahun ' . $tahun;
-            } elseif ($periode === 'triwulan') {
-                $bulanMulai = (($triwulan - 1) * 3) + 1;
+            $labelPeriode = $periode === 'semester'
+                ? 'Semester Tahun ' . $tahun
+                : 'Triwulan Tahun ' . $tahun;
+
+            $tahunOptions = collect(
+                \Illuminate\Support\Facades\DB::table('km_lab')
+                    ->select('tahun_km')
+                    ->distinct()
+                    ->orderBy('tahun_km', 'desc')
+                    ->pluck('tahun_km')
+            )
+                ->push(now()->year)
+                ->unique()
+                ->sortDesc()
+                ->values();
+
+            $targetReferensi = \Illuminate\Support\Facades\DB::table('target_km')
+                ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+                ->where('kontrak_manajemen.tahun_km', $tahun)
+                ->select(
+                    'target_km.kategori_km',
+                    'target_km.indikator',
+                    'target_km.triwulan_1',
+                    'target_km.triwulan_2',
+                    'target_km.triwulan_3',
+                    'target_km.triwulan_4',
+                    'target_km.target'
+                )
+                ->get()
+                ->keyBy(function ($item) {
+                    return $item->kategori_km . '|' . $item->indikator;
+                });
+
+            $hasStatusProgress = \Illuminate\Support\Facades\Schema::hasColumn('aktivitas_km', 'status_progress');
+
+            $getRangeTanggal = function ($key) use ($tahun, $periode) {
+                if ($periode === 'semester') {
+                    $bulanMulai = (int) $key === 1 ? 1 : 7;
+                    $bulanSelesai = (int) $key === 1 ? 6 : 12;
+
+                    return [
+                        \Carbon\Carbon::create($tahun, $bulanMulai, 1)->startOfMonth()->toDateString(),
+                        \Carbon\Carbon::create($tahun, $bulanSelesai, 1)->endOfMonth()->toDateString(),
+                    ];
+                }
+
+                $bulanMulai = (((int) $key - 1) * 3) + 1;
                 $bulanSelesai = $bulanMulai + 2;
 
-                $tanggalMulai = \Carbon\Carbon::create($tahun, $bulanMulai, 1)->startOfMonth();
-                $tanggalSelesai = \Carbon\Carbon::create($tahun, $bulanSelesai, 1)->endOfMonth();
-                $jumlahBulan = 3;
-                $labelPeriode = 'Triwulan ' . $triwulan . ' Tahun ' . $tahun;
-            } elseif ($periode === 'semester') {
-                $bulanMulai = $semester === 1 ? 1 : 7;
-                $bulanSelesai = $semester === 1 ? 6 : 12;
+                return [
+                    \Carbon\Carbon::create($tahun, $bulanMulai, 1)->startOfMonth()->toDateString(),
+                    \Carbon\Carbon::create($tahun, $bulanSelesai, 1)->endOfMonth()->toDateString(),
+                ];
+            };
 
-                $tanggalMulai = \Carbon\Carbon::create($tahun, $bulanMulai, 1)->startOfMonth();
-                $tanggalSelesai = \Carbon\Carbon::create($tahun, $bulanSelesai, 1)->endOfMonth();
-                $jumlahBulan = 6;
-                $labelPeriode = 'Semester ' . $semester . ' Tahun ' . $tahun;
-            } else {
-                $periode = 'tahun';
-                $tanggalMulai = \Carbon\Carbon::create($tahun, 1, 1)->startOfYear();
-                $tanggalSelesai = \Carbon\Carbon::create($tahun, 12, 31)->endOfYear();
-                $jumlahBulan = 12;
-                $labelPeriode = 'Tahunan ' . $tahun;
-            }
+            $ubahTriwulanKePeriode = function ($twValues) use ($periode) {
+                if ($periode === 'semester') {
+                    return [
+                        1 => ($twValues[1] ?? 0) + ($twValues[2] ?? 0),
+                        2 => ($twValues[3] ?? 0) + ($twValues[4] ?? 0),
+                    ];
+                }
+
+                return [
+                    1 => $twValues[1] ?? 0,
+                    2 => $twValues[2] ?? 0,
+                    3 => $twValues[3] ?? 0,
+                    4 => $twValues[4] ?? 0,
+                ];
+            };
+
+            $buatDataKosong = function () use ($kategoriDefault, $periodeColumns) {
+                $data = [];
+
+                foreach ($kategoriDefault as $kategori) {
+                    $data[$kategori] = [
+                        'target' => [],
+                        'realisasi' => [],
+                    ];
+
+                    foreach ($periodeColumns as $key => $label) {
+                        $data[$kategori]['target'][$key] = 0;
+                        $data[$kategori]['realisasi'][$key] = 0;
+                    }
+                }
+
+                return $data;
+            };
 
             $labs = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
                 ->orderBy('id_lab')
                 ->get();
 
             $monitoringLabs = [];
+            $rekapKategori = [];
+
+            foreach ($kategoriDefault as $kategori) {
+                $rekapKategori[$kategori] = [
+                    'kategori' => $kategori,
+                    'target' => 0,
+                    'realisasi' => 0,
+                    'progress' => 0,
+                ];
+            }
 
             foreach ($labs as $lab) {
-                $jumlahDosen = \Illuminate\Support\Facades\DB::table('dosen')
-                    ->where('id_lab', $lab->id_lab)
-                    ->count();
-
                 $jumlahAnggota = \Illuminate\Support\Facades\DB::table('users')
-                    ->where('role', 'Anggota')
+                    ->whereIn('role', ['Anggota', 'anggota'])
                     ->where('id_lab', $lab->id_lab)
                     ->count();
 
-                $totalKmTurun = \Illuminate\Support\Facades\DB::table('km_lab')
+                $dataPerKategori = $buatDataKosong();
+
+                $kmLabRows = \Illuminate\Support\Facades\DB::table('km_lab')
                     ->where('id_lab', $lab->id_lab)
                     ->where('tahun_km', $tahun)
                     ->where('status_km', 'Aktif')
-                    ->sum('jumlah_km');
+                    ->get();
 
-                $totalKmAssign = \Illuminate\Support\Facades\DB::table('km_anggota')
-                    ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
-                    ->where('km_lab.id_lab', $lab->id_lab)
-                    ->where('km_lab.tahun_km', $tahun)
-                    ->where('km_lab.status_km', 'Aktif')
-                    ->sum('km_anggota.jumlah_km');
+                foreach ($kmLabRows as $km) {
+                    $subKategori = $km->sub_kategori_km ?? '-';
+                    $targetKey = $km->kategori_km . '|' . $subKategori;
+                    $targetData = $targetReferensi->get($targetKey);
 
-                $sisaAssign = max($totalKmTurun - $totalKmAssign, 0);
+                    $twValues = [
+                        1 => (int) ($targetData->triwulan_1 ?? 0),
+                        2 => (int) ($targetData->triwulan_2 ?? 0),
+                        3 => (int) ($targetData->triwulan_3 ?? 0),
+                        4 => (int) ($targetData->triwulan_4 ?? 0),
+                    ];
 
-                $targetPeriode = $totalKmAssign > 0
-                    ? (int) ceil(($totalKmAssign * $jumlahBulan) / 12)
-                    : 0;
+                    if (array_sum($twValues) <= 0) {
+                        $total = (int) ($km->jumlah_km ?? 0);
+                        $base = intdiv($total, 4);
+                        $sisa = $total % 4;
 
-                $totalRealisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
-                    ->where('id_lab', $lab->id_lab)
-                    ->whereBetween('tanggal_mulai', [
-                        $tanggalMulai->toDateString(),
-                        $tanggalSelesai->toDateString(),
-                    ])
-                    ->count();
+                        $twValues = [
+                            1 => $base + ($sisa >= 1 ? 1 : 0),
+                            2 => $base + ($sisa >= 2 ? 1 : 0),
+                            3 => $base + ($sisa >= 3 ? 1 : 0),
+                            4 => $base,
+                        ];
+                    }
 
-                $sisaRealisasi = max($targetPeriode - $totalRealisasi, 0);
+                    $periodeValues = $ubahTriwulanKePeriode($twValues);
 
-                $persentaseAssign = $totalKmTurun > 0
-                    ? round(($totalKmAssign / $totalKmTurun) * 100)
-                    : 0;
+                    foreach ($periodeColumns as $key => $label) {
+                        $dataPerKategori[$km->kategori_km]['target'][$key] =
+                            ($dataPerKategori[$km->kategori_km]['target'][$key] ?? 0)
+                            + (int) ($periodeValues[$key] ?? 0);
+                    }
+                }
 
-                $persentaseRealisasi = $targetPeriode > 0
-                    ? round(($totalRealisasi / $targetPeriode) * 100)
-                    : 0;
+                foreach ($kategoriDefault as $kategori) {
+                    foreach ($periodeColumns as $key => $label) {
+                        [$tanggalMulai, $tanggalSelesai] = $getRangeTanggal($key);
+
+                        $queryRealisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                            ->where('id_lab', $lab->id_lab)
+                            ->where('kategori_km', $kategori)
+                            ->whereBetween('tanggal_mulai', [$tanggalMulai, $tanggalSelesai]);
+
+                        if ($hasStatusProgress) {
+                            $queryRealisasi->where('status_progress', 'Accepted');
+                        }
+
+                        $dataPerKategori[$kategori]['realisasi'][$key] = (int) $queryRealisasi->count();
+                    }
+                }
+
+                $totalTargetLab = 0;
+                $totalRealisasiLab = 0;
+
+                foreach ($kategoriDefault as $kategori) {
+                    $targetKategoriLab = array_sum($dataPerKategori[$kategori]['target']);
+                    $realisasiKategoriLab = array_sum($dataPerKategori[$kategori]['realisasi']);
+
+                    $totalTargetLab += $targetKategoriLab;
+                    $totalRealisasiLab += $realisasiKategoriLab;
+
+                    $rekapKategori[$kategori]['target'] += $targetKategoriLab;
+                    $rekapKategori[$kategori]['realisasi'] += $realisasiKategoriLab;
+                }
 
                 $monitoringLabs[] = [
                     'id_lab' => $lab->id_lab,
                     'nama_lab' => $lab->nama_lab,
-                    'jumlah_dosen' => $jumlahDosen,
                     'jumlah_anggota' => $jumlahAnggota,
-                    'total_km_turun' => $totalKmTurun,
-                    'total_km_assign' => $totalKmAssign,
-                    'sisa_assign' => $sisaAssign,
-                    'target_periode' => $targetPeriode,
-                    'total_realisasi' => $totalRealisasi,
-                    'sisa_realisasi' => $sisaRealisasi,
-                    'persentase_assign' => min($persentaseAssign, 100),
-                    'persentase_realisasi' => min($persentaseRealisasi, 100),
-                    'status' => $targetPeriode > 0 && $sisaRealisasi <= 0
-                        ? 'Tercapai'
-                        : 'Belum Tercapai',
+                    'data' => $dataPerKategori,
+                    'total_target' => $totalTargetLab,
+                    'total_realisasi' => $totalRealisasiLab,
+                    'progress' => $totalTargetLab > 0
+                        ? min(round(($totalRealisasiLab / $totalTargetLab) * 100), 100)
+                        : 0,
                 ];
             }
 
-            $totalLab = count($monitoringLabs);
-            $totalKmTurunAll = array_sum(array_column($monitoringLabs, 'total_km_turun'));
-            $totalKmAssignAll = array_sum(array_column($monitoringLabs, 'total_km_assign'));
-            $totalSisaAssignAll = array_sum(array_column($monitoringLabs, 'sisa_assign'));
-            $totalTargetPeriode = array_sum(array_column($monitoringLabs, 'target_periode'));
-            $totalRealisasiPeriode = array_sum(array_column($monitoringLabs, 'total_realisasi'));
+            foreach ($rekapKategori as $kategori => $item) {
+                $rekapKategori[$kategori]['progress'] = $item['target'] > 0
+                    ? min(round(($item['realisasi'] / $item['target']) * 100), 100)
+                    : 0;
+            }
 
-            $persentaseAssignAll = $totalKmTurunAll > 0
-                ? round(($totalKmAssignAll / $totalKmTurunAll) * 100)
-                : 0;
-
-            $persentaseRealisasiAll = $totalTargetPeriode > 0
-                ? round(($totalRealisasiPeriode / $totalTargetPeriode) * 100)
-                : 0;
+            $rekapKategori = array_values($rekapKategori);
 
             return view('ketuakk.monitoring-lab-riset.index', compact(
                 'tahun',
+                'tahunOptions',
                 'periode',
-                'bulan',
-                'triwulan',
-                'semester',
-                'tanggalMulai',
-                'tanggalSelesai',
+                'periodeColumns',
                 'labelPeriode',
+                'kategoriDefault',
                 'monitoringLabs',
-                'totalLab',
-                'totalKmTurunAll',
-                'totalKmAssignAll',
-                'totalSisaAssignAll',
-                'totalTargetPeriode',
-                'totalRealisasiPeriode',
-                'persentaseAssignAll',
-                'persentaseRealisasiAll'
+                'rekapKategori'
             ));
         });
         Route::get('/ketuakk/monitoring-lab-riset/{id}', function ($id) {
