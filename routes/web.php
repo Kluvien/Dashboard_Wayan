@@ -1984,6 +1984,274 @@ Route::middleware(['auth'])->group(function () {
                 'rekapLab'
             ));
         });
+
+        Route::get('/ketuakk/laporan', function (\Illuminate\Http\Request $request) {
+            $tahunMulai = (int) $request->query('tahun_mulai', now()->year);
+            $tahunSelesai = (int) $request->query('tahun_selesai', now()->year);
+
+            if ($tahunMulai > $tahunSelesai) {
+                [$tahunMulai, $tahunSelesai] = [$tahunSelesai, $tahunMulai];
+            }
+
+            $modePeriode = $request->query('mode_periode', 'tahun');
+
+            if (!in_array($modePeriode, ['tahun', 'semester', 'triwulan'])) {
+                $modePeriode = 'tahun';
+            }
+
+            $semesterMulai = max(1, min(2, (int) $request->query('semester_mulai', 1)));
+            $semesterSelesai = max(1, min(2, (int) $request->query('semester_selesai', 2)));
+
+            $triwulanMulai = max(1, min(4, (int) $request->query('triwulan_mulai', 1)));
+            $triwulanSelesai = max(1, min(4, (int) $request->query('triwulan_selesai', 4)));
+
+            $jenisLaporan = $request->query('jenis_laporan', 'keseluruhan_kk');
+
+            if (!in_array($jenisLaporan, [
+                'keseluruhan_kk',
+                'per_lab_riset',
+                'seluruh_lab_riset',
+                'seluruh_anggota',
+                'per_anggota',
+            ])) {
+                $jenisLaporan = 'keseluruhan_kk';
+            }
+
+            $idLab = $request->query('id_lab');
+            $idUser = $request->query('id_user');
+
+            $bulanMulai = 1;
+            $bulanSelesai = 12;
+
+            if ($modePeriode === 'semester') {
+                $bulanMulai = $semesterMulai === 1 ? 1 : 7;
+                $bulanSelesai = $semesterSelesai === 1 ? 6 : 12;
+            }
+
+            if ($modePeriode === 'triwulan') {
+                $bulanMulai = (($triwulanMulai - 1) * 3) + 1;
+                $bulanSelesai = (($triwulanSelesai - 1) * 3) + 3;
+            }
+
+            $tanggalMulai = \Carbon\Carbon::create($tahunMulai, $bulanMulai, 1)->startOfMonth()->toDateString();
+            $tanggalSelesai = \Carbon\Carbon::create($tahunSelesai, $bulanSelesai, 1)->endOfMonth()->toDateString();
+
+            $labelPeriode = 'Tahun ' . $tahunMulai . ' - ' . $tahunSelesai;
+
+            if ($modePeriode === 'semester') {
+                $labelPeriode = 'Semester ' . $semesterMulai . ' Tahun ' . $tahunMulai . ' - Semester ' . $semesterSelesai . ' Tahun ' . $tahunSelesai;
+            }
+
+            if ($modePeriode === 'triwulan') {
+                $labelPeriode = 'Triwulan ' . $triwulanMulai . ' Tahun ' . $tahunMulai . ' - Triwulan ' . $triwulanSelesai . ' Tahun ' . $tahunSelesai;
+            }
+
+            $kategoriDefault = [
+                'Pendidikan',
+                'Penelitian',
+                'Publikasi',
+                'Pengabdian',
+                'Penunjang',
+            ];
+
+            $userLogin = auth()->user();
+
+            $ketuaKkData = \Illuminate\Support\Facades\DB::table('dosen')
+                ->where('id_dosen', $userLogin->id_dosen)
+                ->first();
+
+            $idKk = $ketuaKkData->id_kk ?? 1;
+
+            $hasStatusProgress = \Illuminate\Support\Facades\Schema::hasColumn('aktivitas_km', 'status_progress');
+
+            $tahunOptions = collect()
+                ->merge(\Illuminate\Support\Facades\DB::table('kontrak_manajemen')->distinct()->pluck('tahun_km'))
+                ->merge(\Illuminate\Support\Facades\DB::table('km_lab')->distinct()->pluck('tahun_km'))
+                ->push(now()->year)
+                ->map(fn($item) => (int) $item)
+                ->unique()
+                ->sortDesc()
+                ->values();
+
+            $labOptions = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
+                ->where('id_kk', $idKk)
+                ->orderBy('nama_lab')
+                ->get();
+
+            $anggotaOptions = \Illuminate\Support\Facades\DB::table('users')
+                ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
+                ->leftJoin('laboratorium_riset', 'users.id_lab', '=', 'laboratorium_riset.id_lab')
+                ->whereIn('users.role', ['Anggota', 'anggota'])
+                ->where(function ($query) use ($idKk) {
+                    $query->where('dosen.id_kk', $idKk)
+                        ->orWhere('laboratorium_riset.id_kk', $idKk);
+                })
+                ->select(
+                    'users.id_user',
+                    'users.username',
+                    'dosen.nama_dosen',
+                    'dosen.nidn',
+                    'laboratorium_riset.nama_lab'
+                )
+                ->orderBy('dosen.nama_dosen')
+                ->get();
+
+            $targetQuery = \Illuminate\Support\Facades\DB::table('km_lab')
+                ->join('laboratorium_riset', 'km_lab.id_lab', '=', 'laboratorium_riset.id_lab')
+                ->where('laboratorium_riset.id_kk', $idKk)
+                ->whereBetween('km_lab.tahun_km', [$tahunMulai, $tahunSelesai])
+                ->where('km_lab.status_km', 'Aktif');
+
+            $realisasiQuery = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                ->join('laboratorium_riset', 'aktivitas_km.id_lab', '=', 'laboratorium_riset.id_lab')
+                ->where('laboratorium_riset.id_kk', $idKk)
+                ->whereBetween('aktivitas_km.tanggal_mulai', [$tanggalMulai, $tanggalSelesai]);
+
+            if ($hasStatusProgress) {
+                $realisasiQuery->where('aktivitas_km.status_progress', 'Accepted');
+            }
+
+            $totalTarget = (int) (clone $targetQuery)->sum('km_lab.jumlah_km');
+            $totalRealisasi = (int) (clone $realisasiQuery)->count();
+            $totalSisa = max($totalTarget - $totalRealisasi, 0);
+            $persentaseTotal = $totalTarget > 0 ? min(round(($totalRealisasi / $totalTarget) * 100), 100) : 0;
+
+            $jumlahLab = $labOptions->count();
+            $jumlahAnggota = $anggotaOptions->count();
+
+            $rekapKategori = [];
+
+            foreach ($kategoriDefault as $kategori) {
+                $targetKategori = (int) (clone $targetQuery)
+                    ->where('km_lab.kategori_km', $kategori)
+                    ->sum('km_lab.jumlah_km');
+
+                $queryRealisasiKategori = clone $realisasiQuery;
+                $realisasiKategori = (int) $queryRealisasiKategori
+                    ->where('aktivitas_km.kategori_km', $kategori)
+                    ->count();
+
+                $rekapKategori[] = [
+                    'kategori' => $kategori,
+                    'target' => $targetKategori,
+                    'realisasi' => $realisasiKategori,
+                    'sisa' => max($targetKategori - $realisasiKategori, 0),
+                    'persentase' => $targetKategori > 0 ? min(round(($realisasiKategori / $targetKategori) * 100), 100) : 0,
+                ];
+            }
+
+            $laporanRows = [];
+            $aktivitasRows = collect();
+
+            if ($jenisLaporan === 'seluruh_lab_riset' || $jenisLaporan === 'per_lab_riset') {
+                $labs = $labOptions;
+
+                if ($jenisLaporan === 'per_lab_riset' && !empty($idLab)) {
+                    $labs = $labs->where('id_lab', (int) $idLab)->values();
+                }
+
+                foreach ($labs as $lab) {
+                    $target = (int) \Illuminate\Support\Facades\DB::table('km_lab')
+                        ->where('id_lab', $lab->id_lab)
+                        ->whereBetween('tahun_km', [$tahunMulai, $tahunSelesai])
+                        ->where('status_km', 'Aktif')
+                        ->sum('jumlah_km');
+
+                    $queryRealisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                        ->where('id_lab', $lab->id_lab)
+                        ->whereBetween('tanggal_mulai', [$tanggalMulai, $tanggalSelesai]);
+
+                    if ($hasStatusProgress) {
+                        $queryRealisasi->where('status_progress', 'Accepted');
+                    }
+
+                    $realisasi = (int) $queryRealisasi->count();
+
+                    $laporanRows[] = [
+                        'nama' => $lab->nama_lab,
+                        'keterangan' => 'Lab Riset',
+                        'target' => $target,
+                        'realisasi' => $realisasi,
+                        'sisa' => max($target - $realisasi, 0),
+                        'persentase' => $target > 0 ? min(round(($realisasi / $target) * 100), 100) : 0,
+                        'status' => $target > 0 && $realisasi >= $target ? 'Tercapai' : 'Belum Tercapai',
+                    ];
+                }
+            }
+
+            if ($jenisLaporan === 'seluruh_anggota' || $jenisLaporan === 'per_anggota') {
+                $anggota = $anggotaOptions;
+
+                if ($jenisLaporan === 'per_anggota' && !empty($idUser)) {
+                    $anggota = $anggota->where('id_user', (int) $idUser)->values();
+                }
+
+                foreach ($anggota as $item) {
+                    $target = (int) \Illuminate\Support\Facades\DB::table('km_anggota')
+                        ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
+                        ->where('km_anggota.id_user', $item->id_user)
+                        ->whereBetween('km_lab.tahun_km', [$tahunMulai, $tahunSelesai])
+                        ->where('km_lab.status_km', 'Aktif')
+                        ->sum('km_anggota.jumlah_km');
+
+                    $queryRealisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                        ->where('id_user', $item->id_user)
+                        ->whereBetween('tanggal_mulai', [$tanggalMulai, $tanggalSelesai]);
+
+                    if ($hasStatusProgress) {
+                        $queryRealisasi->where('status_progress', 'Accepted');
+                    }
+
+                    $realisasi = (int) $queryRealisasi->count();
+
+                    $laporanRows[] = [
+                        'nama' => $item->nama_dosen ?? $item->username,
+                        'keterangan' => $item->nama_lab ?? '-',
+                        'target' => $target,
+                        'realisasi' => $realisasi,
+                        'sisa' => max($target - $realisasi, 0),
+                        'persentase' => $target > 0 ? min(round(($realisasi / $target) * 100), 100) : 0,
+                        'status' => $target > 0 && $realisasi >= $target ? 'Tercapai' : 'Belum Tercapai',
+                    ];
+                }
+
+                if ($jenisLaporan === 'per_anggota' && !empty($idUser)) {
+                    $aktivitasRows = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                        ->where('id_user', $idUser)
+                        ->whereBetween('tanggal_mulai', [$tanggalMulai, $tanggalSelesai])
+                        ->orderBy('tanggal_mulai', 'desc')
+                        ->get();
+                }
+            }
+
+            return view('ketuakk.laporan.index', compact(
+                'tahunMulai',
+                'tahunSelesai',
+                'tahunOptions',
+                'modePeriode',
+                'semesterMulai',
+                'semesterSelesai',
+                'triwulanMulai',
+                'triwulanSelesai',
+                'jenisLaporan',
+                'idLab',
+                'idUser',
+                'labelPeriode',
+                'tanggalMulai',
+                'tanggalSelesai',
+                'labOptions',
+                'anggotaOptions',
+                'rekapKategori',
+                'laporanRows',
+                'aktivitasRows',
+                'jumlahLab',
+                'jumlahAnggota',
+                'totalTarget',
+                'totalRealisasi',
+                'totalSisa',
+                'persentaseTotal'
+            ));
+        });
         Route::delete('/ketuakk/data-dosen/{id}', function ($id) {
             try {
                 $dosen = \Illuminate\Support\Facades\DB::table('dosen')

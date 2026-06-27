@@ -375,6 +375,10 @@
                     <a class="sidebar-link {{ request()->is('ketuakk/monitoring-anggota-kk*') ? 'active' : '' }}" href="/ketuakk/monitoring-anggota-kk">
                         <span>Monitoring Anggota KK</span>
                     </a>
+
+                    <a class="sidebar-link {{ request()->is('ketuakk/laporan*') ? 'active' : '' }}" href="/ketuakk/laporan">
+                        Reports
+                    </a>
                 </div>
                 @elseif($role === 'Ketua Lab')
                 <a class="sidebar-link {{ request()->is('ketualab/dashboard') ? 'active' : '' }}" href="/ketualab/dashboard">
