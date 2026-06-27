@@ -1471,10 +1471,7 @@ Route::middleware(['auth'])->group(function () {
             ));
         });
         Route::get('/ketuakk/km-anggota-kk/{id}', function ($id) {
-            $tahun = now()->year;
-
-            $tanggalMulai = \Carbon\Carbon::create($tahun, 1, 1)->startOfYear()->toDateString();
-            $tanggalSelesai = \Carbon\Carbon::create($tahun, 12, 31)->endOfYear()->toDateString();
+            $tahun = (int) request('tahun', now()->year);
 
             $kategoriDefault = [
                 'Pendidikan',
@@ -1484,19 +1481,28 @@ Route::middleware(['auth'])->group(function () {
                 'Penunjang',
             ];
 
+            $jenisByKategori = [
+                'Pendidikan' => 'Pendidikan/Pengajaran',
+                'Penelitian' => 'Penelitian',
+                'Publikasi' => 'Jurnal',
+                'Pengabdian' => 'Pengabdian',
+                'Penunjang' => 'Penunjang',
+            ];
+
             $anggota = \Illuminate\Support\Facades\DB::table('users')
                 ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
                 ->leftJoin('laboratorium_riset', 'users.id_lab', '=', 'laboratorium_riset.id_lab')
                 ->where('users.id_user', $id)
-                ->where('users.role', 'Anggota')
                 ->select(
                     'users.id_user',
                     'users.id_dosen',
                     'users.username',
+                    'users.role',
                     'users.id_lab',
                     'dosen.nama_dosen',
                     'dosen.nidn',
                     'dosen.email',
+                    'dosen.jad',
                     'laboratorium_riset.nama_lab'
                 )
                 ->first();
@@ -1505,50 +1511,133 @@ Route::middleware(['auth'])->group(function () {
                 abort(404);
             }
 
-            $targets = \Illuminate\Support\Facades\DB::table('km_anggota')
-                ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
+            $targetReferensi = \Illuminate\Support\Facades\DB::table('target_km')
+                ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+                ->where('kontrak_manajemen.tahun_km', $tahun)
                 ->select(
-                    'km_lab.kategori_km',
-                    \Illuminate\Support\Facades\DB::raw('SUM(km_anggota.jumlah_km) as total_target')
+                    'target_km.kategori_km',
+                    'target_km.indikator',
+                    'target_km.triwulan_1',
+                    'target_km.triwulan_2',
+                    'target_km.triwulan_3',
+                    'target_km.triwulan_4',
+                    'target_km.target'
                 )
+                ->get()
+                ->keyBy(function ($item) {
+                    return $item->kategori_km . '|' . $item->indikator;
+                });
+
+            $kmDiterimaRaw = \Illuminate\Support\Facades\DB::table('km_anggota')
+                ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
                 ->where('km_anggota.id_user', $anggota->id_user)
                 ->where('km_lab.tahun_km', $tahun)
                 ->where('km_lab.status_km', 'Aktif')
-                ->groupBy('km_lab.kategori_km')
-                ->pluck('total_target', 'kategori_km')
-                ->toArray();
-
-            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
-                ->where('id_user', $anggota->id_user)
-                ->whereBetween('tanggal_mulai', [$tanggalMulai, $tanggalSelesai])
-                ->orderBy('tanggal_mulai', 'desc')
+                ->select(
+                    'km_anggota.id_km_anggota',
+                    'km_anggota.jumlah_km',
+                    'km_anggota.created_at',
+                    'km_lab.kategori_km',
+                    'km_lab.sub_kategori_km'
+                )
+                ->orderBy('km_anggota.created_at', 'desc')
                 ->get();
 
-            $rekap = [];
+            $rangeTriwulan = [
+                1 => [
+                    \Carbon\Carbon::create($tahun, 1, 1)->toDateString(),
+                    \Carbon\Carbon::create($tahun, 3, 31)->toDateString(),
+                ],
+                2 => [
+                    \Carbon\Carbon::create($tahun, 4, 1)->toDateString(),
+                    \Carbon\Carbon::create($tahun, 6, 30)->toDateString(),
+                ],
+                3 => [
+                    \Carbon\Carbon::create($tahun, 7, 1)->toDateString(),
+                    \Carbon\Carbon::create($tahun, 9, 30)->toDateString(),
+                ],
+                4 => [
+                    \Carbon\Carbon::create($tahun, 10, 1)->toDateString(),
+                    \Carbon\Carbon::create($tahun, 12, 31)->toDateString(),
+                ],
+            ];
 
-            foreach ($kategoriDefault as $kategori) {
-                $target = $targets[$kategori] ?? 0;
-                $realisasi = $aktivitas->where('kategori_km', $kategori)->count();
+            $hasIdKmAnggotaAktivitas = \Illuminate\Support\Facades\Schema::hasColumn('aktivitas_km', 'id_km_anggota');
+            $hasSubKategoriAktivitas = \Illuminate\Support\Facades\Schema::hasColumn('aktivitas_km', 'sub_kategori_km');
+            $hasStatusProgress = \Illuminate\Support\Facades\Schema::hasColumn('aktivitas_km', 'status_progress');
 
-                $persentase = $target > 0
-                    ? round(($realisasi / $target) * 100)
+            $kmDiterima = [];
+
+            foreach ($kmDiterimaRaw as $km) {
+                $subKategori = $km->sub_kategori_km ?? '-';
+                $targetKey = $km->kategori_km . '|' . $subKategori;
+                $targetData = $targetReferensi->get($targetKey);
+
+                $targetTw1 = (int) ($targetData->triwulan_1 ?? 0);
+                $targetTw2 = (int) ($targetData->triwulan_2 ?? 0);
+                $targetTw3 = (int) ($targetData->triwulan_3 ?? 0);
+                $targetTw4 = (int) ($targetData->triwulan_4 ?? 0);
+
+                $realisasiTw = [];
+
+                foreach ($rangeTriwulan as $tw => $range) {
+                    $queryRealisasi = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                        ->where('id_user', $anggota->id_user)
+                        ->where('kategori_km', $km->kategori_km)
+                        ->whereBetween('tanggal_mulai', [$range[0], $range[1]]);
+
+                    if ($hasStatusProgress) {
+                        $queryRealisasi->where('status_progress', 'Accepted');
+                    }
+
+                    if ($hasIdKmAnggotaAktivitas) {
+                        $queryRealisasi->where('id_km_anggota', $km->id_km_anggota);
+                    } elseif ($hasSubKategoriAktivitas) {
+                        $queryRealisasi->where('sub_kategori_km', $subKategori);
+                    }
+
+                    $realisasiTw[$tw] = (int) $queryRealisasi->count();
+                }
+
+                $totalTarget = (int) $km->jumlah_km;
+                $totalRealisasi = array_sum($realisasiTw);
+
+                $progress = $totalTarget > 0
+                    ? min(round(($totalRealisasi / $totalTarget) * 100), 100)
                     : 0;
 
-                $rekap[] = [
-                    'kategori' => $kategori,
-                    'target' => $target,
-                    'realisasi' => $realisasi,
-                    'persentase' => min($persentase, 100),
-                    'status' => $target > 0 && $realisasi >= $target
+                $kmDiterima[] = [
+                    'id_km_anggota' => $km->id_km_anggota,
+                    'kategori_km' => $km->kategori_km,
+                    'jenis_km' => $jenisByKategori[$km->kategori_km] ?? '-',
+                    'sub_kategori_km' => $subKategori,
+                    'target_tw1' => $targetTw1,
+                    'target_tw2' => $targetTw2,
+                    'target_tw3' => $targetTw3,
+                    'target_tw4' => $targetTw4,
+                    'total_target' => $totalTarget,
+                    'realisasi_tw1' => $realisasiTw[1] ?? 0,
+                    'realisasi_tw2' => $realisasiTw[2] ?? 0,
+                    'realisasi_tw3' => $realisasiTw[3] ?? 0,
+                    'realisasi_tw4' => $realisasiTw[4] ?? 0,
+                    'total_realisasi' => $totalRealisasi,
+                    'progress' => $progress,
+                    'status' => $totalTarget > 0 && $totalRealisasi >= $totalTarget
                         ? 'Tercapai'
                         : 'Belum Tercapai',
                 ];
             }
 
+            $aktivitas = \Illuminate\Support\Facades\DB::table('aktivitas_km')
+                ->where('id_user', $anggota->id_user)
+                ->whereYear('tanggal_mulai', $tahun)
+                ->orderBy('tanggal_mulai', 'desc')
+                ->get();
+
             return view('ketuakk.km-anggota-kk.detail', compact(
                 'anggota',
                 'tahun',
-                'rekap',
+                'kmDiterima',
                 'aktivitas'
             ));
         });
