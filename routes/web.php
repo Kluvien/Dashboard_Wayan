@@ -1207,7 +1207,7 @@ Route::middleware(['auth'])->group(function () {
                 ->with('success', 'KM yang diturunkan ke lab berhasil dihapus.');
         });
         Route::get('/ketuakk/km-lab-riset/{id}', function ($id) {
-            $tahun = now()->year;
+            $tahun = (int) request('tahun', now()->year);
 
             $lab = \Illuminate\Support\Facades\DB::table('laboratorium_riset')
                 ->where('id_lab', $id)
@@ -1224,6 +1224,31 @@ Route::middleware(['auth'])->group(function () {
                 'Pengabdian',
                 'Penunjang',
             ];
+
+            $jenisByKategori = [
+                'Pendidikan' => 'Pendidikan/Pengajaran',
+                'Penelitian' => 'Penelitian',
+                'Publikasi' => 'Jurnal',
+                'Pengabdian' => 'Pengabdian',
+                'Penunjang' => 'Penunjang',
+            ];
+
+            $targetReferensi = \Illuminate\Support\Facades\DB::table('target_km')
+                ->join('kontrak_manajemen', 'target_km.id_km', '=', 'kontrak_manajemen.id_km')
+                ->where('kontrak_manajemen.tahun_km', $tahun)
+                ->select(
+                    'target_km.kategori_km',
+                    'target_km.indikator',
+                    'target_km.triwulan_1',
+                    'target_km.triwulan_2',
+                    'target_km.triwulan_3',
+                    'target_km.triwulan_4',
+                    'target_km.target'
+                )
+                ->get()
+                ->keyBy(function ($item) {
+                    return $item->kategori_km . '|' . $item->indikator;
+                });
 
             $daftarKmTurunRaw = \Illuminate\Support\Facades\DB::table('km_lab')
                 ->where('id_lab', $id)
@@ -1242,80 +1267,63 @@ Route::middleware(['auth'])->group(function () {
                 $sisaKm = max($km->jumlah_km - $sudahAssign, 0);
 
                 $persentase = $km->jumlah_km > 0
-                    ? round(($sudahAssign / $km->jumlah_km) * 100)
+                    ? min(round(($sudahAssign / $km->jumlah_km) * 100), 100)
                     : 0;
+
+                $subKategori = $km->sub_kategori_km ?? '-';
+                $targetKey = $km->kategori_km . '|' . $subKategori;
+                $targetData = $targetReferensi->get($targetKey);
 
                 $daftarKmTurun[] = [
                     'id_km_lab' => $km->id_km_lab,
                     'kategori_km' => $km->kategori_km,
+                    'jenis_km' => $jenisByKategori[$km->kategori_km] ?? '-',
+                    'sub_kategori_km' => $subKategori,
+                    'triwulan_1' => $targetData->triwulan_1 ?? 0,
+                    'triwulan_2' => $targetData->triwulan_2 ?? 0,
+                    'triwulan_3' => $targetData->triwulan_3 ?? 0,
+                    'triwulan_4' => $targetData->triwulan_4 ?? 0,
                     'jumlah_km' => $km->jumlah_km,
                     'tahun_km' => $km->tahun_km,
                     'status_km' => $km->status_km,
                     'created_at' => $km->created_at,
                     'sudah_assign' => $sudahAssign,
                     'sisa_km' => $sisaKm,
-                    'persentase' => min($persentase, 100),
+                    'persentase' => $persentase,
                 ];
             }
 
-            $targetPerKategori = \Illuminate\Support\Facades\DB::table('km_lab')
-                ->select(
-                    'kategori_km',
-                    \Illuminate\Support\Facades\DB::raw('SUM(jumlah_km) as total_km')
-                )
-                ->where('id_lab', $id)
-                ->where('tahun_km', $tahun)
-                ->where('status_km', 'Aktif')
+            $rekapKategori = collect($daftarKmTurun)
                 ->groupBy('kategori_km')
-                ->pluck('total_km', 'kategori_km');
-
-            $assignPerKategori = \Illuminate\Support\Facades\DB::table('km_anggota')
-                ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
-                ->select(
-                    'km_lab.kategori_km',
-                    \Illuminate\Support\Facades\DB::raw('SUM(km_anggota.jumlah_km) as total_assign')
-                )
-                ->where('km_lab.id_lab', $id)
-                ->where('km_lab.tahun_km', $tahun)
-                ->where('km_lab.status_km', 'Aktif')
-                ->groupBy('km_lab.kategori_km')
-                ->pluck('total_assign', 'kategori_km');
-
-            $rekapKategori = [];
+                ->map(function ($items, $kategori) {
+                    return [
+                        'kategori' => $kategori,
+                        'total_km' => $items->sum('jumlah_km'),
+                        'sudah_assign' => $items->sum('sudah_assign'),
+                        'sisa_km' => $items->sum('sisa_km'),
+                        'persentase' => $items->sum('jumlah_km') > 0
+                            ? min(round(($items->sum('sudah_assign') / $items->sum('jumlah_km')) * 100), 100)
+                            : 0,
+                    ];
+                })
+                ->values();
 
             foreach ($kategoriDefault as $kategori) {
-                $totalKm = $targetPerKategori[$kategori] ?? 0;
-                $sudahAssign = $assignPerKategori[$kategori] ?? 0;
-                $sisaKm = max($totalKm - $sudahAssign, 0);
-
-                $persentase = $totalKm > 0
-                    ? round(($sudahAssign / $totalKm) * 100)
-                    : 0;
-
-                $rekapKategori[] = [
-                    'kategori' => $kategori,
-                    'total_km' => $totalKm,
-                    'sudah_assign' => $sudahAssign,
-                    'sisa_km' => $sisaKm,
-                    'persentase' => min($persentase, 100),
-                    'status' => $totalKm > 0 && $sisaKm <= 0
-                        ? 'Sudah Dibagi'
-                        : 'Belum Selesai',
-                ];
+                if (!$rekapKategori->firstWhere('kategori', $kategori)) {
+                    $rekapKategori->push([
+                        'kategori' => $kategori,
+                        'total_km' => 0,
+                        'sudah_assign' => 0,
+                        'sisa_km' => 0,
+                        'persentase' => 0,
+                    ]);
+                }
             }
-
-            $totalKmTurun = array_sum(array_column($rekapKategori, 'total_km'));
-            $totalKmAssign = array_sum(array_column($rekapKategori, 'sudah_assign'));
-            $totalSisaKm = array_sum(array_column($rekapKategori, 'sisa_km'));
-
-            $persentaseTotal = $totalKmTurun > 0
-                ? round(($totalKmAssign / $totalKmTurun) * 100)
-                : 0;
 
             $riwayatAssign = \Illuminate\Support\Facades\DB::table('km_anggota')
                 ->join('km_lab', 'km_anggota.id_km_lab', '=', 'km_lab.id_km_lab')
-                ->leftJoin('users', 'km_anggota.id_user', '=', 'users.id_user')
-                ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
+                ->join('users', 'km_anggota.id_user', '=', 'users.id_user')
+                ->leftJoin('dosen', 'km_anggota.id_dosen', '=', 'dosen.id_dosen')
                 ->where('km_lab.id_lab', $id)
                 ->where('km_lab.tahun_km', $tahun)
                 ->select(
@@ -1323,7 +1331,7 @@ Route::middleware(['auth'])->group(function () {
                     'km_anggota.jumlah_km',
                     'km_anggota.created_at',
                     'km_lab.kategori_km',
-                    'km_lab.tahun_km',
+                    'km_lab.sub_kategori_km',
                     'users.username',
                     'dosen.nama_dosen',
                     'dosen.nidn',
@@ -1335,8 +1343,8 @@ Route::middleware(['auth'])->group(function () {
 
             $anggota = \Illuminate\Support\Facades\DB::table('users')
                 ->leftJoin('dosen', 'users.id_dosen', '=', 'dosen.id_dosen')
-                ->where('users.role', 'Anggota')
                 ->where('users.id_lab', $id)
+                ->whereIn('users.role', ['anggota', 'Anggota'])
                 ->select(
                     'users.id_user',
                     'users.username',
@@ -1347,6 +1355,13 @@ Route::middleware(['auth'])->group(function () {
                 )
                 ->orderBy('dosen.nama_dosen')
                 ->get();
+
+            $totalKmTurun = collect($daftarKmTurun)->sum('jumlah_km');
+            $totalKmAssign = collect($daftarKmTurun)->sum('sudah_assign');
+            $totalSisaKm = max($totalKmTurun - $totalKmAssign, 0);
+            $persentaseTotal = $totalKmTurun > 0
+                ? min(round(($totalKmAssign / $totalKmTurun) * 100), 100)
+                : 0;
 
             return view('ketuakk.km-lab-riset.detail', compact(
                 'lab',
