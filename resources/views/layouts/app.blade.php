@@ -324,12 +324,12 @@
                     <span>Dashboard</span>
                 </a>
 
-                <div class="sidebar-heading js-sidebar-toggle" data-target="dataMasterMenu">
+                <div class="sidebar-heading js-sidebar-toggle collapsed" data-target="dataMasterMenu">
                     <span>Data Master</span>
                     <i class="bi bi-chevron-down"></i>
                 </div>
 
-                <div class="sidebar-sub is-open" id="dataMasterMenu">
+                <div class="sidebar-sub is-collapsed" id="dataMasterMenu">
                     <a class="sidebar-link {{ request()->is('ketuakk/target-km*') ? 'active' : '' }}" href="/ketuakk/target-km">
                         <span>Data Target KM</span>
                     </a>
@@ -343,12 +343,12 @@
                     </a>
                 </div>
 
-                <div class="sidebar-heading js-sidebar-toggle" data-target="kontrakMenu">
+                <div class="sidebar-heading js-sidebar-toggle collapsed" data-target="kontrakMenu">
                     <span>Kontrak Manajemen</span>
                     <i class="bi bi-chevron-down"></i>
                 </div>
 
-                <div class="sidebar-sub is-open" id="kontrakMenu">
+                <div class="sidebar-sub is-collapsed" id="kontrakMenu">
                     <a class="sidebar-link {{ request()->is('ketuakk/km-kk*') ? 'active' : '' }}" href="/ketuakk/km-kk">
                         Kelompok Keahlian
                     </a>
@@ -362,12 +362,12 @@
                     </a>
                 </div>
 
-                <div class="sidebar-heading js-sidebar-toggle" data-target="monitoringMenu">
+                <div class="sidebar-heading js-sidebar-toggle collapsed" data-target="monitoringMenu">
                     <span>Monitoring</span>
                     <i class="bi bi-chevron-down"></i>
                 </div>
 
-                <div class="sidebar-sub is-open" id="monitoringMenu">
+                <div class="sidebar-sub is-collapsed" id="monitoringMenu">
                     <a class="sidebar-link {{ request()->is('ketuakk/monitoring-lab-riset*') ? 'active' : '' }}" href="/ketuakk/monitoring-lab-riset">
                         <span>Monitoring Lab. Riset</span>
                     </a>
