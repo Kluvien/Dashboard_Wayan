@@ -676,6 +676,199 @@
         text-decoration: underline;
     }
 
+    .ketuakk-dashboard-overview__lab-section {
+        display: grid;
+        grid-template-columns: minmax(0, 1.75fr) minmax(280px, .75fr);
+        gap: 14px;
+        align-items: stretch;
+        margin-bottom: 18px;
+    }
+
+    .ketuakk-dashboard-overview__lab-chart,
+    .ketuakk-dashboard-overview__summary {
+        min-width: 0;
+        border: 1px solid var(--kk-border);
+        background: #FFFFFF;
+    }
+
+    .ketuakk-dashboard-overview__lab-chart {
+        padding: 20px 22px 18px;
+        border-radius: 16px;
+    }
+
+    .ketuakk-dashboard-overview__lab-chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 18px;
+        margin-bottom: 12px;
+    }
+
+    .ketuakk-dashboard-overview__section-copy {
+        min-width: 0;
+        max-width: 62ch;
+    }
+
+    .ketuakk-dashboard-overview__section-title {
+        margin: 0;
+        color: var(--kk-text);
+        font-size: 18px;
+        font-weight: 750;
+        letter-spacing: -.02em;
+        line-height: 1.3;
+    }
+
+    .ketuakk-dashboard-overview__section-description {
+        margin: 5px 0 0;
+        color: var(--kk-muted);
+        font-size: 12px;
+        line-height: 1.55;
+    }
+
+    .ketuakk-dashboard-overview__chart-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        flex-wrap: wrap;
+        flex: 0 0 auto;
+    }
+
+    .ketuakk-dashboard-overview__active-filter {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .ketuakk-dashboard-overview__active-filter i {
+        color: var(--kk-primary);
+    }
+
+    .ketuakk-dashboard-overview__chart-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 7px 10px;
+        border: 1px solid #CBD5E1;
+        border-radius: 8px;
+        color: #334155;
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: border-color .2s ease, color .2s ease, background-color .2s ease;
+    }
+
+    .ketuakk-dashboard-overview__chart-link:hover {
+        border-color: #93C5FD;
+        background: #F8FAFC;
+        color: var(--kk-primary-dark);
+    }
+
+    .ketuakk-dashboard-overview__chart-link:focus-visible {
+        outline: 3px solid rgba(37, 99, 235, .22);
+        outline-offset: 2px;
+    }
+
+    .ketuakk-dashboard-overview__lab-chart-box {
+        position: relative;
+        width: 100%;
+        height: 300px;
+    }
+
+    .ketuakk-dashboard-overview__summary {
+        display: flex;
+        flex-direction: column;
+        padding: 20px 18px 18px;
+        border-radius: 12px;
+    }
+
+    .ketuakk-dashboard-overview__summary-header {
+        padding-bottom: 14px;
+        border-bottom: 1px solid #EEF2F7;
+    }
+
+    .ketuakk-dashboard-overview__summary-filter {
+        margin-top: 9px;
+    }
+
+    .ketuakk-dashboard-overview__summary-list {
+        margin: 0;
+    }
+
+    .ketuakk-dashboard-overview__summary-item {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 14px;
+        align-items: center;
+        padding: 13px 0;
+        border-bottom: 1px solid #EEF2F7;
+    }
+
+    .ketuakk-dashboard-overview__summary-item dt,
+    .ketuakk-dashboard-overview__summary-item dd {
+        margin: 0;
+    }
+
+    .ketuakk-dashboard-overview__summary-item dt {
+        color: #475569;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.4;
+    }
+
+    .ketuakk-dashboard-overview__summary-value {
+        color: var(--kk-text);
+        font-size: 20px;
+        font-weight: 750;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+    }
+
+    .ketuakk-dashboard-overview__summary-value--complete {
+        color: #15803D;
+    }
+
+    .ketuakk-dashboard-overview__summary-total {
+        margin-top: auto;
+        padding-top: 16px;
+    }
+
+    .ketuakk-dashboard-overview__summary-progress-label {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 7px;
+        color: #334155;
+        font-size: 12px;
+        font-weight: 650;
+        line-height: 1.4;
+    }
+
+    .ketuakk-dashboard-overview__summary-progress-value {
+        color: var(--kk-primary-dark);
+        font-weight: 750;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+    }
+
+    .ketuakk-dashboard-overview__summary-progress {
+        height: 7px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #E2E8F0;
+    }
+
+    .ketuakk-dashboard-overview__summary-progress-fill {
+        height: 100%;
+        border-radius: inherit;
+        background: var(--kk-primary);
+    }
+
     @media (max-width: 1200px) {
         .ketuakk-dashboard-overview__header-layout {
             grid-template-columns: 1fr;
@@ -693,6 +886,20 @@
         .ketuakk-dashboard-overview__stats {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
+
+        .ketuakk-dashboard-overview__lab-section {
+            grid-template-columns: minmax(0, 1.45fr) minmax(270px, .75fr);
+        }
+    }
+
+    @media (max-width: 992px) {
+        .ketuakk-dashboard-overview__lab-section {
+            grid-template-columns: 1fr;
+        }
+
+        .ketuakk-dashboard-overview__summary-total {
+            margin-top: 0;
+        }
     }
 
     @media (max-width: 768px) {
@@ -702,6 +909,18 @@
 
         .ketuakk-dashboard-overview__stats {
             grid-template-columns: 1fr;
+        }
+
+        .ketuakk-dashboard-overview__lab-chart-header {
+            display: grid;
+        }
+
+        .ketuakk-dashboard-overview__chart-actions {
+            justify-content: flex-start;
+        }
+
+        .ketuakk-dashboard-overview__lab-chart-box {
+            height: 270px;
         }
     }
 </style>
@@ -897,109 +1116,99 @@
 </div>
 </section>
 
-<div class="dashboard-grid-main">
-    <div class="card">
-        <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-2">
-            <div>
-                <div class="dashboard-panel-title">Diagram Pencapaian Lab Riset</div>
-                <div class="dashboard-panel-subtitle mb-0">
+<section class="ketuakk-dashboard-overview ketuakk-dashboard-overview__lab-section" aria-labelledby="labAchievementTitle">
+    <article class="ketuakk-dashboard-overview__lab-chart">
+        <header class="ketuakk-dashboard-overview__lab-chart-header">
+            <div class="ketuakk-dashboard-overview__section-copy">
+                <h2 class="ketuakk-dashboard-overview__section-title" id="labAchievementTitle">
+                    Diagram Pencapaian Lab Riset
+                </h2>
+                <p class="ketuakk-dashboard-overview__section-description">
                     Persentase pencapaian realisasi KM pada masing-masing Lab Riset untuk {{ $periodeLabel }}.
-                </div>
+                </p>
             </div>
 
-            <div class="d-flex align-items-center justify-content-end gap-2 flex-wrap">
+            <div class="ketuakk-dashboard-overview__chart-actions">
                 @if($filterDashboardAktif)
-                    <div class="dashboard-applied-filter-box">
-                        <i class="bi bi-funnel-fill"></i>
-                        <span class="filter-label">Filter</span>
-                        <span class="filter-value">{{ $filterDashboardLabel }}</span>
+                    <div class="ketuakk-dashboard-overview__active-filter">
+                        <i class="bi bi-funnel"></i>
+                        <span>{{ $filterDashboardLabel }}</span>
                     </div>
                 @endif
 
                 <a
                     href="/ketuakk/monitoring-lab-riset?tahun={{ $tahun }}&periode=triwulan"
-                    class="btn btn-primary btn-sm">
-                    Lihat Selengkapnya
+                    class="ketuakk-dashboard-overview__chart-link">
+                    Lihat Selengkapnya <span aria-hidden="true">→</span>
                 </a>
             </div>
-        </div>
+        </header>
 
-        <div class="dashboard-chart-box">
+        <div class="ketuakk-dashboard-overview__lab-chart-box">
             <canvas id="chartLabAchievement"></canvas>
         </div>
-    </div>
+    </article>
 
-    <div class="card">
-        <div class="d-flex justify-content-between align-items-start gap-2 flex-wrap mb-3">
-            <div>
-                <h4 class="fw-bold mb-1">Ringkasan</h4>
-                <p class="text-muted mb-0">
+    <aside class="ketuakk-dashboard-overview__summary" aria-labelledby="dashboardSummaryTitle">
+        <header class="ketuakk-dashboard-overview__summary-header">
+            <h2 class="ketuakk-dashboard-overview__section-title" id="dashboardSummaryTitle">
+                Ringkasan
+            </h2>
+            <p class="ketuakk-dashboard-overview__section-description">
                     Rekap jumlah lab, anggota KK, dan progres total KM Kelompok Keahlian.
-                </p>
-            </div>
+            </p>
 
             @if($filterDashboardAktif)
-                <div class="dashboard-applied-filter-box">
-                    <i class="bi bi-funnel-fill"></i>
-                    <span class="filter-label">Filter</span>
-                    <span class="filter-value">{{ $filterDashboardLabel }}</span>
+                <div class="ketuakk-dashboard-overview__active-filter ketuakk-dashboard-overview__summary-filter">
+                    <i class="bi bi-funnel"></i>
+                    <span>{{ $filterDashboardLabel }}</span>
                 </div>
             @endif
-        </div>
+        </header>
 
-        <div class="row g-3">
-            <div class="col-6">
-                <div class="border rounded-3 p-3 h-100">
-                    <div class="text-muted small">Jumlah Lab</div>
-                    <div class="fs-3 fw-bold">{{ $jumlahLab ?? 0 }}</div>
-                </div>
+        <dl class="ketuakk-dashboard-overview__summary-list">
+            <div class="ketuakk-dashboard-overview__summary-item">
+                <dt>Jumlah Lab</dt>
+                <dd class="ketuakk-dashboard-overview__summary-value">{{ $jumlahLab ?? 0 }}</dd>
             </div>
 
-            <div class="col-6">
-                <div class="border rounded-3 p-3 h-100">
-                    <div class="text-muted small">Jumlah Anggota KK</div>
-                    <div class="fs-3 fw-bold">{{ $jumlahAnggotaKk ?? 0 }}</div>
-                </div>
+            <div class="ketuakk-dashboard-overview__summary-item">
+                <dt>Jumlah Anggota KK</dt>
+                <dd class="ketuakk-dashboard-overview__summary-value">{{ $jumlahAnggotaKk ?? 0 }}</dd>
             </div>
 
-            <div class="col-6">
-                <div class="border rounded-3 p-3 h-100">
-                    <div class="text-muted small">Lab Menyelesaikan Target KM</div>
-
-                    <div class="fs-3 fw-bold text-success">
-                        {{ $jumlahLabSelesai ?? 0 }}
-                        <span class="fs-5 text-muted">/ {{ $jumlahLab ?? 0 }}</span>
-                    </div>
-                </div>
+            <div class="ketuakk-dashboard-overview__summary-item">
+                <dt>Lab menyelesaikan target KM</dt>
+                <dd class="ketuakk-dashboard-overview__summary-value {{ (int) ($jumlahLab ?? 0) > 0 && (int) ($jumlahLabSelesai ?? 0) === (int) ($jumlahLab ?? 0) ? 'ketuakk-dashboard-overview__summary-value--complete' : '' }}">
+                    {{ $jumlahLabSelesai ?? 0 }} / {{ $jumlahLab ?? 0 }}
+                </dd>
             </div>
 
-            <div class="col-6">
-                <div class="border rounded-3 p-3 h-100">
-                    <div class="text-muted small">Anggota Menyelesaikan Target KM</div>
-
-                    <div class="fs-3 fw-bold text-warning">
-                        {{ $jumlahAnggotaSelesai ?? 0 }}
-                        <span class="fs-5 text-muted">/ {{ $jumlahAnggotaKk ?? 0 }}</span>
-                    </div>
-                </div>
+            <div class="ketuakk-dashboard-overview__summary-item">
+                <dt>Anggota menyelesaikan target KM</dt>
+                <dd class="ketuakk-dashboard-overview__summary-value {{ (int) ($jumlahAnggotaKk ?? 0) > 0 && (int) ($jumlahAnggotaSelesai ?? 0) === (int) ($jumlahAnggotaKk ?? 0) ? 'ketuakk-dashboard-overview__summary-value--complete' : '' }}">
+                    {{ $jumlahAnggotaSelesai ?? 0 }} / {{ $jumlahAnggotaKk ?? 0 }}
+                </dd>
             </div>
-        </div>
+        </dl>
 
-        <div class="mt-4">
-            <div class="d-flex justify-content-between mb-1">
-                <span class="fw-bold">Progress Total KM KK ({{ $periodeLabel }})</span>
-                <span class="fw-bold">{{ $persentaseRealisasi ?? 0 }}%</span>
+        <div class="ketuakk-dashboard-overview__summary-total">
+            <div class="ketuakk-dashboard-overview__summary-progress-label">
+                <span>Progress Total KM KK ({{ $periodeLabel }})</span>
+                <span class="ketuakk-dashboard-overview__summary-progress-value">
+                    {{ $persentaseRealisasi ?? 0 }}%
+                </span>
             </div>
 
-            <div class="progress-soft">
+            <div class="ketuakk-dashboard-overview__summary-progress">
                 <div
-                    class="progress-soft-fill"
+                    class="ketuakk-dashboard-overview__summary-progress-fill"
                     style="width: {{ $persentaseRealisasi ?? 0 }}%;">
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </aside>
+</section>
 
 <div class="dashboard-category-chart-grid">
     @foreach($kategoriDetailCharts ?? [] as $index => $chart)
