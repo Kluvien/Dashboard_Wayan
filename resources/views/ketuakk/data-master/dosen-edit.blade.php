@@ -8,14 +8,14 @@
 </div>
 
 @if($errors->any())
-    <div class="alert alert-danger">
-        <div class="fw-bold mb-1">Terjadi kesalahan:</div>
-        <ul class="mb-0">
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+<div class="alert alert-danger">
+    <div class="fw-bold mb-1">Terjadi kesalahan:</div>
+    <ul class="mb-0">
+        @foreach($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
 @endif
 
 <div class="card">
@@ -38,35 +38,32 @@
 
         <div class="mb-3">
             <label class="form-label fw-bold">Nama Dosen</label>
-            <input 
-                type="text" 
-                name="nama_dosen" 
-                value="{{ old('nama_dosen', $dosen->nama_dosen) }}" 
+            <input
+                type="text"
+                name="nama_dosen"
+                value="{{ old('nama_dosen', $dosen->nama_dosen) }}"
                 class="form-control"
-                placeholder="Masukkan nama dosen"
-            >
+                placeholder="Masukkan nama dosen">
         </div>
 
         <div class="mb-3">
             <label class="form-label fw-bold">NIDN</label>
-            <input 
-                type="text" 
-                name="nidn" 
-                value="{{ old('nidn', $dosen->nidn) }}" 
+            <input
+                type="text"
+                name="nidn"
+                value="{{ old('nidn', $dosen->nidn) }}"
                 class="form-control"
-                placeholder="Masukkan NIDN"
-            >
+                placeholder="Masukkan NIDN">
         </div>
 
         <div class="mb-3">
             <label class="form-label fw-bold">Email</label>
-            <input 
-                type="email" 
-                name="email" 
-                value="{{ old('email', $dosen->email) }}" 
+            <input
+                type="email"
+                name="email"
+                value="{{ old('email', $dosen->email) }}"
                 class="form-control"
-                placeholder="Masukkan email"
-            >
+                placeholder="Masukkan email">
         </div>
 
         <div class="mb-3">
@@ -85,6 +82,9 @@
                 <option value="AA" {{ old('jad', $dosen->jad ?? 'AA') == 'AA' ? 'selected' : '' }}>
                     Asisten Ahli (AA)
                 </option>
+                <option value="NJFA" {{ old('jad', $dosen->jad ?? 'AA') == 'NJFA' ? 'selected' : '' }}>
+                    Non-Jabatan Fungsional Akademik (NJFA)
+                </option>
             </select>
         </div>
 
@@ -93,9 +93,9 @@
             <select name="id_lab" class="form-select">
                 <option value="">-- Pilih Lab Riset --</option>
                 @foreach($labs as $lab)
-                    <option value="{{ $lab->id_lab }}" {{ old('id_lab', $dosen->id_lab) == $lab->id_lab ? 'selected' : '' }}>
-                        {{ $lab->nama_lab }}
-                    </option>
+                <option value="{{ $lab->id_lab }}" {{ old('id_lab', $dosen->id_lab) == $lab->id_lab ? 'selected' : '' }}>
+                    {{ $lab->nama_lab }}
+                </option>
                 @endforeach
             </select>
         </div>

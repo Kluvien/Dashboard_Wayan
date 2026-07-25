@@ -41,7 +41,6 @@ class TargetKmSeeder extends Seeder
             ->first();
 
         $targets = [
-            'Pendidikan' => 4,
             'Penelitian' => 5,
             'Publikasi' => 2,
             'Pengabdian' => 3,
