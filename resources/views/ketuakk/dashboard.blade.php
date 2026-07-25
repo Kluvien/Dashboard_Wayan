@@ -433,34 +433,308 @@
             grid-template-columns: 1fr;
         }
     }
+
+    /* Dashboard Ketua KK: header, filter, action area, and category overview only. */
+    .ketuakk-dashboard-overview {
+        --kk-primary: #2563EB;
+        --kk-primary-dark: #1D4ED8;
+        --kk-text: #0F172A;
+        --kk-muted: #64748B;
+        --kk-border: #E2E8F0;
+        margin-bottom: 18px;
+    }
+
+    .ketuakk-dashboard-overview__heading {
+        margin-bottom: 12px;
+        color: #475569;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .ketuakk-dashboard-overview__header {
+        padding: 22px;
+        border: 1px solid var(--kk-border);
+        border-radius: 16px;
+        background: #FFFFFF;
+    }
+
+    .ketuakk-dashboard-overview__header-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 22px;
+        align-items: start;
+    }
+
+    .ketuakk-dashboard-overview__intro {
+        max-width: 650px;
+    }
+
+    .ketuakk-dashboard-overview__title {
+        margin: 0;
+        color: var(--kk-text);
+        font-size: clamp(24px, 2.2vw, 32px);
+        font-weight: 800;
+        letter-spacing: -.035em;
+        line-height: 1.15;
+        text-wrap: balance;
+    }
+
+    .ketuakk-dashboard-overview__description {
+        max-width: 62ch;
+        margin: 9px 0 0;
+        color: var(--kk-muted);
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .ketuakk-dashboard-overview__period {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-top: 14px;
+        color: #475569;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .ketuakk-dashboard-overview__period i {
+        color: var(--kk-primary);
+    }
+
+    .ketuakk-dashboard-overview__controls {
+        display: grid;
+        justify-items: end;
+        gap: 12px;
+    }
+
+    .ketuakk-dashboard-overview__filter,
+    .ketuakk-dashboard-overview__actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .ketuakk-dashboard-overview__filter-control {
+        min-width: 132px;
+        height: 40px;
+        padding: 0 10px;
+        border: 1px solid #CBD5E1;
+        border-radius: 9px;
+        background: #FFFFFF;
+        color: #1E293B;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .ketuakk-dashboard-overview__filter-control--small {
+        min-width: 122px;
+    }
+
+    .ketuakk-dashboard-overview__filter-control:focus-visible,
+    .ketuakk-dashboard-overview__header .btn:focus-visible,
+    .ketuakk-dashboard-overview__detail:focus-visible {
+        outline: 3px solid rgba(37, 99, 235, .22);
+        outline-offset: 2px;
+    }
+
+    .ketuakk-dashboard-overview__stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 14px;
+    }
+
+    .ketuakk-dashboard-overview__stat {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        min-height: 238px;
+        padding: 17px;
+        border: 1px solid var(--kk-border);
+        border-radius: 14px;
+        background: #FFFFFF;
+        transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .ketuakk-dashboard-overview__stat:hover {
+        border-color: #CBD5E1;
+        box-shadow: 0 6px 18px rgba(30, 64, 175, .06);
+    }
+
+    .ketuakk-dashboard-overview__stat-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 13px;
+    }
+
+    .ketuakk-dashboard-overview__stat-label {
+        color: var(--kk-text);
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1.35;
+    }
+
+    .ketuakk-dashboard-overview__stat-subtitle {
+        margin-top: 3px;
+        color: var(--kk-muted);
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    .ketuakk-dashboard-overview__stat-value {
+        color: var(--kk-primary-dark);
+        font-size: 21px;
+        font-weight: 700;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-dashboard-overview__progress {
+        height: 6px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #E2E8F0;
+    }
+
+    .ketuakk-dashboard-overview__progress-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: var(--kk-primary);
+    }
+
+    .ketuakk-dashboard-overview__metrics {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0 14px;
+        margin-bottom: 13px;
+    }
+
+    .ketuakk-dashboard-overview__metric {
+        min-width: 0;
+        padding: 9px 0;
+        border-top: 1px solid #EEF2F7;
+    }
+
+    .ketuakk-dashboard-overview__metric-label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 4px;
+        color: var(--kk-muted);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+    }
+
+    .ketuakk-dashboard-overview__metric-value {
+        color: #334155;
+        font-size: 19px;
+        font-weight: 700;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-dashboard-overview__metric--attention .ketuakk-dashboard-overview__metric-value,
+    .ketuakk-dashboard-overview__note--attention {
+        color: #B91C1C;
+    }
+
+    .ketuakk-dashboard-overview__metric--complete .ketuakk-dashboard-overview__metric-value,
+    .ketuakk-dashboard-overview__note--complete {
+        color: #15803D;
+    }
+
+    .ketuakk-dashboard-overview__note {
+        min-height: 30px;
+        margin: auto 0 10px;
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1.4;
+    }
+
+    .ketuakk-dashboard-overview__detail {
+        display: inline-flex;
+        align-items: center;
+        align-self: flex-start;
+        gap: 5px;
+        color: var(--kk-primary);
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .ketuakk-dashboard-overview__detail:hover {
+        color: var(--kk-primary-dark);
+        text-decoration: underline;
+    }
+
+    @media (max-width: 1200px) {
+        .ketuakk-dashboard-overview__header-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .ketuakk-dashboard-overview__controls {
+            justify-items: start;
+        }
+
+        .ketuakk-dashboard-overview__filter,
+        .ketuakk-dashboard-overview__actions {
+            justify-content: flex-start;
+        }
+
+        .ketuakk-dashboard-overview__stats {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 768px) {
+        .ketuakk-dashboard-overview__header {
+            padding: 18px;
+        }
+
+        .ketuakk-dashboard-overview__stats {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 
-<div class="page-heading">
-    Dashboard <span class="muted">Ketua KK</span>
+<section class="ketuakk-dashboard-overview" aria-labelledby="ketuakkDashboardOverviewTitle">
+<div class="ketuakk-dashboard-overview__heading">
+    Dashboard Ketua KK
 </div>
 
-<div class="card dashboard-header mb-3">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-        <div>
-            <h4 class="fw-bold mb-1">Ringkasan Kontrak Manajemen {{ $periodeLabel }}</h4>
-            <p class="text-muted mb-0">
+<div class="ketuakk-dashboard-overview__header">
+    <div class="ketuakk-dashboard-overview__header-layout">
+        <div class="ketuakk-dashboard-overview__intro">
+            <h1 class="ketuakk-dashboard-overview__title" id="ketuakkDashboardOverviewTitle">
+                Ringkasan Kontrak Manajemen {{ $periodeLabel }}
+            </h1>
+            <p class="ketuakk-dashboard-overview__description">
                 Monitoring target KM, penurunan KM, realisasi, dan capaian setiap Lab Riset dalam Kelompok Keahlian.
             </p>
-            <span class="dashboard-period-badge">
+            <span class="ketuakk-dashboard-overview__period">
                 <i class="bi bi-calendar3"></i>
                 {{ $periodeKeterangan }}
             </span>
         </div>
 
-        <div class="d-flex align-items-center justify-content-end gap-2 flex-wrap">
-            <form method="GET" action="{{ url('/ketuakk/dashboard') }}" class="dashboard-filter-form">
-                <select name="mode" id="dashboardPeriodMode" class="dashboard-filter-control">
+        <div class="ketuakk-dashboard-overview__controls">
+            <form method="GET" action="{{ url('/ketuakk/dashboard') }}" class="ketuakk-dashboard-overview__filter" aria-label="Filter periode dashboard">
+                <select name="mode" id="dashboardPeriodMode" class="ketuakk-dashboard-overview__filter-control" aria-label="Mode periode">
                     <option value="tahunan" {{ $mode === 'tahunan' ? 'selected' : '' }}>Tahunan</option>
                     <option value="triwulan" {{ $mode === 'triwulan' ? 'selected' : '' }}>Triwulan</option>
                     <option value="semester" {{ $mode === 'semester' ? 'selected' : '' }}>Semester</option>
                 </select>
 
-                <select name="tahun" class="dashboard-filter-control small-control">
+                <select name="tahun" class="ketuakk-dashboard-overview__filter-control ketuakk-dashboard-overview__filter-control--small" aria-label="Tahun">
                     @foreach($tahunOptions as $itemTahun)
                         <option value="{{ $itemTahun }}" {{ (int) $tahun === (int) $itemTahun ? 'selected' : '' }}>
                             {{ $itemTahun }}
@@ -471,7 +745,8 @@
                 <select
                     name="triwulan"
                     id="dashboardTriwulanGroup"
-                    class="dashboard-filter-control small-control {{ $mode === 'triwulan' ? '' : 'd-none' }}">
+                    class="ketuakk-dashboard-overview__filter-control ketuakk-dashboard-overview__filter-control--small {{ $mode === 'triwulan' ? '' : 'd-none' }}"
+                    aria-label="Triwulan">
                     @for($tw = 1; $tw <= 4; $tw++)
                         <option value="{{ $tw }}" {{ $triwulan === $tw ? 'selected' : '' }}>
                             Triwulan {{ $tw }}
@@ -482,33 +757,36 @@
                 <select
                     name="semester"
                     id="dashboardSemesterGroup"
-                    class="dashboard-filter-control small-control {{ $mode === 'semester' ? '' : 'd-none' }}">
+                    class="ketuakk-dashboard-overview__filter-control ketuakk-dashboard-overview__filter-control--small {{ $mode === 'semester' ? '' : 'd-none' }}"
+                    aria-label="Semester">
                     <option value="1" {{ $semester === 1 ? 'selected' : '' }}>Semester 1</option>
                     <option value="2" {{ $semester === 2 ? 'selected' : '' }}>Semester 2</option>
                 </select>
 
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-funnel-fill me-1"></i>
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="bi bi-funnel me-1"></i>
                     Terapkan
                 </button>
             </form>
 
-            <a href="/ketuakk/target-km/create" class="btn btn-outline-primary">
-                <i class="bi bi-plus-circle me-1"></i>
-                Tambah Target
-            </a>
+            <div class="ketuakk-dashboard-overview__actions" aria-label="Aksi kontrak manajemen">
+                <a href="/ketuakk/target-km/create" class="btn btn-outline-primary">
+                    <i class="bi bi-plus-circle me-1"></i>
+                    Tambah Target
+                </a>
 
-            <a href="/ketuakk/km-lab-riset/create" class="btn btn-primary">
-                <i class="bi bi-plus-lg me-1"></i>
-                Turunkan KM ke Lab
-            </a>
+                <a href="/ketuakk/km-lab-riset/create" class="btn btn-primary">
+                    <i class="bi bi-arrow-down-circle me-1"></i>
+                    Turunkan KM ke Lab
+                </a>
+            </div>
         </div>
     </div>
 </div>
 
 @include('partials.periode-saat-ini')
 
-<div class="dashboard-stat-grid">
+<div class="ketuakk-dashboard-overview__stats">
     @forelse($kategoriCards ?? [] as $item)
         @php
             $targetKategori = (int) ($item['target'] ?? 0);
@@ -526,77 +804,77 @@
                 : 'text-belum-turun-selesai';
         @endphp
 
-        <div class="dashboard-stat-card">
-            <div class="dashboard-stat-card-top">
+        <article class="ketuakk-dashboard-overview__stat">
+            <div class="ketuakk-dashboard-overview__stat-top">
                 <div>
-                    <div class="dashboard-stat-label">
+                    <div class="ketuakk-dashboard-overview__stat-label">
                         {{ $item['kategori'] ?? '-' }}
                     </div>
 
-                    <div class="dashboard-stat-subtitle">
+                    <div class="ketuakk-dashboard-overview__stat-subtitle">
                         Progress realisasi kategori KM • {{ $periodeLabel }}
                     </div>
                 </div>
 
-                <div class="dashboard-stat-value">
+                <div class="ketuakk-dashboard-overview__stat-value">
                     {{ rtrim(rtrim(number_format($persentaseKategori, 1), '0'), '.') }}%
                 </div>
             </div>
 
-            <div class="dashboard-category-progress">
+            <div class="ketuakk-dashboard-overview__progress">
                 <div
-                    class="dashboard-category-progress-fill"
+                    class="ketuakk-dashboard-overview__progress-fill"
                     style="width: {{ min($persentaseKategori, 100) }}%;">
                 </div>
             </div>
 
-            <div class="dashboard-km-info">
-                <div class="dashboard-km-item target-item">
-                    <div class="dashboard-km-item-label">
+            <div class="ketuakk-dashboard-overview__metrics">
+                <div class="ketuakk-dashboard-overview__metric">
+                    <div class="ketuakk-dashboard-overview__metric-label">
                         <i class="bi bi-bullseye"></i>
                         Target
                     </div>
 
-                    <div class="dashboard-km-item-value text-target">
+                    <div class="ketuakk-dashboard-overview__metric-value">
                         {{ number_format($targetKategori, 0, ',', '.') }}
                     </div>
                 </div>
 
-                <div class="dashboard-km-item realisasi-item">
-                    <div class="dashboard-km-item-label">
+                <div class="ketuakk-dashboard-overview__metric">
+                    <div class="ketuakk-dashboard-overview__metric-label">
                         <i class="bi bi-check2-circle"></i>
                         Realisasi
                     </div>
 
-                    <div class="dashboard-km-item-value text-realisasi">
+                    <div class="ketuakk-dashboard-overview__metric-value">
                         {{ number_format($realisasiKategori, 0, ',', '.') }}
                     </div>
                 </div>
 
-                <div class="dashboard-km-item diturunkan-item">
-                    <div class="dashboard-km-item-label">
+                <div class="ketuakk-dashboard-overview__metric">
+                    <div class="ketuakk-dashboard-overview__metric-label">
                         <i class="bi bi-arrow-down-circle"></i>
                         Diturunkan
                     </div>
 
-                    <div class="dashboard-km-item-value text-diturunkan">
+                    <div class="ketuakk-dashboard-overview__metric-value">
                         {{ number_format($diturunkanKategori, 0, ',', '.') }}
                     </div>
                 </div>
 
-                <div class="dashboard-km-item {{ $belumTurunClass }}">
-                    <div class="dashboard-km-item-label">
+                <div class="ketuakk-dashboard-overview__metric {{ $belumTurunKategori > 0 ? 'ketuakk-dashboard-overview__metric--attention' : 'ketuakk-dashboard-overview__metric--complete' }}">
+                    <div class="ketuakk-dashboard-overview__metric-label">
                         <i class="bi bi-exclamation-circle"></i>
                         Belum Turun
                     </div>
 
-                    <div class="dashboard-km-item-value {{ $belumTurunTextClass }}">
+                    <div class="ketuakk-dashboard-overview__metric-value">
                         {{ number_format($belumTurunKategori, 0, ',', '.') }}
                     </div>
                 </div>
             </div>
 
-            <div class="dashboard-status-note {{ $belumTurunKategori > 0 ? 'alert' : 'done' }}">
+            <div class="ketuakk-dashboard-overview__note {{ $belumTurunKategori > 0 ? 'ketuakk-dashboard-overview__note--attention' : 'ketuakk-dashboard-overview__note--complete' }}">
                 @if($belumTurunKategori > 0)
                     <i class="bi bi-exclamation-triangle-fill me-1"></i>
                     Masih ada {{ number_format($belumTurunKategori, 0, ',', '.') }} KM yang belum diturunkan.
@@ -606,17 +884,18 @@
                 @endif
             </div>
 
-            <a href="/ketuakk/km-kk?tahun={{ $tahun }}" class="dashboard-category-button">
-                Lihat Detail
+            <a href="/ketuakk/km-kk?tahun={{ $tahun }}" class="ketuakk-dashboard-overview__detail">
+                Lihat detail <span aria-hidden="true">→</span>
             </a>
-        </div>
+        </article>
     @empty
-        <div class="dashboard-stat-card">
-            <div class="dashboard-stat-label">Data kategori KM</div>
-            <div class="dashboard-stat-subtitle">Belum ada target KM pada tahun ini.</div>
-        </div>
+        <article class="ketuakk-dashboard-overview__stat">
+            <div class="ketuakk-dashboard-overview__stat-label">Data kategori KM</div>
+            <div class="ketuakk-dashboard-overview__stat-subtitle">Belum ada target KM pada tahun ini.</div>
+        </article>
     @endforelse
 </div>
+</section>
 
 <div class="dashboard-grid-main">
     <div class="card">
