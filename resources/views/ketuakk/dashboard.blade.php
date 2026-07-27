@@ -262,23 +262,6 @@
         height: 280px;
     }
 
-    .dashboard-chart-box-small {
-        position: relative;
-        width: 100%;
-        height: 230px;
-    }
-
-    .dashboard-category-chart-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 18px;
-        margin-bottom: 18px;
-    }
-
-    .dashboard-category-chart-grid .card:last-child:nth-child(odd) {
-        grid-column: span 2;
-    }
-
     .progress-soft {
         height: 10px;
         border-radius: 999px;
@@ -411,16 +394,6 @@
 
         .dashboard-grid-main {
             grid-template-columns: 1fr;
-        }
-    }
-
-    @media (max-width: 992px) {
-        .dashboard-category-chart-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .dashboard-category-chart-grid .card:last-child:nth-child(odd) {
-            grid-column: span 1;
         }
     }
 
@@ -869,6 +842,153 @@
         background: var(--kk-primary);
     }
 
+    .ketuakk-dashboard-overview__comparison {
+        margin-bottom: 18px;
+        padding: 20px 22px;
+        border: 1px solid var(--kk-border);
+        border-radius: 14px;
+        background: #FFFFFF;
+    }
+
+    .ketuakk-dashboard-overview__comparison-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 18px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #E2E8F0;
+    }
+
+    .ketuakk-dashboard-overview__comparison-groups {
+        display: grid;
+    }
+
+    .ketuakk-dashboard-overview__comparison-group {
+        padding: 17px 0 5px;
+    }
+
+    .ketuakk-dashboard-overview__comparison-group + .ketuakk-dashboard-overview__comparison-group {
+        border-top: 1px solid #CBD5E1;
+    }
+
+    .ketuakk-dashboard-overview__comparison-category {
+        margin: 0 0 10px;
+        color: var(--kk-text);
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.4;
+    }
+
+    .ketuakk-dashboard-overview__comparison-columns,
+    .ketuakk-dashboard-overview__comparison-row {
+        display: grid;
+        grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(72px, 96px)) minmax(210px, .8fr);
+        column-gap: 16px;
+        align-items: center;
+    }
+
+    .ketuakk-dashboard-overview__comparison-columns {
+        padding: 0 16px 8px;
+        color: #64748B;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+    }
+
+    .ketuakk-dashboard-overview__comparison-columns span:not(:first-child) {
+        text-align: right;
+    }
+
+    .ketuakk-dashboard-overview__comparison-columns span:last-child {
+        text-align: left;
+    }
+
+    .ketuakk-dashboard-overview__comparison-row {
+        min-height: 56px;
+        padding: 11px 16px;
+        border-top: 1px solid #EEF2F7;
+    }
+
+    .ketuakk-dashboard-overview__comparison-row:hover {
+        background: #F8FAFC;
+    }
+
+    .ketuakk-dashboard-overview__comparison-name {
+        min-width: 0;
+        color: #334155;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+    }
+
+    .ketuakk-dashboard-overview__comparison-number {
+        color: var(--kk-text);
+        font-size: 13px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .ketuakk-dashboard-overview__comparison-progress {
+        min-width: 0;
+    }
+
+    .ketuakk-dashboard-overview__comparison-progress-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 6px;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1.35;
+    }
+
+    .ketuakk-dashboard-overview__comparison-progress-meta span:last-child {
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+    }
+
+    .ketuakk-dashboard-overview__comparison-track {
+        height: 6px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #E2E8F0;
+    }
+
+    .ketuakk-dashboard-overview__comparison-fill {
+        height: 100%;
+        border-radius: inherit;
+        background: var(--kk-primary);
+    }
+
+    .ketuakk-dashboard-overview__comparison-progress--complete .ketuakk-dashboard-overview__comparison-progress-meta {
+        color: #15803D;
+    }
+
+    .ketuakk-dashboard-overview__comparison-progress--complete .ketuakk-dashboard-overview__comparison-fill {
+        background: #16A34A;
+    }
+
+    .ketuakk-dashboard-overview__comparison-progress--no-target .ketuakk-dashboard-overview__comparison-progress-meta {
+        color: #64748B;
+    }
+
+    .ketuakk-dashboard-overview__comparison-progress--no-target .ketuakk-dashboard-overview__comparison-fill {
+        background: #94A3B8;
+    }
+
+    .ketuakk-dashboard-overview__comparison-empty {
+        padding: 24px 16px;
+        border-top: 1px solid #EEF2F7;
+        color: #64748B;
+        font-size: 13px;
+        text-align: center;
+    }
+
     @media (max-width: 1200px) {
         .ketuakk-dashboard-overview__header-layout {
             grid-template-columns: 1fr;
@@ -889,6 +1009,12 @@
 
         .ketuakk-dashboard-overview__lab-section {
             grid-template-columns: minmax(0, 1.45fr) minmax(270px, .75fr);
+        }
+
+        .ketuakk-dashboard-overview__comparison-columns,
+        .ketuakk-dashboard-overview__comparison-row {
+            grid-template-columns: minmax(180px, 1fr) repeat(3, minmax(64px, 82px)) minmax(190px, .75fr);
+            column-gap: 12px;
         }
     }
 
@@ -921,6 +1047,35 @@
 
         .ketuakk-dashboard-overview__lab-chart-box {
             height: 270px;
+        }
+
+        .ketuakk-dashboard-overview__comparison {
+            padding-right: 18px;
+            padding-left: 18px;
+        }
+
+        .ketuakk-dashboard-overview__comparison-columns {
+            display: none;
+        }
+
+        .ketuakk-dashboard-overview__comparison-row {
+            grid-template-columns: minmax(0, 1fr) repeat(3, minmax(58px, 72px));
+            row-gap: 10px;
+        }
+
+        .ketuakk-dashboard-overview__comparison-progress {
+            grid-column: 1 / -1;
+        }
+
+        .ketuakk-dashboard-overview__comparison-number::before {
+            content: attr(data-label);
+            display: block;
+            margin-bottom: 3px;
+            color: #64748B;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .04em;
+            text-transform: uppercase;
         }
     }
 </style>
@@ -1210,32 +1365,129 @@
     </aside>
 </section>
 
-<div class="dashboard-category-chart-grid">
-    @foreach($kategoriDetailCharts ?? [] as $index => $chart)
-        <div class="card">
-            <div class="d-flex justify-content-between align-items-start gap-2 flex-wrap mb-2">
-                <div>
-                    <div class="dashboard-panel-title">{{ $chart['kategori'] }}</div>
-                    <div class="dashboard-panel-subtitle mb-0">
-                        Target dan realisasi berdasarkan sub kategori KM.
-                    </div>
+<section class="ketuakk-dashboard-overview ketuakk-dashboard-overview__comparison" aria-labelledby="subcategoryComparisonTitle">
+    <header class="ketuakk-dashboard-overview__comparison-header">
+        <div class="ketuakk-dashboard-overview__section-copy">
+            <h2 class="ketuakk-dashboard-overview__section-title" id="subcategoryComparisonTitle">
+                Target dan Realisasi per Subkategori
+            </h2>
+            <p class="ketuakk-dashboard-overview__section-description">
+                Perbandingan target, realisasi, dan sisa capaian setiap subkategori KM.
+            </p>
+        </div>
+
+        @if($filterDashboardAktif)
+            <div class="ketuakk-dashboard-overview__active-filter">
+                <i class="bi bi-funnel"></i>
+                <span>{{ $filterDashboardLabel }}</span>
+            </div>
+        @endif
+    </header>
+
+    <div class="ketuakk-dashboard-overview__comparison-groups">
+        @forelse($kategoriDetailCharts ?? [] as $chart)
+            @php
+                $namaKategori = trim((string) ($chart['kategori'] ?? ''));
+                $subkategoriLabels = collect($chart['labels'] ?? []);
+            @endphp
+
+            <section class="ketuakk-dashboard-overview__comparison-group">
+                <h3 class="ketuakk-dashboard-overview__comparison-category">
+                    {{ $namaKategori !== '' ? $namaKategori : 'Kategori tanpa nama' }}
+                </h3>
+
+                <div class="ketuakk-dashboard-overview__comparison-columns" aria-hidden="true">
+                    <span>Subkategori</span>
+                    <span>Target</span>
+                    <span>Realisasi</span>
+                    <span>Selisih</span>
+                    <span>Capaian</span>
                 </div>
 
-                @if($filterDashboardAktif)
-                    <div class="dashboard-applied-filter-box">
-                        <i class="bi bi-funnel-fill"></i>
-                        <span class="filter-label">Filter</span>
-                        <span class="filter-value">{{ $filterDashboardLabel }}</span>
-                    </div>
-                @endif
-            </div>
+                @forelse($subkategoriLabels as $subkategoriIndex => $subkategoriLabel)
+                    @php
+                        $namaSubkategori = trim((string) $subkategoriLabel);
+                        $targetSubkategori = (float) data_get($chart['targets'] ?? [], $subkategoriIndex, 0);
+                        $realisasiSubkategori = (float) data_get($chart['realisasi'] ?? [], $subkategoriIndex, 0);
+                        $selisihSubkategori = max($targetSubkategori - $realisasiSubkategori, 0);
+                        $targetTersedia = $targetSubkategori > 0;
+                        $persentaseSebenarnya = $targetTersedia
+                            ? ($realisasiSubkategori / $targetSubkategori) * 100
+                            : null;
+                        $lebarProgress = $targetTersedia
+                            ? min(max($persentaseSebenarnya, 0), 100)
+                            : 0;
+                        $targetTercapai = $targetTersedia && $realisasiSubkategori >= $targetSubkategori;
+                        $progressStateClass = !$targetTersedia
+                            ? 'ketuakk-dashboard-overview__comparison-progress--no-target'
+                            : ($targetTercapai ? 'ketuakk-dashboard-overview__comparison-progress--complete' : '');
+                        $targetDisplay = rtrim(rtrim(number_format($targetSubkategori, 2, ',', '.'), '0'), ',');
+                        $realisasiDisplay = rtrim(rtrim(number_format($realisasiSubkategori, 2, ',', '.'), '0'), ',');
+                        $selisihDisplay = rtrim(rtrim(number_format($selisihSubkategori, 2, ',', '.'), '0'), ',');
+                        $persentaseDisplay = $targetTersedia
+                            ? rtrim(rtrim(number_format($persentaseSebenarnya, 1, ',', '.'), '0'), ',') . '%'
+                            : null;
+                    @endphp
 
-            <div class="dashboard-chart-box-small">
-                <canvas id="chartKategoriDetail{{ $index }}"></canvas>
+                    <div class="ketuakk-dashboard-overview__comparison-row">
+                        <div class="ketuakk-dashboard-overview__comparison-name">
+                            {{ $namaSubkategori !== '' ? $namaSubkategori : 'Subkategori tanpa nama' }}
+                        </div>
+
+                        <div class="ketuakk-dashboard-overview__comparison-number" data-label="Target">
+                            {{ $targetDisplay }}
+                        </div>
+
+                        <div class="ketuakk-dashboard-overview__comparison-number" data-label="Realisasi">
+                            {{ $realisasiDisplay }}
+                        </div>
+
+                        <div class="ketuakk-dashboard-overview__comparison-number" data-label="Selisih">
+                            {{ $selisihDisplay }}
+                        </div>
+
+                        <div class="ketuakk-dashboard-overview__comparison-progress {{ $progressStateClass }}">
+                            <div class="ketuakk-dashboard-overview__comparison-progress-meta">
+                                @if(!$targetTersedia)
+                                    <span>Belum ada target</span>
+                                    <span>Tidak tersedia</span>
+                                @elseif($targetTercapai)
+                                    <span>Target tercapai</span>
+                                    <span>{{ $persentaseDisplay }}</span>
+                                @else
+                                    <span>Dalam proses</span>
+                                    <span>{{ $persentaseDisplay }}</span>
+                                @endif
+                            </div>
+
+                            <div
+                                class="ketuakk-dashboard-overview__comparison-track"
+                                role="progressbar"
+                                aria-label="Capaian {{ $namaSubkategori !== '' ? $namaSubkategori : 'subkategori tanpa nama' }}"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                                aria-valuenow="{{ round($lebarProgress, 1) }}"
+                                aria-valuetext="{{ $targetTersedia ? $persentaseDisplay . ' dari target' : 'Belum ada target' }}">
+                                <div
+                                    class="ketuakk-dashboard-overview__comparison-fill"
+                                    style="width: {{ $lebarProgress }}%;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="ketuakk-dashboard-overview__comparison-empty">
+                        Belum ada data subkategori.
+                    </div>
+                @endforelse
+            </section>
+        @empty
+            <div class="ketuakk-dashboard-overview__comparison-empty">
+                Belum ada data target dan realisasi per subkategori.
             </div>
-        </div>
-    @endforeach
-</div>
+        @endforelse
+    </div>
+</section>
 
 <div class="card">
     <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
@@ -1381,10 +1633,7 @@
 
         const labLabels = @json($labShortLabels ?? $labChartLabels ?? []);
         const labAchievementPercentages = @json($labAchievementPercentages ?? []);
-        const kategoriDetailCharts = @json($kategoriDetailCharts ?? []);
-
         const blue = '#477EF7';
-        const green = '#22C55E';
 
         const defaultOptions = {
             responsive: true,
@@ -1449,36 +1698,6 @@
             });
         }
 
-        kategoriDetailCharts.forEach(function(chart, index) {
-            const chartElement = document.getElementById(
-                'chartKategoriDetail' + index
-            );
-
-            if (!chartElement) {
-                return;
-            }
-
-            new Chart(chartElement, {
-                type: 'bar',
-                data: {
-                    labels: chart.labels,
-                    datasets: [{
-                            label: 'Target',
-                            data: chart.targets,
-                            backgroundColor: blue,
-                            borderRadius: 8
-                        },
-                        {
-                            label: 'Realisasi',
-                            data: chart.realisasi,
-                            backgroundColor: green,
-                            borderRadius: 8
-                        }
-                    ]
-                },
-                options: defaultOptions
-            });
-        });
     });
 </script>
 @endsection
