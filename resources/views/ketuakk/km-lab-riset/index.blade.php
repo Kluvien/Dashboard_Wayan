@@ -37,176 +37,246 @@
         font-weight: 800;
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Ringkasan Target KM per Kategori
-    |--------------------------------------------------------------------------
-    */
-    .summary-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 16px;
+    .ketuakk-lab-km {
         margin-bottom: 20px;
-    }
-
-    .summary-card {
-        position: relative;
         overflow: hidden;
-        min-height: 245px;
-        padding: 18px;
         border: 1px solid #E2E8F0;
-        border-radius: 16px;
-        background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFF 100%);
-        box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+        border-radius: 14px;
+        background: #FFFFFF;
+        color: #334155;
     }
 
-    .summary-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 5px;
-        background: linear-gradient(90deg, #477EF7, #77A2FF);
+    .ketuakk-lab-km__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 20px 22px 18px;
+        border-bottom: 1px solid #EEF2F7;
     }
 
-    .summary-title {
+    .ketuakk-lab-km__heading {
+        min-width: 0;
+        max-width: 680px;
+    }
+
+    .ketuakk-lab-km__eyebrow {
+        margin-bottom: 5px;
+        color: #2563EB;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .ketuakk-lab-km__title {
+        margin: 0;
+        color: #0F172A;
+        font-size: 23px;
+        font-weight: 700;
+        letter-spacing: -.02em;
+        line-height: 1.25;
+        text-wrap: balance;
+    }
+
+    .ketuakk-lab-km__description {
+        max-width: 65ch;
+        margin: 7px 0 0;
+        color: #64748B;
+        font-size: 13px;
+        line-height: 1.55;
+    }
+
+    .ketuakk-lab-km__actions {
         display: flex;
         align-items: center;
+        justify-content: flex-end;
+        flex-wrap: wrap;
         gap: 8px;
-        color: #475569;
-        font-size: 14px;
-        font-weight: 800;
-        margin-bottom: 15px;
     }
 
-    .summary-title::before {
-        content: "";
-        width: 9px;
-        height: 9px;
-        border-radius: 50%;
-        background: #477EF7;
-        box-shadow: 0 0 0 4px #EAF1FF;
+    .ketuakk-lab-km__action {
+        white-space: nowrap;
     }
 
-    .summary-progress-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: end;
-        gap: 12px;
-        margin-bottom: 8px;
-    }
-
-    .summary-progress-label {
-        color: #64748B;
-        font-size: 12px;
-        font-weight: 700;
-    }
-
-    .summary-progress-value {
-        color: #0F172A;
-        font-size: 30px;
-        line-height: 1;
-        font-weight: 800;
-    }
-
-    .summary-progress-bar {
-        height: 9px;
-        overflow: hidden;
-        border-radius: 999px;
-        background: #E8EDF5;
-        margin-bottom: 15px;
-    }
-
-    .summary-progress-fill {
-        height: 100%;
-        border-radius: 999px;
-        background: linear-gradient(90deg, #477EF7, #76A3FF);
-    }
-
-    .summary-info-grid {
+    .ketuakk-lab-km__context {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 9px;
-    }
-
-    .summary-info-item {
-        min-height: 65px;
-        padding: 10px 11px;
-        border: 1px solid #E2E8F0;
-        border-radius: 11px;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 18px;
+        padding: 14px 22px;
+        border-bottom: 1px solid #EEF2F7;
         background: #F8FAFC;
     }
 
-    .summary-info-item.full-width {
-        grid-column: span 2;
+    .ketuakk-lab-km__period .km-current-period-banner {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
     }
 
-    .summary-info-label {
+    .ketuakk-lab-km__period .km-current-period-icon {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+        border-radius: 8px;
+    }
+
+    .ketuakk-lab-km__filter {
         display: flex;
-        align-items: center;
-        gap: 5px;
+        align-items: flex-end;
+        gap: 8px;
+    }
+
+    .ketuakk-lab-km__filter-field {
+        min-width: 124px;
+    }
+
+    .ketuakk-lab-km__filter-label {
+        display: block;
         margin-bottom: 5px;
-        color: #64748B;
-        font-size: 11px;
-        font-weight: 800;
-    }
-
-    .summary-info-value {
-        font-size: 21px;
-        font-weight: 800;
-        line-height: 1;
-    }
-
-    .summary-info-item.target {
-        background: #EFF6FF;
-        border-color: #BFDBFE;
-    }
-
-    .summary-info-item.target .summary-info-value {
-        color: #2563EB;
-    }
-
-    .summary-info-item.turun {
-        background: #ECFDF5;
-        border-color: #BBF7D0;
-    }
-
-    .summary-info-item.turun .summary-info-value {
-        color: #16A34A;
-    }
-
-    .summary-info-item.sisa-alert {
-        background: #FEF2F2;
-        border-color: #FECACA;
-    }
-
-    .summary-info-item.sisa-alert .summary-info-label,
-    .summary-info-item.sisa-alert .summary-info-value {
-        color: #DC2626;
-    }
-
-    .summary-info-item.sisa-done {
-        background: #ECFDF5;
-        border-color: #BBF7D0;
-    }
-
-    .summary-info-item.sisa-done .summary-info-label,
-    .summary-info-item.sisa-done .summary-info-value {
-        color: #15803D;
-    }
-
-    .summary-note {
-        margin-top: 11px;
+        color: #475569;
         font-size: 11px;
         font-weight: 700;
     }
 
-    .summary-note.alert {
-        color: #DC2626;
+    .ketuakk-lab-km__filter-select {
+        min-width: 124px;
     }
 
-    .summary-note.done {
+    .ketuakk-lab-km__summary {
+        padding: 18px 22px 20px;
+    }
+
+    .ketuakk-lab-km__summary-heading {
+        margin-bottom: 13px;
+    }
+
+    .ketuakk-lab-km__summary-title {
+        margin: 0;
+        color: #0F172A;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .ketuakk-lab-km__summary-description {
+        margin: 3px 0 0;
+        color: #64748B;
+        font-size: 12px;
+    }
+
+    .ketuakk-lab-km__summary-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        border: 1px solid #E2E8F0;
+        border-radius: 10px;
+        background: #FFFFFF;
+    }
+
+    .ketuakk-lab-km__summary-item {
+        min-width: 0;
+        padding: 15px 16px 14px;
+    }
+
+    .ketuakk-lab-km__summary-item + .ketuakk-lab-km__summary-item {
+        border-left: 1px solid #EEF2F7;
+    }
+
+    .ketuakk-lab-km__category {
+        margin-bottom: 10px;
+        color: #0F172A;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .ketuakk-lab-km__progress-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 7px;
+    }
+
+    .ketuakk-lab-km__progress-label {
+        color: #64748B;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .ketuakk-lab-km__progress-value {
+        color: #0F172A;
+        font-size: 19px;
+        line-height: 1;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-lab-km__progress {
+        height: 6px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #E2E8F0;
+    }
+
+    .ketuakk-lab-km__progress-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: #2563EB;
+    }
+
+    .ketuakk-lab-km__progress-fill--complete {
+        background: #15803D;
+    }
+
+    .ketuakk-lab-km__metrics {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin: 13px 0 11px;
+    }
+
+    .ketuakk-lab-km__metric {
+        min-width: 0;
+    }
+
+    .ketuakk-lab-km__metric-label {
+        margin-bottom: 3px;
+        color: #64748B;
+        font-size: 10px;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+
+    .ketuakk-lab-km__metric-value {
+        color: #334155;
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-lab-km__metric-value--complete {
+        color: #15803D;
+    }
+
+    .ketuakk-lab-km__status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1.4;
+    }
+
+    .ketuakk-lab-km__status--progress {
+        color: #2563EB;
+    }
+
+    .ketuakk-lab-km__status--complete {
         color: #15803D;
     }
 
@@ -367,16 +437,62 @@
         font-size: 36px;
     }
 
-    @media (max-width: 768px) {
-        .summary-grid {
+    @media (max-width: 1199.98px) {
+        .ketuakk-lab-km__summary-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .ketuakk-lab-km__summary-item:nth-child(3) {
+            border-left: 0;
+        }
+
+        .ketuakk-lab-km__summary-item:nth-child(n + 3) {
+            border-top: 1px solid #EEF2F7;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .ketuakk-lab-km__header,
+        .ketuakk-lab-km__context {
             grid-template-columns: 1fr;
+        }
+
+        .ketuakk-lab-km__header {
+            display: block;
+        }
+
+        .ketuakk-lab-km__actions {
+            justify-content: flex-start;
+            margin-top: 16px;
+        }
+
+        .ketuakk-lab-km__context {
+            display: grid;
+        }
+
+        .ketuakk-lab-km__filter {
+            align-items: flex-end;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .ketuakk-lab-km__header,
+        .ketuakk-lab-km__context,
+        .ketuakk-lab-km__summary {
+            padding-right: 16px;
+            padding-left: 16px;
+        }
+
+        .ketuakk-lab-km__summary-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .ketuakk-lab-km__summary-item + .ketuakk-lab-km__summary-item {
+            border-top: 1px solid #EEF2F7;
+            border-left: 0;
         }
     }
 </style>
-
-<div class="page-heading">
-    Kontrak Manajemen <span class="muted">Lab Riset</span>
-</div>
 
 @if(session('success'))
     <div class="alert alert-success rounded-4 mb-4">
@@ -390,23 +506,45 @@
     </div>
 @endif
 
-<div class="card mb-4">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
-        <div>
-            <h4 class="fw-bold mb-1">KM Lab Riset Tahun {{ $tahun }}</h4>
-            <p class="text-muted mb-0">
+<section class="ketuakk-lab-km" aria-labelledby="ketuakk-lab-km-title">
+    <div class="ketuakk-lab-km__header">
+        <div class="ketuakk-lab-km__heading">
+            <div class="ketuakk-lab-km__eyebrow">Kontrak Manajemen</div>
+            <h1 id="ketuakk-lab-km-title" class="ketuakk-lab-km__title">
+                KM Lab Riset Tahun {{ $tahun }}
+            </h1>
+            <p class="ketuakk-lab-km__description">
                 Menampilkan seluruh Lab Riset beserta jumlah KM yang telah diturunkan dari Ketua KK.
             </p>
         </div>
 
-        <div class="d-flex gap-2 flex-wrap">
-            <a href="/ketuakk/km-lab-riset/create" class="btn btn-primary">
+        <div class="ketuakk-lab-km__actions">
+            <a href="/ketuakk/dashboard" class="btn btn-outline-secondary ketuakk-lab-km__action">
+                <i class="bi bi-arrow-left me-1"></i>
+                Kembali
+            </a>
+
+            <a href="/ketuakk/km-lab-riset/create" class="btn btn-primary ketuakk-lab-km__action">
                 <i class="bi bi-plus-lg me-1"></i>
                 Turunkan KM ke Lab
             </a>
+        </div>
+    </div>
 
-            <form method="GET" action="/ketuakk/km-lab-riset" class="d-flex gap-2">
-                <select name="tahun" class="form-select" style="min-width: 120px;">
+    <div class="ketuakk-lab-km__context">
+        <div class="ketuakk-lab-km__period">
+            @include('partials.periode-saat-ini')
+        </div>
+
+        <form method="GET" action="/ketuakk/km-lab-riset" class="ketuakk-lab-km__filter">
+            <div class="ketuakk-lab-km__filter-field">
+                <label for="ketuakk-lab-km-tahun" class="ketuakk-lab-km__filter-label">
+                    Tahun KM
+                </label>
+                <select
+                    id="ketuakk-lab-km-tahun"
+                    name="tahun"
+                    class="form-select form-select-sm ketuakk-lab-km__filter-select">
                     @foreach($tahunOptions ?? [$tahun] as $itemTahun)
                         <option
                             value="{{ $itemTahun }}"
@@ -415,109 +553,107 @@
                         </option>
                     @endforeach
                 </select>
+            </div>
 
-                <button type="submit" class="btn btn-primary">
-                    Filter
-                </button>
-            </form>
+            <button type="submit" class="btn btn-sm btn-outline-primary">
+                Filter
+            </button>
+        </form>
+    </div>
 
-            <a href="/ketuakk/dashboard" class="btn btn-secondary">
-                Kembali
-            </a>
+    <div class="ketuakk-lab-km__summary">
+        <div class="ketuakk-lab-km__summary-heading">
+            <h2 class="ketuakk-lab-km__summary-title">Ringkasan target per kategori</h2>
+            <p class="ketuakk-lab-km__summary-description">
+                Perbandingan target Ketua KK dan KM yang sudah diturunkan ke Lab Riset.
+            </p>
+        </div>
+
+        <div class="ketuakk-lab-km__summary-grid">
+            @foreach($kategoriDefault as $kategori)
+                @php
+                    $rekap = $rekapKategori->firstWhere('kategori', $kategori);
+
+                    $targetKk = (int) data_get($rekap, 'total_km_kk', 0);
+                    $totalTurun = (int) data_get($rekap, 'total_turun', 0);
+                    $sisa = (int) data_get($rekap, 'sisa', max($targetKk - $totalTurun, 0));
+
+                    $persentaseSebenarnya = $targetKk > 0
+                        ? round(($totalTurun / $targetKk) * 100)
+                        : 0;
+                    $persentaseTurun = min($persentaseSebenarnya, 100);
+                    $targetSelesai = $targetKk > 0 && $totalTurun >= $targetKk;
+                @endphp
+
+                <article class="ketuakk-lab-km__summary-item">
+                    <h3 class="ketuakk-lab-km__category">{{ $kategori }}</h3>
+
+                    <div class="ketuakk-lab-km__progress-row">
+                        <span class="ketuakk-lab-km__progress-label">
+                        Progress Penurunan KM
+                        </span>
+                        <span class="ketuakk-lab-km__progress-value">
+                            {{ $persentaseSebenarnya }}%
+                        </span>
+                    </div>
+
+                    <div
+                        class="ketuakk-lab-km__progress"
+                        role="progressbar"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        aria-valuenow="{{ $persentaseTurun }}"
+                        aria-label="Progress penurunan KM kategori {{ $kategori }}: {{ $persentaseSebenarnya }} persen">
+                        <div
+                            class="ketuakk-lab-km__progress-fill {{ $targetSelesai ? 'ketuakk-lab-km__progress-fill--complete' : '' }}"
+                            style="width: {{ $persentaseTurun }}%;">
+                        </div>
+                    </div>
+
+                    <div class="ketuakk-lab-km__metrics">
+                        <div class="ketuakk-lab-km__metric">
+                            <div class="ketuakk-lab-km__metric-label">Target KK</div>
+                            <div class="ketuakk-lab-km__metric-value">
+                                {{ number_format($targetKk, 0, ',', '.') }}
+                            </div>
+                        </div>
+
+                        <div class="ketuakk-lab-km__metric">
+                            <div class="ketuakk-lab-km__metric-label">Diturunkan</div>
+                            <div class="ketuakk-lab-km__metric-value">
+                                {{ number_format($totalTurun, 0, ',', '.') }}
+                            </div>
+                        </div>
+
+                        <div class="ketuakk-lab-km__metric">
+                            <div class="ketuakk-lab-km__metric-label">Sisa</div>
+                            <div class="ketuakk-lab-km__metric-value {{ $targetSelesai ? 'ketuakk-lab-km__metric-value--complete' : '' }}">
+                                {{ number_format($sisa, 0, ',', '.') }}
+                            </div>
+                        </div>
+                    </div>
+
+                    @if($targetKk <= 0)
+                        <div class="ketuakk-lab-km__status">
+                            <i class="bi bi-dash-circle" aria-hidden="true"></i>
+                            Belum ada target
+                        </div>
+                    @elseif($targetSelesai)
+                        <div class="ketuakk-lab-km__status ketuakk-lab-km__status--complete">
+                            <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
+                            Seluruh target sudah diturunkan
+                        </div>
+                    @else
+                        <div class="ketuakk-lab-km__status ketuakk-lab-km__status--progress">
+                            <i class="bi bi-clock" aria-hidden="true"></i>
+                            {{ number_format($sisa, 0, ',', '.') }} KM belum diturunkan
+                        </div>
+                    @endif
+                </article>
+            @endforeach
         </div>
     </div>
-</div>
-
-@include('partials.periode-saat-ini')
-
-<div class="summary-grid">
-    @foreach($kategoriDefault as $kategori)
-        @php
-            $rekap = $rekapKategori->firstWhere('kategori', $kategori);
-
-            $targetKk = (int) data_get($rekap, 'total_km_kk', 0);
-            $totalTurun = (int) data_get($rekap, 'total_turun', 0);
-            $sisa = (int) data_get($rekap, 'sisa', max($targetKk - $totalTurun, 0));
-
-            $persentaseTurun = $targetKk > 0
-                ? min(round(($totalTurun / $targetKk) * 100), 100)
-                : 0;
-
-            $sisaClass = $sisa > 0 ? 'sisa-alert' : 'sisa-done';
-            $noteClass = $sisa > 0 ? 'alert' : 'done';
-        @endphp
-
-        <div class="summary-card">
-            <div class="summary-title">
-                {{ $kategori }}
-            </div>
-
-            <div class="summary-progress-row">
-                <div>
-                    <div class="summary-progress-label">
-                        Progress Penurunan KM
-                    </div>
-                </div>
-
-                <div class="summary-progress-value">
-                    {{ $persentaseTurun }}%
-                </div>
-            </div>
-
-            <div class="summary-progress-bar">
-                <div
-                    class="summary-progress-fill"
-                    style="width: {{ $persentaseTurun }}%;">
-                </div>
-            </div>
-
-            <div class="summary-info-grid">
-                <div class="summary-info-item target">
-                    <div class="summary-info-label">
-                        <i class="bi bi-bullseye"></i>
-                        Target KK
-                    </div>
-
-                    <div class="summary-info-value">
-                        {{ number_format($targetKk, 0, ',', '.') }}
-                    </div>
-                </div>
-
-                <div class="summary-info-item turun">
-                    <div class="summary-info-label">
-                        <i class="bi bi-arrow-down-circle"></i>
-                        Sudah Diturunkan
-                    </div>
-
-                    <div class="summary-info-value">
-                        {{ number_format($totalTurun, 0, ',', '.') }}
-                    </div>
-                </div>
-
-                <div class="summary-info-item full-width {{ $sisaClass }}">
-                    <div class="summary-info-label">
-                        <i class="bi bi-exclamation-circle"></i>
-                        Sisa Target Belum Turun
-                    </div>
-
-                    <div class="summary-info-value">
-                        {{ number_format($sisa, 0, ',', '.') }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="summary-note {{ $noteClass }}">
-                @if($sisa > 0)
-                    <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                    Masih ada {{ number_format($sisa, 0, ',', '.') }} KM yang perlu diturunkan ke Lab.
-                @else
-                    <i class="bi bi-check-circle-fill me-1"></i>
-                    Seluruh target kategori ini sudah diturunkan ke Lab.
-                @endif
-            </div>
-        </div>
-    @endforeach
-</div>
+</section>
 
 <div class="card">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
