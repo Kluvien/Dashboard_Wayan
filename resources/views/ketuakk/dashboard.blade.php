@@ -349,44 +349,6 @@
         }
     }
 
-    .monitoring-table th,
-    .monitoring-table td {
-        white-space: nowrap;
-        vertical-align: middle;
-        font-size: 13px;
-    }
-
-    .status-pill {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 6px 11px;
-        border-radius: 999px;
-        font-size: 12px;
-        font-weight: 700;
-        white-space: nowrap;
-    }
-
-    .status-success {
-        background: #DCFCE7;
-        color: #15803D;
-    }
-
-    .status-warning {
-        background: #FEF3C7;
-        color: #B45309;
-    }
-
-    .status-danger {
-        background: #FEE2E2;
-        color: #B91C1C;
-    }
-
-    .status-secondary {
-        background: #E5E7EB;
-        color: #475569;
-    }
-
     @media (max-width: 1200px) {
         .dashboard-stat-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -977,7 +939,12 @@
         color: #64748B;
     }
 
-    .ketuakk-dashboard-overview__comparison-progress--no-target .ketuakk-dashboard-overview__comparison-fill {
+    .ketuakk-dashboard-overview__comparison-progress--not-started .ketuakk-dashboard-overview__comparison-progress-meta {
+        color: #64748B;
+    }
+
+    .ketuakk-dashboard-overview__comparison-progress--no-target .ketuakk-dashboard-overview__comparison-fill,
+    .ketuakk-dashboard-overview__comparison-progress--not-started .ketuakk-dashboard-overview__comparison-fill {
         background: #94A3B8;
     }
 
@@ -986,6 +953,239 @@
         border-top: 1px solid #EEF2F7;
         color: #64748B;
         font-size: 13px;
+        text-align: center;
+    }
+
+    .ketuakk-dashboard-overview__monitoring {
+        overflow: hidden;
+        border: 1px solid #E2E8F0;
+        border-radius: 14px;
+        background: #FFFFFF;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 18px;
+        flex-wrap: wrap;
+        padding: 20px 22px;
+        border-bottom: 1px solid #E2E8F0;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-scroll {
+        overflow-x: auto;
+    }
+
+    table.ketuakk-dashboard-overview__monitoring-table {
+        width: 100%;
+        min-width: 1080px;
+        margin: 0;
+        border: 0 !important;
+        border-radius: 0;
+        background: #FFFFFF;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-table > thead > tr > th {
+        height: 44px;
+        padding: 10px 16px !important;
+        border: 0 !important;
+        border-bottom: 1px solid #E2E8F0 !important;
+        background: #F8FAFC;
+        color: #64748B;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .05em;
+        line-height: 1.3;
+        text-transform: uppercase;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-table > tbody > tr > td {
+        height: 56px;
+        padding: 11px 16px !important;
+        border: 0 !important;
+        border-bottom: 1px solid #EEF2F7 !important;
+        background: #FFFFFF;
+        color: #334155;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.4;
+        vertical-align: middle;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-table > tbody > tr:last-child > td {
+        border-bottom: 0 !important;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-table > tbody > tr:hover > td {
+        background: #F8FAFC;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-table th:first-child,
+    .ketuakk-dashboard-overview__monitoring-table td:first-child {
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-cell--identity {
+        min-width: 150px;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-identity-primary {
+        color: #0F172A;
+        font-weight: 700;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-cell--number {
+        color: #0F172A !important;
+        font-weight: 700 !important;
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-table th.ketuakk-dashboard-overview__monitoring-cell--number {
+        color: #64748B !important;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-nidn,
+    .ketuakk-dashboard-overview__monitoring-cell--status,
+    .ketuakk-dashboard-overview__monitoring-cell--action {
+        white-space: nowrap;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-cell--status,
+    .ketuakk-dashboard-overview__monitoring-cell--action {
+        text-align: center;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-jad {
+        display: inline-flex;
+        align-items: center;
+        min-height: 24px;
+        padding: 3px 7px;
+        border: 1px solid #E2E8F0;
+        border-radius: 6px;
+        background: #F8FAFC;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1.2;
+        white-space: nowrap;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-progress {
+        min-width: 150px;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-progress-meta {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 5px;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-progress-track {
+        height: 6px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #E2E8F0;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-progress-fill {
+        height: 100%;
+        border-radius: inherit;
+        background: #2563EB;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-progress--complete .ketuakk-dashboard-overview__monitoring-progress-meta {
+        color: #15803D;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-progress--complete .ketuakk-dashboard-overview__monitoring-progress-fill {
+        background: #16A34A;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 8px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1.2;
+        white-space: nowrap;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-status::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        flex: 0 0 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-status--complete {
+        background: #F0FDF4;
+        color: #15803D;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-status--pending {
+        background: #FFFBEB;
+        color: #A16207;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-status--neutral {
+        background: #F1F5F9;
+        color: #475569;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-status--error {
+        background: #FEF2F2;
+        color: #B91C1C;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 8px;
+        border: 1px solid #CBD5E1;
+        border-radius: 7px;
+        background: #FFFFFF;
+        color: #1D4ED8;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.2;
+        text-decoration: none;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-link:hover {
+        border-color: #93C5FD;
+        background: #F8FAFC;
+        color: #1D4ED8;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-link:focus-visible {
+        outline: 3px solid rgba(37, 99, 235, .22);
+        outline-offset: 2px;
+    }
+
+    .ketuakk-dashboard-overview__monitoring-empty {
+        padding: 24px 16px !important;
+        color: #64748B !important;
+        font-size: 13px !important;
+        font-weight: 500 !important;
         text-align: center;
     }
 
@@ -1385,6 +1585,14 @@
     </header>
 
     <div class="ketuakk-dashboard-overview__comparison-groups">
+        <div class="ketuakk-dashboard-overview__comparison-columns" aria-hidden="true">
+            <span>Subkategori</span>
+            <span>Target</span>
+            <span>Realisasi</span>
+            <span>Selisih</span>
+            <span>Capaian</span>
+        </div>
+
         @forelse($kategoriDetailCharts ?? [] as $chart)
             @php
                 $namaKategori = trim((string) ($chart['kategori'] ?? ''));
@@ -1395,14 +1603,6 @@
                 <h3 class="ketuakk-dashboard-overview__comparison-category">
                     {{ $namaKategori !== '' ? $namaKategori : 'Kategori tanpa nama' }}
                 </h3>
-
-                <div class="ketuakk-dashboard-overview__comparison-columns" aria-hidden="true">
-                    <span>Subkategori</span>
-                    <span>Target</span>
-                    <span>Realisasi</span>
-                    <span>Selisih</span>
-                    <span>Capaian</span>
-                </div>
 
                 @forelse($subkategoriLabels as $subkategoriIndex => $subkategoriLabel)
                     @php
@@ -1417,10 +1617,13 @@
                         $lebarProgress = $targetTersedia
                             ? min(max($persentaseSebenarnya, 0), 100)
                             : 0;
+                        $belumMulai = $targetTersedia && $realisasiSubkategori === 0.0;
                         $targetTercapai = $targetTersedia && $realisasiSubkategori >= $targetSubkategori;
                         $progressStateClass = !$targetTersedia
                             ? 'ketuakk-dashboard-overview__comparison-progress--no-target'
-                            : ($targetTercapai ? 'ketuakk-dashboard-overview__comparison-progress--complete' : '');
+                            : ($belumMulai
+                                ? 'ketuakk-dashboard-overview__comparison-progress--not-started'
+                                : ($targetTercapai ? 'ketuakk-dashboard-overview__comparison-progress--complete' : ''));
                         $targetDisplay = rtrim(rtrim(number_format($targetSubkategori, 2, ',', '.'), '0'), ',');
                         $realisasiDisplay = rtrim(rtrim(number_format($realisasiSubkategori, 2, ',', '.'), '0'), ',');
                         $selisihDisplay = rtrim(rtrim(number_format($selisihSubkategori, 2, ',', '.'), '0'), ',');
@@ -1451,6 +1654,9 @@
                                 @if(!$targetTersedia)
                                     <span>Belum ada target</span>
                                     <span>Tidak tersedia</span>
+                                @elseif($belumMulai)
+                                    <span>Belum mulai</span>
+                                    <span>{{ $persentaseDisplay }}</span>
                                 @elseif($targetTercapai)
                                     <span>Target tercapai</span>
                                     <span>{{ $persentaseDisplay }}</span>
@@ -1489,24 +1695,26 @@
     </div>
 </section>
 
-<div class="card">
-    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
-        <div>
-            <h4 class="fw-bold mb-1">Monitoring Anggota KK</h4>
-            <p class="text-muted mb-0">
+<section class="ketuakk-dashboard-overview ketuakk-dashboard-overview__monitoring" aria-labelledby="monitoringAnggotaTitle">
+    <header class="ketuakk-dashboard-overview__monitoring-header">
+        <div class="ketuakk-dashboard-overview__section-copy">
+            <h2 class="ketuakk-dashboard-overview__section-title" id="monitoringAnggotaTitle">
+                Monitoring Anggota KK
+            </h2>
+            <p class="ketuakk-dashboard-overview__section-description">
                 Menampilkan 10 anggota pertama beserta target, realisasi, dan status capaian KM pada {{ $periodeLabel }}.
             </p>
         </div>
 
         <a
             href="/ketuakk/monitoring-anggota-kk?tahun={{ $tahun }}&periode=triwulan"
-            class="btn btn-primary">
+            class="ketuakk-dashboard-overview__monitoring-link">
             Lihat Selengkapnya
         </a>
-    </div>
+    </header>
 
-    <div class="table-responsive">
-        <table class="table align-middle mb-0 monitoring-table">
+    <div class="table-responsive ketuakk-dashboard-overview__monitoring-scroll">
+        <table class="table align-middle mb-0 ketuakk-dashboard-overview__monitoring-table">
             <thead>
                 <tr>
                     <th>No</th>
@@ -1514,94 +1722,115 @@
                     <th>Lab Riset</th>
                     <th>NIDN</th>
                     <th>JAD</th>
-                    <th>Target</th>
-                    <th>Realisasi</th>
-                    <th>Sisa</th>
+                    <th class="ketuakk-dashboard-overview__monitoring-cell--number">Target</th>
+                    <th class="ketuakk-dashboard-overview__monitoring-cell--number">Realisasi</th>
+                    <th class="ketuakk-dashboard-overview__monitoring-cell--number">Sisa</th>
                     <th>Progress</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
+                    <th class="ketuakk-dashboard-overview__monitoring-cell--status">Status</th>
+                    <th class="ketuakk-dashboard-overview__monitoring-cell--action">Aksi</th>
                 </tr>
             </thead>
 
             <tbody>
                 @forelse($monitoringAnggotaRows as $index => $item)
+                    @php
+                        $progressAnggota = is_numeric($item['progress'] ?? null)
+                            ? (float) $item['progress']
+                            : 0;
+                        $progressVisualAnggota = min(max($progressAnggota, 0), 100);
+                        $progressDisplayAnggota = rtrim(
+                            rtrim(number_format($progressAnggota, 1, ',', '.'), '0'),
+                            ','
+                        );
+                        $statusAnggotaText = (string) ($item['status'] ?? '');
+                        $statusAnggotaAdalahError = \Illuminate\Support\Str::contains(
+                            \Illuminate\Support\Str::lower($statusAnggotaText),
+                            ['error', 'gagal', 'ditolak']
+                        );
+                        $statusAnggotaClass = match ($item['status_class'] ?? null) {
+                            'success' => 'ketuakk-dashboard-overview__monitoring-status--complete',
+                            'warning' => 'ketuakk-dashboard-overview__monitoring-status--pending',
+                            'danger' => $statusAnggotaAdalahError
+                                ? 'ketuakk-dashboard-overview__monitoring-status--error'
+                                : 'ketuakk-dashboard-overview__monitoring-status--pending',
+                            default => 'ketuakk-dashboard-overview__monitoring-status--neutral',
+                        };
+                    @endphp
+
                     <tr>
                         <td>{{ $index + 1 }}</td>
 
-                        <td class="fw-bold">
-                            {{ $item['nama_dosen'] }}
+                        <td class="ketuakk-dashboard-overview__monitoring-cell--identity">
+                            <span class="ketuakk-dashboard-overview__monitoring-identity-primary">
+                                {{ $item['nama_dosen'] }}
+                            </span>
                         </td>
 
-                        <td>
+                        <td class="ketuakk-dashboard-overview__monitoring-cell--identity">
                             {{ $item['nama_lab'] }}
                         </td>
 
-                        <td>
+                        <td class="ketuakk-dashboard-overview__monitoring-nidn">
                             {{ $item['nidn'] }}
                         </td>
 
                         <td>
-                            <span class="badge bg-primary">
+                            <span class="ketuakk-dashboard-overview__monitoring-jad">
                                 {{ $item['jad'] }}
                             </span>
                         </td>
 
-                        <td>
+                        <td class="ketuakk-dashboard-overview__monitoring-cell--number">
                             {{ $item['target'] }}
                         </td>
 
-                        <td>
+                        <td class="ketuakk-dashboard-overview__monitoring-cell--number">
                             {{ $item['realisasi'] }}
                         </td>
 
-                        <td>
+                        <td class="ketuakk-dashboard-overview__monitoring-cell--number">
                             {{ $item['sisa'] }}
                         </td>
 
-                        <td style="min-width: 160px;">
-                            <div class="progress-soft mb-1">
+                        <td>
+                            <div class="ketuakk-dashboard-overview__monitoring-progress {{ $progressAnggota >= 100 ? 'ketuakk-dashboard-overview__monitoring-progress--complete' : '' }}">
+                                <div class="ketuakk-dashboard-overview__monitoring-progress-meta">
+                                    {{ $progressDisplayAnggota }}%
+                                </div>
+
                                 <div
-                                    class="progress-soft-fill"
-                                    style="width: {{ $item['progress'] }}%;">
+                                    class="ketuakk-dashboard-overview__monitoring-progress-track"
+                                    role="progressbar"
+                                    aria-valuemin="0"
+                                    aria-valuemax="100"
+                                    aria-valuenow="{{ round($progressVisualAnggota, 1) }}"
+                                    aria-valuetext="{{ $progressDisplayAnggota }}% capaian"
+                                    aria-label="Progress {{ $item['nama_dosen'] }}: {{ $progressDisplayAnggota }}%">
+                                    <div
+                                        class="ketuakk-dashboard-overview__monitoring-progress-fill"
+                                        style="width: {{ $progressVisualAnggota }}%;">
+                                    </div>
                                 </div>
                             </div>
-
-                            <div class="small text-muted">
-                                {{ $item['progress'] }}%
-                            </div>
                         </td>
 
-                        <td>
-                            @if($item['status_class'] === 'success')
-                                <span class="status-pill status-success">
-                                    {{ $item['status'] }}
-                                </span>
-                            @elseif($item['status_class'] === 'warning')
-                                <span class="status-pill status-warning">
-                                    {{ $item['status'] }}
-                                </span>
-                            @elseif($item['status_class'] === 'danger')
-                                <span class="status-pill status-danger">
-                                    {{ $item['status'] }}
-                                </span>
-                            @else
-                                <span class="status-pill status-secondary">
-                                    {{ $item['status'] }}
-                                </span>
-                            @endif
+                        <td class="ketuakk-dashboard-overview__monitoring-cell--status">
+                            <span class="ketuakk-dashboard-overview__monitoring-status {{ $statusAnggotaClass }}">
+                                {{ $item['status'] }}
+                            </span>
                         </td>
 
-                        <td>
+                        <td class="ketuakk-dashboard-overview__monitoring-cell--action">
                             <a
                                 href="/ketuakk/monitoring-anggota-kk/{{ $item['id_user'] }}?tahun={{ $tahun }}"
-                                class="btn btn-primary btn-sm">
+                                class="ketuakk-dashboard-overview__monitoring-link">
                                 Detail
                             </a>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="11" class="text-center text-muted py-4">
+                        <td colspan="11" class="ketuakk-dashboard-overview__monitoring-empty">
                             Belum ada data anggota KK.
                         </td>
                     </tr>
@@ -1609,7 +1838,7 @@
             </tbody>
         </table>
     </div>
-</div>
+</section>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
