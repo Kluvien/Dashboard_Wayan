@@ -515,104 +515,228 @@
     | Riwayat Penurunan KM
     |--------------------------------------------------------------------------
     */
-    .history-card {
+    .ketuakk-lab-km__history {
         margin-top: 20px;
+        overflow: hidden;
+        border: 1px solid #E2E8F0;
+        border-radius: 14px;
+        background: #FFFFFF;
     }
 
-    .history-timestamp {
-        display: inline-flex;
-        flex-direction: column;
-        gap: 2px;
-        min-width: 130px;
-        padding: 8px 10px;
-        border: 1px solid #DBEAFE;
-        border-radius: 10px;
-        background: #EFF6FF;
+    .ketuakk-lab-km__history-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px 22px;
+        border-bottom: 1px solid #E2E8F0;
     }
 
-    .history-timestamp-date {
-        color: #1D4ED8;
-        font-size: 12px;
-        font-weight: 800;
-    }
-
-    .history-timestamp-time {
-        color: #64748B;
-        font-size: 11px;
-        font-weight: 700;
-    }
-
-    .history-lab-name {
-        min-width: 190px;
+    .ketuakk-lab-km__history-title {
+        margin: 0;
         color: #0F172A;
-        font-weight: 800;
+        font-size: 16px;
+        font-weight: 700;
         line-height: 1.35;
     }
 
-    .history-kategori {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: #EEF4FF;
-        color: #2563EB;
+    .ketuakk-lab-km__history-description {
+        max-width: 72ch;
+        margin: 4px 0 0;
+        color: #64748B;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .ketuakk-lab-km__history-count {
+        flex: 0 0 auto;
+        color: #64748B;
         font-size: 12px;
-        font-weight: 800;
         white-space: nowrap;
     }
 
-    .history-subkategori {
-        min-width: 150px;
-        color: #334155;
+    .ketuakk-lab-km__history-count strong {
+        color: #0F172A;
         font-weight: 700;
+        font-variant-numeric: tabular-nums;
     }
 
-    .history-keterangan {
-        min-width: 180px;
+    .ketuakk-lab-km__history-scroll {
+        overflow-x: auto;
+    }
+
+    .ketuakk-lab-km__history-table {
+        width: 100%;
+        margin: 0;
+        border: 0 !important;
+        border-radius: 0 !important;
+        color: #334155;
+    }
+
+    .ketuakk-lab-km__history-table thead th {
+        padding: 11px 16px !important;
+        border: 0 !important;
+        border-bottom: 1px solid #CBD5E1 !important;
+        background: #F8FAFC !important;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .035em;
+        line-height: 1.35;
+        text-transform: uppercase;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .ketuakk-lab-km__history-table tbody tr {
+        min-height: 56px;
+    }
+
+    .ketuakk-lab-km__history-table tbody td {
+        height: 56px;
+        padding: 11px 16px !important;
+        border: 0 !important;
+        border-bottom: 1px solid #EEF2F7 !important;
+        background: #FFFFFF;
+        color: #334155;
+        font-size: 13px;
+        font-weight: 500;
+        vertical-align: middle;
+    }
+
+    .ketuakk-lab-km__history-table tbody tr:last-child td {
+        border-bottom: 0 !important;
+    }
+
+    .ketuakk-lab-km__history-table tbody tr:hover td {
+        background: #F8FAFC;
+    }
+
+    .ketuakk-lab-km__history-cell--index {
+        min-width: 56px;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .ketuakk-lab-km__history-cell--time {
+        min-width: 132px;
+        white-space: nowrap;
+    }
+
+    .ketuakk-lab-km__history-timestamp {
+        display: inline-flex;
+        flex-direction: column;
+        gap: 2px;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-lab-km__history-date {
+        color: #0F172A;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .ketuakk-lab-km__history-time {
+        color: #64748B;
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    .ketuakk-lab-km__history-date i,
+    .ketuakk-lab-km__history-time i {
+        width: 13px;
+        margin-right: 3px;
+        color: #94A3B8;
+        font-size: 11px;
+    }
+
+    .ketuakk-lab-km__history-cell--lab {
+        min-width: 190px;
+        max-width: 280px;
+        text-align: left;
+    }
+
+    .ketuakk-lab-km__history-lab-name {
+        color: #0F172A;
+        font-weight: 700;
+        line-height: 1.35;
+        overflow-wrap: anywhere;
+    }
+
+    .ketuakk-lab-km__history-category {
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 7px;
+        border: 1px solid #E2E8F0;
+        border-radius: 4px;
+        background: #F8FAFC;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1.35;
+    }
+
+    .ketuakk-lab-km__history-subcategory {
+        min-width: 170px;
         max-width: 250px;
-        white-space: normal;
+        color: #334155;
+        font-weight: 600;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+    }
+
+    .ketuakk-lab-km__history-notes {
+        min-width: 180px;
+        max-width: 280px;
         color: #64748B;
         line-height: 1.45;
+        overflow-wrap: anywhere;
     }
 
-    .history-tw {
-        text-align: center;
-        color: #2563EB;
-        font-size: 15px;
-        font-weight: 800;
+    .ketuakk-lab-km__history-cell--number {
+        color: #334155 !important;
+        font-size: 13px;
+        font-weight: 700 !important;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
     }
 
-    .history-total {
+    .ketuakk-lab-km__history-cell--total {
         color: #0F172A;
-        font-size: 16px;
-        font-weight: 900;
-        text-align: center;
     }
 
-    .status-active {
+    .ketuakk-lab-km__history-cell--status {
+        white-space: nowrap;
+    }
+
+    .ketuakk-lab-km__history-status {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 9px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .ketuakk-lab-km__history-status--active {
         color: #15803D;
         background: #DCFCE7;
     }
 
-    .status-inactive {
+    .ketuakk-lab-km__history-status--inactive {
         color: #64748B;
-        background: #E2E8F0;
+        background: #F1F5F9;
     }
 
-    .empty-state {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 7px;
-        padding: 30px 15px;
+    .ketuakk-lab-km__history-empty {
+        padding: 24px 16px;
+        color: #64748B;
+        font-size: 13px;
+        line-height: 1.5;
         text-align: center;
-        color: #64748B;
-    }
-
-    .empty-state i {
-        color: #94A3B8;
-        font-size: 36px;
     }
 
     @media (max-width: 1199.98px) {
@@ -971,35 +1095,37 @@
     </div>
 </section>
 
-<div class="card history-card">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+<section class="ketuakk-lab-km__history" aria-labelledby="ketuakk-lab-km-history-title">
+    <div class="ketuakk-lab-km__history-header">
         <div>
-            <h4 class="fw-bold mb-1">Riwayat Penurunan KM ke Lab Riset</h4>
-            <p class="text-muted mb-0">
+            <h2 id="ketuakk-lab-km-history-title" class="ketuakk-lab-km__history-title">
+                Riwayat Penurunan KM ke Lab Riset
+            </h2>
+            <p class="ketuakk-lab-km__history-description">
                 Riwayat target KM yang diturunkan Ketua KK kepada Lab Riset pada tahun {{ $tahun }}.
             </p>
         </div>
 
-        <div class="small text-muted">
+        <div class="ketuakk-lab-km__history-count">
             Total Riwayat: <strong>{{ $riwayatPenurunanKm->count() }}</strong>
         </div>
     </div>
 
-    <div class="table-responsive">
-        <table class="table align-middle mb-0 history-table">
+    <div class="table-responsive ketuakk-lab-km__history-scroll">
+        <table class="table align-middle ketuakk-lab-km__history-table">
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Waktu Penurunan</th>
-                    <th>Lab Riset</th>
+                    <th class="ketuakk-lab-km__history-cell--index">No</th>
+                    <th class="ketuakk-lab-km__history-cell--time">Waktu Penurunan</th>
+                    <th class="ketuakk-lab-km__history-cell--lab">Lab Riset</th>
                     <th>Kategori KM</th>
                     <th>Sub Kategori / Jenis KM</th>
                     <th>Keterangan</th>
-                    <th class="text-center">TW 1</th>
-                    <th class="text-center">TW 2</th>
-                    <th class="text-center">TW 3</th>
-                    <th class="text-center">TW 4</th>
-                    <th class="text-center">Total Turun</th>
+                    <th class="ketuakk-lab-km__history-cell--number">TW 1</th>
+                    <th class="ketuakk-lab-km__history-cell--number">TW 2</th>
+                    <th class="ketuakk-lab-km__history-cell--number">TW 3</th>
+                    <th class="ketuakk-lab-km__history-cell--number">TW 4</th>
+                    <th class="ketuakk-lab-km__history-cell--number ketuakk-lab-km__history-cell--total">Total Turun</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -1014,23 +1140,23 @@
                         $statusKm = $riwayat->status_km ?? 'Aktif';
 
                         $statusKmClass = $statusKm === 'Aktif'
-                            ? 'status-active'
-                            : 'status-inactive';
+                            ? 'ketuakk-lab-km__history-status--active'
+                            : 'ketuakk-lab-km__history-status--inactive';
                     @endphp
 
                     <tr>
-                        <td>{{ $index + 1 }}</td>
+                        <td class="ketuakk-lab-km__history-cell--index">{{ $index + 1 }}</td>
 
-                        <td>
+                        <td class="ketuakk-lab-km__history-cell--time">
                             @if($waktuPenurunan)
-                                <div class="history-timestamp">
-                                    <span class="history-timestamp-date">
-                                        <i class="bi bi-calendar-event me-1"></i>
+                                <div class="ketuakk-lab-km__history-timestamp">
+                                    <span class="ketuakk-lab-km__history-date">
+                                        <i class="bi bi-calendar-event" aria-hidden="true"></i>
                                         {{ $waktuPenurunan->format('d/m/Y') }}
                                     </span>
 
-                                    <span class="history-timestamp-time">
-                                        <i class="bi bi-clock me-1"></i>
+                                    <span class="ketuakk-lab-km__history-time">
+                                        <i class="bi bi-clock" aria-hidden="true"></i>
                                         {{ $waktuPenurunan->format('H:i') }}
                                     </span>
                                 </div>
@@ -1039,55 +1165,52 @@
                             @endif
                         </td>
 
-                        <td>
-                            <div class="history-lab-name">
+                        <td class="ketuakk-lab-km__history-cell--lab">
+                            <div class="ketuakk-lab-km__history-lab-name">
                                 {{ $riwayat->nama_lab ?? '-' }}
                             </div>
                         </td>
 
                         <td>
-                            <span class="history-kategori">
-                                <i class="bi bi-folder2-open"></i>
+                            <span class="ketuakk-lab-km__history-category">
                                 {{ $riwayat->kategori_km ?? '-' }}
                             </span>
                         </td>
 
                         <td>
-                            <div class="history-subkategori">
+                            <div class="ketuakk-lab-km__history-subcategory">
                                 {{ $riwayat->sub_kategori_km ?? '-' }}
                             </div>
                         </td>
 
                         <td>
-                            <div class="history-keterangan">
+                            <div class="ketuakk-lab-km__history-notes">
                                 {{ $riwayat->keterangan ?? '-' }}
                             </div>
                         </td>
 
-                        <td class="history-tw">
+                        <td class="ketuakk-lab-km__history-cell--number">
                             {{ (int) ($riwayat->triwulan_1 ?? 0) }}
                         </td>
 
-                        <td class="history-tw">
+                        <td class="ketuakk-lab-km__history-cell--number">
                             {{ (int) ($riwayat->triwulan_2 ?? 0) }}
                         </td>
 
-                        <td class="history-tw">
+                        <td class="ketuakk-lab-km__history-cell--number">
                             {{ (int) ($riwayat->triwulan_3 ?? 0) }}
                         </td>
 
-                        <td class="history-tw">
+                        <td class="ketuakk-lab-km__history-cell--number">
                             {{ (int) ($riwayat->triwulan_4 ?? 0) }}
                         </td>
 
-                        <td>
-                            <div class="history-total">
-                                {{ (int) ($riwayat->jumlah_km ?? 0) }}
-                            </div>
+                        <td class="ketuakk-lab-km__history-cell--number ketuakk-lab-km__history-cell--total">
+                            {{ (int) ($riwayat->jumlah_km ?? 0) }}
                         </td>
 
-                        <td>
-                            <span class="status-badge {{ $statusKmClass }}">
+                        <td class="ketuakk-lab-km__history-cell--status">
+                            <span class="ketuakk-lab-km__history-status {{ $statusKmClass }}">
                                 {{ $statusKm }}
                             </span>
                         </td>
@@ -1095,12 +1218,9 @@
                 @empty
                     <tr>
                         <td colspan="12">
-                            <div class="empty-state">
-                                <i class="bi bi-clock-history"></i>
+                            <div class="ketuakk-lab-km__history-empty">
                                 <strong>Belum ada riwayat penurunan KM.</strong>
-                                <span>
-                                    Riwayat akan muncul setelah Ketua KK menurunkan KM kepada Lab Riset.
-                                </span>
+                                Riwayat akan muncul setelah Ketua KK menurunkan KM kepada Lab Riset.
                             </div>
                         </td>
                     </tr>
@@ -1108,5 +1228,5 @@
             </tbody>
         </table>
     </div>
-</div>
+</section>
 @endsection
