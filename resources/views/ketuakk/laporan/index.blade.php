@@ -71,12 +71,6 @@
         margin-bottom: 12px;
     }
 
-    .report-card-value {
-        font-size: 28px;
-        font-weight: 800;
-        margin-bottom: 0;
-    }
-
     .report-table th {
         white-space: nowrap;
         vertical-align: middle;
@@ -424,6 +418,393 @@
         gap: 8px;
     }
 
+    .ketuakk-report__summary {
+        margin-bottom: 24px;
+        overflow: hidden;
+        border: 1px solid #E2E8F0;
+        border-radius: 14px;
+        background: #FFFFFF;
+    }
+
+    .ketuakk-report__summary-header {
+        padding: 16px 20px;
+        border-bottom: 1px solid #E2E8F0;
+        background: #F8FAFC;
+    }
+
+    .ketuakk-report__summary-title {
+        margin: 0;
+        color: #0F172A;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .ketuakk-report__summary-description {
+        margin: 3px 0 0;
+        color: #64748B;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .ketuakk-report__metric-group + .ketuakk-report__metric-group {
+        border-top: 1px solid #E2E8F0;
+    }
+
+    .ketuakk-report__metric-group-title {
+        padding: 11px 18px 0;
+        color: #64748B;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+    }
+
+    .ketuakk-report__metrics {
+        display: grid;
+    }
+
+    .ketuakk-report__metrics--scope {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .ketuakk-report__metrics--achievement {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .ketuakk-report__metric {
+        min-width: 0;
+        padding: 14px 18px 16px;
+        border-right: 1px solid #EEF2F7;
+    }
+
+    .ketuakk-report__metric:last-child {
+        border-right: 0;
+    }
+
+    .ketuakk-report__metric-label {
+        display: block;
+        color: #64748B;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .ketuakk-report__metric-value {
+        display: block;
+        margin-top: 5px;
+        color: #0F172A;
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-report__summary-progress {
+        padding: 0 18px 16px;
+    }
+
+    .ketuakk-report__summary-progress-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 7px;
+        color: #334155;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .ketuakk-report__progress-track {
+        width: 100%;
+        height: 6px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #E2E8F0;
+    }
+
+    .ketuakk-report__progress-fill {
+        height: 100%;
+        border-radius: inherit;
+        background: #2563EB;
+    }
+
+    .ketuakk-report__section {
+        margin-bottom: 24px;
+        overflow: hidden;
+        border: 1px solid #E2E8F0;
+        border-radius: 14px;
+        background: #FFFFFF;
+    }
+
+    .ketuakk-report__section-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 16px 20px;
+        border-bottom: 1px solid #E2E8F0;
+        background: #F8FAFC;
+    }
+
+    .ketuakk-report__section-title {
+        margin: 0;
+        color: #0F172A;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .ketuakk-report__section-description,
+    .ketuakk-report__section-meta {
+        margin: 3px 0 0;
+        color: #64748B;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .ketuakk-report__period-label {
+        color: #475569;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .ketuakk-report__scroll {
+        overflow-x: auto;
+    }
+
+    .ketuakk-report__table {
+        width: 100%;
+        margin: 0;
+        border: 0 !important;
+        border-radius: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .ketuakk-report__table th,
+    .ketuakk-report__table td {
+        min-height: 56px;
+        padding: 11px 16px !important;
+        border: 0 !important;
+        border-bottom: 1px solid #EEF2F7 !important;
+        color: #334155;
+        background: #FFFFFF;
+        font-size: 13px;
+        font-weight: 500;
+        vertical-align: middle;
+    }
+
+    .ketuakk-report__table thead th {
+        color: #475569;
+        background: #F8FAFC;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .03em;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .ketuakk-report__table tbody tr:hover > td,
+    .ketuakk-report__table tbody tr:hover > th {
+        background: #F8FAFC;
+    }
+
+    .ketuakk-report__table tbody tr:last-child > td,
+    .ketuakk-report__table tbody tr:last-child > th {
+        border-bottom: 0 !important;
+    }
+
+    .ketuakk-report__cell--index {
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .ketuakk-report__cell--identity {
+        min-width: 180px;
+        color: #0F172A !important;
+        font-weight: 700 !important;
+        text-align: left;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .ketuakk-report__cell--description {
+        min-width: 220px;
+        text-align: left;
+        white-space: normal !important;
+        overflow-wrap: anywhere;
+    }
+
+    .ketuakk-report__cell--number {
+        text-align: right;
+        white-space: nowrap;
+        font-weight: 700 !important;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-report__cell--date {
+        text-align: center;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-report__cell--status,
+    .ketuakk-report__cell--action {
+        white-space: nowrap;
+    }
+
+    .ketuakk-report__group-heading {
+        border-right: 1px solid #CBD5E1 !important;
+        border-left: 1px solid #CBD5E1 !important;
+        text-align: center;
+    }
+
+    .ketuakk-report__group-start { border-left: 1px solid #CBD5E1 !important; }
+    .ketuakk-report__group-end { border-right: 1px solid #CBD5E1 !important; }
+
+    .ketuakk-report__table-progress {
+        min-width: 170px;
+    }
+
+    .ketuakk-report__table-progress-value {
+        margin-top: 4px;
+        color: #64748B;
+        font-size: 11px;
+        font-weight: 600;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-report__status {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .ketuakk-report__status--success { color: #15803D; }
+    .ketuakk-report__status--warning { color: #B45309; }
+    .ketuakk-report__status--neutral { color: #64748B; }
+
+    .ketuakk-report__empty {
+        padding: 24px 16px !important;
+        color: #64748B !important;
+        font-size: 13px !important;
+        font-weight: 500 !important;
+        text-align: center;
+    }
+
+    .ketuakk-report__category + .ketuakk-report__category {
+        border-top: 1px solid #CBD5E1;
+    }
+
+    .ketuakk-report__category-header {
+        padding: 14px 18px;
+        border-bottom: 1px solid #E2E8F0;
+        background: #F8FAFC;
+    }
+
+    .ketuakk-report__category-title {
+        margin: 0;
+        color: #0F172A;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .ketuakk-report__category-meta {
+        margin-top: 3px;
+        color: #64748B;
+        font-size: 12px;
+    }
+
+    .ketuakk-report__deadline {
+        border-top: 1px solid #E2E8F0;
+    }
+
+    .ketuakk-report__deadline-title {
+        padding: 12px 18px;
+        color: #334155;
+        background: #F8FAFC;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .ketuakk-report__date-range {
+        color: #334155;
+        font-size: 12px;
+        font-weight: 500;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-report__date-range--empty { color: #64748B; }
+
+    .ketuakk-report__evidence {
+        display: inline-flex;
+        min-height: 32px;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10px;
+        border: 1px solid #93C5FD;
+        border-radius: 7px;
+        color: #1D4ED8;
+        background: #FFFFFF;
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .ketuakk-report__evidence:hover {
+        background: #EFF6FF;
+        color: #1D4ED8;
+    }
+
+    .ketuakk-report__evidence:focus-visible {
+        outline: 3px solid rgba(37, 99, 235, .22);
+        outline-offset: 2px;
+    }
+
+    .ketuakk-report__table--detail td:nth-child(n + 4):nth-child(-n + 17),
+    .ketuakk-report__table--scope td:nth-child(n + 4):nth-child(-n + 6) {
+        color: #334155 !important;
+        text-align: right;
+        white-space: nowrap;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-report__table--detail td:first-child,
+    .ketuakk-report__table--deadline td:first-child,
+    .ketuakk-report__table--scope td:first-child,
+    .ketuakk-report__table--activity td:first-child {
+        text-align: center;
+    }
+
+    .ketuakk-report__table--deadline td:nth-child(n + 3),
+    .ketuakk-report__table--activity td:nth-child(5),
+    .ketuakk-report__table--activity td:nth-child(6) {
+        text-align: center;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-report__table--detail td:nth-child(2),
+    .ketuakk-report__table--scope td:nth-child(2),
+    .ketuakk-report__table--activity td:nth-child(2),
+    .ketuakk-report__table--activity td:nth-child(4) {
+        color: #0F172A;
+        font-weight: 700;
+    }
+
+    .ketuakk-report__table--detail td:nth-child(2),
+    .ketuakk-report__table--detail td:nth-child(3),
+    .ketuakk-report__table--scope td:nth-child(2),
+    .ketuakk-report__table--scope td:nth-child(3),
+    .ketuakk-report__table--activity td:nth-child(2),
+    .ketuakk-report__table--activity td:nth-child(3),
+    .ketuakk-report__table--activity td:nth-child(4) {
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
     @media (max-width: 900px) {
         .ketuakk-report__filter-group {
             grid-template-columns: 1fr;
@@ -439,6 +820,18 @@
             padding: 16px 0 0;
             border-top: 1px solid #E2E8F0;
             border-left: 0;
+        }
+
+        .ketuakk-report__metrics--achievement {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .ketuakk-report__metrics--achievement .ketuakk-report__metric:nth-child(2) {
+            border-right: 0;
+        }
+
+        .ketuakk-report__metrics--achievement .ketuakk-report__metric:nth-child(-n + 2) {
+            border-bottom: 1px solid #EEF2F7;
         }
     }
 
@@ -471,6 +864,21 @@
 
         .ketuakk-report__export-buttons {
             flex-direction: column;
+        }
+
+        .ketuakk-report__metrics--scope,
+        .ketuakk-report__metrics--achievement {
+            grid-template-columns: 1fr;
+        }
+
+        .ketuakk-report__metric,
+        .ketuakk-report__metrics--achievement .ketuakk-report__metric:nth-child(2) {
+            border-right: 0;
+            border-bottom: 1px solid #EEF2F7;
+        }
+
+        .ketuakk-report__metric:last-child {
+            border-bottom: 0;
         }
     }
 </style>
@@ -690,94 +1098,117 @@
     </form>
 </section>
 
-<div class="row g-4 mb-4">
-    <div class="col-md-3">
-        <div class="card h-100">
-            <p class="text-muted mb-1">Jumlah Lab Riset</p>
-            <p class="report-card-value">{{ $summary['jumlah_lab'] ?? 0 }}</p>
+<section class="ketuakk-report__summary" aria-labelledby="ketuakk-report-summary-title">
+    <div class="ketuakk-report__summary-header">
+        <h2 id="ketuakk-report-summary-title" class="ketuakk-report__summary-title">Ringkasan laporan</h2>
+        <p class="ketuakk-report__summary-description">
+            Cakupan data dan capaian kontrak manajemen pada periode yang dipilih.
+        </p>
+    </div>
+
+    <div class="ketuakk-report__metric-group">
+        <div class="ketuakk-report__metric-group-title">Cakupan laporan</div>
+        <div class="ketuakk-report__metrics ketuakk-report__metrics--scope">
+            <div class="ketuakk-report__metric">
+                <span class="ketuakk-report__metric-label">Jumlah Lab Riset</span>
+                <strong class="ketuakk-report__metric-value">{{ $summary['jumlah_lab'] ?? 0 }}</strong>
+            </div>
+            <div class="ketuakk-report__metric">
+                <span class="ketuakk-report__metric-label">Jumlah Anggota KK</span>
+                <strong class="ketuakk-report__metric-value">{{ $summary['jumlah_anggota'] ?? 0 }}</strong>
+            </div>
         </div>
     </div>
 
-    <div class="col-md-3">
-        <div class="card h-100">
-            <p class="text-muted mb-1">Jumlah Anggota KK</p>
-            <p class="report-card-value">{{ $summary['jumlah_anggota'] ?? 0 }}</p>
+    <div class="ketuakk-report__metric-group">
+        <div class="ketuakk-report__metric-group-title">Capaian KM</div>
+        <div class="ketuakk-report__metrics ketuakk-report__metrics--achievement">
+            <div class="ketuakk-report__metric">
+                <span class="ketuakk-report__metric-label">Total Target KK</span>
+                <strong class="ketuakk-report__metric-value">{{ $summary['total_target'] ?? 0 }}</strong>
+            </div>
+            <div class="ketuakk-report__metric">
+                <span class="ketuakk-report__metric-label">Total Realisasi</span>
+                <strong class="ketuakk-report__metric-value">{{ $summary['total_realisasi'] ?? 0 }}</strong>
+            </div>
+            <div class="ketuakk-report__metric">
+                <span class="ketuakk-report__metric-label">Sisa Target</span>
+                <strong class="ketuakk-report__metric-value">{{ $summary['total_sisa'] ?? 0 }}</strong>
+            </div>
+            <div class="ketuakk-report__metric">
+                <span class="ketuakk-report__metric-label">Persentase Capaian</span>
+                <strong class="ketuakk-report__metric-value">{{ $summary['persentase'] ?? 0 }}%</strong>
+            </div>
+        </div>
+
+        <div class="ketuakk-report__summary-progress">
+            <div class="ketuakk-report__summary-progress-heading">
+                <span>Progress capaian kontrak manajemen</span>
+                <span>{{ $summary['persentase'] ?? 0 }}%</span>
+            </div>
+            <div
+                class="ketuakk-report__progress-track"
+                role="progressbar"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="{{ $summary['persentase'] ?? 0 }}"
+                aria-label="Progress capaian kontrak manajemen {{ $summary['persentase'] ?? 0 }} persen">
+                <div
+                    class="ketuakk-report__progress-fill"
+                    style="width: {{ min((int) ($summary['persentase'] ?? 0), 100) }}%;">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ketuakk-report__section" aria-labelledby="report-category-title">
+    <div class="ketuakk-report__section-header">
+        <div>
+            <h2 id="report-category-title" class="ketuakk-report__section-title">Rekap Kategori KM</h2>
+            <p class="ketuakk-report__section-description">Perbandingan target dan realisasi untuk setiap kategori kontrak manajemen.</p>
         </div>
     </div>
 
-    <div class="col-md-3">
-        <div class="card h-100">
-            <p class="text-muted mb-1">Total Target KK</p>
-            <p class="report-card-value">{{ $summary['total_target'] ?? 0 }}</p>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card h-100">
-            <p class="text-muted mb-1">Total Realisasi</p>
-            <p class="report-card-value text-success">{{ $summary['total_realisasi'] ?? 0 }}</p>
-        </div>
-    </div>
-</div>
-
-<div class="row g-4 mb-4">
-    <div class="col-md-6">
-        <div class="card h-100">
-            <p class="text-muted mb-1">Sisa Target</p>
-            <p class="report-card-value text-warning">{{ $summary['total_sisa'] ?? 0 }}</p>
-        </div>
-    </div>
-
-    <div class="col-md-6">
-        <div class="card h-100">
-            <p class="text-muted mb-1">Persentase Capaian</p>
-            <p class="report-card-value">{{ $summary['persentase'] ?? 0 }}%</p>
-        </div>
-    </div>
-</div>
-
-<div class="card mb-4">
-    <h4 class="fw-bold mb-3">Rekap Kategori KM</h4>
-
-    <div class="table-responsive">
-        <table class="table align-middle mb-0 report-table">
+    <div class="table-responsive ketuakk-report__scroll">
+        <table class="table align-middle mb-0 report-table ketuakk-report__table">
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Kategori KM</th>
-                    <th>Target</th>
-                    <th>Realisasi</th>
-                    <th>Sisa</th>
-                    <th>Progress</th>
-                    <th>Status</th>
+                    <th scope="col">No</th>
+                    <th scope="col">Kategori KM</th>
+                    <th scope="col" class="ketuakk-report__cell--number">Target</th>
+                    <th scope="col" class="ketuakk-report__cell--number">Realisasi</th>
+                    <th scope="col" class="ketuakk-report__cell--number">Sisa</th>
+                    <th scope="col">Progress</th>
+                    <th scope="col">Status</th>
                 </tr>
             </thead>
 
             <tbody>
                 @forelse($rekapKategori as $index => $item)
                     <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td class="fw-bold">{{ $item['nama'] ?? '-' }}</td>
-                        <td>{{ $item['target'] ?? 0 }}</td>
-                        <td>{{ $item['realisasi'] ?? 0 }}</td>
-                        <td>{{ $item['sisa'] ?? 0 }}</td>
-                        <td style="min-width: 180px;">
-                            <div class="progress-soft mb-1">
-                                <div class="progress-soft-fill" style="width: {{ $item['persentase'] ?? 0 }}%;"></div>
+                        <td class="ketuakk-report__cell--index">{{ $index + 1 }}</td>
+                        <td class="ketuakk-report__cell--identity">{{ $item['nama'] ?? '-' }}</td>
+                        <td class="ketuakk-report__cell--number">{{ $item['target'] ?? 0 }}</td>
+                        <td class="ketuakk-report__cell--number">{{ $item['realisasi'] ?? 0 }}</td>
+                        <td class="ketuakk-report__cell--number">{{ $item['sisa'] ?? 0 }}</td>
+                        <td class="ketuakk-report__table-progress">
+                            <div class="ketuakk-report__progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $item['persentase'] ?? 0 }}" aria-label="Progress {{ $item['nama'] ?? 'kategori' }} {{ $item['persentase'] ?? 0 }} persen">
+                                <div class="ketuakk-report__progress-fill" style="width: {{ min((int) ($item['persentase'] ?? 0), 100) }}%;"></div>
                             </div>
-                            <div class="small text-muted">{{ $item['persentase'] ?? 0 }}%</div>
+                            <div class="ketuakk-report__table-progress-value">{{ $item['persentase'] ?? 0 }}%</div>
                         </td>
-                        <td>
+                        <td class="ketuakk-report__cell--status">
                             @if(($item['status'] ?? '') === 'Tercapai')
-                                <span class="status-pill status-success">Tercapai</span>
+                                <span class="ketuakk-report__status ketuakk-report__status--success">Tercapai</span>
                             @else
-                                <span class="status-pill status-warning">Belum Tercapai</span>
+                                <span class="ketuakk-report__status ketuakk-report__status--warning">Belum Tercapai</span>
                             @endif
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center text-muted py-4">
+                        <td colspan="7" class="ketuakk-report__empty">
                             Belum ada data rekap kategori.
                         </td>
                     </tr>
@@ -785,26 +1216,26 @@
             </tbody>
         </table>
     </div>
-</div>
+</section>
 
-<div class="card mb-4">
-    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+<section class="ketuakk-report__section" aria-labelledby="report-target-detail-title">
+    <div class="ketuakk-report__section-header">
         <div>
-            <h4 class="fw-bold mb-1">Rekap Detail Target KM per Kategori</h4>
-            <p class="text-muted mb-0">
+            <h2 id="report-target-detail-title" class="ketuakk-report__section-title">Rekap Detail Target KM per Kategori</h2>
+            <p class="ketuakk-report__section-description">
                 Menampilkan seluruh sub kategori/jenis KM yang dibuat Ketua KK, beserta keterangan, target, realisasi, pembagian triwulan, dan tenggat penyelesaian.
             </p>
         </div>
 
-        <span class="badge bg-primary">{{ $filters['label_periode'] ?? '-' }}</span>
+        <span class="ketuakk-report__period-label">{{ $filters['label_periode'] ?? '-' }}</span>
     </div>
 
     @forelse($detailTargetKategori as $kategori)
-        <div class="detail-category-card">
-            <div class="detail-category-header d-flex justify-content-between align-items-start flex-wrap gap-2">
+        <section class="ketuakk-report__category">
+            <div class="ketuakk-report__category-header">
                 <div>
-                    <h5 class="detail-category-title">{{ $kategori['kategori'] ?? '-' }}</h5>
-                    <div class="detail-category-meta">
+                    <h3 class="ketuakk-report__category-title">{{ $kategori['kategori'] ?? '-' }}</h3>
+                    <div class="ketuakk-report__category-meta">
                         {{ $kategori['jumlah_sub_kategori'] ?? 0 }} sub kategori/jenis KM
                         · Target periode: {{ $kategori['target_periode'] ?? 0 }}
                         · Realisasi periode: {{ $kategori['realisasi_periode'] ?? 0 }}
@@ -812,15 +1243,15 @@
                 </div>
             </div>
 
-            <div class="table-responsive">
-                <table class="table align-middle mb-0 detail-target-table">
+            <div class="table-responsive ketuakk-report__scroll">
+                <table class="table align-middle mb-0 detail-target-table ketuakk-report__table ketuakk-report__table--detail">
                     <thead>
                         <tr>
                             <th rowspan="2">No</th>
                             <th rowspan="2">Sub Kategori / Jenis KM</th>
                             <th rowspan="2">Keterangan</th>
-                            <th colspan="6" class="group-heading">Target KM</th>
-                            <th colspan="6" class="group-heading">Realisasi KM</th>
+                            <th scope="colgroup" colspan="6" class="ketuakk-report__group-heading">Target KM</th>
+                            <th scope="colgroup" colspan="6" class="ketuakk-report__group-heading">Realisasi KM</th>
                             <th rowspan="2">Sisa</th>
                             <th rowspan="2">Progress</th>
                             <th rowspan="2">Status</th>
@@ -872,14 +1303,14 @@
                                 <td class="fw-bold text-warning">{{ $row['sisa_periode'] ?? 0 }}</td>
                                 <td>{{ $row['persentase'] ?? 0 }}%</td>
                                 <td>
-                                    <span class="status-pill {{ $statusClass }}">
+                                    <span class="ketuakk-report__status {{ ($row['status'] ?? '') === 'Tercapai' ? 'ketuakk-report__status--success' : 'ketuakk-report__status--warning' }}">
                                         {{ $row['status'] ?? '-' }}
                                     </span>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="18" class="text-center text-muted py-4">
+                                <td colspan="18" class="ketuakk-report__empty">
                                     Belum ada detail target KM dalam kategori ini.
                                 </td>
                             </tr>
@@ -888,11 +1319,11 @@
                 </table>
             </div>
 
-            <div class="p-3 border-top">
-                <div class="fw-bold mb-2">Tenggat Penyelesaian per Triwulan</div>
+            <div class="ketuakk-report__deadline">
+                <div class="ketuakk-report__deadline-title">Tenggat Penyelesaian per Triwulan</div>
 
-                <div class="table-responsive">
-                    <table class="table table-sm align-middle mb-0 period-table">
+                <div class="table-responsive ketuakk-report__scroll">
+                    <table class="table table-sm align-middle mb-0 period-table ketuakk-report__table ketuakk-report__table--deadline">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -904,53 +1335,55 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($kategori['rows'] ?? [] as $row)
+                            @forelse($kategori['rows'] ?? [] as $row)
                                 <tr>
                                     <td>{{ $row['no'] ?? '-' }}</td>
                                     <td class="fw-bold">{{ $row['sub_kategori'] ?? '-' }}</td>
                                     <td>
-                                        <span class="period-chip">
+                                        <span class="ketuakk-report__date-range">
                                             {{ $row['tanggal_mulai_tw1'] ?? '-' }} → {{ $row['tanggal_selesai_tw1'] ?? '-' }}
                                         </span>
                                     </td>
                                     <td>
-                                        <span class="period-chip">
+                                        <span class="ketuakk-report__date-range">
                                             {{ $row['tanggal_mulai_tw2'] ?? '-' }} → {{ $row['tanggal_selesai_tw2'] ?? '-' }}
                                         </span>
                                     </td>
                                     <td>
-                                        <span class="period-chip">
+                                        <span class="ketuakk-report__date-range">
                                             {{ $row['tanggal_mulai_tw3'] ?? '-' }} → {{ $row['tanggal_selesai_tw3'] ?? '-' }}
                                         </span>
                                     </td>
                                     <td>
-                                        <span class="period-chip">
+                                        <span class="ketuakk-report__date-range">
                                             {{ $row['tanggal_mulai_tw4'] ?? '-' }} → {{ $row['tanggal_selesai_tw4'] ?? '-' }}
                                         </span>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr><td colspan="6" class="ketuakk-report__empty">Belum ada tenggat penyelesaian pada kategori ini.</td></tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
+        </section>
     @empty
-        <div class="text-center text-muted py-4">
+        <div class="ketuakk-report__empty">
             Belum ada target KM yang dibuat pada periode ini.
         </div>
     @endforelse
-</div>
+</section>
 
 @if(($filters['jenis_laporan'] ?? 'kk') !== 'kk')
-    <div class="card mb-4">
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-            <h4 class="fw-bold mb-0">Detail Laporan: {{ $scopeTitle ?? '-' }}</h4>
-            <span class="badge bg-primary">{{ $filters['label_periode'] ?? '-' }}</span>
+    <section class="ketuakk-report__section" aria-labelledby="report-scope-detail-title">
+        <div class="ketuakk-report__section-header">
+            <h2 id="report-scope-detail-title" class="ketuakk-report__section-title">Detail Laporan: {{ $scopeTitle ?? '-' }}</h2>
+            <span class="ketuakk-report__period-label">{{ $filters['label_periode'] ?? '-' }}</span>
         </div>
 
-        <div class="table-responsive">
-            <table class="table align-middle mb-0 report-table">
+        <div class="table-responsive ketuakk-report__scroll">
+            <table class="table align-middle mb-0 report-table ketuakk-report__table ketuakk-report__table--scope">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -973,23 +1406,23 @@
                             <td>{{ $item['target'] ?? 0 }}</td>
                             <td>{{ $item['realisasi'] ?? 0 }}</td>
                             <td>{{ $item['sisa'] ?? 0 }}</td>
-                            <td style="min-width: 180px;">
-                                <div class="progress-soft mb-1">
-                                    <div class="progress-soft-fill" style="width: {{ $item['persentase'] ?? 0 }}%;"></div>
+                            <td class="ketuakk-report__table-progress">
+                                <div class="ketuakk-report__progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $item['persentase'] ?? 0 }}" aria-label="Progress {{ $item['nama'] ?? 'laporan' }} {{ $item['persentase'] ?? 0 }} persen">
+                                    <div class="ketuakk-report__progress-fill" style="width: {{ min((int) ($item['persentase'] ?? 0), 100) }}%;"></div>
                                 </div>
-                                <div class="small text-muted">{{ $item['persentase'] ?? 0 }}%</div>
+                                <div class="ketuakk-report__table-progress-value">{{ $item['persentase'] ?? 0 }}%</div>
                             </td>
                             <td>
                                 @if(($item['status'] ?? '') === 'Tercapai')
-                                    <span class="status-pill status-success">Tercapai</span>
+                                    <span class="ketuakk-report__status ketuakk-report__status--success">Tercapai</span>
                                 @else
-                                    <span class="status-pill status-warning">Belum Tercapai</span>
+                                    <span class="ketuakk-report__status ketuakk-report__status--warning">Belum Tercapai</span>
                                 @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center text-muted py-4">
+                            <td colspan="8" class="ketuakk-report__empty">
                                 Tidak ada data pada ruang lingkup dan periode ini.
                             </td>
                         </tr>
@@ -997,15 +1430,17 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </section>
 @endif
 
 @if(($filters['jenis_laporan'] ?? '') === 'anggota_satu')
-    <div class="card">
-        <h4 class="fw-bold mb-3">Riwayat Aktivitas Anggota</h4>
+    <section class="ketuakk-report__section" aria-labelledby="report-activity-title">
+        <div class="ketuakk-report__section-header">
+            <h2 id="report-activity-title" class="ketuakk-report__section-title">Riwayat Aktivitas Anggota</h2>
+        </div>
 
-        <div class="table-responsive">
-            <table class="table align-middle mb-0 report-table">
+        <div class="table-responsive ketuakk-report__scroll">
+            <table class="table align-middle mb-0 report-table ketuakk-report__table ketuakk-report__table--activity">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -1028,10 +1463,10 @@
                             <td>{{ $aktivitas['judul_aktivitas'] ?? '-' }}</td>
                             <td>{{ $aktivitas['tanggal_mulai'] ?? '-' }}</td>
                             <td>{{ $aktivitas['tanggal_selesai'] ?? '-' }}</td>
-                            <td><span class="badge bg-success">{{ $aktivitas['status_progress'] ?? 'Accepted' }}</span></td>
+                            <td><span class="ketuakk-report__status ketuakk-report__status--success">{{ $aktivitas['status_progress'] ?? 'Accepted' }}</span></td>
                             <td>
                                 @if(!empty($aktivitas['bukti_link']) && $aktivitas['bukti_link'] !== '-')
-                                    <a href="{{ $aktivitas['bukti_link'] }}" target="_blank" class="btn btn-primary btn-sm">Lihat</a>
+                                    <a href="{{ $aktivitas['bukti_link'] }}" target="_blank" rel="noopener noreferrer" class="ketuakk-report__evidence" aria-label="Lihat bukti aktivitas di tab baru">Lihat</a>
                                 @else
                                     -
                                 @endif
@@ -1039,7 +1474,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center text-muted py-4">
+                            <td colspan="8" class="ketuakk-report__empty">
                                 Belum ada aktivitas yang diterima pada periode ini.
                             </td>
                         </tr>
@@ -1047,7 +1482,7 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </section>
 @endif
 
 <script>
