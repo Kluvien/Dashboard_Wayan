@@ -128,7 +128,7 @@
                 @empty
                     <tr>
                         <td colspan="14" class="text-center text-muted py-4">
-                            Belum ada KM yang diturunkan ke Lab Riset ini.
+                            Belum ada KM yang diberikan ke Lab Riset ini.
                         </td>
                     </tr>
                 @endforelse

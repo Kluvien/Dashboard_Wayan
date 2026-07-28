@@ -1428,7 +1428,7 @@
                 <div class="ketuakk-dashboard-overview__metric">
                     <div class="ketuakk-dashboard-overview__metric-label">
                         <i class="bi bi-arrow-down-circle"></i>
-                        Diturunkan
+                        Didistribusikan
                     </div>
 
                     <div class="ketuakk-dashboard-overview__metric-value">
@@ -1451,10 +1451,10 @@
             <div class="ketuakk-dashboard-overview__note {{ $belumTurunKategori > 0 ? 'ketuakk-dashboard-overview__note--attention' : 'ketuakk-dashboard-overview__note--complete' }}">
                 @if($belumTurunKategori > 0)
                     <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                    Masih ada {{ number_format($belumTurunKategori, 0, ',', '.') }} KM yang belum diturunkan.
+                    Masih ada {{ number_format($belumTurunKategori, 0, ',', '.') }} KM yang belum didistribusikan.
                 @else
                     <i class="bi bi-check-circle-fill me-1"></i>
-                    Seluruh target kategori sudah diturunkan.
+                    Seluruh target kategori sudah didistribusikan.
                 @endif
             </div>
 

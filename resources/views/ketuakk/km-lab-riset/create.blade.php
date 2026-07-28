@@ -300,7 +300,7 @@
         </div>
 
         <div class="mb-4">
-            <div class="form-section-title">Sisa Target KM yang Dapat Diturunkan</div>
+            <div class="form-section-title">Sisa Target KM yang Dapat Didistribusikan</div>
 
             <div class="row g-3">
                 <div class="col-md-3">
@@ -399,7 +399,7 @@
 
                 <div class="col-md-12">
                     <div class="total-km-box">
-                        Total KM yang Diturunkan:
+                        Total KM yang Didistribusikan:
                         <span id="jumlahKmTotal">0</span>
                     </div>
 

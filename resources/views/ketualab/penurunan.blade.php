@@ -14,7 +14,7 @@
         <h6 class="m-0 fw-bold text-primary">Daftar Target dari Ketua KK (Untuk Distribusi Lab)</h6>
     </div>
     <div class="card-body">
-        <p class="text-muted small">Berikut adalah indikator target yang diturunkan oleh Ketua KK. Silakan distribusikan atau pantau pembagian tugas ke anggota laboratorium.</p>
+        <p class="text-muted small">Berikut adalah indikator target yang diberikan oleh Ketua KK. Silakan distribusikan atau pantau pembagian tugas ke anggota laboratorium.</p>
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
                 <thead class="table-light">

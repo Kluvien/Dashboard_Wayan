@@ -532,7 +532,7 @@
         <div>
             <h4 class="fw-bold mb-1">Rekap Detail KM Lab per Kategori</h4>
             <p class="text-muted mb-0">
-                Menampilkan seluruh sub kategori/jenis KM yang diturunkan ke Lab, keterangan, pembagian ke anggota, target dan realisasi per triwulan, serta tenggat penyelesaian.
+                Menampilkan seluruh sub kategori/jenis KM yang diberikan ke Lab, keterangan, pembagian ke anggota, target dan realisasi per triwulan, serta tenggat penyelesaian.
             </p>
         </div>
 

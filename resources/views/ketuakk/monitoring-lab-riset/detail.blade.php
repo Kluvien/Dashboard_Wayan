@@ -247,7 +247,7 @@
 <div class="card mb-4">
     <h4 class="fw-bold mb-1">Rekap KM Lab per Kategori</h4>
     <p class="text-muted mb-4">
-        Rincian KM yang telah diturunkan ke Lab, pembagian kepada anggota, realisasi Accepted, dan tenggat per periode.
+        Rincian KM yang telah diberikan ke Lab, pembagian kepada anggota, realisasi Accepted, dan tenggat per periode.
     </p>
 
     @foreach($kategoriDefault as $kategori)

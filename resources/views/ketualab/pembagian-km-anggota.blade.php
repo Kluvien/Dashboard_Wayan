@@ -299,7 +299,7 @@
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
         <div>
             <p class="text-primary fw-bold mb-1">Pembagian KM Anggota</p>
-            <h1 id="ketualab-assignment-title" class="fw-bold fs-4 mb-1">KM yang Diturunkan ke Lab</h1>
+            <h1 id="ketualab-assignment-title" class="fw-bold fs-4 mb-1">KM yang Diberikan ke Lab</h1>
             <p class="text-muted mb-0">
                 Lab: {{ $lab->nama_lab ?? '-' }} | Tahun: {{ $tahun }}
             </p>
@@ -492,7 +492,7 @@
                     <tr>
                         <td colspan="15">
                             <div class="empty-state">
-                                Belum ada KM yang diturunkan oleh Ketua KK ke Lab ini.
+                                Belum ada KM yang diberikan oleh Ketua KK ke Lab ini.
                             </div>
                         </td>
                     </tr>

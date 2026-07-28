@@ -339,7 +339,7 @@
                     <th rowspan="2">Nama Lab Riset</th>
 
                     <th colspan="5" class="group-header">
-                        KM Diturunkan ke Lab
+                        KM Didistribusikan ke Lab
                     </th>
 
                     <th rowspan="2">Total Turun</th>

@@ -816,7 +816,7 @@
                 KM Lab Riset Tahun {{ $tahun }}
             </h1>
             <p class="ketuakk-lab-km__description">
-                Menampilkan seluruh Lab Riset beserta jumlah KM yang telah diturunkan dari Ketua KK.
+                Menampilkan seluruh Lab Riset beserta jumlah KM yang telah diberikan oleh Ketua KK.
             </p>
         </div>
 
@@ -867,7 +867,7 @@
         <div class="ketuakk-lab-km__summary-heading">
             <h2 class="ketuakk-lab-km__summary-title">Ringkasan target per kategori</h2>
             <p class="ketuakk-lab-km__summary-description">
-                Perbandingan target Ketua KK dan KM yang sudah diturunkan ke Lab Riset.
+                Perbandingan target Ketua KK dan KM yang sudah didistribusikan ke Lab Riset.
             </p>
         </div>
 
@@ -921,7 +921,7 @@
                         </div>
 
                         <div class="ketuakk-lab-km__metric">
-                            <div class="ketuakk-lab-km__metric-label">Diturunkan</div>
+                            <div class="ketuakk-lab-km__metric-label">Didistribusikan</div>
                             <div class="ketuakk-lab-km__metric-value">
                                 {{ number_format($totalTurun, 0, ',', '.') }}
                             </div>
@@ -943,12 +943,12 @@
                     @elseif($targetSelesai)
                         <div class="ketuakk-lab-km__status ketuakk-lab-km__status--complete">
                             <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
-                            Seluruh target sudah diturunkan
+                            Seluruh target sudah didistribusikan
                         </div>
                     @else
                         <div class="ketuakk-lab-km__status ketuakk-lab-km__status--progress">
                             <i class="bi bi-clock" aria-hidden="true"></i>
-                            {{ number_format($sisa, 0, ',', '.') }} KM belum diturunkan
+                            {{ number_format($sisa, 0, ',', '.') }} KM belum didistribusikan
                         </div>
                     @endif
                 </article>
@@ -986,7 +986,7 @@
                     <th
                         colspan="{{ count($kategoriDefault) }}"
                         class="ketuakk-lab-km__labs-group">
-                        KM Diturunkan ke Lab
+                        KM Didistribusikan ke Lab
                     </th>
                     <th rowspan="2" class="ketuakk-lab-km__labs-cell--number">Total Turun</th>
                     <th rowspan="2" class="ketuakk-lab-km__labs-cell--number">Sudah Dibagi ke Anggota</th>
@@ -1102,7 +1102,7 @@
                 Riwayat Penurunan KM ke Lab Riset
             </h2>
             <p class="ketuakk-lab-km__history-description">
-                Riwayat target KM yang diturunkan Ketua KK kepada Lab Riset pada tahun {{ $tahun }}.
+                Riwayat target KM yang didistribusikan Ketua KK kepada Lab Riset pada tahun {{ $tahun }}.
             </p>
         </div>
 
@@ -1220,7 +1220,7 @@
                         <td colspan="12">
                             <div class="ketuakk-lab-km__history-empty">
                                 <strong>Belum ada riwayat penurunan KM.</strong>
-                                Riwayat akan muncul setelah Ketua KK menurunkan KM kepada Lab Riset.
+                                Riwayat akan muncul setelah Ketua KK mendistribusikan KM kepada Lab Riset.
                             </div>
                         </td>
                     </tr>
