@@ -3,6 +3,7 @@
 @section('title', 'Data Dosen')
 
 @section('content')
+@include('ketuakk.data-master._styles')
 <style>
     .pagination-custom {
         gap: 0;
@@ -66,54 +67,45 @@
     }
 </style>
 
-<div class="page-heading">
-    Data <span class="muted">Anggota KK</span>
-</div>
-
-<div class="card">
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+<section class="ketuakk-master">
+    <div class="ketuakk-master__header">
         <div>
-            <h4 class="fw-bold mb-1">Daftar Data Anggota KK</h4>
-            <p class="text-muted mb-0">
+            <div class="ketuakk-master__eyebrow">Data Master Ketua KK</div>
+            <h1 class="ketuakk-master__title">Daftar Data Anggota KK</h1>
+            <p class="ketuakk-master__description">
                 Halaman ini digunakan untuk melihat dan mengelola data dosen anggota Kelompok Keahlian.
             </p>
         </div>
 
-        <a href="/ketuakk/data-dosen/create" class="btn btn-primary">
+        <a href="/ketuakk/data-dosen/create" class="ketuakk-master__button ketuakk-master__button--primary">
             <i class="bi bi-plus-lg me-1"></i>
             Input Data Dosen
         </a>
     </div>
 
-    <form action="/ketuakk/data-dosen" method="GET" class="mb-4">
-        <div class="row g-2 align-items-center">
-            <div class="col-12 col-lg-8">
+    <div class="ketuakk-master__toolbar">
+    <form action="/ketuakk/data-dosen" method="GET" class="ketuakk-master__search">
+                <label for="master-dosen-search" class="visually-hidden">Cari data dosen</label>
                 <input
                     type="text"
+                    id="master-dosen-search"
                     name="q"
                     value="{{ $q ?? '' }}"
                     class="form-control"
                     placeholder="Cari nama, NIDN, email, JAD, atau lab riset...">
-            </div>
-
-            <div class="col-12 col-lg-4">
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary flex-fill">
+                    <button type="submit" class="ketuakk-master__button ketuakk-master__button--primary">
                         Cari
                     </button>
 
-                    <a href="/ketuakk/data-dosen" class="btn btn-secondary flex-fill">
+                    <a href="/ketuakk/data-dosen" class="ketuakk-master__button">
                         Reset
                     </a>
-                </div>
-            </div>
-        </div>
     </form>
+    </div>
 
-    <div class="table-responsive">
+    <div class="table-responsive ketuakk-master__scroll">
         <table
-            class="table align-middle mb-0"
-            style="table-layout: fixed; width: 100%; font-size: 14px;">
+            class="table align-middle mb-0 ketuakk-master__table">
 
             <thead>
                 <tr>
@@ -134,7 +126,7 @@
                             {{ $dosens->firstItem() + $index }}
                         </td>
 
-                        <td class="fw-bold">
+                        <td class="ketuakk-master__cell--identity">
                             {{ $dosen->nama_dosen }}
                         </td>
 
@@ -147,7 +139,7 @@
                         </td>
 
                         <td>
-                            <span class="badge bg-light text-dark border">
+                            <span class="ketuakk-master__label">
                                 {{ $dosen->jad ?? '-' }}
                             </span>
                         </td>
@@ -157,10 +149,10 @@
                         </td>
 
                         <td>
-                            <div class="d-flex flex-column gap-2">
+                            <div class="ketuakk-master__actions-inline">
                                 <a
                                     href="/ketuakk/data-dosen/{{ $dosen->id_dosen }}/edit"
-                                    class="btn btn-edit btn-sm">
+                                    class="ketuakk-master__button">
                                     Ubah
                                 </a>
 
@@ -173,7 +165,7 @@
                                     @csrf
                                     @method('DELETE')
 
-                                    <button type="submit" class="btn btn-delete btn-sm w-100">
+                                    <button type="submit" class="ketuakk-master__button ketuakk-master__button--danger">
                                         Hapus
                                     </button>
                                 </form>
@@ -182,7 +174,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center text-muted py-4">
+                        <td colspan="7" class="ketuakk-master__empty">
                             Belum ada data dosen.
                         </td>
                     </tr>
@@ -192,7 +184,7 @@
     </div>
 
     @if($dosens->total() > 0)
-        <div class="data-table-footer d-flex justify-content-between align-items-center flex-wrap gap-3 mt-4">
+        <div class="data-table-footer ketuakk-master__footer">
             <div class="pagination-info">
                 Menampilkan {{ $dosens->firstItem() }} - {{ $dosens->lastItem() }}
                 dari {{ $dosens->total() }} data dosen
@@ -284,5 +276,5 @@
             @endif
         </div>
     @endif
-</div>
+</section>
 @endsection

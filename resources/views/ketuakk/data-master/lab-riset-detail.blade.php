@@ -3,30 +3,28 @@
 @section('title', 'Detail Lab Riset')
 
 @section('content')
-<div class="page-heading">
-    Detail <span class="muted">Lab Riset</span>
-</div>
-
-<div class="card mb-4">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+@include('ketuakk.data-master._styles')
+<section class="ketuakk-master">
+    <div class="ketuakk-master__header">
         <div>
-            <h4 class="fw-bold mb-1">{{ $lab->nama_lab }}</h4>
-            <p class="text-muted mb-0">
+            <div class="ketuakk-master__eyebrow">Detail Lab Riset</div>
+            <h1 class="ketuakk-master__title">{{ $lab->nama_lab }}</h1>
+            <p class="ketuakk-master__description">
                 Detail data dosen anggota dan aktivitas KM pada laboratorium riset ini.
             </p>
         </div>
 
-        <a href="/ketuakk/data-lab-riset" class="btn btn-secondary">
+        <a href="/ketuakk/data-lab-riset" class="ketuakk-master__button">
             <i class="bi bi-arrow-left me-1"></i> Kembali
         </a>
     </div>
-</div>
+</section>
 
-<div class="card mb-4">
-    <h4 class="fw-bold mb-3">Daftar Dosen Anggota Lab</h4>
+<section class="ketuakk-master">
+    <div class="ketuakk-master__section-header"><h2 class="ketuakk-master__section-title">Daftar Dosen Anggota Lab</h2></div>
 
-    <div class="table-responsive">
-        <table class="table align-middle mb-0">
+    <div class="table-responsive ketuakk-master__scroll">
+        <table class="table align-middle mb-0 ketuakk-master__table">
             <thead>
                 <tr>
                     <th>No</th>
@@ -39,13 +37,13 @@
                 @forelse($dosen as $index => $item)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td class="fw-bold">{{ $item->nama_dosen }}</td>
+                        <td class="ketuakk-master__cell--identity">{{ $item->nama_dosen }}</td>
                         <td>{{ $item->nidn }}</td>
                         <td>{{ $item->email }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center text-muted py-4">
+                        <td colspan="4" class="ketuakk-master__empty">
                             Belum ada dosen pada lab riset ini.
                         </td>
                     </tr>
@@ -53,13 +51,13 @@
             </tbody>
         </table>
     </div>
-</div>
+</section>
 
-<div class="card">
-    <h4 class="fw-bold mb-3">Aktivitas KM Pada Lab Ini</h4>
+<section class="ketuakk-master">
+    <div class="ketuakk-master__section-header"><h2 class="ketuakk-master__section-title">Aktivitas KM Pada Lab Ini</h2></div>
 
-    <div class="table-responsive">
-        <table class="table align-middle mb-0" style="table-layout: fixed; width: 100%; font-size: 14px;">
+    <div class="table-responsive ketuakk-master__scroll">
+        <table class="table align-middle mb-0 ketuakk-master__table">
             <thead>
                 <tr>
                     <th style="width: 6%;">No</th>
@@ -77,14 +75,14 @@
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $item->nama_dosen ?? $item->username }}</td>
                         <td>{{ $item->kategori_km }}</td>
-                        <td class="fw-bold">{{ $item->judul_aktivitas }}</td>
+                        <td class="ketuakk-master__cell--identity">{{ $item->judul_aktivitas }}</td>
                         <td>{{ $item->deskripsi_singkat ?? '-' }}</td>
                         <td>{{ $item->tanggal_mulai }}</td>
                         <td>{{ $item->tanggal_selesai }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center text-muted py-4">
+                        <td colspan="7" class="ketuakk-master__empty">
                             Belum ada aktivitas KM pada lab riset ini.
                         </td>
                     </tr>
@@ -92,5 +90,5 @@
             </tbody>
         </table>
     </div>
-</div>
+</section>
 @endsection
