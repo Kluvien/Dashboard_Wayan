@@ -751,6 +751,276 @@
         font-weight: 700;
     }
 
+    .ketuakk-member-monitoring__table-section {
+        position: relative;
+        overflow: hidden;
+        padding: 0;
+        border: 1px solid #E2E8F0;
+        border-radius: 14px;
+        background: #FFFFFF;
+        box-shadow: none;
+    }
+
+    .ketuakk-member-monitoring__table-header {
+        padding: 18px 20px;
+        border-bottom: 1px solid #E2E8F0;
+        background: #FFFFFF;
+    }
+
+    .ketuakk-member-monitoring__table-title {
+        margin: 0;
+        color: #0F172A;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .ketuakk-member-monitoring__table-description {
+        margin: 4px 0 0;
+        color: #64748B;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .ketuakk-member-monitoring__table-scroll {
+        overflow-x: auto;
+        overflow-y: visible;
+    }
+
+    .ketuakk-member-monitoring__table {
+        width: 100%;
+        min-width: 2450px;
+        margin: 0;
+        border: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .ketuakk-member-monitoring__table th,
+    .ketuakk-member-monitoring__table td {
+        padding: 11px 16px !important;
+        border: 0;
+        border-bottom: 1px solid #EEF2F7;
+        color: #334155;
+        background: #FFFFFF;
+        font-size: 13px;
+        font-weight: 500;
+        vertical-align: middle;
+    }
+
+    .ketuakk-member-monitoring__table thead {
+        position: static;
+        background: #F8FAFC;
+        box-shadow: none;
+    }
+
+    .ketuakk-member-monitoring__table thead th {
+        color: #475569;
+        background: #F8FAFC;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .03em;
+        text-transform: uppercase;
+    }
+
+    .ketuakk-member-monitoring__table tbody tr:hover > td,
+    .ketuakk-member-monitoring__table tbody tr:hover > th {
+        background: #F8FAFC !important;
+    }
+
+    .ketuakk-member-monitoring__table tbody tr > td,
+    .ketuakk-member-monitoring__table tbody tr > th {
+        background: #FFFFFF;
+    }
+
+    .ketuakk-member-monitoring__group-header {
+        border-left: 1px solid #CBD5E1 !important;
+        border-right: 1px solid #CBD5E1 !important;
+        text-align: center;
+    }
+
+    .ketuakk-member-monitoring__group-start {
+        border-left: 1px solid #CBD5E1 !important;
+    }
+
+    .ketuakk-member-monitoring__group-end {
+        border-right: 1px solid #CBD5E1 !important;
+    }
+
+    .ketuakk-member-monitoring__cell--index {
+        width: 58px;
+        min-width: 58px;
+        max-width: 58px;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .ketuakk-member-monitoring__cell--identity {
+        width: 240px;
+        min-width: 240px;
+        max-width: 240px;
+        text-align: left;
+        white-space: normal !important;
+    }
+
+    .ketuakk-member-monitoring__member-name {
+        display: block;
+        color: #0F172A;
+        font-weight: 700;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    .ketuakk-member-monitoring__member-meta {
+        display: block;
+        margin-top: 3px;
+        color: #64748B;
+        font-size: 11px;
+        font-weight: 500;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-member-monitoring__cell--lab {
+        width: 270px;
+        min-width: 270px;
+        max-width: 270px;
+        color: #334155;
+        line-height: 1.45;
+        text-align: left;
+        white-space: normal !important;
+        overflow-wrap: anywhere;
+    }
+
+    .ketuakk-member-monitoring__cell--jad {
+        width: 82px;
+        min-width: 82px;
+        max-width: 82px;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .ketuakk-member-monitoring__jad {
+        display: inline-block;
+        min-width: 34px;
+        padding: 3px 7px;
+        border: 1px solid #E2E8F0;
+        border-radius: 5px;
+        color: #475569;
+        background: #F8FAFC;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .ketuakk-member-monitoring__cell--data-type {
+        width: 110px;
+        min-width: 110px;
+        max-width: 110px;
+        color: #334155;
+        font-size: 12px;
+        font-weight: 700 !important;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .ketuakk-member-monitoring__cell--data-type-realisasi {
+        color: #2563EB !important;
+    }
+
+    .ketuakk-member-monitoring__cell--number {
+        min-width: 78px;
+        color: #334155;
+        font-size: 13px;
+        font-weight: 700 !important;
+        text-align: right;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-member-monitoring__cell--total {
+        min-width: 90px;
+    }
+
+    .ketuakk-member-monitoring__cell--status {
+        min-width: 150px;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .ketuakk-member-monitoring__status {
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .ketuakk-member-monitoring__status--success { color: #15803D; }
+    .ketuakk-member-monitoring__status--warning { color: #B45309; }
+    .ketuakk-member-monitoring__status--neutral { color: #475569; }
+    .ketuakk-member-monitoring__status--secondary { color: #64748B; }
+
+    .ketuakk-member-monitoring__status-progress {
+        display: block;
+        margin-top: 3px;
+        color: #64748B;
+        font-size: 11px;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-member-monitoring__cell--action {
+        min-width: 90px;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .ketuakk-member-monitoring__detail {
+        display: inline-flex;
+        min-height: 32px;
+        align-items: center;
+        justify-content: center;
+        padding: 0 11px;
+        border: 1px solid #93C5FD;
+        border-radius: 7px;
+        color: #1D4ED8;
+        background: #FFFFFF;
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .ketuakk-member-monitoring__detail:hover {
+        border-color: #60A5FA;
+        color: #1D4ED8;
+        background: #EFF6FF;
+    }
+
+    .ketuakk-member-monitoring__detail:focus-visible {
+        outline: 3px solid rgba(37, 99, 235, .22);
+        outline-offset: 2px;
+    }
+
+    .ketuakk-member-monitoring__empty {
+        padding: 24px 16px !important;
+        color: #64748B !important;
+        font-size: 13px !important;
+        font-weight: 500 !important;
+        text-align: center;
+    }
+
+    .ketuakk-member-monitoring__table .sticky-col-no,
+    .ketuakk-member-monitoring__table .sticky-col-name,
+    .ketuakk-member-monitoring__table .sticky-col-lab,
+    .ketuakk-member-monitoring__table .sticky-col-jad,
+    .ketuakk-member-monitoring__table .sticky-col-data {
+        background: #FFFFFF !important;
+    }
+
+    .ketuakk-member-monitoring__table thead .sticky-col-no,
+    .ketuakk-member-monitoring__table thead .sticky-col-name,
+    .ketuakk-member-monitoring__table thead .sticky-col-lab,
+    .ketuakk-member-monitoring__table thead .sticky-col-jad,
+    .ketuakk-member-monitoring__table thead .sticky-col-data {
+        background: #F8FAFC !important;
+    }
+
     .floating-table-scroll {
         position: fixed;
         left: 320px;
@@ -1026,42 +1296,49 @@
         @endforeach
     </section>
 
-    <div class="kk-table-card monitoring-table-card">
-        <div class="kk-section-head mb-3">
-            <div>
-                <div class="kk-section-title">Monitoring Progress Anggota KK</div>
-                <p class="kk-section-desc">
-                    Target dan realisasi setiap anggota tetap ditampilkan lengkap per kategori KM dan periode.
-                </p>
-            </div>
+    <section
+        class="kk-table-card monitoring-table-card ketuakk-member-monitoring__table-section"
+        aria-labelledby="monitoring-progress-anggota-title">
+        <div class="ketuakk-member-monitoring__table-header">
+            <h2 id="monitoring-progress-anggota-title" class="ketuakk-member-monitoring__table-title">
+                Monitoring Progress Anggota KK
+            </h2>
+            <p class="ketuakk-member-monitoring__table-description">
+                Target dan realisasi setiap anggota tetap ditampilkan lengkap per kategori KM dan periode.
+            </p>
         </div>
 
         <div class="table-scroll-sync">
-            <div class="table-scroll-container">
-                <table class="km-table">
+            <div class="table-scroll-container ketuakk-member-monitoring__table-scroll">
+                <table class="km-table ketuakk-member-monitoring__table">
                     <thead>
                         <tr>
-                            <th rowspan="2" class="sticky-col-no">No</th>
-                            <th rowspan="2" class="sticky-col-name">Nama Anggota</th>
-                            <th rowspan="2" class="sticky-col-lab">Lab Riset</th>
-                            <th rowspan="2" class="sticky-col-jad">JAD</th>
-                            <th rowspan="2" class="sticky-col-data">Data</th>
+                            <th scope="col" rowspan="2" class="sticky-col-no ketuakk-member-monitoring__cell--index">No</th>
+                            <th scope="col" rowspan="2" class="sticky-col-name ketuakk-member-monitoring__cell--identity">Nama Anggota</th>
+                            <th scope="col" rowspan="2" class="sticky-col-lab ketuakk-member-monitoring__cell--lab">Lab Riset</th>
+                            <th scope="col" rowspan="2" class="sticky-col-jad ketuakk-member-monitoring__cell--jad">JAD</th>
+                            <th scope="col" rowspan="2" class="sticky-col-data ketuakk-member-monitoring__cell--data-type">Data</th>
 
                             @foreach($kategoriDefault as $kategori)
-                                <th colspan="{{ count($periodeColumns) }}" class="group-header">
+                                <th
+                                    scope="colgroup"
+                                    colspan="{{ count($periodeColumns) }}"
+                                    class="group-header ketuakk-member-monitoring__group-header">
                                     {{ strtoupper($kategori) }}
                                 </th>
                             @endforeach
 
-                            <th rowspan="2" class="text-center">Total</th>
-                            <th rowspan="2" class="text-center">Status</th>
-                            <th rowspan="2" class="text-center">Aksi</th>
+                            <th scope="col" rowspan="2" class="ketuakk-member-monitoring__cell--number ketuakk-member-monitoring__cell--total">Total</th>
+                            <th scope="col" rowspan="2" class="ketuakk-member-monitoring__cell--status">Status</th>
+                            <th scope="col" rowspan="2" class="ketuakk-member-monitoring__cell--action">Aksi</th>
                         </tr>
 
                         <tr>
                             @foreach($kategoriDefault as $kategori)
                                 @foreach($periodeColumns as $key => $label)
-                                    <th class="text-center {{ $loop->first ? 'category-start' : '' }} {{ $loop->last ? 'category-end' : '' }}">
+                                    <th
+                                        scope="col"
+                                        class="ketuakk-member-monitoring__cell--number {{ $loop->first ? 'category-start ketuakk-member-monitoring__group-start' : '' }} {{ $loop->last ? 'category-end ketuakk-member-monitoring__group-end' : '' }}">
                                         {{ $label }}
                                     </th>
                                 @endforeach
@@ -1073,79 +1350,79 @@
                         @forelse($dataMonitoring as $index => $item)
                             @php
                                 $statusClass = match($item['status_class'] ?? 'secondary') {
-                                    'success' => 'status-success',
-                                    'warning' => 'status-warning',
-                                    'danger' => 'status-danger',
-                                    default => 'status-secondary',
+                                    'success' => 'ketuakk-member-monitoring__status--success',
+                                    'warning' => 'ketuakk-member-monitoring__status--warning',
+                                    'danger' => 'ketuakk-member-monitoring__status--neutral',
+                                    default => 'ketuakk-member-monitoring__status--secondary',
                                 };
                             @endphp
                             <tr>
-                                <td rowspan="2" class="sticky-col-no">{{ $index + 1 }}</td>
+                                <td rowspan="2" class="sticky-col-no ketuakk-member-monitoring__cell--index">{{ $index + 1 }}</td>
 
-                                <td rowspan="2" class="sticky-col-name">
-                                    <span class="member-name">{{ $item['nama_dosen'] }}</span>
-                                    <span class="member-meta">{{ $item['nidn'] }}</span>
+                                <td rowspan="2" class="sticky-col-name ketuakk-member-monitoring__cell--identity">
+                                    <span class="ketuakk-member-monitoring__member-name">{{ $item['nama_dosen'] }}</span>
+                                    <span class="ketuakk-member-monitoring__member-meta">{{ $item['nidn'] }}</span>
                                 </td>
 
-                                <td rowspan="2" class="sticky-col-lab">
+                                <td rowspan="2" class="sticky-col-lab ketuakk-member-monitoring__cell--lab">
                                     {{ $item['nama_lab'] }}
                                 </td>
 
-                                <td rowspan="2" class="sticky-col-jad text-center">
-                                    <span class="jad-pill">{{ $item['jad'] }}</span>
+                                <td rowspan="2" class="sticky-col-jad ketuakk-member-monitoring__cell--jad">
+                                    <span class="ketuakk-member-monitoring__jad">{{ $item['jad'] }}</span>
                                 </td>
 
-                                <td class="sticky-col-data data-label-cell">
-                                    <span class="data-badge target">Target</span>
-                                </td>
+                                <th scope="row" class="sticky-col-data data-label-cell ketuakk-member-monitoring__cell--data-type">Target</th>
 
                                 @foreach($kategoriDefault as $kategori)
                                     @foreach($periodeColumns as $key => $label)
-                                        <td class="period-cell {{ $loop->first ? 'category-start' : '' }} {{ $loop->last ? 'category-end' : '' }}">
+                                        <td class="period-cell ketuakk-member-monitoring__cell--number {{ $loop->first ? 'category-start ketuakk-member-monitoring__group-start' : '' }} {{ $loop->last ? 'category-end ketuakk-member-monitoring__group-end' : '' }}">
                                             {{ $item['data'][$kategori]['target'][$key] ?? 0 }}
                                         </td>
                                     @endforeach
                                 @endforeach
 
-                                <td class="fw-bold text-center">{{ $item['total_target'] ?? 0 }}</td>
+                                <td class="ketuakk-member-monitoring__cell--number ketuakk-member-monitoring__cell--total">{{ $item['total_target'] ?? 0 }}</td>
 
-                                <td rowspan="2" class="text-center">
-                                    <span class="status-pill {{ $statusClass }}">
+                                <td rowspan="2" class="ketuakk-member-monitoring__cell--status">
+                                    <span class="ketuakk-member-monitoring__status {{ $statusClass }}">
                                         {{ $item['status_progress'] ?? 'Belum Ada KM' }}
                                     </span>
-                                    <span class="member-meta">{{ $item['persentase'] ?? 0 }}%</span>
+                                    <span class="ketuakk-member-monitoring__status-progress">{{ $item['persentase'] ?? 0 }}%</span>
                                 </td>
 
-                                <td rowspan="2" class="text-center">
+                                <td rowspan="2" class="ketuakk-member-monitoring__cell--action">
                                     <a
                                         href="/ketuakk/monitoring-anggota-kk/{{ $item['id_user'] }}?tahun={{ $tahun }}&periode={{ $periode }}"
-                                        class="kk-btn-soft">
+                                        class="ketuakk-member-monitoring__detail">
                                         Detail
                                     </a>
                                 </td>
                             </tr>
 
                             <tr>
-                                <td class="sticky-col-data data-label-cell">
-                                    <span class="data-badge realisasi">Realisasi</span>
-                                </td>
+                                <th
+                                    scope="row"
+                                    class="sticky-col-data data-label-cell ketuakk-member-monitoring__cell--data-type ketuakk-member-monitoring__cell--data-type-realisasi">
+                                    Realisasi
+                                </th>
 
                                 @foreach($kategoriDefault as $kategori)
                                     @foreach($periodeColumns as $key => $label)
-                                        <td class="period-cell {{ $loop->first ? 'category-start' : '' }} {{ $loop->last ? 'category-end' : '' }}">
+                                        <td class="period-cell ketuakk-member-monitoring__cell--number {{ $loop->first ? 'category-start ketuakk-member-monitoring__group-start' : '' }} {{ $loop->last ? 'category-end ketuakk-member-monitoring__group-end' : '' }}">
                                             {{ $item['data'][$kategori]['realisasi'][$key] ?? 0 }}
                                         </td>
                                     @endforeach
                                 @endforeach
 
-                                <td class="fw-bold text-center">{{ $item['total_realisasi'] ?? 0 }}</td>
+                                <td class="ketuakk-member-monitoring__cell--number ketuakk-member-monitoring__cell--total">{{ $item['total_realisasi'] ?? 0 }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="{{ 8 + (count($kategoriDefault) * count($periodeColumns)) }}">
-                                    <div class="text-center text-muted py-4 fw-semibold">
-                                        Belum ada data anggota KK.
-                                    </div>
+                                <td
+                                    colspan="{{ 8 + (count($kategoriDefault) * count($periodeColumns)) }}"
+                                    class="ketuakk-member-monitoring__empty">
+                                    Belum ada data anggota KK.
                                 </td>
                             </tr>
                         @endforelse
@@ -1157,7 +1434,7 @@
                 <div class="floating-table-scroll-inner"></div>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 
 <script>
