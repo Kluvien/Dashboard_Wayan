@@ -316,6 +316,291 @@
     .chip-warning { color: #B45309; background: #FFF7ED; border-color: #FED7AA; }
     .chip-danger { color: #DC2626; background: #FFF1F2; border-color: #FECDD3; }
 
+    .ketuakk-member-monitoring {
+        padding-bottom: 28px;
+    }
+
+    .ketuakk-member-monitoring__overview,
+    .ketuakk-member-monitoring__summary,
+    .ketuakk-member-monitoring__categories {
+        margin-bottom: 16px;
+        overflow: hidden;
+        border: 1px solid #E2E8F0;
+        border-radius: 14px;
+        background: #FFFFFF;
+    }
+
+    .ketuakk-member-monitoring__overview {
+        padding: 20px 22px;
+    }
+
+    .ketuakk-member-monitoring__heading-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .ketuakk-member-monitoring__eyebrow {
+        margin-bottom: 5px;
+        color: #2563EB;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .ketuakk-member-monitoring__title {
+        margin: 0;
+        color: #0F172A;
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1.25;
+        letter-spacing: -.02em;
+    }
+
+    .ketuakk-member-monitoring__description {
+        max-width: 720px;
+        margin: 6px 0 0;
+        color: #64748B;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .ketuakk-member-monitoring__period {
+        margin-top: 8px;
+        color: #334155;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .ketuakk-member-monitoring__toolbar {
+        padding-top: 16px;
+        margin-top: 16px;
+        border-top: 1px solid #EEF2F7;
+    }
+
+    .ketuakk-member-monitoring__filter {
+        display: grid;
+        grid-template-columns: minmax(150px, 190px) minmax(190px, 240px) auto;
+        gap: 10px;
+        align-items: end;
+    }
+
+    .ketuakk-member-monitoring__field label {
+        display: block;
+        margin-bottom: 6px;
+        color: #334155;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .ketuakk-member-monitoring__field .form-select {
+        min-height: 40px;
+        border-color: #CBD5E1;
+        border-radius: 8px;
+        color: #334155;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .ketuakk-member-monitoring__button {
+        min-height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        padding: 0 15px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .ketuakk-member-monitoring__button--apply {
+        width: auto;
+        min-width: 128px;
+        border-color: #2563EB;
+        background: #2563EB;
+        color: #FFFFFF;
+    }
+
+    .ketuakk-member-monitoring__button--apply:hover {
+        background: #1D4ED8;
+        color: #FFFFFF;
+    }
+
+    .ketuakk-member-monitoring__button--back {
+        border-color: #CBD5E1;
+        background: #FFFFFF;
+        color: #334155;
+    }
+
+    .ketuakk-member-monitoring__button--back:hover {
+        border-color: #94A3B8;
+        background: #F8FAFC;
+        color: #0F172A;
+    }
+
+    .ketuakk-member-monitoring__button:focus-visible {
+        outline: 3px solid rgba(37, 99, 235, .22);
+        outline-offset: 2px;
+    }
+
+    .ketuakk-member-monitoring__section-heading {
+        padding: 16px 20px;
+        border-bottom: 1px solid #E2E8F0;
+        background: #F8FAFC;
+    }
+
+    .ketuakk-member-monitoring__section-title {
+        margin: 0;
+        color: #0F172A;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .ketuakk-member-monitoring__section-description {
+        margin: 3px 0 0;
+        color: #64748B;
+        font-size: 12px;
+    }
+
+    .ketuakk-member-monitoring__status-metrics,
+    .ketuakk-member-monitoring__km-metrics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .ketuakk-member-monitoring__metric {
+        min-width: 0;
+        padding: 15px 18px;
+        border-right: 1px solid #EEF2F7;
+    }
+
+    .ketuakk-member-monitoring__metric:last-child {
+        border-right: 0;
+    }
+
+    .ketuakk-member-monitoring__metric-label {
+        display: block;
+        color: #64748B;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .ketuakk-member-monitoring__metric-value {
+        display: block;
+        margin-top: 5px;
+        color: #0F172A;
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-member-monitoring__metric-value--success { color: #15803D; }
+    .ketuakk-member-monitoring__metric-value--warning { color: #B45309; }
+    .ketuakk-member-monitoring__metric-value--neutral { color: #475569; }
+
+    .ketuakk-member-monitoring__km-group {
+        border-top: 1px solid #E2E8F0;
+    }
+
+    .ketuakk-member-monitoring__group-label {
+        padding: 11px 18px 0;
+        color: #64748B;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+    }
+
+    .ketuakk-member-monitoring__progress-block {
+        padding: 0 18px 16px;
+    }
+
+    .ketuakk-member-monitoring__progress-heading,
+    .ketuakk-member-monitoring__category-progress-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 7px;
+        color: #334155;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .ketuakk-member-monitoring__progress-track {
+        width: 100%;
+        height: 6px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #E2E8F0;
+    }
+
+    .ketuakk-member-monitoring__progress-fill {
+        height: 100%;
+        border-radius: inherit;
+        background: #2563EB;
+    }
+
+    .ketuakk-member-monitoring__category-header,
+    .ketuakk-member-monitoring__category-row {
+        display: grid;
+        grid-template-columns: minmax(180px, 1.6fr) repeat(3, minmax(90px, .65fr)) minmax(210px, 1.2fr);
+        align-items: center;
+        column-gap: 16px;
+    }
+
+    .ketuakk-member-monitoring__category-header {
+        padding: 10px 18px;
+        border-bottom: 1px solid #CBD5E1;
+        color: #64748B;
+        background: #F8FAFC;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+    }
+
+    .ketuakk-member-monitoring__category-row {
+        min-height: 58px;
+        padding: 11px 18px;
+        border-bottom: 1px solid #EEF2F7;
+    }
+
+    .ketuakk-member-monitoring__category-row:last-child {
+        border-bottom: 0;
+    }
+
+    .ketuakk-member-monitoring__category-name {
+        color: #0F172A;
+        font-size: 13px;
+        font-weight: 600;
+        overflow-wrap: anywhere;
+    }
+
+    .ketuakk-member-monitoring__category-caption {
+        display: block;
+        margin-top: 2px;
+        color: #64748B;
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    .ketuakk-member-monitoring__category-number {
+        color: #334155;
+        font-size: 13px;
+        font-weight: 700;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+    }
+
     .kk-table-card {
         padding: 17px;
         position: relative;
@@ -493,6 +778,24 @@
         .kk-summary-progress-card {
             grid-column: span 2;
         }
+
+        .ketuakk-member-monitoring__status-metrics,
+        .ketuakk-member-monitoring__km-metrics {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .ketuakk-member-monitoring__metric:nth-child(2) {
+            border-right: 0;
+        }
+
+        .ketuakk-member-monitoring__metric:nth-child(-n + 2) {
+            border-bottom: 1px solid #EEF2F7;
+        }
+
+        .ketuakk-member-monitoring__category-header,
+        .ketuakk-member-monitoring__category-row {
+            grid-template-columns: minmax(170px, 1.4fr) repeat(3, minmax(72px, .55fr)) minmax(180px, 1fr);
+        }
     }
 
     @media (max-width: 720px) {
@@ -506,6 +809,58 @@
             grid-column: span 1;
         }
 
+        .ketuakk-member-monitoring__overview {
+            padding: 18px 16px;
+        }
+
+        .ketuakk-member-monitoring__filter,
+        .ketuakk-member-monitoring__status-metrics,
+        .ketuakk-member-monitoring__km-metrics {
+            grid-template-columns: 1fr;
+        }
+
+        .ketuakk-member-monitoring__button--apply {
+            width: 100%;
+        }
+
+        .ketuakk-member-monitoring__metric {
+            border-right: 0;
+            border-bottom: 1px solid #EEF2F7;
+        }
+
+        .ketuakk-member-monitoring__metric:last-child {
+            border-bottom: 0;
+        }
+
+        .ketuakk-member-monitoring__category-header {
+            display: none;
+        }
+
+        .ketuakk-member-monitoring__category-row {
+            grid-template-columns: repeat(3, 1fr);
+            row-gap: 10px;
+        }
+
+        .ketuakk-member-monitoring__category-name,
+        .ketuakk-member-monitoring__category-progress {
+            grid-column: 1 / -1;
+        }
+
+        .ketuakk-member-monitoring__category-number {
+            text-align: left;
+        }
+
+        .ketuakk-member-monitoring__category-number::before {
+            display: block;
+            margin-bottom: 2px;
+            color: #64748B;
+            content: attr(data-label);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+
         .floating-table-scroll {
             left: 16px;
             right: 16px;
@@ -513,64 +868,131 @@
     }
 </style>
 
-<div class="kk-monitoring-page">
-    <div class="page-heading">
-        Monitoring <span class="muted">Anggota KK</span>
-    </div>
-
-    <div class="kk-monitoring-hero">
-        <div class="kk-hero-row">
+<div class="ketuakk-member-monitoring">
+    <section class="ketuakk-member-monitoring__overview" aria-labelledby="monitoring-anggota-title">
+        <div class="ketuakk-member-monitoring__heading-row">
             <div>
-                <div class="kk-card-title">Filter Periode Monitoring Anggota KK</div>
-                <p class="kk-card-subtitle">
-                    Monitoring saat ini:
-                    <strong>{{ $labelPeriode ?? 'Triwulan Tahun ' . ($tahun ?? now()->year) }}</strong>
+                <div class="ketuakk-member-monitoring__eyebrow">Monitoring Ketua KK</div>
+                <h1 id="monitoring-anggota-title" class="ketuakk-member-monitoring__title">Monitoring Anggota KK</h1>
+                <p class="ketuakk-member-monitoring__description">
+                    Pantau target dan realisasi kontrak manajemen anggota berdasarkan periode yang dipilih.
                 </p>
-                <span class="kk-period-pill">
-                    <i class="bi bi-calendar-range"></i>
-                    {{ $labelMode }}
-                </span>
+                <div class="ketuakk-member-monitoring__period">
+                    {{ $labelPeriode ?? 'Triwulan Tahun ' . ($tahun ?? now()->year) }} · {{ $labelMode }}
+                </div>
             </div>
 
-            <a href="/ketuakk/dashboard" class="kk-btn-secondary">
+            <a href="/ketuakk/dashboard" class="ketuakk-member-monitoring__button ketuakk-member-monitoring__button--back">
                 <i class="bi bi-arrow-left"></i>
                 Kembali
             </a>
         </div>
 
-        <form action="/ketuakk/monitoring-anggota-kk" method="GET">
-            <div class="kk-filter-grid">
-                <div class="kk-filter-group">
-                    <label for="tahun">Tahun</label>
-                    <select name="tahun" id="tahun" class="form-select">
-                        @foreach($tahunOptions ?? [$tahun] as $itemTahun)
-                            <option value="{{ $itemTahun }}" {{ (int) $tahun === (int) $itemTahun ? 'selected' : '' }}>
-                                {{ $itemTahun }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+        <div class="ketuakk-member-monitoring__toolbar">
+            <form action="/ketuakk/monitoring-anggota-kk" method="GET">
+                <div class="ketuakk-member-monitoring__filter">
+                    <div class="ketuakk-member-monitoring__field">
+                        <label for="tahun">Tahun</label>
+                        <select name="tahun" id="tahun" class="form-select">
+                            @foreach($tahunOptions ?? [$tahun] as $itemTahun)
+                                <option value="{{ $itemTahun }}" {{ (int) $tahun === (int) $itemTahun ? 'selected' : '' }}>
+                                    {{ $itemTahun }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                <div class="kk-filter-group">
-                    <label for="periode">Jenis Periode</label>
-                    <select name="periode" id="periode" class="form-select">
-                        <option value="triwulan" {{ ($periode ?? 'triwulan') === 'triwulan' ? 'selected' : '' }}>Triwulan</option>
-                        <option value="semester" {{ ($periode ?? '') === 'semester' ? 'selected' : '' }}>Semester</option>
-                    </select>
-                </div>
+                    <div class="ketuakk-member-monitoring__field">
+                        <label for="periode">Jenis Periode</label>
+                        <select name="periode" id="periode" class="form-select">
+                            <option value="triwulan" {{ ($periode ?? 'triwulan') === 'triwulan' ? 'selected' : '' }}>Triwulan</option>
+                            <option value="semester" {{ ($periode ?? '') === 'semester' ? 'selected' : '' }}>Semester</option>
+                        </select>
+                    </div>
 
-                <div class="kk-filter-group">
-                    <label>&nbsp;</label>
-                    <button type="submit" class="kk-btn-primary w-100">
-                        <i class="bi bi-funnel-fill"></i>
-                        Terapkan
-                    </button>
+                    <div class="ketuakk-member-monitoring__field">
+                        <button type="submit" class="ketuakk-member-monitoring__button ketuakk-member-monitoring__button--apply">
+                            <i class="bi bi-funnel-fill"></i>
+                            Terapkan
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="ketuakk-member-monitoring__summary" aria-labelledby="ringkasan-anggota-title">
+        <div class="ketuakk-member-monitoring__section-heading">
+            <h2 id="ringkasan-anggota-title" class="ketuakk-member-monitoring__section-title">Ringkasan keseluruhan</h2>
+            <p class="ketuakk-member-monitoring__section-description">Jumlah anggota berdasarkan status dan akumulasi capaian kontrak manajemen.</p>
+        </div>
+        <div class="ketuakk-member-monitoring__status-metrics">
+            <div class="ketuakk-member-monitoring__metric">
+                <span class="ketuakk-member-monitoring__metric-label">Jumlah Anggota</span>
+                <strong class="ketuakk-member-monitoring__metric-value">{{ $jumlahAnggota ?? 0 }}</strong>
+            </div>
+            <div class="ketuakk-member-monitoring__metric">
+                <span class="ketuakk-member-monitoring__metric-label">Sudah Selesai</span>
+                <strong class="ketuakk-member-monitoring__metric-value ketuakk-member-monitoring__metric-value--success">{{ $jumlahSelesai ?? 0 }}</strong>
+            </div>
+            <div class="ketuakk-member-monitoring__metric">
+                <span class="ketuakk-member-monitoring__metric-label">Sedang Progress</span>
+                <strong class="ketuakk-member-monitoring__metric-value ketuakk-member-monitoring__metric-value--warning">{{ $jumlahProgress ?? 0 }}</strong>
+            </div>
+            <div class="ketuakk-member-monitoring__metric">
+                <span class="ketuakk-member-monitoring__metric-label">Belum Mulai</span>
+                <strong class="ketuakk-member-monitoring__metric-value ketuakk-member-monitoring__metric-value--neutral">{{ $jumlahBelumMulai ?? 0 }}</strong>
+            </div>
+        </div>
+        <div class="ketuakk-member-monitoring__km-group">
+            <div class="ketuakk-member-monitoring__group-label">Metrik KM</div>
+            <div class="ketuakk-member-monitoring__km-metrics">
+                <div class="ketuakk-member-monitoring__metric">
+                    <span class="ketuakk-member-monitoring__metric-label">Target</span>
+                    <strong class="ketuakk-member-monitoring__metric-value">{{ $totalTarget }}</strong>
+                </div>
+                <div class="ketuakk-member-monitoring__metric">
+                    <span class="ketuakk-member-monitoring__metric-label">Realisasi</span>
+                    <strong class="ketuakk-member-monitoring__metric-value">{{ $totalRealisasi }}</strong>
+                </div>
+                <div class="ketuakk-member-monitoring__metric">
+                    <span class="ketuakk-member-monitoring__metric-label">Sisa</span>
+                    <strong class="ketuakk-member-monitoring__metric-value">{{ $totalSisa }}</strong>
+                </div>
+                <div class="ketuakk-member-monitoring__metric">
+                    <span class="ketuakk-member-monitoring__metric-label">Progress Total</span>
+                    <strong class="ketuakk-member-monitoring__metric-value">{{ $progressTotal }}%</strong>
                 </div>
             </div>
-        </form>
-    </div>
+            <div class="ketuakk-member-monitoring__progress-block">
+                <div class="ketuakk-member-monitoring__progress-heading">
+                    <span>Progress realisasi seluruh anggota</span>
+                    <span>{{ $progressTotal }}%</span>
+                </div>
+                <div class="ketuakk-member-monitoring__progress-track"
+                    role="progressbar"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-valuenow="{{ $progressTotal }}"
+                    aria-label="Progress realisasi seluruh anggota {{ $progressTotal }} persen">
+                    <div class="ketuakk-member-monitoring__progress-fill" style="width: {{ min($progressTotal, 100) }}%;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <div class="kk-category-grid">
+    <section class="ketuakk-member-monitoring__categories" aria-labelledby="ringkasan-kategori-title">
+        <div class="ketuakk-member-monitoring__section-heading">
+            <h2 id="ringkasan-kategori-title" class="ketuakk-member-monitoring__section-title">Ringkasan per kategori</h2>
+            <p class="ketuakk-member-monitoring__section-description">Perbandingan target dan realisasi anggota untuk {{ $labelPeriode ?? 'periode aktif' }}.</p>
+        </div>
+        <div class="ketuakk-member-monitoring__category-header" aria-hidden="true">
+            <span>Kategori</span>
+            <span class="text-end">Target</span>
+            <span class="text-end">Realisasi</span>
+            <span class="text-end">Sisa</span>
+            <span>Progress</span>
+        </div>
         @foreach($rekapKategori as $item)
             @php
                 $targetKategori = (int) ($item['target'] ?? 0);
@@ -578,75 +1000,31 @@
                 $sisaKategori = max($targetKategori - $realisasiKategori, 0);
                 $progressKategori = min((int) ($item['progress'] ?? 0), 100);
             @endphp
-            <div class="kk-category-card">
-                <div class="kk-category-top">
-                    <div class="kk-category-name">
-                        {{ $item['kategori'] ?? '-' }}
-                        <span class="kk-category-caption">Progress realisasi anggota · {{ $labelPeriode ?? 'periode aktif' }}</span>
-                    </div>
-                    <div class="kk-category-percent">{{ $progressKategori }}%</div>
+            <div class="ketuakk-member-monitoring__category-row">
+                <div class="ketuakk-member-monitoring__category-name">
+                    {{ $item['kategori'] ?? '-' }}
+                    <span class="ketuakk-member-monitoring__category-caption">Progress realisasi anggota · {{ $labelPeriode ?? 'periode aktif' }}</span>
                 </div>
-
-                <div class="kk-progress-track">
-                    <div class="kk-progress-fill" style="width: {{ $progressKategori }}%;"></div>
-                </div>
-
-                <div class="kk-metric-grid">
-                    <div class="kk-metric metric-target">
-                        <div class="kk-metric-label"><i class="bi bi-bullseye"></i> Target</div>
-                        <div class="kk-metric-value">{{ $targetKategori }}</div>
+                <div class="ketuakk-member-monitoring__category-number" data-label="Target">{{ $targetKategori }}</div>
+                <div class="ketuakk-member-monitoring__category-number" data-label="Realisasi">{{ $realisasiKategori }}</div>
+                <div class="ketuakk-member-monitoring__category-number" data-label="Sisa">{{ $sisaKategori }}</div>
+                <div class="ketuakk-member-monitoring__category-progress">
+                    <div class="ketuakk-member-monitoring__category-progress-heading">
+                        <span>Capaian</span>
+                        <span>{{ $progressKategori }}%</span>
                     </div>
-                    <div class="kk-metric metric-realisasi">
-                        <div class="kk-metric-label"><i class="bi bi-check2-circle"></i> Realisasi</div>
-                        <div class="kk-metric-value">{{ $realisasiKategori }}</div>
-                    </div>
-                    <div class="kk-metric metric-sisa">
-                        <div class="kk-metric-label"><i class="bi bi-hourglass-split"></i> Sisa</div>
-                        <div class="kk-metric-value">{{ $sisaKategori }}</div>
-                    </div>
-                    <div class="kk-metric metric-progress">
-                        <div class="kk-metric-label"><i class="bi bi-graph-up-arrow"></i> Progress</div>
-                        <div class="kk-metric-value">{{ $progressKategori }}%</div>
+                    <div class="ketuakk-member-monitoring__progress-track"
+                        role="progressbar"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        aria-valuenow="{{ $progressKategori }}"
+                        aria-label="Progress {{ $item['kategori'] ?? 'kategori' }} {{ $progressKategori }} persen">
+                        <div class="ketuakk-member-monitoring__progress-fill" style="width: {{ min($progressKategori, 100) }}%;"></div>
                     </div>
                 </div>
             </div>
         @endforeach
-    </div>
-
-    <div class="kk-summary-grid">
-        <div class="kk-monitoring-card">
-            <div class="kk-summary-label">Jumlah Anggota</div>
-            <div class="kk-summary-value primary">{{ $jumlahAnggota ?? 0 }}</div>
-        </div>
-        <div class="kk-monitoring-card">
-            <div class="kk-summary-label">Sudah Selesai</div>
-            <div class="kk-summary-value success">{{ $jumlahSelesai ?? 0 }}</div>
-        </div>
-        <div class="kk-monitoring-card">
-            <div class="kk-summary-label">Sedang Progress</div>
-            <div class="kk-summary-value warning">{{ $jumlahProgress ?? 0 }}</div>
-        </div>
-        <div class="kk-monitoring-card">
-            <div class="kk-summary-label">Belum Mulai</div>
-            <div class="kk-summary-value danger">{{ $jumlahBelumMulai ?? 0 }}</div>
-        </div>
-
-        <div class="kk-monitoring-card kk-summary-progress-card">
-            <div class="kk-progress-head">
-                <span>Progress Total Anggota KK</span>
-                <span>{{ $progressTotal }}%</span>
-            </div>
-            <div class="kk-progress-track">
-                <div class="kk-progress-fill" style="width: {{ $progressTotal }}%;"></div>
-            </div>
-            <div class="kk-chip-row">
-                <span class="kk-chip chip-primary"><i class="bi bi-layers-fill"></i> Target: {{ $totalTarget }}</span>
-                <span class="kk-chip chip-success"><i class="bi bi-check-circle-fill"></i> Realisasi: {{ $totalRealisasi }}</span>
-                <span class="kk-chip chip-warning"><i class="bi bi-hourglass-split"></i> Sisa: {{ $totalSisa }}</span>
-                <span class="kk-chip chip-danger"><i class="bi bi-exclamation-circle-fill"></i> Belum Mulai: {{ $jumlahBelumMulai ?? 0 }}</span>
-            </div>
-        </div>
-    </div>
+    </section>
 
     <div class="kk-table-card monitoring-table-card">
         <div class="kk-section-head mb-3">
