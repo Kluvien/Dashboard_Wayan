@@ -195,29 +195,307 @@
             grid-column: span 12;
         }
     }
+
+    .ketuakk-report {
+        margin-bottom: 24px;
+        overflow: hidden;
+        border: 1px solid #E2E8F0;
+        border-radius: 14px;
+        background: #FFFFFF;
+    }
+
+    .ketuakk-report__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 20px 22px;
+        border-bottom: 1px solid #E2E8F0;
+    }
+
+    .ketuakk-report__eyebrow {
+        margin-bottom: 5px;
+        color: #2563EB;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .ketuakk-report__title {
+        margin: 0;
+        color: #0F172A;
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1.25;
+        letter-spacing: -.02em;
+    }
+
+    .ketuakk-report__description {
+        max-width: 720px;
+        margin: 6px 0 0;
+        color: #64748B;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .ketuakk-report__period {
+        margin-top: 8px;
+        color: #334155;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .ketuakk-report__button {
+        min-height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        padding: 0 13px;
+        background: #FFFFFF;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .ketuakk-report__button--back {
+        border-color: #CBD5E1;
+        color: #334155;
+    }
+
+    .ketuakk-report__button--back:hover {
+        border-color: #94A3B8;
+        background: #F8FAFC;
+        color: #0F172A;
+    }
+
+    .ketuakk-report__button--primary {
+        min-width: 142px;
+        border-color: #2563EB;
+        background: #2563EB;
+        color: #FFFFFF;
+    }
+
+    .ketuakk-report__button--primary:hover {
+        border-color: #1D4ED8;
+        background: #1D4ED8;
+        color: #FFFFFF;
+    }
+
+    .ketuakk-report__button--export {
+        border-color: #CBD5E1;
+        color: #334155;
+    }
+
+    .ketuakk-report__button--export:hover {
+        border-color: #93C5FD;
+        background: #EFF6FF;
+        color: #1D4ED8;
+    }
+
+    .ketuakk-report__button:focus-visible {
+        outline: 3px solid rgba(37, 99, 235, .22);
+        outline-offset: 2px;
+    }
+
+    .ketuakk-report__validation {
+        margin: 16px 22px 0;
+        padding: 12px 14px;
+        border: 1px solid #FECACA;
+        border-radius: 8px;
+        color: #991B1B;
+        background: #FEF2F2;
+        font-size: 13px;
+    }
+
+    .ketuakk-report__form {
+        padding: 0 22px 20px;
+    }
+
+    .ketuakk-report__filter-group {
+        display: grid;
+        grid-template-columns: minmax(190px, .9fr) minmax(0, 2.1fr);
+        gap: 20px;
+        padding: 18px 0;
+        border-bottom: 1px solid #EEF2F7;
+    }
+
+    .ketuakk-report__filter-heading {
+        color: #0F172A;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .ketuakk-report__filter-intro {
+        margin: 4px 0 0;
+        color: #64748B;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .ketuakk-report__fields {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        align-items: start;
+    }
+
+    .ketuakk-report__field--full {
+        grid-column: 1 / -1;
+    }
+
+    .ketuakk-report__field label {
+        display: block;
+        margin-bottom: 6px;
+        color: #334155;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .ketuakk-report__field .form-control,
+    .ketuakk-report__field .form-select {
+        min-height: 40px;
+        border-color: #CBD5E1;
+        border-radius: 8px;
+        color: #334155;
+        background-color: #FFFFFF;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .ketuakk-report__field .form-control:focus,
+    .ketuakk-report__field .form-select:focus {
+        border-color: #2563EB;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, .14);
+    }
+
+    .ketuakk-report__help {
+        margin: 6px 0 0;
+        color: #64748B;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .ketuakk-report__conditional {
+        display: none;
+    }
+
+    .ketuakk-report__member-select {
+        min-height: 142px;
+    }
+
+    .ketuakk-report__actions {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 18px;
+        padding-top: 18px;
+    }
+
+    .ketuakk-report__export {
+        min-width: 0;
+        flex: 1;
+        padding-left: 18px;
+        border-left: 1px solid #E2E8F0;
+    }
+
+    .ketuakk-report__export-title {
+        color: #0F172A;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .ketuakk-report__export-description {
+        max-width: 760px;
+        margin: 3px 0 10px;
+        color: #64748B;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .ketuakk-report__export-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    @media (max-width: 900px) {
+        .ketuakk-report__filter-group {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .ketuakk-report__actions {
+            flex-direction: column;
+        }
+
+        .ketuakk-report__export {
+            width: 100%;
+            padding: 16px 0 0;
+            border-top: 1px solid #E2E8F0;
+            border-left: 0;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .ketuakk-report__header {
+            padding: 18px 16px;
+        }
+
+        .ketuakk-report__form {
+            padding: 0 16px 18px;
+        }
+
+        .ketuakk-report__validation {
+            margin-right: 16px;
+            margin-left: 16px;
+        }
+
+        .ketuakk-report__fields {
+            grid-template-columns: 1fr;
+        }
+
+        .ketuakk-report__field--full {
+            grid-column: auto;
+        }
+
+        .ketuakk-report__button,
+        .ketuakk-report__export-buttons {
+            width: 100%;
+        }
+
+        .ketuakk-report__export-buttons {
+            flex-direction: column;
+        }
+    }
 </style>
 
-<div class="page-heading">
-    Laporan <span class="muted">Ketua KK</span>
-</div>
-
-<div class="card report-filter-card mb-4">
-    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+<section class="ketuakk-report" aria-labelledby="ketuakk-report-title">
+    <header class="ketuakk-report__header">
         <div>
-            <h4 class="fw-bold mb-1">Pusat Laporan Kontrak Manajemen</h4>
-            <p class="text-muted mb-0">
-                Periode aktif: <strong>{{ $filters['label_periode'] ?? '-' }}</strong>
+            <div class="ketuakk-report__eyebrow">Laporan Ketua KK</div>
+            <h1 id="ketuakk-report-title" class="ketuakk-report__title">Pusat Laporan Kontrak Manajemen</h1>
+            <p class="ketuakk-report__description">
+                Atur ruang lingkup dan periode untuk menampilkan atau mengunduh laporan kontrak manajemen.
             </p>
+            <div class="ketuakk-report__period">
+                Periode aktif: {{ $filters['label_periode'] ?? '-' }}
+            </div>
         </div>
 
-        <a href="/ketuakk/dashboard" class="btn btn-secondary">
-            <i class="bi bi-arrow-left me-1"></i>
+        <a href="/ketuakk/dashboard" class="ketuakk-report__button ketuakk-report__button--back">
+            <i class="bi bi-arrow-left"></i>
             Kembali
         </a>
-    </div>
+    </header>
 
     @if($errors->any())
-        <div class="alert alert-danger rounded-4 mb-4">
+        <div class="ketuakk-report__validation" role="alert">
             <ul class="mb-0 ps-3">
                 @foreach($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -226,13 +504,18 @@
         </div>
     @endif
 
-    <form id="reportFilterForm" method="GET" action="/ketuakk/laporan">
-        <div class="report-filter-grid">
-            <div class="filter-col-6">
-                <div class="report-filter-section h-100">
-                    <div class="report-filter-section-title">Ruang Lingkup Laporan PDF</div>
+    <form id="reportFilterForm" method="GET" action="/ketuakk/laporan" class="ketuakk-report__form">
+        <section class="ketuakk-report__filter-group" aria-labelledby="ketuakk-report-scope-title">
+            <div>
+                <h2 id="ketuakk-report-scope-title" class="ketuakk-report__filter-heading">Ruang lingkup laporan</h2>
+                <p class="ketuakk-report__filter-intro">
+                    Pilihan ruang lingkup menentukan fokus laporan PDF.
+                </p>
+            </div>
 
-                    <label class="form-label fw-bold">Jenis Laporan</label>
+            <div class="ketuakk-report__fields">
+                <div class="ketuakk-report__field ketuakk-report__field--full">
+                    <label for="jenis_laporan">Jenis Laporan</label>
                     <select name="jenis_laporan" id="jenis_laporan" class="form-select">
                         <option value="kk" {{ ($filters['jenis_laporan'] ?? 'kk') === 'kk' ? 'selected' : '' }}>
                             Seluruh KK
@@ -250,167 +533,162 @@
                             Per Anggota
                         </option>
                     </select>
+                </div>
 
-                    <div class="report-filter-help">
-                        Pilihan ini menentukan fokus laporan PDF. Excel dan CSV ZIP selalu memuat seluruh data dalam beberapa sheet/file.
-                    </div>
+                <div id="labSelectorWrap" class="ketuakk-report__field ketuakk-report__field--full ketuakk-report__conditional">
+                    <label for="id_lab">Pilih Lab Riset</label>
+                    <select name="id_lab" id="id_lab" class="form-select">
+                        <option value="">-- Pilih Lab Riset --</option>
+                        @foreach($labOptions ?? [] as $lab)
+                            <option
+                                value="{{ $lab->id_lab }}"
+                                {{ (string) ($filters['id_lab'] ?? '') === (string) $lab->id_lab ? 'selected' : '' }}>
+                                {{ $lab->nama_lab }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
-                    <div id="labSelectorWrap" class="mt-3" style="display: none;">
-                        <label class="form-label fw-bold">Pilih Lab Riset</label>
-                        <select name="id_lab" id="id_lab" class="form-select">
-                            <option value="">-- Pilih Lab Riset --</option>
-                            @foreach($labOptions ?? [] as $lab)
-                                <option
-                                    value="{{ $lab->id_lab }}"
-                                    {{ (string) ($filters['id_lab'] ?? '') === (string) $lab->id_lab ? 'selected' : '' }}>
-                                    {{ $lab->nama_lab }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                <div id="anggotaSelectorWrap" class="ketuakk-report__field ketuakk-report__field--full ketuakk-report__conditional">
+                    <label for="searchAnggota">Cari Anggota</label>
+                    <input
+                        type="search"
+                        id="searchAnggota"
+                        class="form-control mb-2"
+                        placeholder="Cari nama, NIDN, atau lab riset...">
 
-                    <div id="anggotaSelectorWrap" class="mt-3" style="display: none;">
-                        <label class="form-label fw-bold">Cari dan Pilih Anggota</label>
-                        <input
-                            type="search"
-                            id="searchAnggota"
-                            class="form-control mb-2"
-                            placeholder="Cari nama, NIDN, atau lab riset...">
+                    <label for="id_user">Pilih Anggota</label>
+                    <select name="id_user" id="id_user" class="form-select ketuakk-report__member-select" size="6">
+                        <option value="">-- Pilih Anggota --</option>
+                        @foreach($anggotaOptions ?? [] as $anggota)
+                            @php
+                                $searchText = strtolower(
+                                    ($anggota->nama_dosen ?? $anggota->username) . ' ' .
+                                    ($anggota->nidn ?? '') . ' ' .
+                                    ($anggota->nama_lab ?? '')
+                                );
+                            @endphp
+                            <option
+                                value="{{ $anggota->id_user }}"
+                                data-search="{{ $searchText }}"
+                                {{ (string) ($filters['id_user'] ?? '') === (string) $anggota->id_user ? 'selected' : '' }}>
+                                {{ $anggota->nama_dosen ?? $anggota->username }} — {{ $anggota->nama_lab ?? '-' }}
+                            </option>
+                        @endforeach
+                    </select>
 
-                        <select name="id_user" id="id_user" class="form-select" size="6">
-                            <option value="">-- Pilih Anggota --</option>
-                            @foreach($anggotaOptions ?? [] as $anggota)
-                                @php
-                                    $searchText = strtolower(
-                                        ($anggota->nama_dosen ?? $anggota->username) . ' ' .
-                                        ($anggota->nidn ?? '') . ' ' .
-                                        ($anggota->nama_lab ?? '')
-                                    );
-                                @endphp
-                                <option
-                                    value="{{ $anggota->id_user }}"
-                                    data-search="{{ $searchText }}"
-                                    {{ (string) ($filters['id_user'] ?? '') === (string) $anggota->id_user ? 'selected' : '' }}>
-                                    {{ $anggota->nama_dosen ?? $anggota->username }} — {{ $anggota->nama_lab ?? '-' }}
-                                </option>
-                            @endforeach
-                        </select>
-
-                        <div class="report-filter-help">
-                            Ketik kata kunci untuk menyaring daftar anggota.
-                        </div>
-                    </div>
+                    <p class="ketuakk-report__help">Ketik kata kunci untuk menyaring daftar anggota.</p>
                 </div>
             </div>
+        </section>
 
-            <div class="filter-col-6">
-                <div class="report-filter-section h-100">
-                    <div class="report-filter-section-title">Periode Laporan</div>
-
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Tahun</label>
-                            <select name="tahun" class="form-select">
-                                @foreach($tahunOptions ?? [now()->year] as $tahunOption)
-                                    <option
-                                        value="{{ $tahunOption }}"
-                                        {{ (int) ($filters['tahun'] ?? now()->year) === (int) $tahunOption ? 'selected' : '' }}>
-                                        {{ $tahunOption }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Format Waktu</label>
-                            <select name="mode_periode" id="mode_periode" class="form-select">
-                                <option value="tahun" {{ ($filters['mode_periode'] ?? 'tahun') === 'tahun' ? 'selected' : '' }}>
-                                    Dalam 1 Tahun
-                                </option>
-                                <option value="semester" {{ ($filters['mode_periode'] ?? '') === 'semester' ? 'selected' : '' }}>
-                                    Per Semester
-                                </option>
-                                <option value="triwulan" {{ ($filters['mode_periode'] ?? '') === 'triwulan' ? 'selected' : '' }}>
-                                    Per Triwulan
-                                </option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-12" id="periodeSelectorWrap" style="display: none;">
-                            <label class="form-label fw-bold" id="periodeLabel">Pilih Periode</label>
-
-                            <select name="periode_nilai" id="periode_nilai" class="form-select">
-                                <option value="1" {{ (int) ($filters['periode_nilai'] ?? 1) === 1 ? 'selected' : '' }}>
-                                    Periode 1
-                                </option>
-                                <option value="2" {{ (int) ($filters['periode_nilai'] ?? 1) === 2 ? 'selected' : '' }}>
-                                    Periode 2
-                                </option>
-                                <option value="3" {{ (int) ($filters['periode_nilai'] ?? 1) === 3 ? 'selected' : '' }}>
-                                    Periode 3
-                                </option>
-                                <option value="4" {{ (int) ($filters['periode_nilai'] ?? 1) === 4 ? 'selected' : '' }}>
-                                    Periode 4
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+        <section class="ketuakk-report__filter-group" aria-labelledby="ketuakk-report-period-title">
+            <div>
+                <h2 id="ketuakk-report-period-title" class="ketuakk-report__filter-heading">Periode laporan</h2>
+                <p class="ketuakk-report__filter-intro">
+                    Pilih tahun dan pembagian waktu yang digunakan dalam laporan.
+                </p>
             </div>
 
-            <div class="filter-col-12">
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                    <button type="submit" class="btn btn-primary px-4">
-                        <i class="bi bi-eye me-1"></i>
-                        Tampilkan Laporan
+            <div class="ketuakk-report__fields">
+                <div class="ketuakk-report__field">
+                    <label for="report_tahun">Tahun</label>
+                    <select name="tahun" id="report_tahun" class="form-select">
+                        @foreach($tahunOptions ?? [now()->year] as $tahunOption)
+                            <option
+                                value="{{ $tahunOption }}"
+                                {{ (int) ($filters['tahun'] ?? now()->year) === (int) $tahunOption ? 'selected' : '' }}>
+                                {{ $tahunOption }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="ketuakk-report__field">
+                    <label for="mode_periode">Format Waktu</label>
+                    <select name="mode_periode" id="mode_periode" class="form-select">
+                        <option value="tahun" {{ ($filters['mode_periode'] ?? 'tahun') === 'tahun' ? 'selected' : '' }}>
+                            Dalam 1 Tahun
+                        </option>
+                        <option value="semester" {{ ($filters['mode_periode'] ?? '') === 'semester' ? 'selected' : '' }}>
+                            Per Semester
+                        </option>
+                        <option value="triwulan" {{ ($filters['mode_periode'] ?? '') === 'triwulan' ? 'selected' : '' }}>
+                            Per Triwulan
+                        </option>
+                    </select>
+                </div>
+
+                <div id="periodeSelectorWrap" class="ketuakk-report__field ketuakk-report__field--full ketuakk-report__conditional">
+                    <label for="periode_nilai" id="periodeLabel">Pilih Periode</label>
+                    <select name="periode_nilai" id="periode_nilai" class="form-select">
+                        <option value="1" {{ (int) ($filters['periode_nilai'] ?? 1) === 1 ? 'selected' : '' }}>
+                            Periode 1
+                        </option>
+                        <option value="2" {{ (int) ($filters['periode_nilai'] ?? 1) === 2 ? 'selected' : '' }}>
+                            Periode 2
+                        </option>
+                        <option value="3" {{ (int) ($filters['periode_nilai'] ?? 1) === 3 ? 'selected' : '' }}>
+                            Periode 3
+                        </option>
+                        <option value="4" {{ (int) ($filters['periode_nilai'] ?? 1) === 4 ? 'selected' : '' }}>
+                            Periode 4
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <div class="ketuakk-report__actions">
+            <button type="submit" class="ketuakk-report__button ketuakk-report__button--primary">
+                <i class="bi bi-eye"></i>
+                Tampilkan Laporan
+            </button>
+
+            <div class="ketuakk-report__export">
+                <div class="ketuakk-report__export-title">Unduh laporan</div>
+                <p class="ketuakk-report__export-description">
+                    PDF mengikuti ruang lingkup yang dipilih. Excel selalu memuat seluruh data dalam beberapa sheet, sedangkan CSV diunduh sebagai ZIP berisi beberapa file CSV.
+                </p>
+
+                <div class="ketuakk-report__export-buttons">
+                    <button
+                        type="submit"
+                        formaction="/ketuakk/laporan/download"
+                        formmethod="GET"
+                        name="format"
+                        value="pdf"
+                        class="ketuakk-report__button ketuakk-report__button--export">
+                        <i class="bi bi-file-earmark-pdf"></i>
+                        Download PDF
                     </button>
 
-                    <div class="download-panel flex-grow-1">
-                        <div class="download-panel-title">Unduh Laporan</div>
-                        <div class="download-panel-text">
-                            PDF mengikuti ruang lingkup yang dipilih. Excel berisi beberapa sheet, sedangkan CSV diunduh sebagai ZIP berisi beberapa file CSV.
-                        </div>
+                    <button
+                        type="submit"
+                        formaction="/ketuakk/laporan/download"
+                        formmethod="GET"
+                        name="format"
+                        value="xlsx"
+                        class="ketuakk-report__button ketuakk-report__button--export">
+                        <i class="bi bi-file-earmark-excel"></i>
+                        Download Excel
+                    </button>
 
-                        <div class="d-flex flex-wrap gap-2">
-                            <button
-                                type="submit"
-                                formaction="/ketuakk/laporan/download"
-                                formmethod="GET"
-                                name="format"
-                                value="pdf"
-                                class="btn btn-danger">
-                                <i class="bi bi-file-earmark-pdf me-1"></i>
-                                Download PDF
-                            </button>
-
-                            <button
-                                type="submit"
-                                formaction="/ketuakk/laporan/download"
-                                formmethod="GET"
-                                name="format"
-                                value="xlsx"
-                                class="btn btn-success">
-                                <i class="bi bi-file-earmark-excel me-1"></i>
-                                Download Excel
-                            </button>
-
-                            <button
-                                type="submit"
-                                formaction="/ketuakk/laporan/download"
-                                formmethod="GET"
-                                name="format"
-                                value="csv"
-                                class="btn btn-secondary">
-                                <i class="bi bi-filetype-csv me-1"></i>
-                                Download CSV ZIP
-                            </button>
-                        </div>
-                    </div>
+                    <button
+                        type="submit"
+                        formaction="/ketuakk/laporan/download"
+                        formmethod="GET"
+                        name="format"
+                        value="csv"
+                        class="ketuakk-report__button ketuakk-report__button--export">
+                        <i class="bi bi-filetype-csv"></i>
+                        Download CSV ZIP
+                    </button>
                 </div>
             </div>
         </div>
     </form>
-</div>
+</section>
 
 <div class="row g-4 mb-4">
     <div class="col-md-3">
