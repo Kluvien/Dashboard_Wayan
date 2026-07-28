@@ -25,127 +25,272 @@
         padding-bottom: 28px;
     }
 
-    .kk-monitoring-hero,
-    .kk-monitoring-card,
-    .kk-category-card,
-    .kk-table-card {
+    .ketuakk-lab-monitoring {
+        margin-bottom: 20px;
+        overflow: hidden;
         border: 1px solid #E2E8F0;
-        border-radius: 18px;
+        border-radius: 14px;
         background: #FFFFFF;
-        box-shadow: 0 6px 16px rgba(15, 23, 42, .04);
     }
 
-    .kk-monitoring-hero {
-        padding: 18px;
-        margin-bottom: 16px;
-    }
-
-    .kk-hero-row,
-    .kk-section-head {
+    .ketuakk-lab-monitoring__header {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
-        gap: 14px;
+        gap: 24px;
         flex-wrap: wrap;
+        padding: 20px 22px 18px;
+        border-bottom: 1px solid #EEF2F7;
     }
 
-    .kk-card-title {
-        color: #111827;
-        font-size: 19px;
-        font-weight: 900;
-        margin-bottom: 4px;
+    .ketuakk-lab-monitoring__heading {
+        min-width: 0;
+        max-width: 720px;
     }
 
-    .kk-card-subtitle {
+    .ketuakk-lab-monitoring__eyebrow {
+        margin-bottom: 5px;
+        color: #2563EB;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .ketuakk-lab-monitoring__title {
+        margin: 0;
+        color: #0F172A;
+        font-size: 23px;
+        font-weight: 700;
+        letter-spacing: -.02em;
+        line-height: 1.25;
+        text-wrap: balance;
+    }
+
+    .ketuakk-lab-monitoring__description {
+        max-width: 65ch;
+        margin: 7px 0 0;
         color: #64748B;
         font-size: 13px;
-        margin: 0;
+        line-height: 1.55;
     }
 
-    .kk-period-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        margin-top: 10px;
-        padding: 7px 11px;
-        border: 1px solid #BFDBFE;
-        border-radius: 999px;
-        background: #EFF6FF;
-        color: #2563EB;
-        font-size: 12px;
-        font-weight: 900;
-    }
-
-    .kk-filter-grid {
-        display: grid;
-        grid-template-columns: minmax(140px, .9fr) minmax(185px, 1.2fr) auto;
-        gap: 10px;
-        align-items: end;
-        margin-top: 16px;
-    }
-
-    .kk-filter-group label {
-        display: block;
-        margin-bottom: 6px;
+    .ketuakk-lab-monitoring__period {
+        margin-top: 8px;
         color: #334155;
         font-size: 12px;
-        font-weight: 900;
+        font-weight: 600;
     }
 
-    .kk-filter-group .form-select {
-        height: 41px;
-        border-color: #CBD5E1;
-        border-radius: 10px;
-        color: #172033;
+    .ketuakk-lab-monitoring__period span {
+        color: #64748B;
+        font-weight: 500;
+    }
+
+    .ketuakk-lab-monitoring__back {
+        white-space: nowrap;
+    }
+
+    .ketuakk-lab-monitoring__toolbar {
+        padding: 14px 22px;
+        border-bottom: 1px solid #EEF2F7;
+        background: #F8FAFC;
+    }
+
+    .ketuakk-lab-monitoring__filter {
+        display: grid;
+        grid-template-columns: minmax(124px, 160px) minmax(170px, 210px) auto;
+        align-items: end;
+        gap: 10px;
+    }
+
+    .ketuakk-lab-monitoring__filter-label {
+        display: block;
+        margin-bottom: 5px;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .ketuakk-lab-monitoring__filter-select {
+        min-width: 0;
+    }
+
+    .ketuakk-lab-monitoring__apply {
+        width: auto;
+        min-width: 128px;
+        justify-self: start;
+        white-space: nowrap;
+    }
+
+    .ketuakk-lab-monitoring__summary {
+        padding: 18px 22px;
+        border-bottom: 1px solid #EEF2F7;
+    }
+
+    .ketuakk-lab-monitoring__section-heading {
+        margin-bottom: 12px;
+    }
+
+    .ketuakk-lab-monitoring__section-title {
+        margin: 0;
+        color: #0F172A;
         font-size: 14px;
         font-weight: 700;
     }
 
-    .kk-btn-primary,
-    .kk-btn-secondary,
-    .kk-btn-soft {
-        min-height: 40px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 7px;
-        border: 0;
+    .ketuakk-lab-monitoring__section-description {
+        margin: 3px 0 0;
+        color: #64748B;
+        font-size: 12px;
+        line-height: 1.45;
+    }
+
+    .ketuakk-lab-monitoring__metrics {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 1px;
+        overflow: hidden;
+        border: 1px solid #E2E8F0;
         border-radius: 10px;
-        padding: 0 15px;
-        text-decoration: none;
+        background: #EEF2F7;
+    }
+
+    .ketuakk-lab-monitoring__metric {
+        min-width: 0;
+        padding: 13px 14px;
+        background: #FFFFFF;
+    }
+
+    .ketuakk-lab-monitoring__metric-label {
+        margin-bottom: 5px;
+        color: #64748B;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .035em;
+        line-height: 1.35;
+        text-transform: uppercase;
+    }
+
+    .ketuakk-lab-monitoring__metric-value {
+        color: #0F172A;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-lab-monitoring__summary-progress {
+        margin-top: 13px;
+    }
+
+    .ketuakk-lab-monitoring__progress-meta {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 7px;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .ketuakk-lab-monitoring__progress-value {
+        color: #0F172A;
         font-size: 13px;
-        font-weight: 900;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ketuakk-lab-monitoring__progress {
+        width: 100%;
+        height: 6px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #E2E8F0;
+    }
+
+    .ketuakk-lab-monitoring__progress-fill {
+        height: 100%;
+        border-radius: inherit;
+        background: #2563EB;
+    }
+
+    .ketuakk-lab-monitoring__categories {
+        padding: 18px 22px 20px;
+    }
+
+    .ketuakk-lab-monitoring__category-list {
+        overflow: hidden;
+        border: 1px solid #E2E8F0;
+        border-radius: 10px;
+        background: #FFFFFF;
+    }
+
+    .ketuakk-lab-monitoring__category-header,
+    .ketuakk-lab-monitoring__category-row {
+        display: grid;
+        grid-template-columns: minmax(170px, 1.5fr) repeat(3, minmax(76px, .65fr)) minmax(180px, 1.3fr);
+        align-items: center;
+        gap: 14px;
+        padding: 11px 16px;
+    }
+
+    .ketuakk-lab-monitoring__category-header {
+        border-bottom: 1px solid #CBD5E1;
+        background: #F8FAFC;
+        color: #64748B;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .035em;
+        text-transform: uppercase;
+    }
+
+    .ketuakk-lab-monitoring__category-row {
+        min-height: 58px;
+        border-bottom: 1px solid #EEF2F7;
+    }
+
+    .ketuakk-lab-monitoring__category-row:last-child {
+        border-bottom: 0;
+    }
+
+    .ketuakk-lab-monitoring__category-name {
+        min-width: 0;
+        color: #0F172A;
+        font-size: 13px;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+    }
+
+    .ketuakk-lab-monitoring__category-number {
+        color: #334155;
+        font-size: 13px;
+        font-weight: 700;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
         white-space: nowrap;
     }
 
-    .kk-btn-primary {
-        background: linear-gradient(135deg, #4F7DF3, #6A98FF);
-        color: #FFFFFF;
-        box-shadow: 0 7px 14px rgba(79, 125, 243, .18);
-    }
-
-    .kk-btn-primary:hover {
-        color: #FFFFFF;
-        opacity: .94;
-    }
-
-    .kk-btn-secondary {
-        background: #6B7280;
-        color: #FFFFFF;
-    }
-
-    .kk-btn-secondary:hover {
-        color: #FFFFFF;
-        background: #4B5563;
+    .ketuakk-lab-monitoring__category-progress {
+        min-width: 0;
     }
 
     .kk-btn-soft {
         min-height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
         padding: 0 12px;
         border: 1px solid #BFDBFE;
+        border-radius: 10px;
         background: #EFF6FF;
         color: #2563EB;
+        text-decoration: none;
         font-size: 12px;
+        font-weight: 900;
+        white-space: nowrap;
     }
 
     .kk-btn-soft:hover {
@@ -153,172 +298,21 @@
         background: #DBEAFE;
     }
 
-    .kk-category-grid {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 14px;
-        margin-bottom: 16px;
-    }
-
-    .kk-category-card {
-        min-height: 230px;
-        padding: 14px;
-        border-top: 4px solid #5A88FF;
-        background: linear-gradient(180deg, #FFFFFF 0%, #FBFDFF 100%);
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .kk-category-top {
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
-        align-items: flex-start;
-    }
-
-    .kk-category-name {
-        color: #334155;
-        font-size: 15px;
-        font-weight: 900;
-        line-height: 1.25;
-    }
-
-    .kk-category-caption {
-        display: block;
-        margin-top: 3px;
-        color: #94A3B8;
-        font-size: 10px;
-        font-weight: 800;
-    }
-
-    .kk-category-percent {
-        padding: 6px 10px;
-        border-radius: 12px;
-        background: #EAF1FF;
-        color: #2563EB;
-        font-size: 16px;
-        font-weight: 900;
-        white-space: nowrap;
-    }
-
-    .kk-progress-track {
-        width: 100%;
-        height: 9px;
-        overflow: hidden;
-        border-radius: 999px;
-        background: #E7EDF7;
-    }
-
-    .kk-progress-fill {
-        height: 100%;
-        border-radius: inherit;
-        background: linear-gradient(90deg, #4F7DF3, #79A0FF);
-    }
-
-    .kk-metric-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
-    }
-
-    .kk-metric {
-        min-height: 58px;
-        padding: 8px 10px;
-        border: 1px solid;
-        border-radius: 11px;
-    }
-
-    .kk-metric-label {
-        color: inherit;
-        font-size: 10px;
-        font-weight: 900;
-        letter-spacing: .15px;
-        text-transform: uppercase;
-    }
-
-    .kk-metric-value {
-        margin-top: 4px;
-        color: inherit;
-        font-size: 19px;
-        font-weight: 900;
-        line-height: 1;
-    }
-
-    .metric-target { color: #2563EB; background: #EFF6FF; border-color: #BFDBFE; }
-    .metric-realisasi { color: #059669; background: #ECFDF5; border-color: #BBF7D0; }
-    .metric-sisa { color: #D97706; background: #FFF7ED; border-color: #FED7AA; }
-    .metric-progress { color: #7C3AED; background: #F5F3FF; border-color: #DDD6FE; }
-
-    .kk-summary-grid {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 14px;
-        margin-bottom: 16px;
-    }
-
-    .kk-monitoring-card {
-        padding: 15px;
-    }
-
-    .kk-summary-label {
-        color: #64748B;
-        font-size: 12px;
-        font-weight: 900;
-        margin-bottom: 6px;
-    }
-
-    .kk-summary-value {
-        color: #0F172A;
-        font-size: 24px;
-        font-weight: 900;
-        line-height: 1;
-    }
-
-    .kk-summary-value.primary { color: #2563EB; }
-    .kk-summary-value.success { color: #059669; }
-    .kk-summary-value.warning { color: #D97706; }
-
-    .kk-summary-progress-card {
-        grid-column: span 4;
-    }
-
-    .kk-progress-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 8px;
-        color: #1F2937;
-        font-size: 13px;
-        font-weight: 900;
-    }
-
-    .kk-chip-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 12px;
-    }
-
-    .kk-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 10px;
-        border: 1px solid;
-        border-radius: 999px;
-        font-size: 11px;
-        font-weight: 900;
-    }
-
-    .chip-primary { color: #2563EB; background: #EFF6FF; border-color: #BFDBFE; }
-    .chip-success { color: #15803D; background: #ECFDF5; border-color: #BBF7D0; }
-    .chip-warning { color: #B45309; background: #FFF7ED; border-color: #FED7AA; }
-
     .kk-table-card {
         padding: 17px;
         position: relative;
+        border: 1px solid #E2E8F0;
+        border-radius: 18px;
+        background: #FFFFFF;
+        box-shadow: 0 6px 16px rgba(15, 23, 42, .04);
+    }
+
+    .kk-section-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
     }
 
     .kk-section-title {
@@ -457,26 +451,43 @@
 
     .floating-table-scroll-inner { height: 1px; }
 
-    @media (max-width: 1240px) {
-        .kk-category-grid,
-        .kk-summary-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+    @media (max-width: 1199.98px) {
+        .ketuakk-lab-monitoring__metrics {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .ketuakk-lab-monitoring__filter {
+            grid-template-columns: 1fr;
         }
 
-        .kk-summary-progress-card {
-            grid-column: span 2;
+        .ketuakk-lab-monitoring__apply {
+            width: 100%;
+            justify-self: stretch;
+        }
+
+        .ketuakk-lab-monitoring__category-list {
+            overflow-x: auto;
+        }
+
+        .ketuakk-lab-monitoring__category-header,
+        .ketuakk-lab-monitoring__category-row {
+            min-width: 720px;
         }
     }
 
     @media (max-width: 720px) {
-        .kk-filter-grid,
-        .kk-category-grid,
-        .kk-summary-grid {
-            grid-template-columns: 1fr;
+        .ketuakk-lab-monitoring__header,
+        .ketuakk-lab-monitoring__toolbar,
+        .ketuakk-lab-monitoring__summary,
+        .ketuakk-lab-monitoring__categories {
+            padding-right: 16px;
+            padding-left: 16px;
         }
 
-        .kk-summary-progress-card {
-            grid-column: span 1;
+        .ketuakk-lab-monitoring__metrics {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
         .floating-table-scroll {
@@ -487,35 +498,39 @@
 </style>
 
 <div class="kk-monitoring-page">
-    <div class="page-heading">
-        Monitoring <span class="muted">Lab Riset</span>
-    </div>
-
-    <div class="kk-monitoring-hero">
-        <div class="kk-hero-row">
-            <div>
-                <div class="kk-card-title">Filter Periode Monitoring Lab Riset</div>
-                <p class="kk-card-subtitle">
-                    Monitoring saat ini:
-                    <strong>{{ $labelPeriode ?? 'Triwulan Tahun ' . ($tahun ?? now()->year) }}</strong>
+    <section class="ketuakk-lab-monitoring" aria-labelledby="ketuakk-lab-monitoring-title">
+        <header class="ketuakk-lab-monitoring__header">
+            <div class="ketuakk-lab-monitoring__heading">
+                <div class="ketuakk-lab-monitoring__eyebrow">Monitoring</div>
+                <h1 id="ketuakk-lab-monitoring-title" class="ketuakk-lab-monitoring__title">
+                    Monitoring Lab Riset
+                </h1>
+                <p class="ketuakk-lab-monitoring__description">
+                    Pantau target dan realisasi Lab Riset berdasarkan kategori KM serta periode yang dipilih.
                 </p>
-                <span class="kk-period-pill">
-                    <i class="bi bi-calendar-range"></i>
-                    {{ $labelMode }}
-                </span>
+                <div class="ketuakk-lab-monitoring__period">
+                    {{ $labelPeriode ?? 'Triwulan Tahun ' . ($tahun ?? now()->year) }}
+                    <span>- {{ $labelMode }}</span>
+                </div>
             </div>
 
-            <a href="/ketuakk/dashboard" class="kk-btn-secondary">
-                <i class="bi bi-arrow-left"></i>
+            <a href="/ketuakk/dashboard" class="btn btn-outline-secondary ketuakk-lab-monitoring__back">
+                <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>
                 Kembali
             </a>
-        </div>
+        </header>
 
-        <form action="/ketuakk/monitoring-lab-riset" method="GET">
-            <div class="kk-filter-grid">
-                <div class="kk-filter-group">
-                    <label for="tahun">Tahun</label>
-                    <select name="tahun" id="tahun" class="form-select">
+        <div class="ketuakk-lab-monitoring__toolbar">
+            <form
+                action="/ketuakk/monitoring-lab-riset"
+                method="GET"
+                class="ketuakk-lab-monitoring__filter">
+                <div>
+                    <label for="tahun" class="ketuakk-lab-monitoring__filter-label">Tahun</label>
+                    <select
+                        name="tahun"
+                        id="tahun"
+                        class="form-select form-select-sm ketuakk-lab-monitoring__filter-select">
                         @foreach($tahunOptions ?? [$tahun] as $itemTahun)
                             <option value="{{ $itemTahun }}" {{ (int) $tahun === (int) $itemTahun ? 'selected' : '' }}>
                                 {{ $itemTahun }}
@@ -524,101 +539,137 @@
                     </select>
                 </div>
 
-                <div class="kk-filter-group">
-                    <label for="periode">Jenis Periode</label>
-                    <select name="periode" id="periode" class="form-select">
+                <div>
+                    <label for="periode" class="ketuakk-lab-monitoring__filter-label">Jenis Periode</label>
+                    <select
+                        name="periode"
+                        id="periode"
+                        class="form-select form-select-sm ketuakk-lab-monitoring__filter-select">
                         <option value="triwulan" {{ ($periode ?? 'triwulan') === 'triwulan' ? 'selected' : '' }}>Triwulan</option>
                         <option value="semester" {{ ($periode ?? '') === 'semester' ? 'selected' : '' }}>Semester</option>
                     </select>
                 </div>
 
-                <div class="kk-filter-group">
-                    <label>&nbsp;</label>
-                    <button type="submit" class="kk-btn-primary w-100">
-                        <i class="bi bi-funnel-fill"></i>
-                        Terapkan
-                    </button>
+                <button type="submit" class="btn btn-sm btn-outline-primary ketuakk-lab-monitoring__apply">
+                    Terapkan
+                </button>
+            </form>
+        </div>
+
+        <section class="ketuakk-lab-monitoring__summary" aria-labelledby="ketuakk-lab-monitoring-summary-title">
+            <div class="ketuakk-lab-monitoring__section-heading">
+                <h2 id="ketuakk-lab-monitoring-summary-title" class="ketuakk-lab-monitoring__section-title">
+                    Ringkasan keseluruhan
+                </h2>
+                <p class="ketuakk-lab-monitoring__section-description">
+                    Rekap seluruh Lab Riset pada {{ $labelPeriode ?? 'periode aktif' }}.
+                </p>
+            </div>
+
+            <div class="ketuakk-lab-monitoring__metrics">
+                <div class="ketuakk-lab-monitoring__metric">
+                    <div class="ketuakk-lab-monitoring__metric-label">Jumlah Lab Riset</div>
+                    <div class="ketuakk-lab-monitoring__metric-value">{{ $jumlahLab }}</div>
+                </div>
+                <div class="ketuakk-lab-monitoring__metric">
+                    <div class="ketuakk-lab-monitoring__metric-label">Jumlah Anggota</div>
+                    <div class="ketuakk-lab-monitoring__metric-value">{{ $jumlahAnggota }}</div>
+                </div>
+                <div class="ketuakk-lab-monitoring__metric">
+                    <div class="ketuakk-lab-monitoring__metric-label">Target Periode</div>
+                    <div class="ketuakk-lab-monitoring__metric-value">{{ $totalTarget }}</div>
+                </div>
+                <div class="ketuakk-lab-monitoring__metric">
+                    <div class="ketuakk-lab-monitoring__metric-label">Realisasi Periode</div>
+                    <div class="ketuakk-lab-monitoring__metric-value">{{ $totalRealisasi }}</div>
+                </div>
+                <div class="ketuakk-lab-monitoring__metric">
+                    <div class="ketuakk-lab-monitoring__metric-label">Sisa</div>
+                    <div class="ketuakk-lab-monitoring__metric-value">{{ $sisaTarget }}</div>
+                </div>
+                <div class="ketuakk-lab-monitoring__metric">
+                    <div class="ketuakk-lab-monitoring__metric-label">Progress Total</div>
+                    <div class="ketuakk-lab-monitoring__metric-value">{{ $progressTotal }}%</div>
                 </div>
             </div>
-        </form>
-    </div>
 
-    <div class="category-card-grid kk-category-grid">
-        @foreach($rekapKategori as $item)
-            @php
-                $targetKategori = (int) ($item['target'] ?? 0);
-                $realisasiKategori = (int) ($item['realisasi'] ?? 0);
-                $sisaKategori = max($targetKategori - $realisasiKategori, 0);
-                $progressKategori = min((int) ($item['progress'] ?? 0), 100);
-            @endphp
-            <div class="kk-category-card">
-                <div class="kk-category-top">
-                    <div class="kk-category-name">
-                        {{ $item['kategori'] ?? '-' }}
-                        <span class="kk-category-caption">Progress realisasi kategori KM · {{ $labelPeriode ?? 'periode aktif' }}</span>
-                    </div>
-                    <div class="kk-category-percent">{{ $progressKategori }}%</div>
+            <div class="ketuakk-lab-monitoring__summary-progress">
+                <div class="ketuakk-lab-monitoring__progress-meta">
+                    <span>Progress total Lab Riset</span>
+                    <span class="ketuakk-lab-monitoring__progress-value">{{ $progressTotal }}%</span>
                 </div>
-
-                <div class="kk-progress-track">
-                    <div class="kk-progress-fill" style="width: {{ $progressKategori }}%;"></div>
-                </div>
-
-                <div class="kk-metric-grid">
-                    <div class="kk-metric metric-target">
-                        <div class="kk-metric-label"><i class="bi bi-bullseye"></i> Target</div>
-                        <div class="kk-metric-value">{{ $targetKategori }}</div>
-                    </div>
-                    <div class="kk-metric metric-realisasi">
-                        <div class="kk-metric-label"><i class="bi bi-check2-circle"></i> Realisasi</div>
-                        <div class="kk-metric-value">{{ $realisasiKategori }}</div>
-                    </div>
-                    <div class="kk-metric metric-sisa">
-                        <div class="kk-metric-label"><i class="bi bi-hourglass-split"></i> Sisa</div>
-                        <div class="kk-metric-value">{{ $sisaKategori }}</div>
-                    </div>
-                    <div class="kk-metric metric-progress">
-                        <div class="kk-metric-label"><i class="bi bi-graph-up-arrow"></i> Progress</div>
-                        <div class="kk-metric-value">{{ $progressKategori }}%</div>
+                <div
+                    class="ketuakk-lab-monitoring__progress"
+                    role="progressbar"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-valuenow="{{ $progressTotal }}"
+                    aria-label="Progress total Lab Riset: {{ $progressTotal }} persen">
+                    <div
+                        class="ketuakk-lab-monitoring__progress-fill"
+                        style="width: {{ min($progressTotal, 100) }}%;">
                     </div>
                 </div>
             </div>
-        @endforeach
-    </div>
+        </section>
 
-    <div class="kk-summary-grid">
-        <div class="kk-monitoring-card">
-            <div class="kk-summary-label">Jumlah Lab Riset</div>
-            <div class="kk-summary-value primary">{{ $jumlahLab }}</div>
-        </div>
-        <div class="kk-monitoring-card">
-            <div class="kk-summary-label">Jumlah Anggota</div>
-            <div class="kk-summary-value primary">{{ $jumlahAnggota }}</div>
-        </div>
-        <div class="kk-monitoring-card">
-            <div class="kk-summary-label">Target Periode</div>
-            <div class="kk-summary-value primary">{{ $totalTarget }}</div>
-        </div>
-        <div class="kk-monitoring-card">
-            <div class="kk-summary-label">Realisasi Periode</div>
-            <div class="kk-summary-value success">{{ $totalRealisasi }}</div>
-        </div>
+        <section class="ketuakk-lab-monitoring__categories" aria-labelledby="ketuakk-lab-monitoring-categories-title">
+            <div class="ketuakk-lab-monitoring__section-heading">
+                <h2 id="ketuakk-lab-monitoring-categories-title" class="ketuakk-lab-monitoring__section-title">
+                    Ringkasan per kategori
+                </h2>
+                <p class="ketuakk-lab-monitoring__section-description">
+                    Progress realisasi kategori KM - {{ $labelPeriode ?? 'periode aktif' }}
+                </p>
+            </div>
 
-        <div class="kk-monitoring-card kk-summary-progress-card">
-            <div class="kk-progress-head">
-                <span>Progress Total Lab Riset</span>
-                <span>{{ $progressTotal }}%</span>
+            <div class="ketuakk-lab-monitoring__category-list">
+                <div class="ketuakk-lab-monitoring__category-header" aria-hidden="true">
+                    <span>Kategori</span>
+                    <span class="text-end">Target</span>
+                    <span class="text-end">Realisasi</span>
+                    <span class="text-end">Sisa</span>
+                    <span>Progress</span>
+                </div>
+
+                @foreach($rekapKategori as $item)
+                    @php
+                        $targetKategori = (int) ($item['target'] ?? 0);
+                        $realisasiKategori = (int) ($item['realisasi'] ?? 0);
+                        $sisaKategori = max($targetKategori - $realisasiKategori, 0);
+                        $progressKategori = min((int) ($item['progress'] ?? 0), 100);
+                    @endphp
+
+                    <div class="ketuakk-lab-monitoring__category-row">
+                        <div class="ketuakk-lab-monitoring__category-name">
+                            {{ $item['kategori'] ?? '-' }}
+                        </div>
+                        <div class="ketuakk-lab-monitoring__category-number">{{ $targetKategori }}</div>
+                        <div class="ketuakk-lab-monitoring__category-number">{{ $realisasiKategori }}</div>
+                        <div class="ketuakk-lab-monitoring__category-number">{{ $sisaKategori }}</div>
+                        <div class="ketuakk-lab-monitoring__category-progress">
+                            <div class="ketuakk-lab-monitoring__progress-meta">
+                                <span>Progress</span>
+                                <span class="ketuakk-lab-monitoring__progress-value">{{ $progressKategori }}%</span>
+                            </div>
+                            <div
+                                class="ketuakk-lab-monitoring__progress"
+                                role="progressbar"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                                aria-valuenow="{{ $progressKategori }}"
+                                aria-label="Progress kategori {{ $item['kategori'] ?? '-' }}: {{ $progressKategori }} persen">
+                                <div
+                                    class="ketuakk-lab-monitoring__progress-fill"
+                                    style="width: {{ min($progressKategori, 100) }}%;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
-            <div class="kk-progress-track">
-                <div class="kk-progress-fill" style="width: {{ $progressTotal }}%;"></div>
-            </div>
-            <div class="kk-chip-row">
-                <span class="kk-chip chip-primary"><i class="bi bi-layers-fill"></i> Target: {{ $totalTarget }}</span>
-                <span class="kk-chip chip-success"><i class="bi bi-check-circle-fill"></i> Realisasi: {{ $totalRealisasi }}</span>
-                <span class="kk-chip chip-warning"><i class="bi bi-hourglass-split"></i> Sisa: {{ $sisaTarget }}</span>
-            </div>
-        </div>
-    </div>
+        </section>
+    </section>
 
     <div class="kk-table-card monitoring-table-card">
         <div class="kk-section-head mb-3">
