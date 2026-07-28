@@ -132,25 +132,29 @@
             grid-template-columns: 1fr;
         }
     }
+    .anggota-activity-form { background: #FFF; border: 1px solid #E2E8F0; border-radius: 14px; overflow: hidden; }
+    .anggota-activity-form__header { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; padding: 20px 22px; border-bottom: 1px solid #EEF2F7; }
+    .anggota-activity-form__eyebrow { margin: 0 0 5px; color: #2563EB; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .anggota-activity-form__title { margin: 0; color: #0F172A; font-size: 24px; font-weight: 700; }
+    .anggota-activity-form__body { padding: 22px; }
+    .anggota-activity-form__back { border-color: #CBD5E1; color: #334155; font-size: 13px; font-weight: 700; }
 </style>
 
-<div class="page-heading">
-    Edit <span class="muted">Aktivitas KM</span>
-</div>
-
-<div class="card mb-4 form-card">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+<section class="anggota-activity-form" aria-labelledby="anggota-activity-edit-title">
+    <header class="anggota-activity-form__header">
         <div>
-            <h4 class="fw-bold mb-1">Form Edit Aktivitas KM</h4>
+            <p class="anggota-activity-form__eyebrow">Realisasi Kontrak Manajemen</p>
+            <h1 id="anggota-activity-edit-title" class="anggota-activity-form__title">Edit Aktivitas KM</h1>
             <p class="text-muted mb-0">
                 Perbarui KM yang dikerjakan dan update progres aktivitas Anda.
             </p>
         </div>
 
-        <a href="/anggota/aktivitas-km" class="btn btn-secondary">
+        <a href="/anggota/aktivitas-km" class="btn btn-outline-secondary anggota-activity-form__back">
             <i class="bi bi-arrow-left me-1"></i> Kembali
         </a>
-    </div>
+    </header>
+    <div class="anggota-activity-form__body">
 
     @if ($errors->any())
     <div class="alert alert-danger rounded-4 mb-4">
@@ -373,7 +377,8 @@
         </div>
     </form>
     @endif
-</div>
+    </div>
+</section>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

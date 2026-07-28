@@ -180,12 +180,18 @@
         .detail-grid { grid-template-columns: 1fr; }
         .detail-block.full { grid-column: span 1; }
     }
+
+    .anggota-verification-detail__header { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; padding: 20px 22px; margin-bottom: 16px; background: #FFF; border: 1px solid #E2E8F0; border-radius: 14px; }
+    .anggota-verification-detail__eyebrow { margin: 0 0 5px; color: #2563EB; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .anggota-verification-detail__title { margin: 0; color: #0F172A; font-size: 24px; font-weight: 700; }
+    @media (max-width: 575.98px) { .anggota-verification-detail__header { flex-direction: column; } }
 </style>
 
 <div class="member-detail-page">
-    <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-3">
+    <header class="anggota-verification-detail__header">
         <div>
-            <div class="page-heading mb-1">Detail <span class="muted">Status Pengajuan KM</span></div>
+            <p class="anggota-verification-detail__eyebrow">Verifikasi Aktivitas</p>
+            <h1 class="anggota-verification-detail__title">Detail Status Pengajuan KM</h1>
             <p class="member-detail-subtitle">Rincian aktivitas dan hasil verifikasi dari Ketua Lab.</p>
         </div>
 
@@ -193,7 +199,7 @@
             <i class="bi bi-arrow-left"></i>
             Kembali ke Dashboard
         </a>
-    </div>
+    </header>
 
     <div class="member-detail-card">
         <div class="decision-banner {{ $statusClass }}">

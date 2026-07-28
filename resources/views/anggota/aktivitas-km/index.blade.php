@@ -36,16 +36,6 @@
         };
     };
 
-    $classStatusAktivitas = function ($status) {
-        return match($status) {
-            'Accepted' => 'bg-success',
-            'Submitted' => 'bg-primary',
-            'On Progress', 'Pending' => 'bg-warning text-dark',
-            'Rejected' => 'bg-danger',
-            default => 'bg-secondary',
-        };
-    };
-
     $formatTriwulanDitambahkan = function ($tanggal) {
         if (empty($tanggal)) {
             return '-';
@@ -411,17 +401,92 @@
             width: 100%;
         }
     }
+    .anggota-activities__header { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; padding: 20px 22px; margin-bottom: 16px; background: #FFF; border: 1px solid #E2E8F0; border-radius: 14px; }
+    .anggota-activities__eyebrow { margin: 0 0 5px; color: #2563EB; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .anggota-activities__title { margin: 0; color: #0F172A; font-size: 24px; font-weight: 700; }
+    .anggota-activities__description { margin: 7px 0 0; color: #64748B; font-size: 13px; }
+
+    .anggota-activity-index__section { margin-bottom: 16px; overflow: hidden; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 14px; }
+    .anggota-activity-index__section-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; padding: 18px 22px; border-bottom: 1px solid #EEF2F7; }
+    .anggota-activity-index__section-title { margin: 0; color: #0F172A; font-size: 17px; font-weight: 700; }
+    .anggota-activity-index__section-description { max-width: 780px; margin: 5px 0 0; color: #64748B; font-size: 13px; line-height: 1.55; }
+    .anggota-activity-index__period { display: flex; align-items: flex-start; gap: 8px; margin-top: 10px; color: #64748B; font-size: 12px; }
+    .anggota-activity-index__current-period { display: flex; align-items: center; gap: 10px; padding: 11px 22px; border-bottom: 1px solid #EEF2F7; background: #F8FAFC; color: #334155; font-size: 12px; }
+    .anggota-activity-index__current-period strong { color: #0F172A; font-weight: 700; }
+    .anggota-activity-index__filter { display: flex; align-items: flex-end; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+    .anggota-activity-index__filter-field { display: grid; gap: 5px; }
+    .anggota-activity-index__filter-label { color: #64748B; font-size: 11px; font-weight: 700; }
+    .anggota-activity-index__filter-button { width: auto; min-width: 110px; min-height: 38px; padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; }
+    .anggota-activity-index__metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-bottom: 1px solid #EEF2F7; }
+    .anggota-activity-index__metric { min-height: 92px; padding: 16px 22px; border-right: 1px solid #EEF2F7; }
+    .anggota-activity-index__metric:last-child { border-right: 0; }
+    .anggota-activity-index__metric-label { color: #64748B; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .anggota-activity-index__metric-value { display: block; margin-top: 5px; color: #0F172A; font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .anggota-activity-index__progress { height: 6px; margin-top: 9px; overflow: hidden; border-radius: 999px; background: #E2E8F0; }
+    .anggota-activity-index__progress-fill { height: 100%; background: #2563EB; }
+    .anggota-activity-index__comparison-head, .anggota-activity-index__comparison-row { display: grid; grid-template-columns: minmax(180px, 1.5fr) repeat(4, minmax(84px, .55fr)) minmax(180px, 1fr); align-items: center; column-gap: 14px; }
+    .anggota-activity-index__comparison-head { padding: 9px 22px; background: #F8FAFC; border-bottom: 1px solid #CBD5E1; color: #64748B; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .anggota-activity-index__comparison-row { min-height: 72px; padding: 11px 22px; border-bottom: 1px solid #EEF2F7; color: #334155; font-size: 13px; }
+    .anggota-activity-index__comparison-row:last-child { border-bottom: 0; }
+    .anggota-activity-index__comparison-row:hover { background: #F8FAFC; }
+    .anggota-activity-index__category-name { color: #0F172A; font-weight: 700; }
+    .anggota-activity-index__category-note { display: block; margin-top: 3px; color: #64748B; font-size: 12px; }
+    .anggota-activity-index__category-note.is-success { color: #15803D; }
+    .anggota-activity-index__category-note.is-warning { color: #B45309; }
+    .anggota-activity-index__number { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .anggota-activity-index__comparison-progress { display: grid; grid-template-columns: minmax(90px, 1fr) auto; align-items: center; gap: 9px; }
+    .anggota-activity-index__detail-link { display: inline-flex; margin-top: 7px; color: #2563EB; font-size: 12px; font-weight: 700; text-decoration: none; }
+    .anggota-activity-index__scroll { overflow-x: auto; }
+    .anggota-activity-index__table { width: 100%; margin: 0; }
+    .anggota-activity-index__table > thead > tr > th { padding: 11px 16px; background: #F8FAFC; border: 0; border-bottom: 1px solid #CBD5E1; color: #334155; font-size: 11px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; vertical-align: middle; white-space: nowrap; }
+    .anggota-activity-index__table > tbody > tr > td { padding: 11px 16px; border: 0; border-bottom: 1px solid #EEF2F7; color: #334155; font-size: 13px; font-weight: 500; vertical-align: middle; }
+    .anggota-activity-index__table > tbody > tr:last-child > td { border-bottom: 0; }
+    .anggota-activity-index__table > tbody > tr:hover > td { background: #F8FAFC; }
+    .anggota-activity-index__table.target-km-table > tbody > tr { height: auto; min-height: 0; }
+    .anggota-activity-index__table.target-km-table > tbody > tr > td { height: auto; min-height: 0; padding: 10px 14px; vertical-align: middle; }
+    .anggota-activity-index__table.target-km-table > tbody > tr > td.detail-target { width: 310px; min-width: 270px; vertical-align: top; white-space: normal; }
+    .anggota-activity-index__target-detail { display: grid; gap: 3px; min-height: 0; }
+    .anggota-activity-index__target-detail .anggota-activity-index__metadata { margin-top: 0; line-height: 1.35; }
+    .anggota-activity-index__deadlines { display: grid; grid-template-columns: repeat(2, minmax(0, max-content)); gap: 2px 14px; margin-top: 3px; }
+    .anggota-activity-index__table .anggota-activity-index__cell--number { text-align: center; font-variant-numeric: tabular-nums; }
+    .anggota-activity-index__table .anggota-activity-index__cell--numeric { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .anggota-activity-index__table .anggota-activity-index__cell--date { text-align: center; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .anggota-activity-index__identity { color: #0F172A; font-weight: 600; }
+    .anggota-activity-index__metadata { margin-top: 3px; color: #64748B; font-size: 12px; font-weight: 500; white-space: normal; }
+    .anggota-activity-index__deadline { display: block; margin: 0; color: #64748B; font-size: 11px; line-height: 1.35; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .anggota-activity-index__status { display: inline-flex; align-items: center; min-height: 26px; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .anggota-activity-index__status--success { color: #15803D; background: #F0FDF4; }
+    .anggota-activity-index__status--warning { color: #B45309; background: #FFFBEB; }
+    .anggota-activity-index__status--danger { color: #B91C1C; background: #FEF2F2; }
+    .anggota-activity-index__status--neutral { color: #64748B; background: #F8FAFC; }
+    .anggota-activity-index__actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 150px; }
+    .anggota-activity-index__action { min-height: 32px; padding: 5px 9px; border-radius: 7px; font-size: 12px; font-weight: 700; }
+    .anggota-activity-index__lock { color: #64748B; font-size: 11px; font-weight: 600; white-space: normal; }
+    .anggota-activity-index__empty { padding: 24px 16px !important; color: #64748B !important; font-size: 13px !important; text-align: center; }
+    @media (max-width: 991.98px) {
+        .anggota-activity-index__metrics { grid-template-columns: repeat(2, 1fr); }
+        .anggota-activity-index__comparison-head { display: none; }
+        .anggota-activity-index__comparison-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 18px; }
+        .anggota-activity-index__comparison-row > :first-child, .anggota-activity-index__comparison-progress { grid-column: 1 / -1; }
+    }
+    @media (max-width: 575.98px) {
+        .anggota-activities__header, .anggota-activity-index__section-header { flex-direction: column; }
+        .anggota-activity-index__filter, .anggota-activity-index__filter-field, .anggota-activity-index__filter .page-filter-control, .anggota-activity-index__filter-button { width: 100%; }
+        .anggota-activity-index__metrics, .anggota-activity-index__comparison-row { grid-template-columns: 1fr; }
+        .anggota-activity-index__metric { border-right: 0; border-bottom: 1px solid #EEF2F7; }
+        .anggota-activity-index__comparison-row > * { grid-column: 1; }
+        .anggota-activity-index__deadlines { grid-template-columns: 1fr; }
+    }
 </style>
 
-<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
-    <div class="page-heading mb-0">
-        Aktivitas <span class="muted">KM</span>
+<header class="anggota-activities__header">
+    <div>
+        <p class="anggota-activities__eyebrow">Realisasi Kontrak Manajemen</p>
+        <h1 class="anggota-activities__title">Aktivitas KM</h1>
+        <p class="anggota-activities__description">Kelola aktivitas, bukti, dan riwayat realisasi KM Anda.</p>
     </div>
-
-    <a href="/anggota/aktivitas-km/create" class="btn btn-primary">
-        <i class="bi bi-plus-lg me-1"></i> Tambah Aktivitas
-    </a>
-</div>
+    <a href="/anggota/aktivitas-km/create" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i> Tambah Aktivitas</a>
+</header>
 
 @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -440,42 +505,37 @@
 {{-- ========================================================= --}}
 {{-- RINGKASAN KM NAMA ANGGOTA --}}
 {{-- ========================================================= --}}
-<div id="ringkasan-km" class="card mb-4">
-    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
+<section id="ringkasan-km" class="anggota-activity-index__section" aria-labelledby="activity-summary-title">
+    <header class="anggota-activity-index__section-header">
         <div>
-            <h4 class="fw-bold mb-1">Ringkasan KM {{ $namaAnggota }}</h4>
-            <p class="text-muted mb-0">
+            <h2 id="activity-summary-title" class="anggota-activity-index__section-title">Ringkasan KM {{ $namaAnggota }}</h2>
+            <p class="anggota-activity-index__section-description">
                 Ringkasan target, realisasi disetujui, sisa target, dan capaian KM pada {{ $labelPeriode }}.
             </p>
-            <span class="period-badge">
+            <span class="anggota-activity-index__period">
                 <i class="bi bi-calendar3"></i>
                 {{ $keteranganPeriode }}
             </span>
         </div>
-
-        <div class="d-flex align-items-center justify-content-end gap-3 flex-wrap">
-            <div class="summary-total text-muted">
-                Total:
-                <strong>{{ $totalTarget ?? 0 }}</strong> target ·
-                <strong class="text-success">{{ $totalRealisasi ?? 0 }}</strong> realisasi ·
-                <strong class="text-warning">{{ $persentaseTotal ?? 0 }}%</strong> capaian
-            </div>
-
-            <form method="GET" action="{{ route('anggota.aktivitas-km.index') }}" class="page-filter-form">
+            <form method="GET" action="{{ route('anggota.aktivitas-km.index') }}" class="anggota-activity-index__filter">
+                <div class="anggota-activity-index__filter-field">
+                    <label for="periodeRingkasan" class="anggota-activity-index__filter-label">Periode</label>
                 <select name="periode" id="periodeRingkasan" class="page-filter-control">
                     <option value="tahun" {{ $periode === 'tahun' ? 'selected' : '' }}>Tahunan</option>
                     <option value="triwulan" {{ $periode === 'triwulan' ? 'selected' : '' }}>Triwulan</option>
                     <option value="semester" {{ $periode === 'semester' ? 'selected' : '' }}>Semester</option>
                 </select>
-
-                <select name="tahun" class="page-filter-control year">
+                </div>
+                <div class="anggota-activity-index__filter-field">
+                    <label for="tahunRingkasan" class="anggota-activity-index__filter-label">Tahun</label>
+                <select name="tahun" id="tahunRingkasan" class="page-filter-control year">
                     @foreach($tahunOptions as $itemTahun)
                         <option value="{{ $itemTahun }}" {{ $tahun === (int) $itemTahun ? 'selected' : '' }}>
                             {{ $itemTahun }}
                         </option>
                     @endforeach
                 </select>
-
+                </div>
                 <select
                     name="triwulan"
                     id="triwulanRingkasan"
@@ -495,95 +555,78 @@
                     <option value="2" {{ $semester === 2 ? 'selected' : '' }}>Semester 2</option>
                 </select>
 
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary anggota-activity-index__filter-button">
                     <i class="bi bi-funnel-fill me-1"></i> Terapkan
                 </button>
             </form>
+    </header>
+
+    <div class="anggota-activity-index__metrics">
+        <div class="anggota-activity-index__metric"><span class="anggota-activity-index__metric-label">Total Target</span><strong class="anggota-activity-index__metric-value">{{ $totalTarget ?? 0 }}</strong></div>
+        <div class="anggota-activity-index__metric"><span class="anggota-activity-index__metric-label">Total Realisasi</span><strong class="anggota-activity-index__metric-value">{{ $totalRealisasi ?? 0 }}</strong></div>
+        <div class="anggota-activity-index__metric"><span class="anggota-activity-index__metric-label">Sisa</span><strong class="anggota-activity-index__metric-value">{{ $totalSisa ?? 0 }}</strong></div>
+        <div class="anggota-activity-index__metric">
+            <span class="anggota-activity-index__metric-label">Persentase Capaian</span>
+            <strong class="anggota-activity-index__metric-value">{{ $persentaseTotal ?? 0 }}%</strong>
+            <div class="anggota-activity-index__progress" role="progressbar" aria-label="Persentase capaian KM anggota" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $persentaseTotal ?? 0 }}">
+                <div class="anggota-activity-index__progress-fill" style="width: {{ min((int) ($persentaseTotal ?? 0), 100) }}%;"></div>
+            </div>
         </div>
     </div>
 
-    @include('partials.periode-saat-ini')
-@include('partials.filter-diterapkan')
+    <div class="anggota-activity-index__current-period" role="status" aria-label="Periode kalender saat ini">
+        <i class="bi bi-calendar-range text-primary"></i>
+        <span>Periode saat ini:</span>
+        <strong>Triwulan {{ (int) ceil(now()->month / 3) }}</strong>
+        <span aria-hidden="true">·</span>
+        <strong>Semester {{ now()->month <= 6 ? 1 : 2 }}</strong>
+        <span aria-hidden="true">·</span>
+        <strong>Tahun {{ now()->year }}</strong>
+    </div>
 
-<div class="km-summary-grid">
+    <div class="anggota-activity-index__comparison-head" aria-hidden="true">
+        <span>Kategori</span><span class="text-end">Target</span><span class="text-end">Realisasi</span><span class="text-end">Sisa</span><span class="text-end">Subkategori</span><span>Progress</span>
+    </div>
+    <div>
         @forelse($kategoriCards as $card)
-            @php
-                $sisaClass = (int) ($card['sisa'] ?? 0) > 0 ? 'sisa-alert' : 'sisa-safe';
-                $noteClass = $card['catatan_class'] ?? 'secondary';
-            @endphp
-
-            <div class="km-summary-card">
-                <div class="km-summary-title-row">
-                    <div>
-                        <div class="km-summary-title">{{ $card['kategori'] ?? '-' }}</div>
-                        <div class="km-summary-subtitle">Progress realisasi kategori KM</div>
-                    </div>
-
-                    <div class="km-summary-percent">{{ $card['persentase'] ?? 0 }}%</div>
+            <div class="anggota-activity-index__comparison-row">
+                <div>
+                    <span class="anggota-activity-index__category-name">{{ $card['kategori'] ?? '-' }}</span>
+                    <span class="anggota-activity-index__category-note {{ ($card['catatan_class'] ?? '') === 'success' ? 'is-success' : (((int) ($card['sisa'] ?? 0) > 0) ? 'is-warning' : '') }}">{{ $card['catatan'] ?? '-' }}</span>
+                    <a href="#daftar-target-km" class="anggota-activity-index__detail-link">Lihat detail</a>
                 </div>
-
-                <div class="km-summary-progress">
-                    <div class="km-summary-progress-fill" style="width: {{ min((int) ($card['persentase'] ?? 0), 100) }}%;"></div>
+                <span class="anggota-activity-index__number">{{ $card['target'] ?? 0 }}</span>
+                <span class="anggota-activity-index__number">{{ $card['realisasi'] ?? 0 }}</span>
+                <span class="anggota-activity-index__number">{{ $card['sisa'] ?? 0 }}</span>
+                <span class="anggota-activity-index__number">{{ $card['jumlah_subkategori'] ?? 0 }}</span>
+                <div class="anggota-activity-index__comparison-progress">
+                    <div class="anggota-activity-index__progress" role="progressbar" aria-label="Capaian {{ $card['kategori'] ?? 'kategori KM' }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $card['persentase'] ?? 0 }}"><div class="anggota-activity-index__progress-fill" style="width: {{ min((int) ($card['persentase'] ?? 0), 100) }}%;"></div></div>
+                    <strong class="anggota-activity-index__number">{{ $card['persentase'] ?? 0 }}%</strong>
                 </div>
-
-                <div class="km-summary-info-grid">
-                    <div class="km-summary-info target">
-                        <div class="km-summary-label">Target</div>
-                        <div class="km-summary-value">{{ $card['target'] ?? 0 }}</div>
-                    </div>
-
-                    <div class="km-summary-info realisasi">
-                        <div class="km-summary-label">Realisasi</div>
-                        <div class="km-summary-value">{{ $card['realisasi'] ?? 0 }}</div>
-                    </div>
-
-                    <div class="km-summary-info {{ $sisaClass }}">
-                        <div class="km-summary-label">Sisa</div>
-                        <div class="km-summary-value">{{ $card['sisa'] ?? 0 }}</div>
-                    </div>
-
-                    <div class="km-summary-info subkategori">
-                        <div class="km-summary-label">Sub Kategori</div>
-                        <div class="km-summary-value">{{ $card['jumlah_subkategori'] ?? 0 }}</div>
-                    </div>
-                </div>
-
-                <div class="km-summary-note {{ $noteClass }}">
-                    @if(($card['catatan_class'] ?? '') === 'success')
-                        <i class="bi bi-check-circle-fill me-1"></i>
-                    @elseif(($card['catatan_class'] ?? '') === 'danger')
-                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                    @else
-                        <i class="bi bi-info-circle-fill me-1"></i>
-                    @endif
-                    {{ $card['catatan'] ?? '-' }}
-                </div>
-
-                <a href="#daftar-target-km" class="btn btn-primary">Lihat Detail</a>
             </div>
         @empty
-            <div class="text-muted">Belum ada ringkasan KM pada {{ $labelPeriode }}.</div>
+            <div class="anggota-activity-index__empty">Belum ada ringkasan KM pada {{ $labelPeriode }}.</div>
         @endforelse
     </div>
-</div>
+</section>
 
 {{-- ========================================================= --}}
 {{-- DAFTAR TARGET KM NAMA ANGGOTA --}}
 {{-- ========================================================= --}}
-<div id="daftar-target-km" class="card mb-4">
-    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
+<section id="daftar-target-km" class="anggota-activity-index__section" aria-labelledby="activity-target-title">
+    <header class="anggota-activity-index__section-header">
         <div>
-            <h4 class="fw-bold mb-1">Daftar Target KM {{ $namaAnggota }}</h4>
-            <p class="text-muted mb-0">
+            <h2 id="activity-target-title" class="anggota-activity-index__section-title">Daftar Target KM {{ $namaAnggota }}</h2>
+            <p class="anggota-activity-index__section-description">
                 Menampilkan target tahunan yang telah dibagikan oleh Ketua Lab, beserta target dan realisasi per triwulan.
             </p>
-            <span class="period-badge">
+            <span class="anggota-activity-index__period">
                 <i class="bi bi-calendar3"></i>
                 Menampilkan data tahun {{ $tahun }}
             </span>
         </div>
 
-        <form method="GET" action="{{ route('anggota.aktivitas-km.index') }}" class="page-filter-form">
+        <form method="GET" action="{{ route('anggota.aktivitas-km.index') }}" class="anggota-activity-index__filter">
             <input type="hidden" name="periode" value="{{ $periode }}">
             <input type="hidden" name="triwulan" value="{{ $triwulan }}">
             <input type="hidden" name="semester" value="{{ $semester }}">
@@ -596,38 +639,38 @@
                 @endforeach
             </select>
 
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-outline-primary anggota-activity-index__filter-button">
                 <i class="bi bi-funnel-fill me-1"></i> Filter
             </button>
         </form>
-    </div>
+    </header>
 
-    <div class="table-responsive">
-        <table class="table align-middle mb-0 target-km-table">
+    <div class="table-responsive anggota-activity-index__scroll">
+        <table class="table target-km-table anggota-activity-index__table">
             <thead>
                 <tr>
-                    <th rowspan="2">No</th>
-                    <th rowspan="2">Tahun</th>
-                    <th rowspan="2">Detail Target KM</th>
+                    <th scope="col" rowspan="2">No</th>
+                    <th scope="col" rowspan="2">Tahun</th>
+                    <th scope="col" rowspan="2">Detail Target KM</th>
 
-                    <th colspan="4" class="target-group-header">Target KM per Triwulan</th>
-                    <th colspan="4" class="target-group-header">Realisasi KM per Triwulan</th>
+                    <th scope="colgroup" colspan="4" class="target-group-header">Target KM per Triwulan</th>
+                    <th scope="colgroup" colspan="4" class="target-group-header">Realisasi KM per Triwulan</th>
 
-                    <th rowspan="2">Total Target</th>
-                    <th rowspan="2">Total Realisasi</th>
-                    <th rowspan="2">Sisa</th>
-                    <th rowspan="2">Status</th>
+                    <th scope="col" rowspan="2">Total Target</th>
+                    <th scope="col" rowspan="2">Total Realisasi</th>
+                    <th scope="col" rowspan="2">Sisa</th>
+                    <th scope="col" rowspan="2">Status</th>
                 </tr>
 
                 <tr>
                     @for($tw = 1; $tw <= 4; $tw++)
-                        <th class="text-center {{ $tw === 1 ? 'target-tw-start' : '' }} {{ $tw === 4 ? 'target-tw-end' : '' }}">
+                        <th scope="col" class="text-end {{ $tw === 1 ? 'target-tw-start' : '' }} {{ $tw === 4 ? 'target-tw-end' : '' }}">
                             TW {{ $tw }}
                         </th>
                     @endfor
 
                     @for($tw = 1; $tw <= 4; $tw++)
-                        <th class="text-center {{ $tw === 1 ? 'target-tw-start' : '' }} {{ $tw === 4 ? 'target-tw-end' : '' }}">
+                        <th scope="col" class="text-end {{ $tw === 1 ? 'target-tw-start' : '' }} {{ $tw === 4 ? 'target-tw-end' : '' }}">
                             TW {{ $tw }}
                         </th>
                     @endfor
@@ -658,122 +701,94 @@
                             4 => $target->tanggal_selesai_tw4 ?? null,
                         ];
 
-                        $statusClass = match($target->status_class ?? 'secondary') {
-                            'success' => 'target-status-success',
-                            'warning' => 'target-status-warning',
-                            'danger' => 'target-status-danger',
-                            default => 'target-status-secondary',
-                        };
                     @endphp
 
                     <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $target->tahun_km ?? '-' }}</td>
+                        <td class="anggota-activity-index__cell--number">{{ $index + 1 }}</td>
+                        <td class="anggota-activity-index__cell--number">{{ $target->tahun_km ?? '-' }}</td>
 
                         <td class="detail-target">
-                            <div class="target-detail-category">{{ $target->kategori_km ?? '-' }}</div>
+                            <div class="anggota-activity-index__target-detail">
+                            <div class="anggota-activity-index__identity">{{ $target->kategori_km ?? '-' }}</div>
 
-                            <div class="target-detail-row">
+                            <div class="anggota-activity-index__metadata">
                                 <strong>Sub Kategori:</strong>
                                 <span>{{ $target->sub_kategori_km ?? '-' }}</span>
                             </div>
 
-                            <div class="target-detail-row">
+                            <div class="anggota-activity-index__metadata">
                                 <strong>Keterangan:</strong>
                                 <span>{{ $target->keterangan ?? '-' }}</span>
                             </div>
 
-                            <div class="target-deadline-list">
+                            <div class="anggota-activity-index__deadlines">
                                 @foreach($tenggat as $nomorTw => $tanggalTenggat)
                                     @if(!empty($tanggalTenggat))
-                                        <span class="target-deadline">
-                                            <i class="bi bi-calendar-event"></i>
+                                        <span class="anggota-activity-index__deadline">
                                             TW{{ $nomorTw }}: {{ \Carbon\Carbon::parse($tanggalTenggat)->format('d/m/Y') }}
                                         </span>
                                     @endif
                                 @endforeach
                             </div>
+                            </div>
                         </td>
 
                         @foreach($targetTriwulan as $nomorTw => $jumlah)
-                            <td class="{{ $nomorTw === 1 ? 'target-tw-start' : '' }} {{ $nomorTw === 4 ? 'target-tw-end' : '' }}">
-                                <div class="{{ $jumlah > 0 ? 'target-period-number' : 'target-period-empty' }}">
-                                    {{ $jumlah > 0 ? $jumlah : '-' }}
-                                </div>
-                            </td>
+                            <td class="anggota-activity-index__cell--numeric {{ $nomorTw === 1 ? 'target-tw-start' : '' }} {{ $nomorTw === 4 ? 'target-tw-end' : '' }}">{{ $jumlah > 0 ? $jumlah : '-' }}</td>
                         @endforeach
 
                         @foreach($realisasiTriwulan as $nomorTw => $jumlah)
-                            <td class="{{ $nomorTw === 1 ? 'target-tw-start' : '' }} {{ $nomorTw === 4 ? 'target-tw-end' : '' }}">
-                                <div class="{{ $jumlah > 0 ? 'target-realisasi-number' : 'target-period-empty' }}">
-                                    {{ $jumlah > 0 ? $jumlah : '-' }}
-                                </div>
-                            </td>
+                            <td class="anggota-activity-index__cell--numeric {{ $nomorTw === 1 ? 'target-tw-start' : '' }} {{ $nomorTw === 4 ? 'target-tw-end' : '' }}">{{ $jumlah > 0 ? $jumlah : '-' }}</td>
                         @endforeach
 
-                        <td>
-                            <div class="target-summary-number target-summary-primary">{{ $target->jumlah_km ?? 0 }}</div>
-                        </td>
+                        <td class="anggota-activity-index__cell--numeric">{{ $target->jumlah_km ?? 0 }}</td>
+                        <td class="anggota-activity-index__cell--numeric">{{ $target->total_realisasi ?? 0 }}</td>
+                        <td class="anggota-activity-index__cell--numeric">{{ $target->sisa_km ?? 0 }}</td>
 
                         <td>
-                            <div class="target-summary-number target-summary-success">{{ $target->total_realisasi ?? 0 }}</div>
-                        </td>
-
-                        <td>
-                            <div class="target-summary-number target-summary-warning">{{ $target->sisa_km ?? 0 }}</div>
-                        </td>
-
-                        <td>
-                            <span class="target-status {{ $statusClass }}">
+                            <span class="anggota-activity-index__status {{ ($target->status_class ?? '') === 'success' ? 'anggota-activity-index__status--success' : (($target->status_class ?? '') === 'warning' ? 'anggota-activity-index__status--warning' : 'anggota-activity-index__status--neutral') }}">
                                 {{ $target->status_target ?? 'Belum Ada Target' }}
                             </span>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="15">
-                            <div class="empty-state">
-                                Belum ada target KM yang dibagikan kepada {{ $namaAnggota }} pada tahun {{ $tahun }}.
-                            </div>
-                        </td>
+                        <td colspan="15" class="anggota-activity-index__empty">Belum ada target KM yang dibagikan kepada {{ $namaAnggota }} pada tahun {{ $tahun }}.</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
-</div>
+</section>
 
 {{-- ========================================================= --}}
 {{-- DAFTAR AKTIVITAS KM NAMA ANGGOTA --}}
 {{-- ========================================================= --}}
-<div class="card mb-4">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+<section class="anggota-activity-index__section" aria-labelledby="activity-list-title">
+    <header class="anggota-activity-index__section-header">
         <div>
-            <h4 class="fw-bold mb-1">Daftar Aktivitas KM {{ $namaAnggota }}</h4>
-            <p class="text-muted mb-0">
+            <h2 id="activity-list-title" class="anggota-activity-index__section-title">Daftar Aktivitas KM {{ $namaAnggota }}</h2>
+            <p class="anggota-activity-index__section-description">
                 Menampilkan aktivitas KM pada tahun {{ $tahun }}. Upload bukti aktivitas berupa PDF, PNG, JPG, atau JPEG.
                 Jika berupa link, ubah terlebih dahulu menjadi format PDF.
             </p>
         </div>
-    </div>
-</div>
-
-<div class="card mb-4">
-    <div class="table-responsive">
-        <table class="table align-middle mb-0 aktivitas-km-table">
+    </header>
+    <div class="table-responsive anggota-activity-index__scroll">
+        <table class="table aktivitas-km-table anggota-activity-index__table">
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Tahun</th>
-                    <th>Kategori</th>
-                    <th>Sub Kategori</th>
-                    <th>Judul Aktivitas</th>
-                    <th>Status</th>
-                    <th>Tanggal Mulai</th>
-                    <th>Tanggal Selesai</th>
-                    <th>Ditambahkan di Triwulan</th>
-                    <th>Bukti</th>
-                    <th>Aksi</th>
+                    <th scope="col">No</th>
+                    <th scope="col">Tahun</th>
+                    <th scope="col">Kategori</th>
+                    <th scope="col">Sub Kategori</th>
+                    <th scope="col">Judul Aktivitas</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Tanggal Mulai</th>
+                    <th scope="col">Tanggal Selesai</th>
+                    <th scope="col">Ditambahkan di Triwulan</th>
+                    <th scope="col">Bukti</th>
+                    <th scope="col">Aksi</th>
                 </tr>
             </thead>
 
@@ -781,75 +796,81 @@
                 @forelse($aktivitas as $index => $item)
                     @php
                         $status = $item->status_progress ?? 'On Progress';
+                        $statusVisualClass = match($status) {
+                            'Accepted' => 'anggota-activity-index__status--success',
+                            'Rejected' => 'anggota-activity-index__status--danger',
+                            'Submitted', 'On Progress', 'Pending' => 'anggota-activity-index__status--warning',
+                            default => 'anggota-activity-index__status--neutral',
+                        };
                     @endphp
                     <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ !empty($item->tanggal_mulai) ? \Carbon\Carbon::parse($item->tanggal_mulai)->format('Y') : '-' }}</td>
-                        <td>{{ $item->kategori_km ?? '-' }}</td>
+                        <td class="anggota-activity-index__cell--number">{{ $index + 1 }}</td>
+                        <td class="anggota-activity-index__cell--number">{{ !empty($item->tanggal_mulai) ? \Carbon\Carbon::parse($item->tanggal_mulai)->format('Y') : '-' }}</td>
+                        <td class="anggota-activity-index__identity">{{ $item->kategori_km ?? '-' }}</td>
                         <td>{{ $item->sub_kategori_km ?? '-' }}</td>
 
                         <td class="activity-title">
-                            <strong>{{ $item->judul_aktivitas ?? '-' }}</strong>
+                            <strong class="anggota-activity-index__identity">{{ $item->judul_aktivitas ?? '-' }}</strong>
                             @if(!empty($item->deskripsi_singkat))
-                                <div class="small text-muted">
+                                <div class="anggota-activity-index__metadata">
                                     {{ \Illuminate\Support\Str::limit($item->deskripsi_singkat, 80) }}
                                 </div>
                             @endif
                         </td>
 
                         <td>
-                            <span class="badge {{ $classStatusAktivitas($status) }}">
+                            <span class="anggota-activity-index__status {{ $statusVisualClass }}">
                                 {{ $labelStatusAktivitas($status) }}
                             </span>
 
                             @if($status === 'Rejected' && !empty($item->catatan_verifikasi))
-                                <div class="small text-danger mt-1" style="white-space: normal; max-width: 180px;">
+                                <div class="anggota-activity-index__metadata text-danger">
                                     {{ \Illuminate\Support\Str::limit($item->catatan_verifikasi, 90) }}
                                 </div>
                             @endif
                         </td>
 
-                        <td>{{ !empty($item->tanggal_mulai) ? \Carbon\Carbon::parse($item->tanggal_mulai)->format('d/m/Y') : '-' }}</td>
-                        <td>{{ !empty($item->tanggal_selesai) ? \Carbon\Carbon::parse($item->tanggal_selesai)->format('d/m/Y') : '-' }}</td>
-                        <td>{{ $formatTriwulanDitambahkan($item->created_at ?? $item->tanggal_mulai ?? null) }}</td>
+                        <td class="anggota-activity-index__cell--date">{{ !empty($item->tanggal_mulai) ? \Carbon\Carbon::parse($item->tanggal_mulai)->format('d/m/Y') : '-' }}</td>
+                        <td class="anggota-activity-index__cell--date">{{ !empty($item->tanggal_selesai) ? \Carbon\Carbon::parse($item->tanggal_selesai)->format('d/m/Y') : '-' }}</td>
+                        <td class="anggota-activity-index__cell--date">{{ $formatTriwulanDitambahkan($item->created_at ?? $item->tanggal_mulai ?? null) }}</td>
 
                         <td>
                             @if(!empty($item->bukti_pdf_path) || !empty($item->bukti_file_path))
-                                <a href="/bukti-km/{{ $item->id_aktivitas }}/download" class="btn btn-sm btn-outline-primary">
+                                <a href="/bukti-km/{{ $item->id_aktivitas }}/download" class="btn btn-outline-primary anggota-activity-index__action">
                                     <i class="bi bi-download me-1"></i> Download
                                 </a>
                             @elseif(!empty($item->bukti_link))
-                                <a href="{{ $item->bukti_link }}" target="_blank" class="btn btn-sm btn-outline-primary">Link</a>
+                                <a href="{{ $item->bukti_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary anggota-activity-index__action">Link</a>
                             @else
                                 <span class="text-muted">-</span>
                             @endif
                         </td>
 
                         <td>
-                            <div class="d-flex flex-wrap gap-1">
+                            <div class="anggota-activity-index__actions">
                                 @if(in_array($status, ['Accepted', 'Rejected'], true))
-                                    <a href="/anggota/aktivitas-km/{{ $item->id_aktivitas }}/detail" class="btn btn-sm btn-outline-primary">
+                                    <a href="/anggota/aktivitas-km/{{ $item->id_aktivitas }}/detail" class="btn btn-outline-secondary anggota-activity-index__action">
                                         Detail
                                     </a>
                                 @endif
 
                                 @if($status === 'Submitted')
-                                    <span class="small text-primary fw-semibold">
+                                    <span class="anggota-activity-index__lock">
                                         <i class="bi bi-hourglass-split me-1"></i> Menunggu verifikasi Ketua Lab
                                     </span>
                                 @elseif($status === 'Accepted')
-                                    <span class="small text-success fw-semibold">
+                                    <span class="anggota-activity-index__lock">
                                         <i class="bi bi-lock-fill me-1"></i> Terkunci setelah disetujui
                                     </span>
                                 @else
-                                    <a href="/anggota/aktivitas-km/{{ $item->id_aktivitas }}/edit" class="btn btn-edit btn-sm">Edit</a>
+                                    <a href="/anggota/aktivitas-km/{{ $item->id_aktivitas }}/edit" class="btn btn-outline-primary anggota-activity-index__action">Edit</a>
                                 @endif
                             </div>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="11" class="text-center text-muted py-4">
+                        <td colspan="11" class="anggota-activity-index__empty">
                             Belum ada aktivitas KM pada tahun {{ $tahun }}.
                         </td>
                     </tr>
@@ -857,38 +878,38 @@
             </tbody>
         </table>
     </div>
-</div>
+</section>
 
 {{-- ========================================================= --}}
 {{-- RIWAYAT REALISASI KM NAMA ANGGOTA --}}
 {{-- ========================================================= --}}
-<div id="riwayat-realisasi-km" class="card">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+<section id="riwayat-realisasi-km" class="anggota-activity-index__section" aria-labelledby="activity-history-title">
+    <header class="anggota-activity-index__section-header">
         <div>
-            <h4 class="fw-bold mb-1">Riwayat Realisasi KM {{ $namaAnggota }}</h4>
-            <p class="text-muted mb-0">
+            <h2 id="activity-history-title" class="anggota-activity-index__section-title">Riwayat Realisasi KM {{ $namaAnggota }}</h2>
+            <p class="anggota-activity-index__section-description">
                 Riwayat aktivitas KM yang telah diinput pada tahun {{ $tahun }}, termasuk aktivitas yang masih diproses.
             </p>
         </div>
 
-        <div class="small text-muted">
+        <div class="anggota-activity-index__period">
             Total aktivitas: <strong>{{ $riwayatRealisasi->count() }}</strong>
         </div>
-    </div>
+    </header>
 
-    <div class="table-responsive">
-        <table class="table align-middle mb-0 history-activity-table">
+    <div class="table-responsive anggota-activity-index__scroll">
+        <table class="table history-activity-table anggota-activity-index__table">
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Kategori</th>
-                    <th>Sub Kategori</th>
-                    <th>Judul Aktivitas</th>
-                    <th>Status</th>
-                    <th>Tanggal Mulai</th>
-                    <th>Tanggal Selesai</th>
-                    <th>Ditambahkan di Triwulan</th>
-                    <th>Update Terakhir</th>
+                    <th scope="col">No</th>
+                    <th scope="col">Kategori</th>
+                    <th scope="col">Sub Kategori</th>
+                    <th scope="col">Judul Aktivitas</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Tanggal Mulai</th>
+                    <th scope="col">Tanggal Selesai</th>
+                    <th scope="col">Ditambahkan di Triwulan</th>
+                    <th scope="col">Update Terakhir</th>
                 </tr>
             </thead>
 
@@ -896,35 +917,41 @@
                 @forelse($riwayatRealisasi as $index => $item)
                     @php
                         $status = $item->status_progress ?? 'On Progress';
+                        $statusVisualClass = match($status) {
+                            'Accepted' => 'anggota-activity-index__status--success',
+                            'Rejected' => 'anggota-activity-index__status--danger',
+                            'Submitted', 'On Progress', 'Pending' => 'anggota-activity-index__status--warning',
+                            default => 'anggota-activity-index__status--neutral',
+                        };
                     @endphp
                     <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td class="fw-bold">{{ $item->kategori_km ?? '-' }}</td>
+                        <td class="anggota-activity-index__cell--number">{{ $index + 1 }}</td>
+                        <td class="anggota-activity-index__identity">{{ $item->kategori_km ?? '-' }}</td>
                         <td>{{ $item->sub_kategori_km ?? '-' }}</td>
 
                         <td class="history-title">
-                            <strong>{{ $item->judul_aktivitas ?? '-' }}</strong>
+                            <strong class="anggota-activity-index__identity">{{ $item->judul_aktivitas ?? '-' }}</strong>
                             @if(!empty($item->deskripsi_singkat))
-                                <div class="small text-muted">
+                                <div class="anggota-activity-index__metadata">
                                     {{ \Illuminate\Support\Str::limit($item->deskripsi_singkat, 100) }}
                                 </div>
                             @endif
                         </td>
 
                         <td>
-                            <span class="badge {{ $classStatusAktivitas($status) }}">
+                            <span class="anggota-activity-index__status {{ $statusVisualClass }}">
                                 {{ $labelStatusAktivitas($status) }}
                             </span>
                         </td>
 
-                        <td>{{ !empty($item->tanggal_mulai) ? \Carbon\Carbon::parse($item->tanggal_mulai)->format('d/m/Y') : '-' }}</td>
-                        <td>{{ !empty($item->tanggal_selesai) ? \Carbon\Carbon::parse($item->tanggal_selesai)->format('d/m/Y') : '-' }}</td>
-                        <td>{{ $formatTriwulanDitambahkan($item->created_at ?? $item->tanggal_mulai ?? null) }}</td>
-                        <td>{{ !empty($item->updated_at) ? \Carbon\Carbon::parse($item->updated_at)->format('d/m/Y H:i') : '-' }}</td>
+                        <td class="anggota-activity-index__cell--date">{{ !empty($item->tanggal_mulai) ? \Carbon\Carbon::parse($item->tanggal_mulai)->format('d/m/Y') : '-' }}</td>
+                        <td class="anggota-activity-index__cell--date">{{ !empty($item->tanggal_selesai) ? \Carbon\Carbon::parse($item->tanggal_selesai)->format('d/m/Y') : '-' }}</td>
+                        <td class="anggota-activity-index__cell--date">{{ $formatTriwulanDitambahkan($item->created_at ?? $item->tanggal_mulai ?? null) }}</td>
+                        <td class="anggota-activity-index__cell--date">{{ !empty($item->updated_at) ? \Carbon\Carbon::parse($item->updated_at)->format('d/m/Y H:i') : '-' }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9" class="text-center text-muted py-4">
+                        <td colspan="9" class="anggota-activity-index__empty">
                             Belum ada riwayat realisasi KM pada tahun {{ $tahun }}.
                         </td>
                     </tr>
@@ -932,7 +959,7 @@
             </tbody>
         </table>
     </div>
-</div>
+</section>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

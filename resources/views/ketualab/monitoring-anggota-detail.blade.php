@@ -485,14 +485,11 @@
 </style>
 
 <div class="detail-monitoring-page">
-    <div class="page-heading">
-        Detail Monitoring <span class="muted">Anggota Lab</span>
-    </div>
-
-    <div class="detail-card">
+    <section class="detail-card" aria-labelledby="ketualab-monitoring-member-detail-title">
         <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
             <div>
-                <div class="detail-member-name">{{ $anggota->nama_anggota ?? '-' }}</div>
+                <p class="detail-subtitle mb-1">Detail Monitoring Anggota Lab</p>
+                <h1 id="ketualab-monitoring-member-detail-title" class="detail-member-name">{{ $anggota->nama_anggota ?? '-' }}</h1>
                 <div class="detail-member-meta">
                     <span>Lab: {{ $lab->nama_lab ?? '-' }}</span>
                     <span>NIDN: {{ $anggota->nidn ?? '-' }}</span>
@@ -508,7 +505,7 @@
                 Kembali
             </a>
         </div>
-    </div>
+    </section>
 
     <div class="detail-card">
         <div class="detail-section-head">

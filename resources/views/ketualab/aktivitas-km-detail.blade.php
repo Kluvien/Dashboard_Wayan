@@ -357,12 +357,17 @@
             width: 100%;
         }
     }
+    .ketualab-activity-detail__header { padding: 20px 22px; margin-bottom: 16px; background: #FFF; border: 1px solid #E2E8F0; border-radius: 14px; }
+    .ketualab-activity-detail__eyebrow { margin: 0 0 5px; color: #2563EB; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .ketualab-activity-detail__title { margin: 0; color: #0F172A; font-size: 24px; font-weight: 700; }
 </style>
 
 <div class="verification-detail-page">
-    <div class="page-heading">
-        Detail <span class="muted">Verifikasi Aktivitas KM</span>
-    </div>
+    <header class="ketualab-activity-detail__header">
+        <p class="ketualab-activity-detail__eyebrow">Verifikasi Anggota Lab</p>
+        <h1 class="ketualab-activity-detail__title">Detail Verifikasi Aktivitas KM</h1>
+        <p class="verification-subtitle mb-0">Tinjau rincian aktivitas dan bukti sebelum mengambil keputusan.</p>
+    </header>
 
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">

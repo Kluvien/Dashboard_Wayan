@@ -11,6 +11,13 @@
 @endphp
 
 <style>
+    .ketuakk-lab-detail__overview,.ketuakk-lab-detail__section { overflow:hidden; border:1px solid #E2E8F0; border-radius:14px; background:#FFF; margin-bottom:16px; }
+    .ketuakk-lab-detail__header { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; padding:20px 22px; border-bottom:1px solid #E2E8F0; flex-wrap:wrap; }
+    .ketuakk-lab-detail__title { margin:0; color:#0F172A; font-size:22px; font-weight:700; }
+    .ketuakk-lab-detail__description { margin:5px 0 0; color:#64748B; font-size:13px; }
+    .ketuakk-lab-detail__section-title { margin:0; padding:15px 20px; border-bottom:1px solid #E2E8F0; background:#F8FAFC; color:#0F172A; font-size:14px; font-weight:700; }
+    .ketuakk-lab-detail__table { border:0!important; border-radius:0; }
+    .ketuakk-lab-detail__table th,.ketuakk-lab-detail__table td { padding:11px 16px!important; border-bottom:1px solid #EEF2F7!important; }
     .km-table th {
         white-space: nowrap;
         vertical-align: middle;
@@ -37,15 +44,11 @@
     }
 </style>
 
-<div class="page-heading">
-    Detail KM <span class="muted">Lab Riset</span>
-</div>
-
-<div class="card mb-4">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+<section class="ketuakk-lab-detail__overview" aria-labelledby="lab-detail-title">
+    <header class="ketuakk-lab-detail__header">
         <div>
-            <h4 class="fw-bold mb-1">{{ $lab->nama_lab ?? '-' }}</h4>
-            <p class="text-muted mb-0">
+            <h1 id="lab-detail-title" class="ketuakk-lab-detail__title">{{ $lab->nama_lab ?? '-' }}</h1>
+            <p class="ketuakk-lab-detail__description">
                 Rekap penurunan dan pembagian KM Lab Riset tahun {{ $tahun ?? now()->year }}.
             </p>
         </div>
@@ -54,14 +57,14 @@
             <i class="bi bi-arrow-left me-1"></i>
             Kembali
         </a>
-    </div>
-</div>
+    </header>
+</section>
 
-<div class="card mb-4">
-    <h4 class="fw-bold mb-3">Daftar KM Turun dari Kelompok Keahlian</h4>
+<section class="ketuakk-lab-detail__section">
+    <h2 class="ketuakk-lab-detail__section-title">Daftar KM Turun dari Kelompok Keahlian</h2>
 
     <div class="table-responsive">
-        <table class="table align-middle mb-0 km-table">
+        <table class="table align-middle mb-0 km-table ketuakk-lab-detail__table">
             <thead>
                 <tr>
                     <th>No</th>
@@ -132,7 +135,7 @@
             </tbody>
         </table>
     </div>
-</div>
+</section>
 
 <div class="card mb-4">
     <h4 class="fw-bold mb-3">Rekap KM per Kategori</h4>

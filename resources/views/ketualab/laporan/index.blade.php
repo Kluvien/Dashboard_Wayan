@@ -218,20 +218,17 @@
     }
 </style>
 
-<div class="page-heading">
-    Laporan <span class="muted">Ketua Lab</span>
-</div>
-
-<div class="card report-filter-card mb-4">
+<section class="card report-filter-card mb-4" aria-labelledby="ketualab-report-title">
     <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
         <div>
-            <h4 class="fw-bold mb-1">Pusat Laporan Kontrak Manajemen</h4>
+            <p class="mb-1 text-primary fw-bold">Laporan Ketua Lab</p>
+            <h1 id="ketualab-report-title" class="fw-bold mb-1 fs-4">Pusat Laporan Kontrak Manajemen</h1>
             <p class="text-muted mb-0">
                 Periode aktif: <strong>{{ $filters['label_periode'] ?? '-' }}</strong>
             </p>
         </div>
 
-        <a href="/ketualab/dashboard" class="btn btn-secondary">
+        <a href="/ketualab/dashboard" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left me-1"></i>
             Kembali
         </a>
@@ -409,7 +406,7 @@
             </div>
         </div>
     </form>
-</div>
+</section>
 
 <div class="row g-4 mb-4">
     <div class="col-md-3">

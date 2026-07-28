@@ -11,6 +11,19 @@
 @endphp
 
 <style>
+    .ketuakk-member-detail__overview { overflow:hidden; border:1px solid #E2E8F0; border-radius:14px; background:#FFF; margin-bottom:16px; }
+    .ketuakk-member-detail__header { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; padding:20px 22px; border-bottom:1px solid #E2E8F0; flex-wrap:wrap; }
+    .ketuakk-member-detail__eyebrow { color:#2563EB; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+    .ketuakk-member-detail__title { margin:4px 0 0; color:#0F172A; font-size:22px; font-weight:700; }
+    .ketuakk-member-detail__description { margin:5px 0 0; color:#64748B; font-size:13px; }
+    .ketuakk-member-detail__back { min-height:38px; display:inline-flex; align-items:center; padding:0 13px; border:1px solid #CBD5E1; border-radius:8px; color:#334155; text-decoration:none; font-size:12px; font-weight:700; }
+    .ketuakk-member-detail__identity { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .ketuakk-member-detail__identity-item { padding:13px 18px; border-right:1px solid #EEF2F7; border-bottom:1px solid #EEF2F7; }
+    .ketuakk-member-detail__identity-label { display:block; color:#64748B; font-size:11px; }
+    .ketuakk-member-detail__identity-value { display:block; margin-top:3px; color:#0F172A; font-size:13px; font-weight:600; overflow-wrap:anywhere; }
+    .ketuakk-member-detail__summary { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); margin-bottom:16px; overflow:hidden; border:1px solid #E2E8F0; border-radius:14px; background:#FFF; }
+    .ketuakk-member-detail__metric { padding:16px 18px; border-right:1px solid #EEF2F7; }
+    .ketuakk-member-detail__metric:last-child { border-right:0; }
     .detail-period-filter {
         display: flex;
         align-items: end;
@@ -151,6 +164,7 @@
     }
 
     @media (max-width: 576px) {
+        .ketuakk-member-detail__identity,.ketuakk-member-detail__summary { grid-template-columns:1fr; }
         .detail-period-filter,
         .detail-filter-group,
         .detail-filter-submit {
@@ -159,57 +173,34 @@
     }
 </style>
 
-<div class="page-heading">
-    {{ $pageTitle }} <span class="muted">{{ $pageMuted }}</span>
-</div>
-
-<div class="card mb-4">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+<section class="ketuakk-member-detail__overview" aria-labelledby="member-detail-title">
+    <header class="ketuakk-member-detail__header">
         <div>
-            <h4 class="fw-bold mb-1">{{ $anggota->nama_dosen ?? $anggota->username }}</h4>
-            <p class="text-muted mb-0">
-                {{ $detailDescription }} Tahun {{ $tahun }}.
-            </p>
+            <div class="ketuakk-member-detail__eyebrow">{{ $pageTitle }} {{ $pageMuted }}</div>
+            <h1 id="member-detail-title" class="ketuakk-member-detail__title">{{ $anggota->nama_dosen ?? $anggota->username }}</h1>
+            <p class="ketuakk-member-detail__description">{{ $detailDescription }} Tahun {{ $tahun }}.</p>
         </div>
 
-        <a href="{{ $backUrl }}" class="btn btn-secondary">
+        <a href="{{ $backUrl }}" class="ketuakk-member-detail__back">
             Kembali
         </a>
+    </header>
+    <div class="ketuakk-member-detail__identity">
+        @foreach([
+            'Nama Anggota' => ($anggota->nama_dosen ?? $anggota->username),
+            'NIDN' => ($anggota->nidn ?? '-'),
+            'JAD' => ($anggota->jad ?? '-'),
+            'Email' => ($anggota->email ?? '-'),
+            'Lab Riset' => ($anggota->nama_lab ?? '-'),
+            'Role' => ($anggota->role ?? 'Anggota'),
+        ] as $identityLabel => $identityValue)
+            <div class="ketuakk-member-detail__identity-item">
+                <span class="ketuakk-member-detail__identity-label">{{ $identityLabel }}</span>
+                <span class="ketuakk-member-detail__identity-value">{{ $identityValue }}</span>
+            </div>
+        @endforeach
     </div>
-
-    <div class="table-responsive">
-        <table class="table align-middle mb-0 km-table">
-            <tbody>
-                <tr>
-                    <th style="width: 220px;">Nama Anggota</th>
-                    <td>{{ $anggota->nama_dosen ?? $anggota->username }}</td>
-                </tr>
-                <tr>
-                    <th>NIDN</th>
-                    <td>{{ $anggota->nidn ?? '-' }}</td>
-                </tr>
-                <tr>
-                    <th>JAD</th>
-                    <td>
-                        <span class="jad-badge">{{ $anggota->jad ?? '-' }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Email</th>
-                    <td>{{ $anggota->email ?? '-' }}</td>
-                </tr>
-                <tr>
-                    <th>Lab Riset</th>
-                    <td>{{ $anggota->nama_lab ?? '-' }}</td>
-                </tr>
-                <tr>
-                    <th>Role</th>
-                    <td>{{ $anggota->role ?? 'Anggota' }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+</section>
 
 <div class="card mb-4">
     <div class="mb-3">
@@ -265,33 +256,25 @@
     </form>
 </div>
 
-<div class="row g-3 mb-4">
-    <div class="col-md-6 col-xl-3">
-        <div class="card h-100">
+<div class="ketuakk-member-detail__summary">
+    <div class="ketuakk-member-detail__metric">
             <div class="metric-card-title">Target Tahunan</div>
             <div class="metric-card-number text-primary">{{ $totalTargetTahunan }}</div>
-        </div>
     </div>
 
-    <div class="col-md-6 col-xl-3">
-        <div class="card h-100">
+    <div class="ketuakk-member-detail__metric">
             <div class="metric-card-title">Target Periode</div>
             <div class="metric-card-number text-primary">{{ $totalTargetPeriode }}</div>
-        </div>
     </div>
 
-    <div class="col-md-6 col-xl-3">
-        <div class="card h-100">
+    <div class="ketuakk-member-detail__metric">
             <div class="metric-card-title">Realisasi Accepted</div>
             <div class="metric-card-number text-success">{{ $totalRealisasi }}</div>
-        </div>
     </div>
 
-    <div class="col-md-6 col-xl-3">
-        <div class="card h-100">
+    <div class="ketuakk-member-detail__metric">
             <div class="metric-card-title">Progress Periode</div>
             <div class="metric-card-number">{{ min($persentaseTotal, 100) }}%</div>
-        </div>
     </div>
 </div>
 

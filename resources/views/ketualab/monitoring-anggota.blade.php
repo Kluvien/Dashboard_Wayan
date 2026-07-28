@@ -924,14 +924,10 @@
 </style>
 
 <div class="monitoring-anggota-page">
-    <div class="page-heading">
-        Monitoring <span class="muted">Anggota Lab</span>
-    </div>
-
-    <div class="monitoring-filter-card">
+    <section class="monitoring-filter-card" aria-labelledby="ketualab-monitoring-member-title">
         <div class="monitoring-header-line">
             <div>
-                <div class="monitoring-card-title">Filter Periode Monitoring Anggota</div>
+                <h1 id="ketualab-monitoring-member-title" class="monitoring-card-title">Monitoring Anggota Lab</h1>
                 <p class="monitoring-card-subtitle">
                     Monitoring saat ini:
                     <strong>{{ $labelPeriode ?? 'Tahunan' }}</strong>
@@ -1013,7 +1009,7 @@
                 </div>
             </div>
         </form>
-    </div>
+    </section>
 
     @if($jumlahMenungguVerifikasi > 0)
         <div class="approval-queue-card">

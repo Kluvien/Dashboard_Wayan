@@ -9,6 +9,11 @@
 @endphp
 
 <style>
+    .ketuakk-lab-assign-form { max-width:1080px; overflow:hidden; border:1px solid #E2E8F0; border-radius:14px; background:#FFF; }
+    .ketuakk-lab-assign-form__header { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; padding:20px 22px; border-bottom:1px solid #E2E8F0; flex-wrap:wrap; }
+    .ketuakk-lab-assign-form__title { margin:0; color:#0F172A; font-size:22px; font-weight:700; }
+    .ketuakk-lab-assign-form__description { margin:5px 0 0; color:#64748B; font-size:13px; }
+    .ketuakk-lab-assign-form__body { padding:20px 22px; }
     .form-card {
         max-width: 1080px;
     }
@@ -110,15 +115,11 @@
     }
 </style>
 
-<div class="page-heading">
-    Turunkan <span class="muted">KM ke Lab Riset</span>
-</div>
-
-<div class="card form-card">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+<section class="ketuakk-lab-assign-form" aria-labelledby="lab-assign-title">
+    <header class="ketuakk-lab-assign-form__header">
         <div>
-            <h4 class="fw-bold mb-1">Form Penurunan KM ke Lab Riset</h4>
-            <p class="text-muted mb-0">
+            <h1 id="lab-assign-title" class="ketuakk-lab-assign-form__title">Form Penurunan KM ke Lab Riset</h1>
+            <p class="ketuakk-lab-assign-form__description">
                 Ketua KK membagi target KM kepada Lab Riset berdasarkan periode triwulan.
             </p>
         </div>
@@ -127,7 +128,7 @@
             <i class="bi bi-arrow-left me-1"></i>
             Kembali
         </a>
-    </div>
+    </header>
 
     @if ($errors->any())
         <div class="alert alert-danger rounded-4 mb-4">
@@ -140,7 +141,7 @@
         </div>
     @endif
 
-    <form action="/ketuakk/km-lab-riset" method="POST">
+    <form action="/ketuakk/km-lab-riset" method="POST" class="ketuakk-lab-assign-form__body">
         @csrf
 
         <div class="mb-4">
@@ -418,7 +419,7 @@
             </a>
         </div>
     </form>
-</div>
+</section>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

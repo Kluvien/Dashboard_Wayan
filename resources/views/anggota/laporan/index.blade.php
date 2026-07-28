@@ -212,20 +212,17 @@
     }
 </style>
 
-<div class="page-heading">
-    Laporan <span class="muted">Anggota</span>
-</div>
-
-<div class="card report-filter-card mb-4">
+<section class="card report-filter-card mb-4" aria-labelledby="anggota-report-title">
     <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap mb-4">
         <div>
-            <h4 class="fw-bold mb-1">Pusat Laporan KM Pribadi</h4>
+            <p class="mb-1 text-primary fw-bold">Laporan Anggota</p>
+            <h1 id="anggota-report-title" class="fw-bold mb-1 fs-4">Pusat Laporan KM Pribadi</h1>
             <p class="text-muted mb-0">
                 Periode aktif: <strong>{{ $filters['label_periode'] ?? '-' }}</strong>
             </p>
         </div>
 
-        <a href="/anggota/dashboard" class="btn btn-secondary">
+        <a href="/anggota/dashboard" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left me-1"></i>
             Kembali
         </a>
@@ -335,7 +332,7 @@
             </div>
         </div>
     </form>
-</div>
+</section>
 
 <div class="row g-3 mb-4">
     <div class="col-md-6 col-xl-3">

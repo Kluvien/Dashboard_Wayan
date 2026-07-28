@@ -48,47 +48,39 @@
 @endphp
 
 <style>
-    .deadline-card {
-        border: 1px solid #D9E2F0;
-        border-radius: 14px;
-        background: #FBFCFF;
-        padding: 18px;
-        height: 100%;
-    }
-
-    .deadline-card-title {
-        font-size: 16px;
-        font-weight: 800;
-        margin-bottom: 14px;
-        color: #1E293B;
-    }
-
-    .deadline-note {
-        font-size: 12px;
-        color: #64748B;
-        margin-top: 8px;
-    }
-
-    .deadline-card.is-disabled {
-        opacity: 0.55;
-        background: #F8FAFC;
-    }
+    .ketuakk-target-form { max-width:1180px; overflow:hidden; border:1px solid #E2E8F0; border-radius:14px; background:#FFF; }
+    .ketuakk-target-form__header { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; padding:20px 22px; border-bottom:1px solid #E2E8F0; flex-wrap:wrap; }
+    .ketuakk-target-form__eyebrow { color:#2563EB; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+    .ketuakk-target-form__title { margin:4px 0 0; color:#0F172A; font-size:22px; font-weight:700; }
+    .ketuakk-target-form__description { margin:5px 0 0; color:#64748B; font-size:13px; }
+    .ketuakk-target-form__back,.ketuakk-target-form__button { min-height:38px; display:inline-flex; align-items:center; justify-content:center; padding:0 13px; border:1px solid #CBD5E1; border-radius:8px; background:#FFF; color:#334155; font-size:12px; font-weight:700; text-decoration:none; }
+    .ketuakk-target-form__button--primary { border-color:#2563EB; background:#2563EB; color:#FFF; }
+    .ketuakk-target-form__body { padding:20px 22px; }
+    .ketuakk-target-form__fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .ketuakk-target-form__field label { display:block; margin-bottom:6px; color:#334155; font-size:12px; font-weight:700; }
+    .ketuakk-target-form__field .form-control,.ketuakk-target-form__field .form-select { min-height:42px; border:1px solid #CBD5E1; border-radius:8px; font-size:13px; }
+    .ketuakk-target-form__quarters { grid-column:1/-1; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border-top:1px solid #E2E8F0; }
+    .ketuakk-target-form__quarter { padding:16px 18px; border-right:1px solid #EEF2F7; border-bottom:1px solid #EEF2F7; }
+    .ketuakk-target-form__quarter:nth-child(even) { border-right:0; }
+    .ketuakk-target-form__quarter-title { margin-bottom:12px; color:#0F172A; font-size:14px; font-weight:700; }
+    .ketuakk-target-form__note { margin-top:8px; color:#64748B; font-size:12px; }
+    .ketuakk-target-form__quarter.is-disabled { background:#F8FAFC; opacity:.65; }
+    .ketuakk-target-form__actions { display:flex; gap:8px; padding-top:18px; border-top:1px solid #EEF2F7; margin-top:18px; flex-wrap:wrap; }
+    @media(max-width:720px){.ketuakk-target-form__fields,.ketuakk-target-form__quarters{grid-template-columns:1fr}.ketuakk-target-form__quarter{border-right:0}.ketuakk-target-form__body{padding:18px 16px}}
 </style>
 
-<div class="card">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+<section class="ketuakk-target-form" aria-labelledby="target-form-title">
+    <header class="ketuakk-target-form__header">
         <div>
-            <h4 class="fw-bold mb-1">{{ $formTitle }}</h4>
-            <p class="text-muted mb-0">
-                Atur target dan periode pelaksanaan KM pada setiap Triwulan.
-            </p>
+            <div class="ketuakk-target-form__eyebrow">Kontrak Manajemen Ketua KK</div>
+            <h1 id="target-form-title" class="ketuakk-target-form__title">{{ $formTitle }}</h1>
+            <p class="ketuakk-target-form__description">Atur target dan periode pelaksanaan KM pada setiap Triwulan.</p>
         </div>
-
-        <a href="/ketuakk/target-km" class="btn btn-secondary">
+        <a href="/ketuakk/target-km" class="ketuakk-target-form__back">
             <i class="bi bi-arrow-left me-1"></i>
             Kembali
         </a>
-    </div>
+    </header>
 
     @if($errors->any())
         <div class="alert alert-danger rounded-4 mb-4">
@@ -101,16 +93,16 @@
         </div>
     @endif
 
-    <form action="{{ $formAction }}" method="POST">
+    <form action="{{ $formAction }}" method="POST" class="ketuakk-target-form__body">
         @csrf
 
         @if($httpMethod !== 'POST')
             @method($httpMethod)
         @endif
 
-        <div class="row g-4">
-            <div class="col-md-6">
-                <label class="form-label fw-bold">Tahun KM</label>
+        <div class="ketuakk-target-form__fields">
+            <div class="ketuakk-target-form__field">
+                <label for="tahun_km">Tahun KM</label>
 
                 <input
                     type="number"
@@ -123,10 +115,10 @@
                     required>
             </div>
 
-            <div class="col-md-6">
-                <label class="form-label fw-bold">Kategori KM</label>
+            <div class="ketuakk-target-form__field">
+                <label for="kategori_km">Kategori KM</label>
 
-                <select name="kategori_km" class="form-select" required>
+                <select name="kategori_km" id="kategori_km" class="form-select" required>
                     <option value="">-- Pilih Kategori KM --</option>
 
                     @foreach($kategoriOptions as $kategori => $subKategoriList)
@@ -139,12 +131,13 @@
                 </select>
             </div>
 
-            <div class="col-md-6">
-                <label class="form-label fw-bold">Jenis KM / Sub Kategori</label>
+            <div class="ketuakk-target-form__field">
+                <label for="indikator">Jenis KM / Sub Kategori</label>
 
                 <input
                     type="text"
                     name="indikator"
+                    id="indikator"
                     class="form-control"
                     value="{{ $value('indikator') }}"
                     placeholder="Contoh: Perkuliahan"
@@ -152,35 +145,36 @@
                     required>
             </div>
 
-            <div class="col-md-6">
-                <label class="form-label fw-bold">Keterangan KM</label>
+            <div class="ketuakk-target-form__field">
+                <label for="keterangan">Keterangan KM</label>
 
                 <input
                     type="text"
                     name="keterangan"
+                    id="keterangan"
                     class="form-control"
                     value="{{ $value('keterangan') }}"
                     placeholder="Contoh: Jumlah perkuliahan aktif">
             </div>
 
-            <div class="col-12">
+            <div class="ketuakk-target-form__field" style="grid-column:1/-1">
                 <div class="alert alert-info mb-0">
                     Deadline hanya wajib diisi bila jumlah target pada Triwulan tersebut lebih dari 0.
                 </div>
             </div>
 
+            <div class="ketuakk-target-form__quarters">
             @foreach($triwulanData as $nomor => $tw)
-                <div class="col-lg-6">
                     <div
-                        class="deadline-card js-deadline-card"
+                        class="ketuakk-target-form__quarter js-deadline-card"
                         data-triwulan="{{ $nomor }}">
 
-                        <div class="deadline-card-title">
+                        <div class="ketuakk-target-form__quarter-title">
                             {{ $tw['label'] }}
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label fw-bold">
+                            <label for="{{ $tw['target'] }}" class="form-label fw-bold">
                                 Jumlah Target KM
                             </label>
 
@@ -196,7 +190,7 @@
 
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">
+                                <label for="{{ $tw['mulai'] }}" class="form-label fw-bold">
                                     Tanggal Mulai
                                 </label>
 
@@ -209,7 +203,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">
+                                <label for="{{ $tw['selesai'] }}" class="form-label fw-bold">
                                     Tanggal Selesai
                                 </label>
 
@@ -222,12 +216,12 @@
                             </div>
                         </div>
 
-                        <div class="deadline-note">
+                        <div class="ketuakk-target-form__note">
                             Periode Triwulan akan otomatis mengikuti tahun KM yang dipilih.
                         </div>
                     </div>
-                </div>
             @endforeach
+            </div>
 
             <div class="col-12">
                 <div class="alert alert-primary mb-0">
@@ -237,18 +231,18 @@
             </div>
         </div>
 
-        <div class="d-flex gap-2 mt-4">
-            <button type="submit" class="btn btn-primary">
+        <div class="ketuakk-target-form__actions">
+            <button type="submit" class="ketuakk-target-form__button ketuakk-target-form__button--primary">
                 <i class="bi bi-save me-1"></i>
                 {{ $submitLabel }}
             </button>
 
-            <a href="/ketuakk/target-km" class="btn btn-secondary">
+            <a href="/ketuakk/target-km" class="ketuakk-target-form__button">
                 Batal
             </a>
         </div>
     </form>
-</div>
+</section>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -337,7 +331,12 @@
             let total = 0;
 
             targetInputs.forEach(function(input) {
-                total += parseInt(input.value || 0);
+                const parsedValue = Number.parseInt(input.value, 10);
+                const safeValue = Number.isFinite(parsedValue)
+                    ? Math.max(0, parsedValue)
+                    : 0;
+
+                total += safeValue;
             });
 
             totalPreview.textContent = total;

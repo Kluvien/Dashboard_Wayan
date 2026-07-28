@@ -3,10 +3,6 @@
 @section('title', 'Edit Target KM')
 
 @section('content')
-<div class="page-heading">
-    Edit <span class="muted">Target KM</span>
-</div>
-
 @include('ketuakk.partials.target-form', [
     'formTitle' => 'Form Edit Target KM',
     'formAction' => '/ketuakk/target-km/' . $target->id_target,

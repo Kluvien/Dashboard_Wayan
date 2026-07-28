@@ -11,6 +11,12 @@
 @endphp
 
 <style>
+    .ketuakk-lab-monitor-detail__overview,.ketuakk-lab-monitor-detail__section { overflow:hidden; border:1px solid #E2E8F0; border-radius:14px; background:#FFF; margin-bottom:16px; }
+    .ketuakk-lab-monitor-detail__header { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; padding:20px 22px; border-bottom:1px solid #E2E8F0; flex-wrap:wrap; }
+    .ketuakk-lab-monitor-detail__title { margin:0; color:#0F172A; font-size:22px; font-weight:700; }
+    .ketuakk-lab-monitor-detail__description { margin:5px 0 0; color:#64748B; font-size:13px; }
+    .ketuakk-lab-monitor-detail__table { border:0!important; border-radius:0; }
+    .ketuakk-lab-monitor-detail__table th,.ketuakk-lab-monitor-detail__table td { padding:11px 16px!important; border-bottom:1px solid #EEF2F7!important; }
     .lab-detail-filter {
         display: flex;
         align-items: center;
@@ -142,15 +148,11 @@
     }
 </style>
 
-<div class="page-heading">
-    Detail Monitoring <span class="muted">Lab Riset</span>
-</div>
-
-<div class="card mb-4">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+<section class="ketuakk-lab-monitor-detail__overview" aria-labelledby="lab-monitor-detail-title">
+    <header class="ketuakk-lab-monitor-detail__header">
         <div>
-            <h4 class="fw-bold mb-1">{{ $lab->nama_lab ?? '-' }}</h4>
-            <p class="text-muted mb-0">
+            <h1 id="lab-monitor-detail-title" class="ketuakk-lab-monitor-detail__title">{{ $lab->nama_lab ?? '-' }}</h1>
+            <p class="ketuakk-lab-monitor-detail__description">
                 Tahun {{ $tahun }} · Tampilan {{ $labelPeriode ?? 'Triwulan' }} ·
                 {{ $jumlahAnggota ?? 0 }} anggota Lab
             </p>
@@ -159,8 +161,8 @@
         <a href="/ketuakk/monitoring-lab-riset?tahun={{ $tahun }}&periode={{ $periode }}" class="btn btn-secondary">
             <i class="bi bi-arrow-left me-1"></i> Kembali
         </a>
-    </div>
-</div>
+    </header>
+</section>
 
 <div class="card mb-4">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
@@ -276,7 +278,7 @@
             </div>
 
             <div class="table-responsive">
-                <table class="table table-bordered align-middle mb-0 lab-detail-table">
+                <table class="table table-bordered align-middle mb-0 lab-detail-table ketuakk-lab-monitor-detail__table">
                     <thead>
                         <tr>
                             <th rowspan="2">No</th>

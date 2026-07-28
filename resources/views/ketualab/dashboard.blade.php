@@ -655,16 +655,17 @@
             flex: 1 1 130px;
         }
     }
+    .ketualab-dashboard__overview { padding: 20px 22px; background: #FFF; border: 1px solid #E2E8F0; border-radius: 14px; }
+    .ketualab-dashboard__eyebrow { margin: 0 0 5px; color: #2563EB; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .ketualab-dashboard__title { margin: 0 0 7px; color: #0F172A; font-size: 24px; font-weight: 700; }
+    .ketualab-dashboard__toolbar { padding-top: 16px; margin-top: 16px; border-top: 1px solid #EEF2F7; }
 </style>
 
-<div class="page-heading">
-    Dashboard <span class="muted">Ketua Lab</span>
-</div>
-
-<div class="card dashboard-header mb-3">
+<section class="dashboard-header ketualab-dashboard__overview mb-3" aria-labelledby="ketualab-dashboard-title">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
         <div>
-            <h4 class="fw-bold mb-1">Ringkasan KM Lab {{ $periodeLabel }}</h4>
+            <p class="ketualab-dashboard__eyebrow">Dashboard Ketua Lab</p>
+            <h1 id="ketualab-dashboard-title" class="ketualab-dashboard__title">Ringkasan KM Lab {{ $periodeLabel }}</h1>
             <p class="text-muted mb-0">
                 Lab: {{ $namaLab }}
             </p>
@@ -674,7 +675,7 @@
             </span>
         </div>
 
-        <div class="d-flex align-items-center justify-content-end gap-2 flex-wrap">
+        <div class="d-flex align-items-center justify-content-end gap-2 flex-wrap ketualab-dashboard__toolbar">
             <form method="GET" action="{{ url('/ketualab/dashboard') }}" class="dashboard-filter-form">
                 <select name="mode" id="dashboardPeriodMode" class="dashboard-filter-control">
                     <option value="tahunan" {{ $mode === 'tahunan' ? 'selected' : '' }}>Tahunan</option>
@@ -721,7 +722,7 @@
             </a>
         </div>
     </div>
-</div>
+</section>
 
 @if($jumlahMenungguVerifikasi > 0)
     <div class="approval-alert-card">

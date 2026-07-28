@@ -24,6 +24,12 @@
 @endphp
 
 <style>
+    .ketuakk-km-overview__panel { overflow:hidden; border:1px solid #E2E8F0; border-radius:14px; background:#FFF; margin-bottom:16px; }
+    .ketuakk-km-overview__header { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; padding:20px 22px; border-bottom:1px solid #E2E8F0; flex-wrap:wrap; }
+    .ketuakk-km-overview__title { margin:0; color:#0F172A; font-size:22px; font-weight:700; }
+    .ketuakk-km-overview__description { margin:5px 0 0; color:#64748B; font-size:13px; }
+    .ketuakk-km-overview__table { border:0!important; border-radius:0; }
+    .ketuakk-km-overview__table th,.ketuakk-km-overview__table td { padding:11px 16px!important; border-bottom:1px solid #EEF2F7!important; }
     .km-table th {
         white-space: nowrap;
         vertical-align: middle;
@@ -147,15 +153,11 @@
     }
 </style>
 
-<div class="page-heading">
-    Kontrak Manajemen <span class="muted">Kelompok Keahlian</span>
-</div>
-
-<div class="card mb-4">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+<section class="ketuakk-km-overview__panel" aria-labelledby="km-overview-title">
+    <header class="ketuakk-km-overview__header">
         <div>
-            <h4 class="fw-bold mb-1">Kontrak Manajemen Kelompok Keahlian</h4>
-            <p class="text-muted mb-0">
+            <h1 id="km-overview-title" class="ketuakk-km-overview__title">Kontrak Manajemen Kelompok Keahlian</h1>
+            <p class="ketuakk-km-overview__description">
                 Rekap target Kontrak Manajemen Kelompok Keahlian tahun {{ $tahun }}.
             </p>
         </div>
@@ -187,10 +189,10 @@
                 Tambah Target
             </a>
         </div>
-    </div>
+    </header>
 
     <div class="table-responsive">
-        <table class="table align-middle mb-0 km-table">
+        <table class="table align-middle mb-0 km-table ketuakk-km-overview__table">
             <thead>
                 <tr>
                     <th rowspan="2">No</th>
@@ -313,7 +315,7 @@
             </tbody>
         </table>
     </div>
-</div>
+</section>
 
 <div class="card">
     <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">

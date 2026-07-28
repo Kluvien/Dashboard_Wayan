@@ -101,17 +101,11 @@
     }
 
     .deadline-date {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 5px;
-        padding: 6px 8px;
-        border-radius: 8px;
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
+        display: inline-block;
         color: #334155;
         font-size: 12px;
-        font-weight: 700;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
         white-space: nowrap;
     }
 
@@ -130,9 +124,9 @@
         justify-content: center;
         min-width: 36px;
         padding: 5px 9px;
-        border-radius: 999px;
-        background: #ECFDF5;
-        color: #15803D;
+        border-radius: 6px;
+        background: #F8FAFC;
+        color: #334155;
         font-size: 12px;
         font-weight: 800;
     }
@@ -147,7 +141,7 @@
         align-items: center;
         justify-content: center;
         padding: 6px 11px;
-        border-radius: 999px;
+        border-radius: 6px;
         font-size: 11px;
         font-weight: 800;
         white-space: nowrap;
@@ -181,6 +175,17 @@
         background: #F8FAFC;
         padding: 10px 12px;
     }
+
+    .ketualab-assignment__section { margin-bottom: 16px; overflow: hidden; background: #FFF; border: 1px solid #E2E8F0; border-radius: 14px; }
+    .ketualab-assignment__section-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 18px 22px; border-bottom: 1px solid #EEF2F7; }
+    .ketualab-assignment__section-title { margin: 0; color: #0F172A; font-size: 17px; font-weight: 700; }
+    .ketualab-assignment__section-description { margin: 5px 0 0; color: #64748B; font-size: 13px; }
+    .ketualab-assignment__scroll { overflow-x: auto; }
+    .ketualab-assignment__table { width: 100%; margin: 0; }
+    .ketualab-assignment__table > thead > tr > th { padding: 11px 16px; background: #F8FAFC; border: 0; border-bottom: 1px solid #CBD5E1; color: #334155; font-size: 11px; font-weight: 700; text-transform: uppercase; vertical-align: middle; }
+    .ketualab-assignment__table > tbody > tr > td { height: auto; padding: 10px 14px; border: 0; border-bottom: 1px solid #EEF2F7; color: #334155; font-size: 13px; vertical-align: middle; }
+    .ketualab-assignment__number { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .ketualab-assignment__action { min-height: 32px; padding: 5px 9px; border-radius: 7px; font-size: 12px; font-weight: 700; }
 
     .modal-km-info-item.full {
         grid-column: span 2;
@@ -267,10 +272,6 @@
     }
 </style>
 
-<div class="page-heading">
-    Pembagian <span class="muted">KM Anggota</span>
-</div>
-
 @if(session('success'))
     <div class="alert alert-success rounded-4">
         {{ session('success') }}
@@ -294,10 +295,11 @@
     </div>
 @endif
 
-<div class="card mb-4">
+<section class="card mb-4" aria-labelledby="ketualab-assignment-title">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
         <div>
-            <h4 class="fw-bold mb-1">KM yang Diturunkan ke Lab</h4>
+            <p class="text-primary fw-bold mb-1">Pembagian KM Anggota</p>
+            <h1 id="ketualab-assignment-title" class="fw-bold fs-4 mb-1">KM yang Diturunkan ke Lab</h1>
             <p class="text-muted mb-0">
                 Lab: {{ $lab->nama_lab ?? '-' }} | Tahun: {{ $tahun }}
             </p>
@@ -320,26 +322,26 @@
                 </button>
             </form>
 
-            <a href="/ketualab/dashboard" class="btn btn-secondary">
+            <a href="/ketualab/dashboard" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left me-1"></i>
                 Kembali
             </a>
         </div>
     </div>
-</div>
+</section>
 
-<div class="card mb-4">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+<section class="ketualab-assignment__section" aria-labelledby="assignment-source-title">
+    <header class="ketualab-assignment__section-header">
         <div>
-            <h4 class="fw-bold mb-1">Daftar KM dari Ketua KK</h4>
-            <p class="text-muted mb-0">
+            <h2 id="assignment-source-title" class="ketualab-assignment__section-title">Daftar KM dari Ketua KK</h2>
+            <p class="ketualab-assignment__section-description">
                 Rincian target KM yang diterima Lab beserta pembagian per Triwulan dan tenggat penyelesaian.
             </p>
         </div>
-    </div>
+    </header>
 
-    <div class="table-responsive">
-        <table class="table align-middle mb-0 km-table">
+    <div class="table-responsive ketualab-assignment__scroll">
+        <table class="table km-table ketualab-assignment__table">
             <thead>
                 <tr>
                     <th rowspan="2">No</th>
@@ -425,21 +427,18 @@
 
                             <td class="text-center {{ $tw === 1 ? 'tw-start' : '' }} {{ $tw === 4 ? 'tw-end' : '' }}">
                                 @if($jumlahTw > 0 && !empty($tenggat))
-                                    <span class="deadline-date">
-                                        <i class="bi bi-calendar-event"></i>
-                                        {{ $formatTanggal($tenggat) }}
-                                    </span>
+                                    <span class="deadline-date">{{ $formatTanggal($tenggat) }}</span>
                                 @else
                                     <span class="deadline-empty">-</span>
                                 @endif
                             </td>
                         @endforeach
 
-                        <td class="text-center fw-bold">
+                        <td class="ketualab-assignment__number">
                             {{ $km->jumlah_km ?? 0 }}
                         </td>
 
-                        <td class="text-center fw-bold text-primary">
+                        <td class="ketualab-assignment__number">
                             {{ $km->sudah_assign ?? 0 }}
                         </td>
 
@@ -459,7 +458,7 @@
                             @if(($km->sisa_km ?? 0) > 0)
                                 <button
                                     type="button"
-                                    class="btn btn-primary btn-sm js-open-assign-modal"
+                                    class="btn btn-primary js-open-assign-modal ketualab-assignment__action"
                                     data-bs-toggle="modal"
                                     data-bs-target="#assignKmModal"
 
@@ -483,7 +482,7 @@
                                     Bagi
                                 </button>
                             @else
-                                <button type="button" class="btn btn-secondary btn-sm" disabled>
+                                <button type="button" class="btn btn-outline-secondary ketualab-assignment__action" disabled>
                                     Selesai
                                 </button>
                             @endif
@@ -501,7 +500,7 @@
             </tbody>
         </table>
     </div>
-</div>
+</section>
 
 <div class="card mb-4">
     <div class="mb-3">

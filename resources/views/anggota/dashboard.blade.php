@@ -788,16 +788,17 @@
             grid-template-columns: 1fr;
         }
     }
+    .anggota-dashboard__overview { padding: 20px 22px; background: #FFF; border: 1px solid #E2E8F0; border-radius: 14px; }
+    .anggota-dashboard__eyebrow { margin: 0 0 5px; color: #2563EB; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .anggota-dashboard__title { margin: 0 0 7px; color: #0F172A; font-size: 24px; font-weight: 700; }
+    .anggota-dashboard__toolbar { padding-top: 16px; margin-top: 16px; border-top: 1px solid #EEF2F7; }
 </style>
 
-<div class="page-heading">
-    Dashboard <span class="muted">Anggota</span>
-</div>
-
-<div class="card dashboard-header mb-3">
+<section class="dashboard-header anggota-dashboard__overview mb-3" aria-labelledby="anggota-dashboard-title">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
         <div>
-            <div class="dashboard-panel-title mb-1">{{ $namaAnggota ?? 'Anggota' }}</div>
+            <p class="anggota-dashboard__eyebrow">Dashboard Anggota</p>
+            <h1 id="anggota-dashboard-title" class="anggota-dashboard__title">{{ $namaAnggota ?? 'Anggota' }}</h1>
             <div class="dashboard-panel-subtitle mb-0">
                 Lab: {{ $namaLab ?? '-' }}
                 |
@@ -812,7 +813,7 @@
             </span>
         </div>
 
-        <div class="d-flex align-items-center justify-content-end gap-2 flex-wrap">
+        <div class="d-flex align-items-center justify-content-end gap-2 flex-wrap anggota-dashboard__toolbar">
             <form method="GET" action="{{ route('anggota.dashboard') }}" class="dashboard-filter-form">
                 <select name="periode" id="anggotaPeriodeFilter" class="dashboard-filter-control">
                     <option value="tahun" {{ $periode === 'tahun' ? 'selected' : '' }}>Tahunan</option>
@@ -859,7 +860,7 @@
             </a>
         </div>
     </div>
-</div>
+</section>
 
 @if($statusPengajuanKm->isNotEmpty())
     <div id="statusPengajuanKmPanel" class="member-verification-alert">

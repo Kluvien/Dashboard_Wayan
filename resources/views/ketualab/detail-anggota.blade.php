@@ -49,18 +49,21 @@
         border-radius: 999px;
         background: #477EF7;
     }
+
+    .ketualab-member-detail__overview { padding: 20px 22px; margin-bottom: 16px; background: #FFF; border: 1px solid #E2E8F0; border-radius: 14px; }
+    .ketualab-member-detail__eyebrow { margin: 0 0 5px; color: #2563EB; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .ketualab-member-detail__title { margin: 0; color: #0F172A; font-size: 24px; font-weight: 700; }
+    .ketualab-member-detail__identity { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 17px; border-top: 1px solid #EEF2F7; }
+    @media (max-width: 767.98px) { .ketualab-member-detail__identity { grid-template-columns: 1fr; } }
 </style>
 
-<div class="page-heading">
-    Detail KM <span class="muted">Anggota Lab</span>
-</div>
-
-<div class="card mb-4">
+<section class="ketualab-member-detail__overview">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
         <div>
-            <h4 class="fw-bold mb-1">
+            <p class="ketualab-member-detail__eyebrow">Monitoring Anggota Lab</p>
+            <h1 class="ketualab-member-detail__title">
                 {{ $anggota->nama_dosen ?? $anggota->username ?? '-' }}
-            </h4>
+            </h1>
 
             <p class="text-muted mb-0">
                 Detail target dan realisasi Kontrak Manajemen anggota Lab tahun {{ $tahun }}.
@@ -111,7 +114,7 @@
             </tbody>
         </table>
     </div>
-</div>
+</section>
 
 <div class="card mb-4">
     <h4 class="fw-bold mb-3">Daftar KM yang Diterima Anggota</h4>

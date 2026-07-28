@@ -613,17 +613,13 @@
 </style>
 
 <div class="monitoring-lab-page">
-    <div class="monitoring-title">
-        Monitoring <span class="muted">KM Lab</span>
-    </div>
-
     {{-- HEADER + FILTER: mengikuti pola Dashboard Ketua KK --}}
-    <div class="monitoring-hero">
+    <section class="monitoring-hero" aria-labelledby="ketualab-monitoring-lab-title">
         <div class="monitoring-hero-inner">
             <div>
-                <h4 class="monitoring-hero-title">
+                <h1 id="ketualab-monitoring-lab-title" class="monitoring-hero-title">
                     Ringkasan Monitoring KM Lab {{ $labelPeriode ?? '' }}
-                </h4>
+                </h1>
                 <p class="monitoring-hero-desc">
                     Lab: <strong>{{ $lab->nama_lab ?? '-' }}</strong> · Monitoring target, pembagian KM, realisasi, dan tenggat penyelesaian.
                 </p>
@@ -676,7 +672,7 @@
                 </a>
             </form>
         </div>
-    </div>
+    </section>
 
     {{-- CARD KATEGORI: mengikuti tone dan struktur dashboard Ketua KK --}}
     @include('partials.periode-saat-ini')

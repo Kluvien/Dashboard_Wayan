@@ -85,22 +85,26 @@
         background: #FEECEC;
         color: #B91C1C;
     }
+
+    .anggota-progress__overview, .anggota-progress__section { background: #FFF; border: 1px solid #E2E8F0; border-radius: 14px; overflow: hidden; }
+    .anggota-progress__header { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; padding: 20px 22px; }
+    .anggota-progress__eyebrow { margin: 0 0 5px; color: #2563EB; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .anggota-progress__title { margin: 0; color: #0F172A; font-size: 24px; font-weight: 700; }
+    .anggota-progress__metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid #EEF2F7; }
+    .anggota-progress__metric { padding: 16px 22px; border-right: 1px solid #EEF2F7; }
+    .anggota-progress__metric:last-child { border-right: 0; }
+    .anggota-progress__metric-label { color: #64748B; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .anggota-progress__metric-value { display: block; margin-top: 5px; color: #0F172A; font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .anggota-progress__bar { height: 6px; margin-top: 9px; overflow: hidden; border-radius: 999px; background: #E2E8F0; }
+    .anggota-progress__bar-fill { height: 100%; background: #2563EB; }
+    @media (max-width: 767.98px) { .anggota-progress__header { flex-direction: column; } .anggota-progress__metrics { grid-template-columns: repeat(2, 1fr); } }
 </style>
 
-<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-    <div class="page-heading mb-0">
-        Progress <span class="muted">KM Saya</span>
-    </div>
-
-    <a href="/anggota/dashboard" class="btn btn-secondary">
-        <i class="bi bi-arrow-left me-1"></i> Kembali
-    </a>
-</div>
-
-<div class="card mb-4">
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+<section class="anggota-progress__overview mb-4" aria-labelledby="anggota-progress-title">
+    <header class="anggota-progress__header">
         <div>
-            <h4 class="fw-bold mb-1">Progress KM Saya</h4>
+            <p class="anggota-progress__eyebrow">Capaian Kontrak Manajemen</p>
+            <h1 id="anggota-progress-title" class="anggota-progress__title">Progress KM Saya</h1>
             <p class="text-muted mb-0">
                 Halaman ini menampilkan target KM yang diterima, aktivitas yang sudah diinput, dan status progres terbaru.
             </p>
@@ -116,41 +120,30 @@
                 @endforeach
             </select>
         </form>
-    </div>
-</div>
-
-<div class="row g-3 mb-4">
-    <div class="col-md-3">
-        <div class="summary-card">
-            <div class="summary-label">Total Target</div>
-            <p class="summary-value">{{ $totalTarget }}</p>
+        <a href="/anggota/dashboard" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i> Kembali</a>
+    </header>
+    <div class="anggota-progress__metrics">
+        <div class="anggota-progress__metric">
+            <span class="anggota-progress__metric-label">Total Target</span>
+            <span class="anggota-progress__metric-value">{{ $totalTarget }}</span>
         </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="summary-card">
-            <div class="summary-label">Total Realisasi Accepted</div>
-            <p class="summary-value">{{ $totalRealisasi }}</p>
+        <div class="anggota-progress__metric">
+            <span class="anggota-progress__metric-label">Total Realisasi Accepted</span>
+            <span class="anggota-progress__metric-value">{{ $totalRealisasi }}</span>
         </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="summary-card">
-            <div class="summary-label">Sisa Target</div>
-            <p class="summary-value">{{ $totalSisa }}</p>
+        <div class="anggota-progress__metric">
+            <span class="anggota-progress__metric-label">Sisa Target</span>
+            <span class="anggota-progress__metric-value">{{ $totalSisa }}</span>
         </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="summary-card">
-            <div class="summary-label">Persentase Capaian</div>
-            <p class="summary-value">{{ $persentaseTotal }}%</p>
-            <div class="progress-soft mt-2">
-                <div class="progress-soft-fill" style="width: {{ $persentaseTotal }}%;"></div>
+        <div class="anggota-progress__metric">
+            <span class="anggota-progress__metric-label">Persentase Capaian</span>
+            <span class="anggota-progress__metric-value">{{ $persentaseTotal }}%</span>
+            <div class="anggota-progress__bar" role="progressbar" aria-label="Persentase capaian KM" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $persentaseTotal }}">
+                <div class="anggota-progress__bar-fill" style="width: {{ min($persentaseTotal, 100) }}%;"></div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
 <div class="card mb-4">
     <h4 class="fw-bold mb-3">Progress Per Kategori KM</h4>
