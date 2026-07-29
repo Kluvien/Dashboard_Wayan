@@ -63,7 +63,7 @@
     }
 
     .target-km-table {
-        min-width: 1250px;
+        width: 100%;
     }
 
     .aktivitas-km-table,
@@ -481,6 +481,7 @@
         .anggota-activity-index__comparison-row > * { grid-column: 1; }
         .anggota-activity-index__deadlines { grid-template-columns: 1fr; }
     }
+    .anggota-activity-index__target-records{border-top:1px solid #D5DCE5}.anggota-activity-index__target-record{padding:14px 20px 18px;border-bottom:1px solid #E5EAF0}.anggota-activity-index__target-record header{display:flex;justify-content:space-between;gap:16px}.anggota-activity-index__target-record h3{margin:2px 0;color:#1F2937;font-size:16px}.anggota-activity-index__target-record header p{margin:0;color:#5B6472;font-size:14px;line-height:1.5}.anggota-activity-index__target-record dl{display:flex;gap:24px;margin:12px 0}.anggota-activity-index__target-record dt{color:#5B6472;font-size:13px}.anggota-activity-index__target-record dd{margin:2px 0 0;color:#1F2937;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}.anggota-activity-index__period-table{width:100%;border-collapse:collapse;color:#374151;font-size:14px}.anggota-activity-index__period-table th,.anggota-activity-index__period-table td{padding:9px 12px;border-bottom:1px solid #E5EAF0}.anggota-activity-index__period-table thead th{background:#EEF2F6;font-size:13px;text-align:left}.anggota-activity-index__period-table td:nth-child(2),.anggota-activity-index__period-table td:nth-child(3){text-align:right;font-weight:700;font-variant-numeric:tabular-nums}@media(max-width:640px){.anggota-activity-index__target-record{padding:14px 16px}.anggota-activity-index__target-record header{flex-direction:column}.anggota-activity-index__target-record dl{flex-wrap:wrap}}
 </style>
 
 <header class="anggota-activities__header">
@@ -649,39 +650,7 @@
         </form>
     </header>
 
-    <div class="table-responsive anggota-activity-index__scroll">
-        <table class="table target-km-table anggota-activity-index__table">
-            <thead>
-                <tr>
-                    <th scope="col" rowspan="2">No</th>
-                    <th scope="col" rowspan="2">Tahun</th>
-                    <th scope="col" rowspan="2">Detail Target KM</th>
-
-                    <th scope="colgroup" colspan="4" class="target-group-header">Target KM per Triwulan</th>
-                    <th scope="colgroup" colspan="4" class="target-group-header">Realisasi KM per Triwulan</th>
-
-                    <th scope="col" rowspan="2">Total Target</th>
-                    <th scope="col" rowspan="2">Total Realisasi</th>
-                    <th scope="col" rowspan="2">Sisa</th>
-                    <th scope="col" rowspan="2">Status</th>
-                </tr>
-
-                <tr>
-                    @for($tw = 1; $tw <= 4; $tw++)
-                        <th scope="col" class="text-end {{ $tw === 1 ? 'target-tw-start' : '' }} {{ $tw === 4 ? 'target-tw-end' : '' }}">
-                            TW {{ $tw }}
-                        </th>
-                    @endfor
-
-                    @for($tw = 1; $tw <= 4; $tw++)
-                        <th scope="col" class="text-end {{ $tw === 1 ? 'target-tw-start' : '' }} {{ $tw === 4 ? 'target-tw-end' : '' }}">
-                            TW {{ $tw }}
-                        </th>
-                    @endfor
-                </tr>
-            </thead>
-
-            <tbody>
+    <div class="anggota-activity-index__target-records">
                 @forelse($targetKmSaya as $index => $target)
                     @php
                         $targetTriwulan = [
@@ -707,61 +676,18 @@
 
                     @endphp
 
-                    <tr>
-                        <td class="anggota-activity-index__cell--number">{{ $index + 1 }}</td>
-                        <td class="anggota-activity-index__cell--number">{{ $target->tahun_km ?? '-' }}</td>
-
-                        <td class="detail-target">
-                            <div class="anggota-activity-index__target-detail">
-                            <div class="anggota-activity-index__identity">{{ $target->kategori_km ?? '-' }}</div>
-
-                            <div class="anggota-activity-index__metadata">
-                                <strong>Sub Kategori:</strong>
-                                <span>{{ $target->sub_kategori_km ?? '-' }}</span>
-                            </div>
-
-                            <div class="anggota-activity-index__metadata">
-                                <strong>Keterangan:</strong>
-                                <span>{{ $target->keterangan ?? '-' }}</span>
-                            </div>
-
-                            <div class="anggota-activity-index__deadlines">
-                                @foreach($tenggat as $nomorTw => $tanggalTenggat)
-                                    @if(!empty($tanggalTenggat))
-                                        <span class="anggota-activity-index__deadline">
-                                            TW{{ $nomorTw }}: {{ \Carbon\Carbon::parse($tanggalTenggat)->format('d/m/Y') }}
-                                        </span>
-                                    @endif
-                                @endforeach
-                            </div>
-                            </div>
-                        </td>
-
-                        @foreach($targetTriwulan as $nomorTw => $jumlah)
-                            <td class="anggota-activity-index__cell--numeric {{ $nomorTw === 1 ? 'target-tw-start' : '' }} {{ $nomorTw === 4 ? 'target-tw-end' : '' }}">{{ $jumlah > 0 ? $jumlah : '-' }}</td>
-                        @endforeach
-
-                        @foreach($realisasiTriwulan as $nomorTw => $jumlah)
-                            <td class="anggota-activity-index__cell--numeric {{ $nomorTw === 1 ? 'target-tw-start' : '' }} {{ $nomorTw === 4 ? 'target-tw-end' : '' }}">{{ $jumlah > 0 ? $jumlah : '-' }}</td>
-                        @endforeach
-
-                        <td class="anggota-activity-index__cell--numeric">{{ $target->jumlah_km ?? 0 }}</td>
-                        <td class="anggota-activity-index__cell--numeric">{{ $target->total_realisasi ?? 0 }}</td>
-                        <td class="anggota-activity-index__cell--numeric">{{ $target->sisa_km ?? 0 }}</td>
-
-                        <td>
-                            <span class="anggota-activity-index__status {{ ($target->status_class ?? '') === 'success' ? 'anggota-activity-index__status--success' : (($target->status_class ?? '') === 'warning' ? 'anggota-activity-index__status--warning' : 'anggota-activity-index__status--neutral') }}">
-                                {{ $target->status_target ?? 'Belum Ada Target' }}
-                            </span>
-                        </td>
-                    </tr>
+                    <article class="anggota-activity-index__target-record">
+                        <header><div><span>{{ $index + 1 }} · {{ $target->tahun_km ?? '-' }}</span><h3>{{ $target->kategori_km ?? '-' }}</h3><p>{{ $target->sub_kategori_km ?? '-' }} · {{ $target->keterangan ?? '-' }}</p></div><span class="anggota-activity-index__status {{ ($target->status_class ?? '') === 'success' ? 'anggota-activity-index__status--success' : (($target->status_class ?? '') === 'warning' ? 'anggota-activity-index__status--warning' : 'anggota-activity-index__status--neutral') }}">{{ $target->status_target ?? 'Belum Ada Target' }}</span></header>
+                        <dl><div><dt>Total target</dt><dd>{{ $target->jumlah_km ?? 0 }}</dd></div><div><dt>Total realisasi</dt><dd>{{ $target->total_realisasi ?? 0 }}</dd></div><div><dt>Sisa</dt><dd>{{ $target->sisa_km ?? 0 }}</dd></div></dl>
+                        <table class="anggota-activity-index__period-table"><thead><tr><th scope="col">Periode</th><th scope="col">Target</th><th scope="col">Realisasi</th><th scope="col">Tenggat</th></tr></thead><tbody>
+                            @for($tw = 1; $tw <= 4; $tw++)
+                                <tr><th scope="row">TW {{ $tw }}</th><td>{{ $targetTriwulan[$tw] ?? 0 }}</td><td>{{ $realisasiTriwulan[$tw] ?? 0 }}</td><td>{{ !empty($tenggat[$tw]) ? \Carbon\Carbon::parse($tenggat[$tw])->format('d/m/Y') : '-' }}</td></tr>
+                            @endfor
+                        </tbody></table>
+                    </article>
                 @empty
-                    <tr>
-                        <td colspan="15" class="anggota-activity-index__empty">Belum ada target KM yang dibagikan kepada {{ $namaAnggota }} pada tahun {{ $tahun }}.</td>
-                    </tr>
+                    <div class="anggota-activity-index__empty">Belum ada target KM yang dibagikan kepada {{ $namaAnggota }} pada tahun {{ $tahun }}.</div>
                 @endforelse
-            </tbody>
-        </table>
     </div>
 </section>
 

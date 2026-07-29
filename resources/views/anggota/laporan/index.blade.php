@@ -210,6 +210,7 @@
             grid-column: span 12;
         }
     }
+    .anggota-laporan__target-records{border-top:1px solid #D5DCE5}.anggota-laporan__target-record{padding:14px 16px 18px;border-bottom:1px solid #E5EAF0}.anggota-laporan__target-record header{display:flex;justify-content:space-between;gap:16px}.anggota-laporan__target-record h6{margin:0;color:#1F2937;font-size:15px}.anggota-laporan__target-record header p{margin:3px 0 0;color:#5B6472;font-size:14px}.anggota-laporan__target-record dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:12px 0}.anggota-laporan__target-record dt{color:#5B6472;font-size:13px}.anggota-laporan__target-record dd{margin:2px 0 0;color:#1F2937;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}.anggota-laporan__progress{height:6px;overflow:hidden;border-radius:999px;background:#E5EAF0;margin-bottom:12px}.anggota-laporan__progress span{display:block;height:100%;background:#2457A6}.anggota-laporan__period-table{width:100%;border-collapse:collapse;color:#374151;font-size:14px}.anggota-laporan__period-table th,.anggota-laporan__period-table td{padding:9px 12px;border-bottom:1px solid #E5EAF0}.anggota-laporan__period-table thead th{background:#EEF2F6;font-size:13px;text-align:left}.anggota-laporan__period-table td:nth-child(2),.anggota-laporan__period-table td:nth-child(3){text-align:right;font-weight:700;font-variant-numeric:tabular-nums}@media(max-width:640px){.anggota-laporan__target-record header{flex-direction:column}.anggota-laporan__target-record dl{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 
 <section class="card report-filter-card mb-4" aria-labelledby="anggota-report-title">
@@ -470,85 +471,14 @@
                 <span class="detail-progress">Progress {{ $kategori['persentase'] ?? 0 }}%</span>
             </div>
 
-            <div class="table-responsive">
-                <table class="table report-table align-middle mb-0">
-                    <thead>
-                        <tr>
-                            <th rowspan="2">No</th>
-                            <th rowspan="2">Sub Kategori / Jenis KM</th>
-                            <th rowspan="2">Keterangan</th>
-                            <th colspan="6" class="table-group-title">Target KM</th>
-                            <th colspan="6" class="table-group-title">Realisasi Accepted</th>
-                            <th rowspan="2">Sisa</th>
-                            <th rowspan="2">Progress</th>
-                            <th rowspan="2">Status</th>
-                        </tr>
-                        <tr>
-                            <th>TW1</th><th>TW2</th><th>TW3</th><th>TW4</th><th>Total</th><th>Periode</th>
-                            <th>TW1</th><th>TW2</th><th>TW3</th><th>TW4</th><th>Total</th><th>Periode</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            <div class="anggota-laporan__target-records">
                         @forelse($kategori['rows'] ?? [] as $row)
-                            <tr>
-                                <td>{{ $row['no'] ?? '-' }}</td>
-                                <td class="fw-semibold">{{ $row['sub_kategori'] ?? '-' }}</td>
-                                <td>{{ $row['keterangan'] ?? '-' }}</td>
-                                <td>{{ $row['target_tw1'] ?? 0 }}</td><td>{{ $row['target_tw2'] ?? 0 }}</td><td>{{ $row['target_tw3'] ?? 0 }}</td><td>{{ $row['target_tw4'] ?? 0 }}</td>
-                                <td>{{ $row['target_total_tahunan'] ?? 0 }}</td><td>{{ $row['target_periode'] ?? 0 }}</td>
-                                <td>{{ $row['realisasi_tw1'] ?? 0 }}</td><td>{{ $row['realisasi_tw2'] ?? 0 }}</td><td>{{ $row['realisasi_tw3'] ?? 0 }}</td><td>{{ $row['realisasi_tw4'] ?? 0 }}</td>
-                                <td>{{ $row['realisasi_total_tahunan'] ?? 0 }}</td><td class="text-success fw-semibold">{{ $row['realisasi_periode'] ?? 0 }}</td>
-                                <td class="text-warning fw-semibold">{{ $row['sisa'] ?? 0 }}</td>
-                                <td>{{ $row['persentase'] ?? 0 }}%</td>
-                                <td><span class="status-badge {{ $statusClass($row['status'] ?? '') }}">{{ $row['status'] ?? '-' }}</span></td>
-                            </tr>
+                            @php $rowProgress=min(max((float)($row['persentase']??0),0),100); @endphp
+                            <article class="anggota-laporan__target-record"><header><div><span>{{ $row['no']??'-' }}</span><h6>{{ $row['sub_kategori']??'-' }}</h6><p>{{ $row['keterangan']??'-' }}</p></div><span class="status-badge {{ $statusClass($row['status']??'') }}">{{ $row['status']??'-' }}</span></header><dl><div><dt>Target tahunan</dt><dd>{{ $row['target_total_tahunan']??0 }}</dd></div><div><dt>Target periode</dt><dd>{{ $row['target_periode']??0 }}</dd></div><div><dt>Realisasi tahunan</dt><dd>{{ $row['realisasi_total_tahunan']??0 }}</dd></div><div><dt>Realisasi periode</dt><dd>{{ $row['realisasi_periode']??0 }}</dd></div><div><dt>Sisa</dt><dd>{{ $row['sisa']??0 }}</dd></div><div><dt>Progress</dt><dd>{{ $row['persentase']??0 }}%</dd></div></dl><div class="anggota-laporan__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $rowProgress }}" aria-label="Progress {{ $row['sub_kategori']??'target' }} {{ $row['persentase']??0 }} persen"><span style="width:{{ $rowProgress }}%"></span></div><table class="anggota-laporan__period-table"><thead><tr><th scope="col">Periode</th><th scope="col">Target</th><th scope="col">Realisasi</th><th scope="col">Tenggat</th></tr></thead><tbody>@for($tw=1;$tw<=4;$tw++)<tr><th scope="row">TW{{ $tw }}</th><td>{{ $row['target_tw'.$tw]??0 }}</td><td>{{ $row['realisasi_tw'.$tw]??0 }}</td><td>{{ $row['tanggal_mulai_tw'.$tw]??'-' }} — {{ $row['tanggal_selesai_tw'.$tw]??'-' }}</td></tr>@endfor</tbody></table></article>
                         @empty
-                            <tr><td colspan="18" class="empty-row">Belum ada target KM pada kategori ini.</td></tr>
+                            <div class="empty-row">Belum ada target KM pada kategori ini.</div>
                         @endforelse
-                    </tbody>
-                </table>
             </div>
-
-            @if(!empty($kategori['rows']) && count($kategori['rows']) > 0)
-                <div class="p-3 border-top">
-                    <div class="fw-bold small mb-2">Tenggat Penyelesaian per Triwulan</div>
-                    <div class="table-responsive">
-                        <table class="table report-table align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Sub Kategori / Jenis KM</th>
-                                    <th>TW1</th>
-                                    <th>TW2</th>
-                                    <th>TW3</th>
-                                    <th>TW4</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($kategori['rows'] as $row)
-                                    <tr>
-                                        <td>{{ $row['no'] ?? '-' }}</td>
-                                        <td class="fw-semibold">{{ $row['sub_kategori'] ?? '-' }}</td>
-                                        @for($tw = 1; $tw <= 4; $tw++)
-                                            @php
-                                                $mulai = $row['tanggal_mulai_tw' . $tw] ?? '-';
-                                                $selesai = $row['tanggal_selesai_tw' . $tw] ?? '-';
-                                            @endphp
-                                            <td>
-                                                @if($mulai !== '-' || $selesai !== '-')
-                                                    <span class="deadline-chip"><i class="bi bi-calendar-event"></i> {{ $mulai }} — {{ $selesai }}</span>
-                                                @else
-                                                    <span class="text-muted">-</span>
-                                                @endif
-                                            </td>
-                                        @endfor
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            @endif
         </div>
     @endforeach
 </div>

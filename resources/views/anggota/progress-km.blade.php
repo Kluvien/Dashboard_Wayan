@@ -98,6 +98,7 @@
     .anggota-progress__bar { height: 6px; margin-top: 9px; overflow: hidden; border-radius: 999px; background: #E2E8F0; }
     .anggota-progress__bar-fill { height: 100%; background: #2563EB; }
     @media (max-width: 767.98px) { .anggota-progress__header { flex-direction: column; } .anggota-progress__metrics { grid-template-columns: repeat(2, 1fr); } }
+    .anggota-progress__records{border-top:1px solid #D5DCE5}.anggota-progress__record{padding:14px 20px 18px;border-bottom:1px solid #E5EAF0}.anggota-progress__record header{display:flex;justify-content:space-between;gap:16px}.anggota-progress__record h3{margin:2px 0;color:#1F2937;font-size:16px}.anggota-progress__record header p{margin:0;color:#5B6472;font-size:14px}.anggota-progress__record dl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:12px 0}.anggota-progress__record dt{color:#5B6472;font-size:13px}.anggota-progress__record dd{margin:2px 0 0;color:#1F2937;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}.anggota-progress__record-bar{height:6px;overflow:hidden;border-radius:999px;background:#E5EAF0}.anggota-progress__record-bar span{display:block;height:100%;background:#2457A6}.anggota-progress__record-footer{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:12px;color:#374151;font-size:14px}@media(max-width:640px){.anggota-progress__record header,.anggota-progress__record-footer{flex-direction:column;align-items:flex-start}.anggota-progress__record dl{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 
 <section class="anggota-progress__overview mb-4" aria-labelledby="anggota-progress-title">
@@ -187,25 +188,7 @@
         </a>
     </div>
 
-    <div class="table-responsive">
-        <table class="table align-middle mb-0 km-table">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Tahun</th>
-                    <th>Kategori KM</th>
-                    <th>Sub Kategori</th>
-                    <th>Target</th>
-                    <th>Accepted</th>
-                    <th>Sisa</th>
-                    <th>Progress</th>
-                    <th>Status Terakhir</th>
-                    <th>Aktivitas Terakhir</th>
-                    <th>Bukti</th>
-                </tr>
-            </thead>
-
-            <tbody>
+    <div class="anggota-progress__records">
                 @forelse($daftarProgressKm as $index => $item)
                 @php
                 $statusClass = match($item['status_capaian']) {
@@ -218,34 +201,17 @@
                 };
                 @endphp
 
-                <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ $item['tahun'] }}</td>
-                    <td class="fw-bold">{{ $item['kategori'] }}</td>
-                    <td>{{ $item['sub_kategori'] }}</td>
-                    <td>{{ $item['target'] }}</td>
-                    <td>{{ $item['realisasi'] }}</td>
-                    <td>{{ $item['sisa'] }}</td>
-                    <td style="min-width: 140px;">
-                        <div class="progress-soft mb-1">
-                            <div class="progress-soft-fill" style="width: {{ $item['persentase'] }}%;"></div>
-                        </div>
-                        <span class="small fw-bold">{{ $item['persentase'] }}%</span>
-                    </td>
-                    <td>
-                        <span class="status-badge {{ $statusClass }}">
-                            {{ $item['status_capaian'] }}
-                        </span>
-                    </td>
-                    <td>
-                        {{ $item['judul_terakhir'] }}
+                <article class="anggota-progress__record">
+                    <header><div><span>{{ $index + 1 }} · {{ $item['tahun'] }}</span><h3>{{ $item['kategori'] }}</h3><p>{{ $item['sub_kategori'] }}</p></div><span class="status-badge {{ $statusClass }}">{{ $item['status_capaian'] }}</span></header>
+                    <dl><div><dt>Target</dt><dd>{{ $item['target'] }}</dd></div><div><dt>Realisasi</dt><dd>{{ $item['realisasi'] }}</dd></div><div><dt>Sisa</dt><dd>{{ $item['sisa'] }}</dd></div><div><dt>Progress</dt><dd>{{ $item['persentase'] }}%</dd></div></dl>
+                    <div class="anggota-progress__record-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ min($item['persentase'],100) }}" aria-label="Progress {{ $item['kategori'] }} {{ $item['persentase'] }} persen"><span style="width:{{ min($item['persentase'],100) }}%"></span></div>
+                    <div class="anggota-progress__record-footer"><div><strong>{{ $item['judul_terakhir'] }}</strong>
                         @if($item['total_aktivitas'] > 0)
                         <div class="text-muted small">
                             {{ $item['total_aktivitas'] }} aktivitas diinput
                         </div>
                         @endif
-                    </td>
-                    <td>
+                    </div><div>
                         @if(!empty($item['bukti_pdf_path']) || !empty($item['bukti_file_path']))
                         <a href="/bukti-km/{{ $item['id_aktivitas_terakhir'] }}/download" class="btn btn-sm btn-outline-primary">
                             <i class="bi bi-download me-1"></i> Download
@@ -257,17 +223,11 @@
                         @else
                         <span class="text-muted">-</span>
                         @endif
-                    </td>
-                </tr>
+                    </div></div>
+                </article>
                 @empty
-                <tr>
-                    <td colspan="11" class="text-center text-muted py-4">
-                        Belum ada KM yang ditugaskan kepada Anda pada tahun {{ $tahun }}.
-                    </td>
-                </tr>
+                <div class="text-center text-muted py-4">Belum ada KM yang ditugaskan kepada Anda pada tahun {{ $tahun }}.</div>
                 @endforelse
-            </tbody>
-        </table>
     </div>
 </div>
 @endsection
