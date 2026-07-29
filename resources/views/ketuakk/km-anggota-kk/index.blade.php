@@ -87,7 +87,7 @@
     }
 
     .km-table {
-        min-width: 1250px;
+        width: 100%;
     }
 
     table.ketuakk-member-km__table {
@@ -245,72 +245,6 @@
         font-weight: 500 !important;
         line-height: 1.5;
         text-align: center;
-    }
-
-    .table-scroll-container {
-        overflow-x: auto;
-        overflow-y: hidden;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-
-    .table-scroll-container::-webkit-scrollbar {
-        display: none;
-    }
-
-    .sticky-col {
-        position: sticky;
-        left: 0;
-        z-index: 2;
-    }
-
-    .sticky-col-2 {
-        position: sticky;
-        left: 60px;
-        z-index: 2;
-    }
-
-    .ketuakk-member-km__table thead .sticky-col,
-    .ketuakk-member-km__table thead .sticky-col-2 {
-        z-index: 4;
-        background: #F8FAFC !important;
-    }
-
-    .ketuakk-member-km__table tbody .sticky-col,
-    .ketuakk-member-km__table tbody .sticky-col-2 {
-        background: #FFFFFF;
-    }
-
-    .ketuakk-member-km__table tbody tr:hover .sticky-col,
-    .ketuakk-member-km__table tbody tr:hover .sticky-col-2 {
-        background: #F8FAFC;
-    }
-
-    .floating-table-scroll {
-        position: fixed;
-        left: 320px;
-        right: 32px;
-        bottom: 16px;
-        height: 18px;
-        overflow-x: auto;
-        overflow-y: hidden;
-        background: #ffffff;
-        border: 1px solid #E5E7EB;
-        border-radius: 999px;
-        z-index: 999;
-        display: none;
-        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
-    }
-
-    .floating-table-scroll-inner {
-        height: 1px;
-    }
-
-    @media (max-width: 992px) {
-        .floating-table-scroll {
-            left: 16px;
-            right: 16px;
-        }
     }
 
     @media (max-width: 575.98px) {

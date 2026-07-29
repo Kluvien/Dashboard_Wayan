@@ -322,7 +322,7 @@
     }
 
     table.ketuakk-lab-monitoring__table {
-        min-width: 1780px;
+        width: 100%;
         width: 100%;
         margin: 0;
         border: 0 !important;
@@ -481,84 +481,6 @@
         text-align: center;
     }
 
-    .sticky-col-no,
-    .sticky-col-lab,
-    .sticky-col-anggota,
-    .sticky-col-data {
-        position: sticky;
-        z-index: 12;
-        background: #FFFFFF !important;
-    }
-
-    .sticky-col-no {
-        left: 0;
-        width: 58px;
-        min-width: 58px;
-        max-width: 58px;
-    }
-
-    .sticky-col-lab {
-        left: 58px;
-        width: 190px;
-        min-width: 190px;
-        max-width: 190px;
-    }
-
-    .sticky-col-anggota {
-        left: 248px;
-        width: 92px;
-        min-width: 92px;
-        max-width: 92px;
-    }
-
-    .sticky-col-data {
-        left: 340px;
-        width: 110px;
-        min-width: 110px;
-        max-width: 110px;
-        border-right: 1px solid #CBD5E1 !important;
-    }
-
-    .ketuakk-lab-monitoring__table thead .sticky-col-no,
-    .ketuakk-lab-monitoring__table thead .sticky-col-lab,
-    .ketuakk-lab-monitoring__table thead .sticky-col-anggota,
-    .ketuakk-lab-monitoring__table thead .sticky-col-data {
-        z-index: 50;
-        background: #F8FAFC !important;
-    }
-
-    .ketuakk-lab-monitoring__table tbody .sticky-col-no,
-    .ketuakk-lab-monitoring__table tbody .sticky-col-lab,
-    .ketuakk-lab-monitoring__table tbody .sticky-col-anggota,
-    .ketuakk-lab-monitoring__table tbody .sticky-col-data {
-        background: #FFFFFF !important;
-    }
-
-    .ketuakk-lab-monitoring__table tbody tr:hover .sticky-col-no,
-    .ketuakk-lab-monitoring__table tbody tr:hover .sticky-col-lab,
-    .ketuakk-lab-monitoring__table tbody tr:hover .sticky-col-anggota,
-    .ketuakk-lab-monitoring__table tbody tr:hover .sticky-col-data {
-        background: #F8FAFC !important;
-    }
-
-    .floating-table-scroll {
-        position: fixed;
-        left: 320px;
-        right: 32px;
-        bottom: 16px;
-        height: 18px;
-        overflow-x: auto;
-        overflow-y: hidden;
-        background: #FFFFFF;
-        border: 1px solid #E5E7EB;
-        border-radius: 999px;
-        z-index: 999;
-        display: none;
-        box-shadow: 0 8px 24px rgba(15, 23, 42, .12);
-    }
-
-    .floating-table-scroll-inner { height: 1px; }
-
     @media (max-width: 1199.98px) {
         .ketuakk-lab-monitoring__metrics {
             grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -598,10 +520,38 @@
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
-        .floating-table-scroll {
-            left: 16px;
-            right: 16px;
-        }
+    }
+    .ketuakk-lab-monitoring__records { border-top: 1px solid #D5DCE5; }
+    .ketuakk-lab-monitoring__record { border-bottom: 1px solid #E5EAF0; background: #fff; }
+    .ketuakk-lab-monitoring__record-summary { display: grid; grid-template-columns: minmax(220px, 1.2fr) auto minmax(120px, .7fr) auto; gap: 20px; align-items: center; padding: 16px 22px; cursor: pointer; list-style: none; }
+    .ketuakk-lab-monitoring__record-summary::-webkit-details-marker { display: none; }
+    .ketuakk-lab-monitoring__record-summary:focus-visible { outline: 3px solid rgba(36,87,166,.22); outline-offset: -3px; }
+    .ketuakk-lab-monitoring__record-identity { display: flex; gap: 12px; align-items: center; min-width: 0; }
+    .ketuakk-lab-monitoring__record-identity strong { display: block; color: #1F2937; font-size: 15px; line-height: 1.45; }
+    .ketuakk-lab-monitoring__record-identity span:not(.ketuakk-lab-monitoring__record-index) { display: block; color: #5B6472; font-size: 13px; }
+    .ketuakk-lab-monitoring__record-index { color: #5B6472; font-size: 13px; font-weight: 700; }
+    .ketuakk-lab-monitoring__record-metrics { display: flex; gap: 20px; margin: 0; }
+    .ketuakk-lab-monitoring__record-metrics dt { color: #5B6472; font-size: 13px; }
+    .ketuakk-lab-monitoring__record-metrics dd { margin: 2px 0 0; color: #1F2937; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .ketuakk-lab-monitoring__record-track { height: 6px; overflow: hidden; border-radius: 999px; background: #E5EAF0; }
+    .ketuakk-lab-monitoring__record-track span { display: block; height: 100%; background: #2457A6; }
+    .ketuakk-lab-monitoring__category-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; padding: 0 22px 22px; }
+    .ketuakk-lab-monitoring__category { min-width: 0; border-top: 1px solid #D5DCE5; }
+    .ketuakk-lab-monitoring__category h3 { margin: 0; padding: 12px 0 8px; color: #1F2937; font-size: 15px; font-weight: 700; }
+    .ketuakk-lab-monitoring__period-table { width: 100%; border-collapse: collapse; color: #374151; font-size: 14px; }
+    .ketuakk-lab-monitoring__period-table th,
+    .ketuakk-lab-monitoring__period-table td { padding: 9px 12px; border-bottom: 1px solid #E5EAF0; }
+    .ketuakk-lab-monitoring__period-table thead th { background: #EEF2F6; font-size: 13px; font-weight: 700; text-align: left; }
+    .ketuakk-lab-monitoring__period-table td { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+    @media (max-width: 900px) {
+        .ketuakk-lab-monitoring__record-summary { grid-template-columns: 1fr auto; }
+        .ketuakk-lab-monitoring__record-progress { grid-column: 1 / -1; }
+        .ketuakk-lab-monitoring__category-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+        .ketuakk-lab-monitoring__record-summary { grid-template-columns: 1fr; padding: 16px; }
+        .ketuakk-lab-monitoring__record-metrics { flex-wrap: wrap; }
+        .ketuakk-lab-monitoring__category-grid { padding: 0 16px 18px; }
     }
 </style>
 
@@ -779,10 +729,6 @@
         </section>
     </section>
 
-    @php
-        $jumlahKolomMonitoring = 6 + (count($kategoriDefault) * count($periodeColumns));
-    @endphp
-
     <section
         class="ketuakk-lab-monitoring__table-section"
         aria-labelledby="ketuakk-lab-monitoring-table-title">
@@ -797,178 +743,57 @@
             </div>
         </header>
 
-        <div class="table-scroll-sync">
-            <div class="table-responsive table-scroll-container ketuakk-lab-monitoring__table-scroll">
-                <table class="table align-middle ketuakk-lab-monitoring__table">
-                    <thead>
-                        <tr>
-                            <th scope="col" rowspan="2" class="sticky-col-no ketuakk-lab-monitoring__cell--index">No</th>
-                            <th scope="col" rowspan="2" class="sticky-col-lab ketuakk-lab-monitoring__cell--identity">Lab Riset</th>
-                            <th scope="col" rowspan="2" class="sticky-col-anggota ketuakk-lab-monitoring__cell--member-count">Anggota</th>
-                            <th scope="col" rowspan="2" class="sticky-col-data ketuakk-lab-monitoring__cell--data-type">Data</th>
-
-                            @foreach($kategoriDefault as $kategori)
-                                <th
-                                    scope="colgroup"
-                                    colspan="{{ count($periodeColumns) }}"
-                                    class="ketuakk-lab-monitoring__group-header">
-                                    {{ $kategori }}
-                                </th>
-                            @endforeach
-
-                            <th scope="col" rowspan="2" class="ketuakk-lab-monitoring__cell--number ketuakk-lab-monitoring__cell--total">Total</th>
-                            <th scope="col" rowspan="2" class="ketuakk-lab-monitoring__cell--action">Aksi</th>
-                        </tr>
-
-                        <tr>
-                            @foreach($kategoriDefault as $kategori)
-                                @foreach($periodeColumns as $key => $label)
-                                    <th
-                                        scope="col"
-                                        class="ketuakk-lab-monitoring__cell--number {{ $loop->first ? 'ketuakk-lab-monitoring__group-start' : '' }} {{ $loop->last ? 'ketuakk-lab-monitoring__group-end' : '' }}">
-                                        {{ $label }}
-                                    </th>
-                                @endforeach
-                            @endforeach
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @forelse($monitoringLabs as $index => $lab)
-                            <tr>
-                                <td rowspan="2" class="sticky-col-no ketuakk-lab-monitoring__cell--index">
-                                    {{ $index + 1 }}
-                                </td>
-
-                                <td rowspan="2" class="sticky-col-lab ketuakk-lab-monitoring__cell--identity">
-                                    <div class="ketuakk-lab-monitoring__lab-name">
-                                        {{ $lab['nama_lab'] ?? '-' }}
-                                    </div>
-                                    <div class="ketuakk-lab-monitoring__lab-progress">
-                                        Progress {{ $lab['progress'] ?? 0 }}%
-                                    </div>
-                                </td>
-
-                                <td rowspan="2" class="sticky-col-anggota ketuakk-lab-monitoring__cell--member-count">
-                                    {{ $lab['jumlah_anggota'] ?? 0 }}
-                                </td>
-
-                                <th
-                                    scope="row"
-                                    class="sticky-col-data ketuakk-lab-monitoring__cell--data-type">
-                                    Target
-                                </th>
-
-                                @foreach($kategoriDefault as $kategori)
-                                    @foreach($periodeColumns as $key => $label)
-                                        <td class="ketuakk-lab-monitoring__cell--number {{ $loop->first ? 'ketuakk-lab-monitoring__group-start' : '' }} {{ $loop->last ? 'ketuakk-lab-monitoring__group-end' : '' }}">
-                                            {{ $lab['data'][$kategori]['target'][$key] ?? 0 }}
-                                        </td>
-                                    @endforeach
-                                @endforeach
-
-                                <td class="ketuakk-lab-monitoring__cell--number ketuakk-lab-monitoring__cell--total">
-                                    {{ $lab['total_target'] ?? 0 }}
-                                </td>
-
-                                <td rowspan="2" class="ketuakk-lab-monitoring__cell--action">
-                                    <a
-                                        href="/ketuakk/monitoring-lab-riset/{{ $lab['id_lab'] }}?tahun={{ $tahun }}&periode={{ $periode }}"
-                                        class="btn btn-sm btn-outline-primary ketuakk-lab-monitoring__detail">
-                                        Detail
-                                    </a>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th
-                                    scope="row"
-                                    class="sticky-col-data ketuakk-lab-monitoring__cell--data-type ketuakk-lab-monitoring__cell--data-type-realisasi">
-                                    Realisasi
-                                </th>
-
-                                @foreach($kategoriDefault as $kategori)
-                                    @foreach($periodeColumns as $key => $label)
-                                        <td class="ketuakk-lab-monitoring__cell--number {{ $loop->first ? 'ketuakk-lab-monitoring__group-start' : '' }} {{ $loop->last ? 'ketuakk-lab-monitoring__group-end' : '' }}">
-                                            {{ $lab['data'][$kategori]['realisasi'][$key] ?? 0 }}
-                                        </td>
-                                    @endforeach
-                                @endforeach
-
-                                <td class="ketuakk-lab-monitoring__cell--number ketuakk-lab-monitoring__cell--total">
-                                    {{ $lab['total_realisasi'] ?? 0 }}
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td
-                                    colspan="{{ $jumlahKolomMonitoring }}"
-                                    class="ketuakk-lab-monitoring__empty">
-                                    Belum ada data monitoring lab riset.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="floating-table-scroll" id="floatingMonitoringLabScroll">
-                <div class="floating-table-scroll-inner"></div>
-            </div>
+        <div class="ketuakk-lab-monitoring__records">
+            @forelse($monitoringLabs as $index => $lab)
+                @php
+                    $labProgress = (float) ($lab['progress'] ?? 0);
+                    $labProgressVisual = min(max($labProgress, 0), 100);
+                @endphp
+                <details class="ketuakk-lab-monitoring__record" @if($loop->first) open @endif>
+                    <summary class="ketuakk-lab-monitoring__record-summary">
+                        <div class="ketuakk-lab-monitoring__record-identity">
+                            <span class="ketuakk-lab-monitoring__record-index">{{ $index + 1 }}</span>
+                            <div>
+                                <strong>{{ $lab['nama_lab'] ?? '-' }}</strong>
+                                <span>{{ $lab['jumlah_anggota'] ?? 0 }} anggota</span>
+                            </div>
+                        </div>
+                        <dl class="ketuakk-lab-monitoring__record-metrics">
+                            <div><dt>Target</dt><dd>{{ $lab['total_target'] ?? 0 }}</dd></div>
+                            <div><dt>Realisasi</dt><dd>{{ $lab['total_realisasi'] ?? 0 }}</dd></div>
+                            <div><dt>Progress</dt><dd>{{ $labProgress }}%</dd></div>
+                        </dl>
+                        <div class="ketuakk-lab-monitoring__record-progress">
+                            <div class="ketuakk-lab-monitoring__record-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $labProgressVisual }}" aria-label="Progress {{ $lab['nama_lab'] ?? 'lab riset' }} {{ $labProgress }} persen">
+                                <span style="width: {{ $labProgressVisual }}%"></span>
+                            </div>
+                        </div>
+                        <a href="/ketuakk/monitoring-lab-riset/{{ $lab['id_lab'] }}?tahun={{ $tahun }}&periode={{ $periode }}" class="ketuakk-lab-monitoring__detail" onclick="event.stopPropagation()">Detail</a>
+                    </summary>
+                    <div class="ketuakk-lab-monitoring__category-grid">
+                        @foreach($kategoriDefault as $kategori)
+                            <section class="ketuakk-lab-monitoring__category">
+                                <h3>{{ $kategori }}</h3>
+                                <table class="ketuakk-lab-monitoring__period-table">
+                                    <thead><tr><th scope="col">Periode</th><th scope="col">Target</th><th scope="col">Realisasi</th></tr></thead>
+                                    <tbody>
+                                        @foreach($periodeColumns as $key => $label)
+                                            <tr>
+                                                <th scope="row">{{ $label }}</th>
+                                                <td>{{ $lab['data'][$kategori]['target'][$key] ?? 0 }}</td>
+                                                <td>{{ $lab['data'][$kategori]['realisasi'][$key] ?? 0 }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </section>
+                        @endforeach
+                    </div>
+                </details>
+            @empty
+                <div class="ketuakk-lab-monitoring__empty">Belum ada data monitoring lab riset.</div>
+            @endforelse
         </div>
     </section>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const wrapper = document.querySelector('.table-scroll-sync');
-        const tableScroll = document.querySelector('.table-scroll-container');
-        const floatingScroll = document.getElementById('floatingMonitoringLabScroll');
-        const floatingInner = floatingScroll ? floatingScroll.querySelector('.floating-table-scroll-inner') : null;
-
-        if (!wrapper || !tableScroll || !floatingScroll || !floatingInner) {
-            return;
-        }
-
-        let isSyncing = false;
-
-        function updateWidth() {
-            floatingInner.style.width = tableScroll.scrollWidth + 'px';
-        }
-
-        function syncScroll(source, target) {
-            if (isSyncing) return;
-
-            isSyncing = true;
-            target.scrollLeft = source.scrollLeft;
-            isSyncing = false;
-        }
-
-        function toggleFloatingScroll() {
-            const rect = wrapper.getBoundingClientRect();
-            const isTableVisible = rect.top < window.innerHeight && rect.bottom > 120;
-            const needHorizontalScroll = tableScroll.scrollWidth > tableScroll.clientWidth;
-
-            floatingScroll.style.display = isTableVisible && needHorizontalScroll ? 'block' : 'none';
-        }
-
-        updateWidth();
-        toggleFloatingScroll();
-
-        tableScroll.addEventListener('scroll', function() {
-            syncScroll(tableScroll, floatingScroll);
-        });
-
-        floatingScroll.addEventListener('scroll', function() {
-            syncScroll(floatingScroll, tableScroll);
-        });
-
-        window.addEventListener('resize', function() {
-            updateWidth();
-            toggleFloatingScroll();
-        });
-
-        window.addEventListener('scroll', toggleFloatingScroll);
-    });
-</script>
 @endsection

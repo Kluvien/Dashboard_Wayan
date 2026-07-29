@@ -117,7 +117,7 @@
 
     table.ketuakk-targets__table {
         width: 100%;
-        min-width: 1480px;
+        width: 100%;
         margin: 0;
         border: 0 !important;
         border-radius: 0;
@@ -350,6 +350,38 @@
             justify-content: flex-start;
         }
     }
+    .ketuakk-targets__records { border-top: 1px solid #D5DCE5; }
+    .ketuakk-targets__record + .ketuakk-targets__record { border-top: 1px solid #E5EAF0; }
+    .ketuakk-targets__record-header { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 20px; align-items: center; padding: 16px 22px; background: #F3F6F9; }
+    .ketuakk-targets__record-identity { display: flex; gap: 12px; align-items: flex-start; min-width: 0; }
+    .ketuakk-targets__record-index { display: inline-grid; place-items: center; min-width: 30px; height: 30px; border: 1px solid #D5DCE5; border-radius: 8px; color: #5B6472; font-size: 13px; font-weight: 700; }
+    .ketuakk-targets__record-title { margin: 0; color: #1F2937; font-size: 17px; font-weight: 700; line-height: 1.4; }
+    .ketuakk-targets__record-subtitle { margin: 3px 0 0; color: #5B6472; font-size: 14px; line-height: 1.5; }
+    .ketuakk-targets__record-metrics { display: flex; gap: 20px; margin: 0; }
+    .ketuakk-targets__record-metrics div { min-width: 84px; }
+    .ketuakk-targets__record-metrics dt { color: #5B6472; font-size: 13px; font-weight: 600; }
+    .ketuakk-targets__record-metrics dd { margin: 2px 0 0; color: #1F2937; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .ketuakk-targets__record-body { display: grid; grid-template-columns: minmax(180px, .7fr) minmax(480px, 1.5fr); gap: 22px; padding: 16px 22px 20px; }
+    .ketuakk-targets__record-note span { color: #5B6472; font-size: 13px; font-weight: 700; }
+    .ketuakk-targets__record-note p { margin: 5px 0 0; color: #374151; font-size: 14px; line-height: 1.55; overflow-wrap: anywhere; }
+    .ketuakk-targets__period-table { width: 100%; border-collapse: collapse; color: #374151; font-size: 14px; }
+    .ketuakk-targets__period-table th,
+    .ketuakk-targets__period-table td { padding: 10px 12px; border-bottom: 1px solid #E5EAF0; vertical-align: middle; }
+    .ketuakk-targets__period-table thead th { background: #EEF2F6; color: #374151; font-size: 13px; font-weight: 700; text-align: left; }
+    .ketuakk-targets__period-table tbody th { color: #1F2937; font-weight: 600; }
+    .ketuakk-targets__period-table td:nth-child(2) { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .ketuakk-targets__period-table td:nth-child(n+3) { font-variant-numeric: tabular-nums; white-space: nowrap; }
+    @media (max-width: 900px) {
+        .ketuakk-targets__record-header { grid-template-columns: 1fr; }
+        .ketuakk-targets__record-body { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+        .ketuakk-targets__record-header,
+        .ketuakk-targets__record-body { padding-left: 16px; padding-right: 16px; }
+        .ketuakk-targets__record-metrics { flex-wrap: wrap; }
+        .ketuakk-targets__period-table th,
+        .ketuakk-targets__period-table td { padding: 9px 7px; }
+    }
 </style>
 
 <section class="ketuakk-targets" aria-labelledby="targetKmTitle">
@@ -398,97 +430,22 @@
         </div>
     </header>
 
-    <div class="table-responsive ketuakk-targets__scroll">
-        <table class="table align-middle mb-0 ketuakk-targets__table">
-            <thead>
-                <tr>
-                    <th rowspan="2" class="ketuakk-targets__cell--index">No</th>
-                    <th rowspan="2" class="ketuakk-targets__cell--year">Tahun</th>
-                    <th rowspan="2">Kategori KM</th>
-                    <th rowspan="2">Jenis KM / Sub Kategori</th>
-                    <th rowspan="2">Keterangan</th>
-
-                    <th colspan="4" class="target-group-header ketuakk-targets__group-header">
-                        Target KM per Triwulan
-                    </th>
-
-                    <th colspan="4" class="due-group-header ketuakk-targets__group-header">
-                        Tenggat per Triwulan
-                    </th>
-
-                    <th rowspan="2" class="ketuakk-targets__cell--number">Total</th>
-                    <th rowspan="2" class="ketuakk-targets__cell--action">Aksi</th>
-                </tr>
-
-                <tr>
-                    <th class="target-start ketuakk-targets__group-start ketuakk-targets__cell--number">TW 1</th>
-                    <th class="ketuakk-targets__cell--number">TW 2</th>
-                    <th class="ketuakk-targets__cell--number">TW 3</th>
-                    <th class="ketuakk-targets__cell--number">TW 4</th>
-
-                    <th class="text-center due-start ketuakk-targets__group-start">TW 1</th>
-                    <th class="text-center">TW 2</th>
-                    <th class="text-center">TW 3</th>
-                    <th class="text-center">TW 4</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @forelse($targets as $index => $target)
-                    <tr>
-                        <td class="ketuakk-targets__cell--index">{{ $index + 1 }}</td>
-
-                        <td class="ketuakk-targets__cell--year">{{ $target->tahun_km }}</td>
-
-                        <td class="ketuakk-targets__cell--category">
-                            {{ $target->kategori_km }}
-                        </td>
-
-                        <td class="ketuakk-targets__cell--subcategory">{{ $target->indikator }}</td>
-
-                        <td class="ketuakk-targets__cell--description">
-                            {{ $target->keterangan ?? '-' }}
-                        </td>
-
-                        <td class="target-start ketuakk-targets__group-start ketuakk-targets__cell--number">
-                            {{ $target->triwulan_1 }}
-                        </td>
-
-                        <td class="ketuakk-targets__cell--number">
-                            {{ $target->triwulan_2 }}
-                        </td>
-
-                        <td class="ketuakk-targets__cell--number">
-                            {{ $target->triwulan_3 }}
-                        </td>
-
-                        <td class="ketuakk-targets__cell--number">
-                            {{ $target->triwulan_4 }}
-                        </td>
-
-                        @foreach([1, 2, 3, 4] as $tw)
-                            @php
-                                $tanggalSelesai = $target->{'tanggal_selesai_tw' . $tw} ?? null;
-                            @endphp
-
-                            <td class="ketuakk-targets__cell--date {{ $tw === 1 ? 'due-start ketuakk-targets__group-start' : '' }}">
-                                @if(!empty($tanggalSelesai))
-                                    <span class="ketuakk-targets__date">
-                                        <i class="bi bi-calendar-event"></i>
-                                        {{ $formatDueDate($tanggalSelesai) }}
-                                    </span>
-                                @else
-                                    <span class="ketuakk-targets__date--empty">-</span>
-                                @endif
-                            </td>
-                        @endforeach
-
-                        <td class="ketuakk-targets__cell--number">
-                            {{ $target->target }}
-                        </td>
-
-                        <td class="ketuakk-targets__cell--action">
-                            <div class="ketuakk-targets__row-actions">
+    <div class="ketuakk-targets__records">
+        @forelse($targets as $index => $target)
+            <article class="ketuakk-targets__record">
+                <header class="ketuakk-targets__record-header">
+                    <div class="ketuakk-targets__record-identity">
+                        <span class="ketuakk-targets__record-index">{{ $index + 1 }}</span>
+                        <div>
+                            <h2 class="ketuakk-targets__record-title">{{ $target->kategori_km }}</h2>
+                            <p class="ketuakk-targets__record-subtitle">{{ $target->indikator }}</p>
+                        </div>
+                    </div>
+                    <dl class="ketuakk-targets__record-metrics">
+                        <div><dt>Tahun</dt><dd>{{ $target->tahun_km }}</dd></div>
+                        <div><dt>Total target</dt><dd>{{ $target->target }}</dd></div>
+                    </dl>
+                    <div class="ketuakk-targets__row-actions">
                                 <a
                                     href="/ketuakk/target-km/{{ $target->id_target }}/edit"
                                     class="ketuakk-targets__action ketuakk-targets__action--edit">
@@ -510,18 +467,42 @@
                                         Hapus
                                     </button>
                                 </form>
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="15" class="ketuakk-targets__empty">
-                            Belum ada data target KM untuk tahun {{ $tahun }}.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                    </div>
+                </header>
+                <div class="ketuakk-targets__record-body">
+                    <div class="ketuakk-targets__record-note">
+                        <span>Keterangan</span>
+                        <p>{{ $target->keterangan ?? '-' }}</p>
+                    </div>
+                    <table class="ketuakk-targets__period-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Triwulan</th>
+                                <th scope="col">Target</th>
+                                <th scope="col">Tanggal Mulai</th>
+                                <th scope="col">Tanggal Selesai</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach([1, 2, 3, 4] as $tw)
+                                @php
+                                    $tanggalMulai = $target->{'tanggal_mulai_tw' . $tw} ?? null;
+                                    $tanggalSelesai = $target->{'tanggal_selesai_tw' . $tw} ?? null;
+                                @endphp
+                                <tr>
+                                    <th scope="row">TW {{ $tw }}</th>
+                                    <td>{{ $target->{'triwulan_' . $tw} ?? 0 }}</td>
+                                    <td>{{ !empty($tanggalMulai) ? $formatDueDate($tanggalMulai) : '-' }}</td>
+                                    <td>{{ !empty($tanggalSelesai) ? $formatDueDate($tanggalSelesai) : '-' }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+        @empty
+            <div class="ketuakk-targets__empty">Belum ada data target KM untuk tahun {{ $tahun }}.</div>
+        @endforelse
     </div>
 </section>
 @endsection

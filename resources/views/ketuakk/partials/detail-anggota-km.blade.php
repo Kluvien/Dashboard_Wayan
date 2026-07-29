@@ -72,7 +72,7 @@
     }
 
     .monitoring-detail-table {
-        min-width: 1420px;
+        width: 100%;
     }
 
     .monitoring-detail-table th {
@@ -81,11 +81,11 @@
     }
 
     .table-detail-km {
-        min-width: 1080px;
+        width: 100%;
     }
 
     .aktivitas-table {
-        min-width: 1160px;
+        width: 100%;
     }
 
     .jad-badge {
@@ -170,6 +170,30 @@
         .detail-filter-submit {
             width: 100%;
         }
+    }
+    .ketuakk-member-detail__category-section { margin-bottom: 24px; overflow: hidden; border: 1px solid #D5DCE5; border-radius: 14px; background: #fff; padding: 20px 22px 22px; }
+    .ketuakk-member-detail__section-title { margin: 0; color: #1F2937; font-size: 18px; font-weight: 700; }
+    .ketuakk-member-detail__section-description { margin: 5px 0 18px; color: #5B6472; font-size: 14px; line-height: 1.5; }
+    .ketuakk-member-detail__category-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
+    .ketuakk-member-detail__category { min-width: 0; border-top: 1px solid #D5DCE5; }
+    .ketuakk-member-detail__category header { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 12px 0 8px; }
+    .ketuakk-member-detail__category header div { display: flex; gap: 8px; align-items: center; }
+    .ketuakk-member-detail__category h3 { margin: 0; color: #1F2937; font-size: 15px; font-weight: 700; }
+    .ketuakk-member-detail__status { color: #5B6472; font-size: 13px; font-weight: 600; }
+    .ketuakk-member-detail__category-metrics { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 8px; margin: 0 0 10px; }
+    .ketuakk-member-detail__category-metrics dt { color: #5B6472; font-size: 13px; }
+    .ketuakk-member-detail__category-metrics dd { margin: 2px 0 0; color: #1F2937; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .ketuakk-member-detail__progress { height: 6px; overflow: hidden; border-radius: 999px; background: #E5EAF0; margin-bottom: 12px; }
+    .ketuakk-member-detail__progress span { display: block; height: 100%; background: #2457A6; }
+    .ketuakk-member-detail__period-table { width: 100%; border-collapse: collapse; color: #374151; font-size: 14px; }
+    .ketuakk-member-detail__period-table th,
+    .ketuakk-member-detail__period-table td { padding: 9px 12px; border-bottom: 1px solid #E5EAF0; }
+    .ketuakk-member-detail__period-table thead th { background: #EEF2F6; font-size: 13px; font-weight: 700; text-align: left; }
+    .ketuakk-member-detail__period-table td { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+    @media (max-width: 900px) { .ketuakk-member-detail__category-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) {
+        .ketuakk-member-detail__category-section { padding: 16px; }
+        .ketuakk-member-detail__category-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
     }
 </style>
 
@@ -278,94 +302,43 @@
     </div>
 </div>
 
-<div class="card mb-4">
-    <h4 class="fw-bold mb-1">Rekap Progress per Kategori</h4>
-    <p class="text-muted mb-4">
+<section class="ketuakk-member-detail__category-section">
+    <h2 class="ketuakk-member-detail__section-title">Rekap Progress per Kategori</h2>
+    <p class="ketuakk-member-detail__section-description">
         Target dan realisasi ditampilkan per {{ $periode === 'semester' ? 'semester' : 'triwulan' }}.
         Nilai “Target Periode” dan “Realisasi Periode” mengikuti filter aktif.
     </p>
 
-    <div class="table-responsive">
-        <table class="table table-bordered align-middle mb-0 monitoring-detail-table">
-            <thead>
-                <tr>
-                    <th rowspan="2">No</th>
-                    <th rowspan="2">Kategori KM</th>
-                    <th colspan="{{ count($periodeColumns) }}">Target per {{ $periode === 'semester' ? 'Semester' : 'Triwulan' }}</th>
-                    <th colspan="{{ count($periodeColumns) }}">Realisasi Accepted per {{ $periode === 'semester' ? 'Semester' : 'Triwulan' }}</th>
-                    <th rowspan="2">Target Tahunan</th>
-                    <th rowspan="2">Target Periode</th>
-                    <th rowspan="2">Realisasi Periode</th>
-                    <th rowspan="2">Sisa</th>
-                    <th rowspan="2">Progress</th>
-                    <th rowspan="2">Status</th>
-                </tr>
-                <tr>
-                    @foreach($periodeColumns as $label)
-                        <th>{{ $label }}</th>
-                    @endforeach
-
-                    @foreach($periodeColumns as $label)
-                        <th>{{ $label }}</th>
-                    @endforeach
-                </tr>
-            </thead>
-
-            <tbody>
-                @forelse($rekap as $index => $item)
+    <div class="ketuakk-member-detail__category-grid">
+        @forelse($rekap as $index => $item)
                     @php
                         $status = $item['status'] ?? 'Belum Mulai';
                         $progress = min((int) ($item['persentase'] ?? 0), 100);
                     @endphp
-                    <tr>
-                        <td class="text-center">{{ $index + 1 }}</td>
-                        <td class="fw-bold">{{ $item['kategori'] }}</td>
-
+            <article class="ketuakk-member-detail__category">
+                <header><div><span>{{ $index + 1 }}</span><h3>{{ $item['kategori'] }}</h3></div><span class="ketuakk-member-detail__status">{{ $status }}</span></header>
+                <dl class="ketuakk-member-detail__category-metrics">
+                    <div><dt>Target tahunan</dt><dd>{{ $item['target_tahunan'] }}</dd></div>
+                    <div><dt>Target periode</dt><dd>{{ $item['target_periode'] }}</dd></div>
+                    <div><dt>Realisasi</dt><dd>{{ $item['realisasi'] }}</dd></div>
+                    <div><dt>Sisa</dt><dd>{{ $item['sisa'] }}</dd></div>
+                    <div><dt>Progress</dt><dd>{{ $progress }}%</dd></div>
+                </dl>
+                <div class="ketuakk-member-detail__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $progress }}" aria-label="Progress kategori {{ $item['kategori'] }} {{ $progress }} persen"><span style="width: {{ $progress }}%"></span></div>
+                <table class="ketuakk-member-detail__period-table">
+                    <thead><tr><th scope="col">Periode</th><th scope="col">Target</th><th scope="col">Realisasi</th></tr></thead>
+                    <tbody>
                         @foreach($periodeColumns as $key => $label)
-                            <td class="text-center text-primary fw-bold">{{ $item['target_periode_detail'][$key] ?? 0 }}</td>
+                            <tr><th scope="row">{{ $label }}</th><td>{{ $item['target_periode_detail'][$key] ?? 0 }}</td><td>{{ $item['realisasi_periode_detail'][$key] ?? 0 }}</td></tr>
                         @endforeach
-
-                        @foreach($periodeColumns as $key => $label)
-                            <td class="text-center text-success fw-bold">{{ $item['realisasi_periode_detail'][$key] ?? 0 }}</td>
-                        @endforeach
-
-                        <td class="text-center">{{ $item['target_tahunan'] }}</td>
-                        <td class="text-center fw-bold">{{ $item['target_periode'] }}</td>
-                        <td class="text-center text-success fw-bold">{{ $item['realisasi'] }}</td>
-                        <td class="text-center {{ $item['sisa'] > 0 ? 'text-warning' : 'text-success' }} fw-bold">{{ $item['sisa'] }}</td>
-
-                        <td>
-                            <div class="progress-compact">
-                                <div class="progress">
-                                    <div class="progress-bar" style="width: {{ $progress }}%;"></div>
-                                </div>
-                                <div class="small text-muted mt-1">{{ $progress }}%</div>
-                            </div>
-                        </td>
-
-                        <td class="text-center">
-                            @if($status === 'Tercapai')
-                                <span class="badge bg-success">Tercapai</span>
-                            @elseif($status === 'On Progress')
-                                <span class="badge bg-warning text-dark">On Progress</span>
-                            @elseif($status === 'Belum Ada Target')
-                                <span class="badge bg-secondary">Belum Ada Target</span>
-                            @else
-                                <span class="badge bg-danger">Belum Mulai</span>
-                            @endif
-                        </td>
-                    </tr>
+                    </tbody>
+                </table>
+            </article>
                 @empty
-                    <tr>
-                        <td colspan="{{ 8 + (count($periodeColumns) * 2) }}" class="text-center text-muted py-4">
-                            Belum ada data rekap.
-                        </td>
-                    </tr>
+                    <div class="ketuakk-member-detail__empty">Belum ada data rekap.</div>
                 @endforelse
-            </tbody>
-        </table>
     </div>
-</div>
+</section>
 
 <div class="card mb-4">
     <h4 class="fw-bold mb-1">Riwayat KM yang Diberikan</h4>

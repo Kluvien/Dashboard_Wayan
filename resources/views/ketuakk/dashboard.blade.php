@@ -237,126 +237,11 @@
         opacity: 0.94;
     }
 
-    .dashboard-grid-main {
-        display: grid;
-        grid-template-columns: 1.5fr 1fr;
-        gap: 18px;
-        margin-bottom: 18px;
-    }
-
-    .dashboard-panel-title {
-        font-size: 18px;
-        font-weight: 800;
-        margin-bottom: 4px;
-    }
-
-    .dashboard-panel-subtitle {
-        font-size: 13px;
-        color: var(--text-muted);
-        margin-bottom: 14px;
-    }
-
-    .dashboard-chart-box {
-        position: relative;
-        width: 100%;
-        height: 280px;
-    }
-
-    .progress-soft {
-        height: 10px;
-        border-radius: 999px;
-        background: #E5E7EB;
-        overflow: hidden;
-    }
-
-    .progress-soft-fill {
-        height: 100%;
-        border-radius: 999px;
-        background: var(--blue);
-    }
-
-    /* Filter periode dashboard */
-    .dashboard-filter-form {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 8px;
-        flex-wrap: wrap;
-    }
-
-    .dashboard-filter-control {
-        min-width: 132px;
-        height: 40px;
-        border: 1px solid #CBD5E1;
-        border-radius: 10px;
-        background: #FFFFFF;
-        color: #1E293B;
-        font-size: 14px;
-        font-weight: 600;
-        padding: 0 10px;
-    }
-
-    .dashboard-filter-control.small-control {
-        min-width: 122px;
-    }
-
-    .dashboard-period-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        margin-top: 8px;
-        padding: 6px 10px;
-        border: 1px solid #D7E4FF;
-        border-radius: 999px;
-        background: #EFF6FF;
-        color: #2563EB;
-        font-size: 12px;
-        font-weight: 800;
-    }
-
-    .dashboard-applied-filter-box {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        padding: 8px 11px;
-        border: 1px solid #BFDBFE;
-        border-left: 4px solid #477EF7;
-        border-radius: 12px;
-        background: linear-gradient(90deg, #EFF6FF 0%, #FFFFFF 100%);
-        color: #1D4ED8;
-        box-shadow: 0 5px 12px rgba(37, 99, 235, .07);
-        font-size: 12px;
-        font-weight: 800;
-        white-space: nowrap;
-    }
-
-    .dashboard-applied-filter-box .filter-label {
-        color: #64748B;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: .03em;
-    }
-
-    .dashboard-applied-filter-box .filter-value {
-        color: #1D4ED8;
-        font-weight: 900;
-    }
-
-    @media (max-width: 576px) {
-        .dashboard-applied-filter-box {
-            width: 100%;
-            justify-content: flex-start;
-        }
-    }
-
     @media (max-width: 1200px) {
         .dashboard-stat-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
-        .dashboard-grid-main {
-            grid-template-columns: 1fr;
-        }
     }
 
     @media (max-width: 768px) {
@@ -979,7 +864,7 @@
 
     table.ketuakk-dashboard-overview__monitoring-table {
         width: 100%;
-        min-width: 1080px;
+        width: 100%;
         margin: 0;
         border: 0 !important;
         border-radius: 0;

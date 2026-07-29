@@ -37,7 +37,7 @@
     }
 
     .lab-detail-table {
-        min-width: 1580px;
+        width: 100%;
     }
 
     .lab-detail-table th,
@@ -146,6 +146,24 @@
             width: 100%;
         }
     }
+    .ketuakk-lab-monitor-detail__records { border-top: 1px solid #D5DCE5; }
+    .ketuakk-lab-monitor-detail__record { padding: 14px 0 18px; border-bottom: 1px solid #E5EAF0; }
+    .ketuakk-lab-monitor-detail__record header { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+    .ketuakk-lab-monitor-detail__record h6 { margin: 0; color: #1F2937; font-size: 15px; font-weight: 700; }
+    .ketuakk-lab-monitor-detail__record p { margin: 3px 0 0; color: #5B6472; font-size: 14px; line-height: 1.5; }
+    .ketuakk-lab-monitor-detail__record header > span { color: #5B6472; font-size: 13px; font-weight: 600; }
+    .ketuakk-lab-monitor-detail__record dl { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 12px; margin: 12px 0; }
+    .ketuakk-lab-monitor-detail__record dt { color: #5B6472; font-size: 13px; }
+    .ketuakk-lab-monitor-detail__record dd { margin: 2px 0 0; color: #1F2937; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .ketuakk-lab-monitor-detail__progress { height: 6px; overflow: hidden; border-radius: 999px; background: #E5EAF0; margin-bottom: 12px; }
+    .ketuakk-lab-monitor-detail__progress span { display: block; height: 100%; background: #2457A6; }
+    .ketuakk-lab-monitor-detail__period-table { width: 100%; border-collapse: collapse; color: #374151; font-size: 14px; }
+    .ketuakk-lab-monitor-detail__period-table th,
+    .ketuakk-lab-monitor-detail__period-table td { padding: 9px 12px; border-bottom: 1px solid #E5EAF0; }
+    .ketuakk-lab-monitor-detail__period-table thead th { background: #EEF2F6; font-size: 13px; font-weight: 700; text-align: left; }
+    .ketuakk-lab-monitor-detail__period-table td:nth-child(2),
+    .ketuakk-lab-monitor-detail__period-table td:nth-child(3) { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+    @media (max-width: 640px) { .ketuakk-lab-monitor-detail__record dl { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 </style>
 
 <section class="ketuakk-lab-monitor-detail__overview" aria-labelledby="lab-monitor-detail-title">
@@ -277,103 +295,37 @@
                 </span>
             </div>
 
-            <div class="table-responsive">
-                <table class="table table-bordered align-middle mb-0 lab-detail-table ketuakk-lab-monitor-detail__table">
-                    <thead>
-                        <tr>
-                            <th rowspan="2">No</th>
-                            <th rowspan="2">Sub Kategori / Jenis KM</th>
-                            <th rowspan="2">Keterangan</th>
-                            <th colspan="{{ count($periodeColumns) }}">Target per Periode</th>
-                            <th colspan="{{ count($periodeColumns) }}">Realisasi Accepted</th>
-                            <th rowspan="2">Total Target</th>
-                            <th rowspan="2">Realisasi</th>
-                            <th rowspan="2">Sudah Dibagi</th>
-                            <th rowspan="2">Belum Dibagi</th>
-                            <th rowspan="2">Tenggat</th>
-                            <th rowspan="2">Status</th>
-                            <th rowspan="2">Progress</th>
-                        </tr>
-                        <tr>
-                            @foreach($periodeColumns as $label)
-                                <th>{{ $label }}</th>
-                            @endforeach
-                            @foreach($periodeColumns as $label)
-                                <th>{{ $label }}</th>
-                            @endforeach
-                        </tr>
-                    </thead>
-                    <tbody>
+            <div class="ketuakk-lab-monitor-detail__records">
                         @forelse($kategoriData as $index => $item)
                             @php
                                 $progress = min((int) ($item['persentase'] ?? 0), 100);
                                 $status = $item['status'] ?? 'Belum Mulai';
                             @endphp
-                            <tr>
-                                <td class="text-center">{{ $index + 1 }}</td>
-                                <td class="text-wrap-cell fw-bold">{{ $item['sub_kategori'] ?? '-' }}</td>
-                                <td class="text-wrap-cell">{{ $item['keterangan'] ?? '-' }}</td>
-
-                                @foreach($periodeColumns as $key => $label)
-                                    <td class="text-center">{{ $item['target_periode'][$key] ?? 0 }}</td>
-                                @endforeach
-
-                                @foreach($periodeColumns as $key => $label)
-                                    <td class="text-center text-success fw-bold">{{ $item['realisasi_periode'][$key] ?? 0 }}</td>
-                                @endforeach
-
-                                <td class="text-center fw-bold">{{ $item['total_target'] ?? 0 }}</td>
-                                <td class="text-center text-success fw-bold">{{ $item['total_realisasi'] ?? 0 }}</td>
-                                <td class="text-center text-primary fw-bold">{{ $item['sudah_dibagi'] ?? 0 }}</td>
-                                <td class="text-center {{ ($item['belum_dibagi'] ?? 0) > 0 ? 'text-danger' : 'text-success' }} fw-bold">
-                                    {{ $item['belum_dibagi'] ?? 0 }}
-                                </td>
-
-                                <td>
-                                    <div class="deadline-list">
-                                        @forelse($item['deadline_periode'] ?? [] as $key => $deadline)
-                                            <span class="deadline-chip">
-                                                {{ $periodeColumns[$key] ?? ('P' . $key) }}:
-                                                {{ $deadline ?: '-' }}
-                                            </span>
-                                        @empty
-                                            <span class="text-muted">-</span>
-                                        @endforelse
-                                    </div>
-                                </td>
-
-                                <td class="text-center">
-                                    @if($status === 'Tercapai')
-                                        <span class="badge bg-success">Tercapai</span>
-                                    @elseif($status === 'Lewat Tenggat')
-                                        <span class="badge bg-danger">Lewat Tenggat</span>
-                                    @elseif($status === 'Belum Dibagi')
-                                        <span class="badge bg-danger">Belum Dibagi</span>
-                                    @elseif($status === 'On Progress')
-                                        <span class="badge bg-warning text-dark">On Progress</span>
-                                    @else
-                                        <span class="badge bg-secondary">{{ $status }}</span>
-                                    @endif
-                                </td>
-
-                                <td>
-                                    <div class="lab-detail-progress">
-                                        <div class="lab-detail-progress-track">
-                                            <div class="lab-detail-progress-fill" style="width: {{ $progress }}%;"></div>
-                                        </div>
-                                        <div class="small text-muted mt-1">{{ $progress }}%</div>
-                                    </div>
-                                </td>
-                            </tr>
+                            <article class="ketuakk-lab-monitor-detail__record">
+                                <header>
+                                    <div><span>{{ $index + 1 }}</span><h6>{{ $item['sub_kategori'] ?? '-' }}</h6><p>{{ $item['keterangan'] ?? '-' }}</p></div>
+                                    <span>{{ $status }}</span>
+                                </header>
+                                <dl>
+                                    <div><dt>Total target</dt><dd>{{ $item['total_target'] ?? 0 }}</dd></div>
+                                    <div><dt>Realisasi</dt><dd>{{ $item['total_realisasi'] ?? 0 }}</dd></div>
+                                    <div><dt>Sudah dibagi</dt><dd>{{ $item['sudah_dibagi'] ?? 0 }}</dd></div>
+                                    <div><dt>Belum dibagi</dt><dd>{{ $item['belum_dibagi'] ?? 0 }}</dd></div>
+                                    <div><dt>Progress</dt><dd>{{ $progress }}%</dd></div>
+                                </dl>
+                                <div class="ketuakk-lab-monitor-detail__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $progress }}" aria-label="Progress {{ $item['sub_kategori'] ?? 'subkategori' }} {{ $progress }} persen"><span style="width: {{ $progress }}%"></span></div>
+                                <table class="ketuakk-lab-monitor-detail__period-table">
+                                    <thead><tr><th scope="col">Periode</th><th scope="col">Target</th><th scope="col">Realisasi</th><th scope="col">Tenggat</th></tr></thead>
+                                    <tbody>
+                                        @foreach($periodeColumns as $key => $label)
+                                            <tr><th scope="row">{{ $label }}</th><td>{{ $item['target_periode'][$key] ?? 0 }}</td><td>{{ $item['realisasi_periode'][$key] ?? 0 }}</td><td>{{ $item['deadline_periode'][$key] ?? '-' }}</td></tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </article>
                         @empty
-                            <tr>
-                                <td colspan="{{ 8 + (count($periodeColumns) * 2) }}" class="text-center text-muted py-4">
-                                    Belum ada KM kategori {{ $kategori }} pada tahun {{ $tahun }}.
-                                </td>
-                            </tr>
+                            <div class="ketuakk-lab-monitor-detail__empty">Belum ada KM kategori {{ $kategori }} pada tahun {{ $tahun }}.</div>
                         @endforelse
-                    </tbody>
-                </table>
             </div>
         </div>
     @endforeach
