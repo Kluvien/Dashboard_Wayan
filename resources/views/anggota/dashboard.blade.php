@@ -793,6 +793,7 @@
     .anggota-dashboard__title { margin: 0 0 7px; color: #0F172A; font-size: 24px; font-weight: 700; }
     .anggota-dashboard__toolbar { padding-top: 16px; margin-top: 16px; border-top: 1px solid #EEF2F7; }
     .anggota-dashboard__target-records{border-top:1px solid #D5DCE5}.anggota-dashboard__target-record{padding:14px 20px 18px;border-bottom:1px solid #E5EAF0}.anggota-dashboard__target-record header{display:flex;justify-content:space-between;gap:16px}.anggota-dashboard__target-record h3{margin:2px 0;color:#1F2937;font-size:16px}.anggota-dashboard__target-record header p{margin:0;color:#5B6472;font-size:14px}.anggota-dashboard__target-record dl{display:flex;gap:24px;margin:12px 0}.anggota-dashboard__target-record dt{color:#5B6472;font-size:13px}.anggota-dashboard__target-record dd{margin:2px 0 0;color:#1F2937;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}.anggota-dashboard__period-table{width:100%;border-collapse:collapse;color:#374151;font-size:14px}.anggota-dashboard__period-table th,.anggota-dashboard__period-table td{padding:9px 12px;border-bottom:1px solid #E5EAF0}.anggota-dashboard__period-table thead th{background:#EEF2F6;font-size:13px;text-align:left}.anggota-dashboard__period-table td:nth-child(2),.anggota-dashboard__period-table td:nth-child(3){text-align:right;font-weight:700;font-variant-numeric:tabular-nums}@media(max-width:640px){.anggota-dashboard__target-record header{flex-direction:column}.anggota-dashboard__target-record dl{flex-wrap:wrap}}
+    .anggota-dashboard__metadata{margin-top:3px;color:#5B6472;font-size:13px;line-height:1.5;overflow-wrap:anywhere}.anggota-dashboard__period{font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums}.anggota-dashboard__period span{display:block}
 </style>
 
 <section class="dashboard-header anggota-dashboard__overview mb-3" aria-labelledby="anggota-dashboard-title">
@@ -1212,13 +1213,9 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Kategori</th>
-                    <th>Sub Kategori</th>
-                    <th>Keterangan KM</th>
-                    <th>Judul Aktivitas</th>
+                    <th>Aktivitas</th>
+                    <th>Periode</th>
                     <th>Status</th>
-                    <th>Tanggal Mulai</th>
-                    <th>Tanggal Selesai</th>
                     <th>Update Terakhir</th>
                 </tr>
             </thead>
@@ -1247,20 +1244,12 @@
 
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $item->kategori_km ?? '-' }}</td>
-                        <td>{{ $item->sub_kategori_km ?? '-' }}</td>
-                        <td class="keterangan-km">{{ $item->keterangan_km ?? '-' }}</td>
-                        <td>{{ $item->judul_aktivitas ?? '-' }}</td>
+                        <td><strong>{{ $item->judul_aktivitas ?? '-' }}</strong><div class="anggota-dashboard__metadata">{{ $item->kategori_km ?? '-' }} · {{ $item->sub_kategori_km ?? '-' }}</div><div class="anggota-dashboard__metadata">{{ $item->keterangan_km ?? '-' }}</div></td>
+                        <td class="anggota-dashboard__period">{{ !empty($item->tanggal_mulai) ? \Carbon\Carbon::parse($item->tanggal_mulai)->format('d/m/Y') : '-' }}<span>— {{ !empty($item->tanggal_selesai) ? \Carbon\Carbon::parse($item->tanggal_selesai)->format('d/m/Y') : '-' }}</span></td>
                         <td>
                             <span class="status-pill {{ $statusClass }}">
                                 {{ $statusLabel }}
                             </span>
-                        </td>
-                        <td>
-                            {{ !empty($item->tanggal_mulai) ? \Carbon\Carbon::parse($item->tanggal_mulai)->format('d/m/Y') : '-' }}
-                        </td>
-                        <td>
-                            {{ !empty($item->tanggal_selesai) ? \Carbon\Carbon::parse($item->tanggal_selesai)->format('d/m/Y') : '-' }}
                         </td>
                         <td>
                             {{ !empty($item->updated_at) ? \Carbon\Carbon::parse($item->updated_at)->format('d/m/Y H:i') : '-' }}
@@ -1268,7 +1257,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9">
+                        <td colspan="5">
                             <div class="empty-state">
                                 Belum ada riwayat penyelesaian KM.
                             </div>

@@ -211,6 +211,7 @@
         }
     }
     .anggota-laporan__target-records{border-top:1px solid #D5DCE5}.anggota-laporan__target-record{padding:14px 16px 18px;border-bottom:1px solid #E5EAF0}.anggota-laporan__target-record header{display:flex;justify-content:space-between;gap:16px}.anggota-laporan__target-record h6{margin:0;color:#1F2937;font-size:15px}.anggota-laporan__target-record header p{margin:3px 0 0;color:#5B6472;font-size:14px}.anggota-laporan__target-record dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:12px 0}.anggota-laporan__target-record dt{color:#5B6472;font-size:13px}.anggota-laporan__target-record dd{margin:2px 0 0;color:#1F2937;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}.anggota-laporan__progress{height:6px;overflow:hidden;border-radius:999px;background:#E5EAF0;margin-bottom:12px}.anggota-laporan__progress span{display:block;height:100%;background:#2457A6}.anggota-laporan__period-table{width:100%;border-collapse:collapse;color:#374151;font-size:14px}.anggota-laporan__period-table th,.anggota-laporan__period-table td{padding:9px 12px;border-bottom:1px solid #E5EAF0}.anggota-laporan__period-table thead th{background:#EEF2F6;font-size:13px;text-align:left}.anggota-laporan__period-table td:nth-child(2),.anggota-laporan__period-table td:nth-child(3){text-align:right;font-weight:700;font-variant-numeric:tabular-nums}@media(max-width:640px){.anggota-laporan__target-record header{flex-direction:column}.anggota-laporan__target-record dl{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    .anggota-laporan__metadata{margin-top:3px;color:#5B6472;font-size:13px;line-height:1.5;overflow-wrap:anywhere}.anggota-laporan__period{font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums}.anggota-laporan__period span{display:block}
 </style>
 
 <section class="card report-filter-card mb-4" aria-labelledby="anggota-report-title">
@@ -494,12 +495,8 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Kategori</th>
-                    <th>Sub Kategori</th>
-                    <th>Judul Aktivitas</th>
-                    <th>Deskripsi</th>
-                    <th>Tanggal Mulai</th>
-                    <th>Tanggal Selesai</th>
+                    <th>Aktivitas</th>
+                    <th>Periode</th>
                     <th>Status</th>
                     <th>Bukti</th>
                 </tr>
@@ -508,12 +505,8 @@
                 @forelse($aktivitasRows as $row)
                     <tr>
                         <td>{{ $row['no'] ?? '-' }}</td>
-                        <td>{{ $row['kategori_km'] ?? '-' }}</td>
-                        <td>{{ $row['sub_kategori_km'] ?? '-' }}</td>
-                        <td class="fw-semibold">{{ $row['judul_aktivitas'] ?? '-' }}</td>
-                        <td>{{ $row['deskripsi_singkat'] ?? '-' }}</td>
-                        <td>{{ $row['tanggal_mulai'] ?? '-' }}</td>
-                        <td>{{ $row['tanggal_selesai'] ?? '-' }}</td>
+                        <td><strong>{{ $row['judul_aktivitas'] ?? '-' }}</strong><div class="anggota-laporan__metadata">{{ $row['kategori_km'] ?? '-' }} · {{ $row['sub_kategori_km'] ?? '-' }}</div><div class="anggota-laporan__metadata">{{ $row['deskripsi_singkat'] ?? '-' }}</div></td>
+                        <td class="anggota-laporan__period">{{ $row['tanggal_mulai'] ?? '-' }}<span>— {{ $row['tanggal_selesai'] ?? '-' }}</span></td>
                         <td><span class="status-badge {{ $statusClass(($row['status_progress'] ?? '') === 'Accepted' ? 'Tercapai' : (($row['status_progress'] ?? '') === 'On Progress' ? 'On Progress' : 'Belum Mulai')) }}">{{ $row['status_progress'] ?? '-' }}</span></td>
                         <td>
                             @if(($row['bukti'] ?? '-') !== '-')
@@ -524,7 +517,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="9" class="empty-row">Belum ada aktivitas KM pada periode ini.</td></tr>
+                    <tr><td colspan="5" class="empty-row">Belum ada aktivitas KM pada periode ini.</td></tr>
                 @endforelse
             </tbody>
         </table>

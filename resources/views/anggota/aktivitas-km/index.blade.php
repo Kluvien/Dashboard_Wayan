@@ -482,6 +482,7 @@
         .anggota-activity-index__deadlines { grid-template-columns: 1fr; }
     }
     .anggota-activity-index__target-records{border-top:1px solid #D5DCE5}.anggota-activity-index__target-record{padding:14px 20px 18px;border-bottom:1px solid #E5EAF0}.anggota-activity-index__target-record header{display:flex;justify-content:space-between;gap:16px}.anggota-activity-index__target-record h3{margin:2px 0;color:#1F2937;font-size:16px}.anggota-activity-index__target-record header p{margin:0;color:#5B6472;font-size:14px;line-height:1.5}.anggota-activity-index__target-record dl{display:flex;gap:24px;margin:12px 0}.anggota-activity-index__target-record dt{color:#5B6472;font-size:13px}.anggota-activity-index__target-record dd{margin:2px 0 0;color:#1F2937;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}.anggota-activity-index__period-table{width:100%;border-collapse:collapse;color:#374151;font-size:14px}.anggota-activity-index__period-table th,.anggota-activity-index__period-table td{padding:9px 12px;border-bottom:1px solid #E5EAF0}.anggota-activity-index__period-table thead th{background:#EEF2F6;font-size:13px;text-align:left}.anggota-activity-index__period-table td:nth-child(2),.anggota-activity-index__period-table td:nth-child(3){text-align:right;font-weight:700;font-variant-numeric:tabular-nums}@media(max-width:640px){.anggota-activity-index__target-record{padding:14px 16px}.anggota-activity-index__target-record header{flex-direction:column}.anggota-activity-index__target-record dl{flex-wrap:wrap}}
+    .anggota-activity-index__period-cell{color:#374151;font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums}.anggota-activity-index__period-cell span,.anggota-activity-index__period-cell small{display:block}.anggota-activity-index__period-cell small{margin-top:3px;color:#5B6472;font-size:13px}.anggota-activity-index__table{table-layout:auto}.anggota-activity-index__table td{overflow-wrap:anywhere}
 </style>
 
 <header class="anggota-activities__header">
@@ -709,14 +710,9 @@
             <thead>
                 <tr>
                     <th scope="col">No</th>
-                    <th scope="col">Tahun</th>
-                    <th scope="col">Kategori</th>
-                    <th scope="col">Sub Kategori</th>
-                    <th scope="col">Judul Aktivitas</th>
+                    <th scope="col">Aktivitas</th>
+                    <th scope="col">Periode</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Tanggal Mulai</th>
-                    <th scope="col">Tanggal Selesai</th>
-                    <th scope="col">Ditambahkan di Triwulan</th>
                     <th scope="col">Bukti</th>
                     <th scope="col">Aksi</th>
                 </tr>
@@ -735,17 +731,19 @@
                     @endphp
                     <tr>
                         <td class="anggota-activity-index__cell--number">{{ $index + 1 }}</td>
-                        <td class="anggota-activity-index__cell--number">{{ !empty($item->tanggal_mulai) ? \Carbon\Carbon::parse($item->tanggal_mulai)->format('Y') : '-' }}</td>
-                        <td class="anggota-activity-index__identity">{{ $item->kategori_km ?? '-' }}</td>
-                        <td>{{ $item->sub_kategori_km ?? '-' }}</td>
-
                         <td class="activity-title">
                             <strong class="anggota-activity-index__identity">{{ $item->judul_aktivitas ?? '-' }}</strong>
+                            <div class="anggota-activity-index__metadata">{{ $item->kategori_km ?? '-' }} · {{ $item->sub_kategori_km ?? '-' }}</div>
                             @if(!empty($item->deskripsi_singkat))
                                 <div class="anggota-activity-index__metadata">
                                     {{ \Illuminate\Support\Str::limit($item->deskripsi_singkat, 80) }}
                                 </div>
                             @endif
+                        </td>
+                        <td class="anggota-activity-index__period-cell">
+                            <span>{{ !empty($item->tanggal_mulai) ? \Carbon\Carbon::parse($item->tanggal_mulai)->format('d/m/Y') : '-' }}</span>
+                            <span>— {{ !empty($item->tanggal_selesai) ? \Carbon\Carbon::parse($item->tanggal_selesai)->format('d/m/Y') : '-' }}</span>
+                            <small>{{ $formatTriwulanDitambahkan($item->created_at ?? $item->tanggal_mulai ?? null) }}</small>
                         </td>
 
                         <td>
@@ -759,10 +757,6 @@
                                 </div>
                             @endif
                         </td>
-
-                        <td class="anggota-activity-index__cell--date">{{ !empty($item->tanggal_mulai) ? \Carbon\Carbon::parse($item->tanggal_mulai)->format('d/m/Y') : '-' }}</td>
-                        <td class="anggota-activity-index__cell--date">{{ !empty($item->tanggal_selesai) ? \Carbon\Carbon::parse($item->tanggal_selesai)->format('d/m/Y') : '-' }}</td>
-                        <td class="anggota-activity-index__cell--date">{{ $formatTriwulanDitambahkan($item->created_at ?? $item->tanggal_mulai ?? null) }}</td>
 
                         <td>
                             @if(!empty($item->bukti_pdf_path) || !empty($item->bukti_file_path))
@@ -800,7 +794,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="11" class="anggota-activity-index__empty">
+                        <td colspan="6" class="anggota-activity-index__empty">
                             Belum ada aktivitas KM pada tahun {{ $tahun }}.
                         </td>
                     </tr>
@@ -832,13 +826,9 @@
             <thead>
                 <tr>
                     <th scope="col">No</th>
-                    <th scope="col">Kategori</th>
-                    <th scope="col">Sub Kategori</th>
-                    <th scope="col">Judul Aktivitas</th>
+                    <th scope="col">Aktivitas</th>
+                    <th scope="col">Periode</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Tanggal Mulai</th>
-                    <th scope="col">Tanggal Selesai</th>
-                    <th scope="col">Ditambahkan di Triwulan</th>
                     <th scope="col">Update Terakhir</th>
                 </tr>
             </thead>
@@ -856,16 +846,19 @@
                     @endphp
                     <tr>
                         <td class="anggota-activity-index__cell--number">{{ $index + 1 }}</td>
-                        <td class="anggota-activity-index__identity">{{ $item->kategori_km ?? '-' }}</td>
-                        <td>{{ $item->sub_kategori_km ?? '-' }}</td>
-
                         <td class="history-title">
                             <strong class="anggota-activity-index__identity">{{ $item->judul_aktivitas ?? '-' }}</strong>
+                            <div class="anggota-activity-index__metadata">{{ $item->kategori_km ?? '-' }} · {{ $item->sub_kategori_km ?? '-' }}</div>
                             @if(!empty($item->deskripsi_singkat))
                                 <div class="anggota-activity-index__metadata">
                                     {{ \Illuminate\Support\Str::limit($item->deskripsi_singkat, 100) }}
                                 </div>
                             @endif
+                        </td>
+                        <td class="anggota-activity-index__period-cell">
+                            <span>{{ !empty($item->tanggal_mulai) ? \Carbon\Carbon::parse($item->tanggal_mulai)->format('d/m/Y') : '-' }}</span>
+                            <span>— {{ !empty($item->tanggal_selesai) ? \Carbon\Carbon::parse($item->tanggal_selesai)->format('d/m/Y') : '-' }}</span>
+                            <small>{{ $formatTriwulanDitambahkan($item->created_at ?? $item->tanggal_mulai ?? null) }}</small>
                         </td>
 
                         <td>
@@ -874,14 +867,11 @@
                             </span>
                         </td>
 
-                        <td class="anggota-activity-index__cell--date">{{ !empty($item->tanggal_mulai) ? \Carbon\Carbon::parse($item->tanggal_mulai)->format('d/m/Y') : '-' }}</td>
-                        <td class="anggota-activity-index__cell--date">{{ !empty($item->tanggal_selesai) ? \Carbon\Carbon::parse($item->tanggal_selesai)->format('d/m/Y') : '-' }}</td>
-                        <td class="anggota-activity-index__cell--date">{{ $formatTriwulanDitambahkan($item->created_at ?? $item->tanggal_mulai ?? null) }}</td>
                         <td class="anggota-activity-index__cell--date">{{ !empty($item->updated_at) ? \Carbon\Carbon::parse($item->updated_at)->format('d/m/Y H:i') : '-' }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9" class="anggota-activity-index__empty">
+                        <td colspan="5" class="anggota-activity-index__empty">
                             Belum ada riwayat realisasi KM pada tahun {{ $tahun }}.
                         </td>
                     </tr>
