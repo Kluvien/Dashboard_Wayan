@@ -8,14 +8,14 @@
     .anggota-profile__header { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; padding: 20px 22px; border-bottom: 1px solid #EEF2F7; }
     .anggota-profile__eyebrow { margin: 0 0 5px; color: #2563EB; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
     .anggota-profile__title { margin: 0; color: #0F172A; font-size: 24px; font-weight: 700; }
-    .anggota-profile__description { margin: 7px 0 0; color: #64748B; font-size: 13px; }
-    .anggota-profile__back { padding: 7px 13px; border-color: #CBD5E1; border-radius: 8px; color: #334155; font-size: 13px; font-weight: 700; white-space: nowrap; }
+    .anggota-profile__description { margin: 7px 0 0; color: #5B6472; font-size: 14px; line-height: 1.5; }
+    .anggota-profile__back { min-height: 40px; padding: 8px 14px; border-color: #D5DCE5; border-radius: 8px; color: #374151; font-size: 14px; font-weight: 600; white-space: nowrap; }
     .anggota-profile__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .anggota-profile__item { min-height: 86px; padding: 16px 22px; border-right: 1px solid #EEF2F7; border-bottom: 1px solid #EEF2F7; }
     .anggota-profile__item:nth-child(3n) { border-right: 0; }
     .anggota-profile__item:nth-last-child(-n+3) { border-bottom: 0; }
     .anggota-profile__label { display: block; margin-bottom: 7px; color: #64748B; font-size: 11px; font-weight: 700; text-transform: uppercase; }
-    .anggota-profile__value { color: #0F172A; font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+    .anggota-profile__value { color: #1F2937; font-size: 14px; line-height: 1.5; font-weight: 600; overflow-wrap: anywhere; }
     @media (max-width: 767.98px) {
         .anggota-profile__header { flex-direction: column; }
         .anggota-profile__grid { grid-template-columns: 1fr; }

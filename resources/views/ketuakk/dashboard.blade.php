@@ -1292,7 +1292,7 @@
                 Ringkasan Kontrak Manajemen {{ $periodeLabel }}
             </h1>
             <p class="ketuakk-dashboard-overview__description">
-                Monitoring target KM, penurunan KM, realisasi, dan capaian setiap Lab Riset dalam Kelompok Keahlian.
+                Monitoring target KM, distribusi KM, realisasi, dan capaian setiap Lab Riset dalam Kelompok Keahlian.
             </p>
             <span class="ketuakk-dashboard-overview__period">
                 <i class="bi bi-calendar3"></i>

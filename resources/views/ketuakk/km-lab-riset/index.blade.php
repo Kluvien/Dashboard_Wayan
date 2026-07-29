@@ -512,7 +512,7 @@
 
     /*
     |--------------------------------------------------------------------------
-    | Riwayat Penurunan KM
+    | Riwayat Distribusi KM
     |--------------------------------------------------------------------------
     */
     .ketuakk-lab-km__history {
@@ -892,7 +892,7 @@
 
                     <div class="ketuakk-lab-km__progress-row">
                         <span class="ketuakk-lab-km__progress-label">
-                        Progress Penurunan KM
+                        Progress Distribusi KM
                         </span>
                         <span class="ketuakk-lab-km__progress-value">
                             {{ $persentaseSebenarnya }}%
@@ -905,7 +905,7 @@
                         aria-valuemin="0"
                         aria-valuemax="100"
                         aria-valuenow="{{ $persentaseTurun }}"
-                        aria-label="Progress penurunan KM kategori {{ $kategori }}: {{ $persentaseSebenarnya }} persen">
+                        aria-label="Progress distribusi KM kategori {{ $kategori }}: {{ $persentaseSebenarnya }} persen">
                         <div
                             class="ketuakk-lab-km__progress-fill {{ $targetSelesai ? 'ketuakk-lab-km__progress-fill--complete' : '' }}"
                             style="width: {{ $persentaseTurun }}%;">
@@ -968,7 +968,7 @@
                 Daftar Lab Riset
             </h2>
             <p class="ketuakk-lab-km__labs-description">
-                Ketua KK dapat melihat penurunan KM ke setiap Lab Riset dan membuka detail pembagian KM anggota.
+                Ketua KK dapat melihat distribusi KM ke setiap Lab Riset dan membuka detail pembagian KM anggota.
             </p>
         </div>
 
@@ -1099,7 +1099,7 @@
     <div class="ketuakk-lab-km__history-header">
         <div>
             <h2 id="ketuakk-lab-km-history-title" class="ketuakk-lab-km__history-title">
-                Riwayat Penurunan KM ke Lab Riset
+                Riwayat Distribusi KM ke Lab Riset
             </h2>
             <p class="ketuakk-lab-km__history-description">
                 Riwayat target KM yang didistribusikan Ketua KK kepada Lab Riset pada tahun {{ $tahun }}.
@@ -1219,7 +1219,7 @@
                     <tr>
                         <td colspan="12">
                             <div class="ketuakk-lab-km__history-empty">
-                                <strong>Belum ada riwayat penurunan KM.</strong>
+                                <strong>Belum ada riwayat distribusi KM.</strong>
                                 Riwayat akan muncul setelah Ketua KK mendistribusikan KM kepada Lab Riset.
                             </div>
                         </td>

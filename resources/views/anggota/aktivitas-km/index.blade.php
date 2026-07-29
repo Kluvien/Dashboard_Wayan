@@ -62,10 +62,14 @@
         white-space: nowrap;
     }
 
-    .target-km-table,
+    .target-km-table {
+        min-width: 1250px;
+    }
+
     .aktivitas-km-table,
     .history-activity-table {
-        min-width: 1250px;
+        min-width: 0;
+        table-layout: fixed;
     }
 
     .target-km-table td.detail-target,
@@ -409,7 +413,7 @@
     .anggota-activity-index__section { margin-bottom: 16px; overflow: hidden; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 14px; }
     .anggota-activity-index__section-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; padding: 18px 22px; border-bottom: 1px solid #EEF2F7; }
     .anggota-activity-index__section-title { margin: 0; color: #0F172A; font-size: 17px; font-weight: 700; }
-    .anggota-activity-index__section-description { max-width: 780px; margin: 5px 0 0; color: #64748B; font-size: 13px; line-height: 1.55; }
+    .anggota-activity-index__section-description { max-width: 780px; margin: 5px 0 0; color: #5B6472; font-size: 14px; line-height: 1.55; }
     .anggota-activity-index__period { display: flex; align-items: flex-start; gap: 8px; margin-top: 10px; color: #64748B; font-size: 12px; }
     .anggota-activity-index__current-period { display: flex; align-items: center; gap: 10px; padding: 11px 22px; border-bottom: 1px solid #EEF2F7; background: #F8FAFC; color: #334155; font-size: 12px; }
     .anggota-activity-index__current-period strong { color: #0F172A; font-weight: 700; }
@@ -426,7 +430,7 @@
     .anggota-activity-index__progress-fill { height: 100%; background: #2563EB; }
     .anggota-activity-index__comparison-head, .anggota-activity-index__comparison-row { display: grid; grid-template-columns: minmax(180px, 1.5fr) repeat(4, minmax(84px, .55fr)) minmax(180px, 1fr); align-items: center; column-gap: 14px; }
     .anggota-activity-index__comparison-head { padding: 9px 22px; background: #F8FAFC; border-bottom: 1px solid #CBD5E1; color: #64748B; font-size: 11px; font-weight: 700; text-transform: uppercase; }
-    .anggota-activity-index__comparison-row { min-height: 72px; padding: 11px 22px; border-bottom: 1px solid #EEF2F7; color: #334155; font-size: 13px; }
+    .anggota-activity-index__comparison-row { min-height: 72px; padding: 11px 22px; border-bottom: 1px solid #E5EAF0; color: #374151; font-size: 14px; }
     .anggota-activity-index__comparison-row:last-child { border-bottom: 0; }
     .anggota-activity-index__comparison-row:hover { background: #F8FAFC; }
     .anggota-activity-index__category-name { color: #0F172A; font-weight: 700; }
@@ -438,8 +442,8 @@
     .anggota-activity-index__detail-link { display: inline-flex; margin-top: 7px; color: #2563EB; font-size: 12px; font-weight: 700; text-decoration: none; }
     .anggota-activity-index__scroll { overflow-x: auto; }
     .anggota-activity-index__table { width: 100%; margin: 0; }
-    .anggota-activity-index__table > thead > tr > th { padding: 11px 16px; background: #F8FAFC; border: 0; border-bottom: 1px solid #CBD5E1; color: #334155; font-size: 11px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; vertical-align: middle; white-space: nowrap; }
-    .anggota-activity-index__table > tbody > tr > td { padding: 11px 16px; border: 0; border-bottom: 1px solid #EEF2F7; color: #334155; font-size: 13px; font-weight: 500; vertical-align: middle; }
+    .anggota-activity-index__table > thead > tr > th { padding: 11px 14px; background: #EEF2F6; border: 0; border-bottom: 1px solid #D5DCE5; color: #374151; font-size: 13px; font-weight: 700; letter-spacing: .01em; vertical-align: middle; white-space: normal; }
+    .anggota-activity-index__table > tbody > tr > td { padding: 11px 14px; border: 0; border-bottom: 1px solid #E5EAF0; color: #374151; font-size: 14px; line-height: 1.5; font-weight: 500; vertical-align: middle; overflow-wrap: anywhere; }
     .anggota-activity-index__table > tbody > tr:last-child > td { border-bottom: 0; }
     .anggota-activity-index__table > tbody > tr:hover > td { background: #F8FAFC; }
     .anggota-activity-index__table.target-km-table > tbody > tr { height: auto; min-height: 0; }

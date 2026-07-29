@@ -322,7 +322,7 @@
         <div>
             <h4 class="fw-bold mb-1">Daftar Lab Riset</h4>
             <p class="text-muted mb-0">
-                Ketua KK dapat melihat penurunan KM ke setiap Lab Riset dan membuka detail pembagian KM anggota.
+                Ketua KK dapat melihat distribusi KM ke setiap Lab Riset dan membuka detail pembagian KM anggota.
             </p>
         </div>
 

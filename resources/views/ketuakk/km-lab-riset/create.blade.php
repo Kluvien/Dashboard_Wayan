@@ -118,7 +118,7 @@
 <section class="ketuakk-lab-assign-form" aria-labelledby="lab-assign-title">
     <header class="ketuakk-lab-assign-form__header">
         <div>
-            <h1 id="lab-assign-title" class="ketuakk-lab-assign-form__title">Form Penurunan KM ke Lab Riset</h1>
+            <h1 id="lab-assign-title" class="ketuakk-lab-assign-form__title">Form Distribusi KM ke Lab Riset</h1>
             <p class="ketuakk-lab-assign-form__description">
                 Ketua KK membagi target KM kepada Lab Riset berdasarkan periode triwulan.
             </p>
@@ -145,7 +145,7 @@
         @csrf
 
         <div class="mb-4">
-            <div class="form-section-title">Informasi Penurunan KM</div>
+            <div class="form-section-title">Informasi Distribusi KM</div>
 
             <div class="row g-4">
                 <div class="col-md-6">

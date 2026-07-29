@@ -11,9 +11,9 @@
     .anggota-history__description { margin: 7px 0 0; color: #64748B; font-size: 13px; }
     .anggota-history__back { padding: 7px 13px; border-color: #CBD5E1; border-radius: 8px; color: #334155; font-size: 13px; font-weight: 700; white-space: nowrap; }
     .anggota-history__scroll { overflow-x: auto; }
-    .anggota-history__table { width: 100%; min-width: 900px; margin: 0; }
-    .anggota-history__table > thead > tr > th { padding: 11px 16px; background: #F8FAFC; border: 0; border-bottom: 1px solid #CBD5E1; color: #334155; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; vertical-align: middle; }
-    .anggota-history__table > tbody > tr > td { min-height: 56px; padding: 11px 16px; border: 0; border-bottom: 1px solid #EEF2F7; color: #334155; font-size: 13px; font-weight: 500; vertical-align: middle; }
+    .anggota-history__table { width: 100%; min-width: 0; table-layout: fixed; margin: 0; }
+    .anggota-history__table > thead > tr > th { padding: 11px 14px; background: #EEF2F6; border: 0; border-bottom: 1px solid #D5DCE5; color: #374151; font-size: 13px; font-weight: 700; vertical-align: middle; white-space: normal; }
+    .anggota-history__table > tbody > tr > td { padding: 11px 14px; border: 0; border-bottom: 1px solid #E5EAF0; color: #374151; font-size: 14px; line-height: 1.5; font-weight: 500; vertical-align: middle; overflow-wrap: anywhere; }
     .anggota-history__table > tbody > tr:last-child > td { border-bottom: 0; }
     .anggota-history__table > tbody > tr:hover > td { background: #F8FAFC; }
     .anggota-history__number { text-align: center; font-variant-numeric: tabular-nums; }

@@ -320,6 +320,16 @@
             padding-left: 16px;
         }
     }
+    .ketuakk-member-km__table { min-width: 0; table-layout: fixed; }
+    .ketuakk-member-km__table > thead > tr > th { padding: 11px 14px; background: #EEF2F6; color: #374151; font-size: 13px; }
+    .ketuakk-member-km__table > tbody > tr > td { padding: 11px 14px; color: #374151; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+    .ketuakk-member-km__identity-meta { margin-top: 3px; color: #5B6472; font-size: 13px; }
+    .ketuakk-member-km__category-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px 14px; }
+    .ketuakk-member-km__category-list > div { display: flex; justify-content: space-between; gap: 8px; }
+    .ketuakk-member-km__category-list strong { font-variant-numeric: tabular-nums; color: #1F2937; }
+    @media (max-width: 767.98px) {
+        .ketuakk-member-km__category-list { grid-template-columns: 1fr; }
+    }
 </style>
 
 <section class="ketuakk-member-km" aria-labelledby="ketuakk-member-km-title">
@@ -363,56 +373,46 @@
         </a>
     </div>
 
-    <div class="table-scroll-sync">
-        <div class="table-scroll-container">
+    <div class="table-responsive ketuakk-member-km__table-scroll">
             <table class="table align-middle km-table ketuakk-member-km__table">
                 <thead>
                     <tr>
-                        <th rowspan="2" class="sticky-col ketuakk-member-km__cell--index" style="min-width: 60px;">No</th>
-                        <th rowspan="2" class="sticky-col-2 ketuakk-member-km__cell--identity" style="min-width: 180px;">Nama Anggota</th>
-                        <th rowspan="2" class="ketuakk-member-km__cell--nidn">NIDN</th>
-                        <th rowspan="2" class="ketuakk-member-km__cell--jad">JAD</th>
-                        <th rowspan="2" class="ketuakk-member-km__cell--email">Email</th>
-                        <th rowspan="2" class="ketuakk-member-km__cell--lab">Lab Riset</th>
-                        <th colspan="{{ count($kategoriDefault) }}" class="ketuakk-member-km__group-header">Jumlah KM</th>
-                        <th rowspan="2" class="ketuakk-member-km__cell--number">Total</th>
-                        <th rowspan="2" class="ketuakk-member-km__cell--action">Aksi</th>
-                    </tr>
-                    <tr>
-                        @foreach($kategoriDefault as $kategori)
-                            <th class="ketuakk-member-km__cell--number">{{ $kategori }}</th>
-                        @endforeach
+                        <th scope="col" class="ketuakk-member-km__cell--index">No</th>
+                        <th scope="col" class="ketuakk-member-km__cell--identity">Identitas</th>
+                        <th scope="col" class="ketuakk-member-km__cell--lab">Unit</th>
+                        <th scope="col">KM per Kategori</th>
+                        <th scope="col" class="ketuakk-member-km__cell--number">Total</th>
+                        <th scope="col" class="ketuakk-member-km__cell--action">Aksi</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     @forelse($dataAnggota as $index => $item)
                     <tr>
-                        <td class="sticky-col ketuakk-member-km__cell--index">{{ $index + 1 }}</td>
+                        <td class="ketuakk-member-km__cell--index">{{ $index + 1 }}</td>
 
-                        <td class="sticky-col-2 ketuakk-member-km__cell--identity">
+                        <td class="ketuakk-member-km__cell--identity">
                             <div class="ketuakk-member-km__identity-primary">
                                 {{ $item['nama_dosen'] }}
                             </div>
+                            <div class="ketuakk-member-km__identity-meta">NIDN: {{ $item['nidn'] }}</div>
+                            <div class="ketuakk-member-km__identity-meta">{{ $item['email'] }}</div>
                         </td>
 
-                        <td class="ketuakk-member-km__cell--nidn">{{ $item['nidn'] }}</td>
-
-                        <td class="ketuakk-member-km__cell--jad">
+                        <td class="ketuakk-member-km__cell--lab">
+                            <div>{{ $item['nama_lab'] }}</div>
                             <span class="ketuakk-member-km__jad">
                                 {{ $item['jad'] }}
                             </span>
                         </td>
 
-                        <td class="ketuakk-member-km__cell--email">{{ $item['email'] }}</td>
-
-                        <td class="ketuakk-member-km__cell--lab">{{ $item['nama_lab'] }}</td>
-
-                        @foreach($kategoriDefault as $kategori)
-                            <td class="ketuakk-member-km__cell--number">
-                                {{ $item['jumlah_km'][$kategori] ?? 0 }}
-                            </td>
-                        @endforeach
+                        <td>
+                            <div class="ketuakk-member-km__category-list">
+                                @foreach($kategoriDefault as $kategori)
+                                    <div><span>{{ $kategori }}</span><strong>{{ $item['jumlah_km'][$kategori] ?? 0 }}</strong></div>
+                                @endforeach
+                            </div>
+                        </td>
 
                         <td class="ketuakk-member-km__cell--number">
                             {{ $item['total_km'] ?? 0 }}
@@ -437,75 +437,13 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="{{ $jumlahKolomAnggota }}" class="ketuakk-member-km__empty">
+                        <td colspan="6" class="ketuakk-member-km__empty">
                             Belum ada data anggota KK.
                         </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
-        </div>
-
-        <div class="floating-table-scroll" id="floatingKmAnggotaScroll">
-            <div class="floating-table-scroll-inner"></div>
-        </div>
     </div>
 </section>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const wrapper = document.querySelector('.table-scroll-sync');
-        const tableScroll = document.querySelector('.table-scroll-container');
-        const floatingScroll = document.getElementById('floatingKmAnggotaScroll');
-        const floatingInner = floatingScroll ? floatingScroll.querySelector('.floating-table-scroll-inner') : null;
-
-        if (!wrapper || !tableScroll || !floatingScroll || !floatingInner) {
-            return;
-        }
-
-        let isSyncing = false;
-
-        function updateWidth() {
-            floatingInner.style.width = tableScroll.scrollWidth + 'px';
-        }
-
-        function syncScroll(source, target) {
-            if (isSyncing) return;
-
-            isSyncing = true;
-            target.scrollLeft = source.scrollLeft;
-            isSyncing = false;
-        }
-
-        function toggleFloatingScroll() {
-            const rect = wrapper.getBoundingClientRect();
-            const isTableVisible = rect.top < window.innerHeight && rect.bottom > 120;
-            const needHorizontalScroll = tableScroll.scrollWidth > tableScroll.clientWidth;
-
-            if (isTableVisible && needHorizontalScroll) {
-                floatingScroll.style.display = 'block';
-            } else {
-                floatingScroll.style.display = 'none';
-            }
-        }
-
-        updateWidth();
-        toggleFloatingScroll();
-
-        tableScroll.addEventListener('scroll', function() {
-            syncScroll(tableScroll, floatingScroll);
-        });
-
-        floatingScroll.addEventListener('scroll', function() {
-            syncScroll(floatingScroll, tableScroll);
-        });
-
-        window.addEventListener('resize', function() {
-            updateWidth();
-            toggleFloatingScroll();
-        });
-
-        window.addEventListener('scroll', toggleFloatingScroll);
-    });
-</script>
 @endsection

@@ -138,6 +138,19 @@
     .anggota-activity-form__title { margin: 0; color: #0F172A; font-size: 24px; font-weight: 700; }
     .anggota-activity-form__body { padding: 22px; }
     .anggota-activity-form__back { border-color: #CBD5E1; color: #334155; font-size: 13px; font-weight: 700; }
+    .anggota-activity-form__body .form-label { color: #374151; font-size: 14px; line-height: 1.5; font-weight: 600; white-space: normal; }
+    .anggota-activity-form__body .form-control,
+    .anggota-activity-form__body .form-select { width: 100%; min-width: 0; min-height: 44px; border-color: #D5DCE5; color: #374151; font-size: 14px; }
+    .anggota-activity-form__body textarea.form-control { min-height: 112px; resize: vertical; }
+    .anggota-activity-form__body .form-text { color: #5B6472; font-size: 13px; line-height: 1.5; }
+    .anggota-activity-form__body .form-control:focus,
+    .anggota-activity-form__body .form-select:focus { border-color: #2457A6; box-shadow: 0 0 0 3px rgba(36,87,166,.22); }
+    .anggota-activity-form__body .btn { min-height: 42px; font-size: 14px; }
+    @media (max-width: 767.98px) {
+        .anggota-activity-form__header { flex-direction: column; }
+        .anggota-activity-form__body .row > * { width: 100%; }
+        .anggota-activity-form__body .d-flex { flex-wrap: wrap; }
+    }
 </style>
 
 <section class="anggota-activity-form" aria-labelledby="anggota-activity-create-title">
