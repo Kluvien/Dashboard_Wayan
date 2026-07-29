@@ -225,7 +225,7 @@
 
     .detail-table {
         width: 100%;
-        min-width: 1380px;
+        width: 100%;
         border-collapse: collapse;
     }
 
@@ -482,6 +482,12 @@
             width: 100%;
         }
     }
+    .ketualab-monitoring-detail__records{border-top:1px solid #D5DCE5}
+    .ketualab-monitoring-detail__record{padding:14px 0 18px;border-bottom:1px solid #E5EAF0}
+    .ketualab-monitoring-detail__record header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.ketualab-monitoring-detail__record h3{margin:2px 0;color:#1F2937;font-size:15px}.ketualab-monitoring-detail__record header p{margin:0;color:#5B6472;font-size:14px;line-height:1.5}
+    .ketualab-monitoring-detail__record dl{display:flex;gap:24px;margin:12px 0}.ketualab-monitoring-detail__record dt{color:#5B6472;font-size:13px}.ketualab-monitoring-detail__record dd{margin:2px 0 0;color:#1F2937;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+    .ketualab-monitoring-detail__period-table{width:100%;border-collapse:collapse;color:#374151;font-size:14px}.ketualab-monitoring-detail__period-table th,.ketualab-monitoring-detail__period-table td{padding:9px 12px;border-bottom:1px solid #E5EAF0}.ketualab-monitoring-detail__period-table thead th{background:#EEF2F6;font-size:13px;text-align:left}.ketualab-monitoring-detail__period-table td:nth-child(2),.ketualab-monitoring-detail__period-table td:nth-child(3){text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+    @media(max-width:640px){.ketualab-monitoring-detail__record dl{flex-wrap:wrap}.ketualab-monitoring-detail__record header{flex-direction:column}}
 </style>
 
 <div class="detail-monitoring-page">
@@ -637,31 +643,7 @@
             </div>
         </div>
 
-        <div class="detail-table-wrap">
-            <table class="detail-table">
-                <thead>
-                    <tr>
-                        <th rowspan="2">No</th>
-                        <th rowspan="2">Kategori</th>
-                        <th rowspan="2">Sub Kategori / Jenis KM</th>
-                        <th rowspan="2">Keterangan</th>
-                        <th colspan="4" class="group">Target KM per Triwulan</th>
-                        <th colspan="4" class="group">Realisasi Disetujui per Triwulan</th>
-                        <th rowspan="2">Target Periode</th>
-                        <th rowspan="2">Realisasi Periode</th>
-                        <th rowspan="2">Sisa</th>
-                        <th rowspan="2">Status</th>
-                    </tr>
-                    <tr>
-                        @for($tw = 1; $tw <= 4; $tw++)
-                            <th>TW {{ $tw }}</th>
-                        @endfor
-                        @for($tw = 1; $tw <= 4; $tw++)
-                            <th>TW {{ $tw }}</th>
-                        @endfor
-                    </tr>
-                </thead>
-                <tbody>
+        <div class="ketualab-monitoring-detail__records">
                     @forelse($rincianTarget as $index => $row)
                         @php
                             $deadline = [
@@ -671,56 +653,18 @@
                                 4 => $row->tanggal_selesai_tw4 ?? null,
                             ];
                         @endphp
-                        <tr>
-                            <td class="center">{{ $index + 1 }}</td>
-                            <td class="center">
-                                <span class="category-name">{{ $row->kategori_km }}</span>
-                            </td>
-                            <td>
-                                <div class="target-name">{{ $row->sub_kategori_km ?: '-' }}</div>
-                                <div class="deadline-list">
-                                    @foreach($deadline as $tw => $tanggal)
-                                        @if($tanggal)
-                                            <span class="deadline-item">
-                                                <i class="bi bi-calendar-event"></i>
-                                                TW{{ $tw }}: {{ \Carbon\Carbon::parse($tanggal)->format('d/m/Y') }}
-                                            </span>
-                                        @endif
-                                    @endforeach
-                                </div>
-                            </td>
-                            <td class="keterangan-text">{{ $row->keterangan ?: '-' }}</td>
-
-                            @for($tw = 1; $tw <= 4; $tw++)
-                                <td class="center">
-                                    <span class="number-target">{{ (int) ($row->target_tw[$tw] ?? 0) }}</span>
-                                </td>
-                            @endfor
-
-                            @for($tw = 1; $tw <= 4; $tw++)
-                                <td class="center">
-                                    <span class="number-realisasi">{{ (int) ($row->realisasi_tw[$tw] ?? 0) }}</span>
-                                </td>
-                            @endfor
-
-                            <td class="center"><span class="number-target">{{ $row->target_periode }}</span></td>
-                            <td class="center"><span class="number-realisasi">{{ $row->realisasi_periode }}</span></td>
-                            <td class="center"><span class="number-sisa">{{ $row->sisa }}</span></td>
-                            <td class="center">
-                                <span class="status-pill status-{{ $row->status_class }}">
-                                    {{ $row->status }}
-                                </span>
-                            </td>
-                        </tr>
+                        <article class="ketualab-monitoring-detail__record">
+                            <header><div><span>{{ $index + 1 }} · {{ $row->kategori_km }}</span><h3>{{ $row->sub_kategori_km ?: '-' }}</h3><p>{{ $row->keterangan ?: '-' }}</p></div><span class="status-pill status-{{ $row->status_class }}">{{ $row->status }}</span></header>
+                            <dl><div><dt>Target periode</dt><dd>{{ $row->target_periode }}</dd></div><div><dt>Realisasi periode</dt><dd>{{ $row->realisasi_periode }}</dd></div><div><dt>Sisa</dt><dd>{{ $row->sisa }}</dd></div></dl>
+                            <table class="ketualab-monitoring-detail__period-table"><thead><tr><th scope="col">Periode</th><th scope="col">Target</th><th scope="col">Realisasi</th><th scope="col">Tenggat</th></tr></thead><tbody>
+                                @for($tw = 1; $tw <= 4; $tw++)
+                                    <tr><th scope="row">TW {{ $tw }}</th><td>{{ (int) ($row->target_tw[$tw] ?? 0) }}</td><td>{{ (int) ($row->realisasi_tw[$tw] ?? 0) }}</td><td>{{ !empty($deadline[$tw]) ? \Carbon\Carbon::parse($deadline[$tw])->format('d/m/Y') : '-' }}</td></tr>
+                                @endfor
+                            </tbody></table>
+                        </article>
                     @empty
-                        <tr>
-                            <td colspan="17">
-                                <div class="empty-state">Belum ada target KM untuk anggota ini pada tahun {{ $tahun }}.</div>
-                            </td>
-                        </tr>
+                        <div class="empty-state">Belum ada target KM untuk anggota ini pada tahun {{ $tahun }}.</div>
                     @endforelse
-                </tbody>
-            </table>
         </div>
     </div>
 
@@ -733,7 +677,7 @@
         </div>
 
         <div class="detail-table-wrap">
-            <table class="detail-table" style="min-width: 1480px;">
+            <table class="detail-table">
                 <thead>
                     <tr>
                         <th>No</th>

@@ -55,6 +55,9 @@
     .ketualab-member-detail__title { margin: 0; color: #0F172A; font-size: 24px; font-weight: 700; }
     .ketualab-member-detail__identity { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 17px; border-top: 1px solid #EEF2F7; }
     @media (max-width: 767.98px) { .ketualab-member-detail__identity { grid-template-columns: 1fr; } }
+    .ketualab-anggota-detail__identity{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin:18px 0 0;border-top:1px solid #D5DCE5}
+    .ketualab-anggota-detail__identity div{padding:13px 16px;border-bottom:1px solid #E5EAF0}.ketualab-anggota-detail__identity dt{color:#5B6472;font-size:13px;font-weight:600}.ketualab-anggota-detail__identity dd{margin:3px 0 0;color:#1F2937;font-size:14px;font-weight:600;line-height:1.5;overflow-wrap:anywhere}
+    @media(max-width:767px){.ketualab-anggota-detail__identity{grid-template-columns:1fr}}
 </style>
 
 <section class="ketualab-member-detail__overview">
@@ -75,45 +78,14 @@
         </a>
     </div>
 
-    <div class="table-responsive">
-        <table class="table align-middle mb-0 km-table">
-            <tbody>
-                <tr>
-                    <th style="width: 220px;">Nama Anggota</th>
-                    <td>{{ $anggota->nama_dosen ?? $anggota->username ?? '-' }}</td>
-                </tr>
-
-                <tr>
-                    <th>NIDN</th>
-                    <td>{{ $anggota->nidn ?? '-' }}</td>
-                </tr>
-
-                <tr>
-                    <th>JAD</th>
-                    <td>
-                        <span class="jad-badge">
-                            {{ $anggota->jad ?? '-' }}
-                        </span>
-                    </td>
-                </tr>
-
-                <tr>
-                    <th>Email</th>
-                    <td>{{ $anggota->email ?? '-' }}</td>
-                </tr>
-
-                <tr>
-                    <th>Lab Riset</th>
-                    <td>{{ $anggota->nama_lab ?? '-' }}</td>
-                </tr>
-
-                <tr>
-                    <th>Role</th>
-                    <td>{{ $anggota->role ?? 'Anggota' }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <dl class="ketualab-anggota-detail__identity">
+        <div><dt>Nama Anggota</dt><dd>{{ $anggota->nama_dosen ?? $anggota->username ?? '-' }}</dd></div>
+        <div><dt>NIDN</dt><dd>{{ $anggota->nidn ?? '-' }}</dd></div>
+        <div><dt>JAD</dt><dd>{{ $anggota->jad ?? '-' }}</dd></div>
+        <div><dt>Email</dt><dd>{{ $anggota->email ?? '-' }}</dd></div>
+        <div><dt>Lab Riset</dt><dd>{{ $anggota->nama_lab ?? '-' }}</dd></div>
+        <div><dt>Role</dt><dd>{{ $anggota->role ?? 'Anggota' }}</dd></div>
+    </dl>
 </section>
 
 <div class="card mb-4">

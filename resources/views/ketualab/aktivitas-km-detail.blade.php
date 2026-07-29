@@ -310,7 +310,7 @@
 
     .history-table {
         width: 100%;
-        min-width: 900px;
+        width: 100%;
         border-collapse: collapse;
     }
 
@@ -360,6 +360,7 @@
     .ketualab-activity-detail__header { padding: 20px 22px; margin-bottom: 16px; background: #FFF; border: 1px solid #E2E8F0; border-radius: 14px; }
     .ketualab-activity-detail__eyebrow { margin: 0 0 5px; color: #2563EB; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
     .ketualab-activity-detail__title { margin: 0; color: #0F172A; font-size: 24px; font-weight: 700; }
+    .ketualab-aktivitas-detail__section{min-width:0}.ketualab-aktivitas-detail__section .section-title{margin:0;color:#1F2937;font-size:18px;line-height:1.4}.ketualab-aktivitas-detail__section .info-label,.ketualab-aktivitas-detail__section .info-value{font-size:14px;line-height:1.5}.ketualab-aktivitas-detail__section .proof-box{min-width:0;flex-wrap:wrap}.ketualab-aktivitas-detail__section .proof-caption{overflow-wrap:anywhere}.ketualab-aktivitas-detail__section textarea{width:100%;min-height:110px}
 </style>
 
 <div class="verification-detail-page">
@@ -417,8 +418,8 @@
     </div>
 
     <div class="detail-grid">
-        <div class="verification-info-card">
-            <div class="section-title">Aktivitas yang Diajukan</div>
+        <section class="verification-info-card ketualab-aktivitas-detail__section" aria-labelledby="aktivitas-diajukan-title">
+            <h2 id="aktivitas-diajukan-title" class="section-title">Aktivitas yang Diajukan</h2>
             <p class="section-desc">Informasi inti yang diinput oleh anggota.</p>
 
             <div class="activity-name">{{ $aktivitas->judul_aktivitas ?? '-' }}</div>
@@ -448,10 +449,10 @@
                     @endif
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="verification-info-card">
-            <div class="section-title">Anggota dan Target KM</div>
+        <section class="verification-info-card ketualab-aktivitas-detail__section" aria-labelledby="anggota-target-title">
+            <h2 id="anggota-target-title" class="section-title">Anggota dan Target KM</h2>
             <p class="section-desc">Relasi aktivitas terhadap target KM yang diberikan kepada anggota.</p>
 
             <div class="info-list">
@@ -486,7 +487,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 
     @if($status === 'Submitted')

@@ -409,7 +409,7 @@
 
     .monitoring-table {
         width: 100%;
-        min-width: 1120px;
+        width: 100%;
         border-collapse: collapse;
     }
 
@@ -661,7 +661,7 @@
 
     .category-detail-table {
         width: 100%;
-        min-width: 1180px;
+        width: 100%;
         border-collapse: collapse;
     }
 
@@ -841,7 +841,7 @@
 
     .verification-history-table {
         width: 100%;
-        min-width: 1100px;
+        width: 100%;
         border-collapse: collapse;
     }
 
@@ -921,6 +921,17 @@
             grid-column: span 1;
         }
     }
+    .ketualab-monitoring-anggota__records{border-top:1px solid #D5DCE5}
+    .ketualab-monitoring-anggota__record{display:grid;grid-template-columns:minmax(240px,1.2fr) minmax(420px,2fr);gap:14px 24px;padding:16px 20px;border-bottom:1px solid #E5EAF0;background:#fff}
+    .ketualab-monitoring-anggota__identity{display:flex;gap:12px;align-items:flex-start}
+    .ketualab-monitoring-anggota__identity strong{display:block;color:#1F2937;font-size:15px}
+    .ketualab-monitoring-anggota__identity p{margin:3px 0 0;color:#5B6472;font-size:13px;line-height:1.5}
+    .ketualab-monitoring-anggota__record dl{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:0}
+    .ketualab-monitoring-anggota__record dt{color:#5B6472;font-size:13px}.ketualab-monitoring-anggota__record dd{margin:2px 0 0;color:#1F2937;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+    .ketualab-monitoring-anggota__progress{grid-column:1/2;height:6px;overflow:hidden;border-radius:999px;background:#E5EAF0}.ketualab-monitoring-anggota__progress span{display:block;height:100%;background:#2457A6}
+    .ketualab-monitoring-anggota__actions{display:flex;justify-content:flex-end;align-items:center;gap:12px}.ketualab-monitoring-anggota__actions .btn-monitoring-primary{min-height:40px;font-size:14px}
+    @media(max-width:900px){.ketualab-monitoring-anggota__record{grid-template-columns:1fr}.ketualab-monitoring-anggota__progress{grid-column:auto}.ketualab-monitoring-anggota__actions{justify-content:flex-start}}
+    @media(max-width:640px){.ketualab-monitoring-anggota__record dl{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 
 <div class="monitoring-anggota-page">
@@ -1220,26 +1231,8 @@
             @endif
         </div>
 
-        <div class="table-wrap">
-            <table class="monitoring-table">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama Anggota</th>
-                        <th>NIDN</th>
-                        <th>JAD</th>
-                        <th>KM Assign</th>
-                        <th>Target Periode</th>
-                        <th>Realisasi</th>
-                        <th>Sisa</th>
-                        <th>Progress</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @forelse($dataMonitoring as $index => $item)
+        <div class="ketualab-monitoring-anggota__records">
+            @forelse($dataMonitoring as $index => $item)
                         @php
                             $statusClass = match($item['status_class'] ?? 'secondary') {
                                 'success' => 'status-success',
@@ -1248,45 +1241,25 @@
                                 default => 'status-secondary',
                             };
                         @endphp
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>
-                                <span class="member-name">{{ $item['nama_dosen'] }}</span>
-                                <span class="member-meta">{{ $item['username'] }}</span>
-                            </td>
-                            <td>{{ $item['nidn'] }}</td>
-                            <td><span class="jad-pill">{{ $item['jad'] }}</span></td>
-                            <td>{{ $item['total_km_assign'] }}</td>
-                            <td>{{ $item['target_periode'] }}</td>
-                            <td style="color:#059669; font-weight:900;">{{ $item['total_realisasi'] }}</td>
-                            <td style="color:#d97706; font-weight:900;">{{ $item['sisa'] }}</td>
-                            <td>
-                                <div class="soft-progress">
-                                    <div class="soft-progress-fill" style="width: {{ min((int)$item['persentase'], 100) }}%;"></div>
-                                </div>
-                                <span class="member-meta">{{ $item['persentase'] }}%</span>
-                            </td>
-                            <td><span class="status-pill {{ $statusClass }}">{{ $item['status'] }}</span></td>
-                            <td>
-                                <a
+                <article class="ketualab-monitoring-anggota__record">
+                    <div class="ketualab-monitoring-anggota__identity"><span>{{ $index + 1 }}</span><div><strong>{{ $item['nama_dosen'] }}</strong><p>{{ $item['username'] }} · NIDN {{ $item['nidn'] }} · {{ $item['jad'] }}</p></div></div>
+                    <dl>
+                        <div><dt>KM diberikan</dt><dd>{{ $item['total_km_assign'] }}</dd></div>
+                        <div><dt>Target periode</dt><dd>{{ $item['target_periode'] }}</dd></div>
+                        <div><dt>Realisasi</dt><dd>{{ $item['total_realisasi'] }}</dd></div>
+                        <div><dt>Sisa</dt><dd>{{ $item['sisa'] }}</dd></div>
+                        <div><dt>Progress</dt><dd>{{ $item['persentase'] }}%</dd></div>
+                    </dl>
+                    <div class="ketualab-monitoring-anggota__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ min((int)$item['persentase'], 100) }}" aria-label="Progress {{ $item['nama_dosen'] }} {{ $item['persentase'] }} persen"><span style="width:{{ min((int)$item['persentase'], 100) }}%"></span></div>
+                    <div class="ketualab-monitoring-anggota__actions"><span class="status-pill {{ $statusClass }}">{{ $item['status'] }}</span><a
                                     href="/ketualab/detail-anggota/{{ $item['id_user'] }}?tahun={{ $tahun }}&periode={{ $periode }}&triwulan={{ $triwulan }}&semester={{ $semester }}"
-                                    class="btn-monitoring-primary"
-                                    style="height:34px; padding:0 11px; font-size:12px;">
+                                    class="btn-monitoring-primary">
                                     Detail
-                                </a>
-                            </td>
-                        </tr>
+                                </a></div>
+                </article>
                     @empty
-                        <tr>
-                            <td colspan="11">
-                                <div class="empty-state">
-                                    Belum ada anggota yang sesuai dengan filter atau pencarian.
-                                </div>
-                            </td>
-                        </tr>
+                        <div class="empty-state">Belum ada anggota yang sesuai dengan filter atau pencarian.</div>
                     @endforelse
-                </tbody>
-            </table>
         </div>
     </div>
 

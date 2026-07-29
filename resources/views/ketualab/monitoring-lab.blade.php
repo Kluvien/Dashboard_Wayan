@@ -468,7 +468,7 @@
 
     .recap-table {
         width: 100%;
-        min-width: 1570px;
+        width: 100%;
         border-collapse: collapse;
     }
 
@@ -610,6 +610,22 @@
             grid-template-columns: 1fr;
         }
     }
+    .ketualab-monitoring-lab__records { border-top: 1px solid #D5DCE5; }
+    .ketualab-monitoring-lab__record { padding: 14px 0 18px; border-bottom: 1px solid #E5EAF0; }
+    .ketualab-monitoring-lab__record header { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; }
+    .ketualab-monitoring-lab__record h5 { margin:0; color:#1F2937; font-size:15px; font-weight:700; }
+    .ketualab-monitoring-lab__record p { margin:3px 0 0; color:#5B6472; font-size:14px; line-height:1.5; }
+    .ketualab-monitoring-lab__record dl { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; margin:12px 0; }
+    .ketualab-monitoring-lab__record dt { color:#5B6472; font-size:13px; }
+    .ketualab-monitoring-lab__record dd { margin:2px 0 0; color:#1F2937; font-size:14px; font-weight:700; font-variant-numeric:tabular-nums; }
+    .ketualab-monitoring-lab__progress { height:6px; overflow:hidden; border-radius:999px; background:#E5EAF0; }
+    .ketualab-monitoring-lab__progress span { display:block; height:100%; background:#2457A6; }
+    .ketualab-monitoring-lab__status-line { font-size:13px !important; }
+    .ketualab-monitoring-lab__period-table { width:100%; border-collapse:collapse; color:#374151; font-size:14px; }
+    .ketualab-monitoring-lab__period-table th,.ketualab-monitoring-lab__period-table td { padding:9px 12px; border-bottom:1px solid #E5EAF0; }
+    .ketualab-monitoring-lab__period-table thead th { background:#EEF2F6; font-size:13px; font-weight:700; text-align:left; }
+    .ketualab-monitoring-lab__period-table td { text-align:right; font-weight:700; font-variant-numeric:tabular-nums; }
+    @media(max-width:640px){.ketualab-monitoring-lab__record dl{grid-template-columns:repeat(2,minmax(0,1fr));}}
 </style>
 
 <div class="monitoring-lab-page">
@@ -845,98 +861,35 @@
                     </div>
                 </div>
 
-                <div class="recap-table-wrap">
-                    <table class="recap-table">
-                        <thead>
-                            <tr class="group-header">
-                                <th rowspan="2">No</th>
-                                <th rowspan="2" class="text-start">Sub Kategori / Jenis KM</th>
-                                <th rowspan="2" class="text-start">Keterangan</th>
-                                <th colspan="4">Target KM per Triwulan</th>
-                                <th rowspan="2">Target Periode</th>
-                                <th colspan="4">Realisasi Accepted per Triwulan</th>
-                                <th rowspan="2">Realisasi Periode</th>
-                                <th rowspan="2">Sudah Dibagi</th>
-                                <th rowspan="2">Belum Dibagi</th>
-                                <th rowspan="2">Tenggat Periode</th>
-                                <th rowspan="2">Status Tenggat</th>
-                                <th rowspan="2">Progress</th>
-                                <th rowspan="2">Status</th>
-                            </tr>
-                            <tr>
-                                @for($tw = 1; $tw <= 4; $tw++)
-                                    <th class="{{ in_array($tw, $triwulanAktif ?? []) ? 'tw-selected' : '' }}">TW{{ $tw }}</th>
-                                @endfor
-                                @for($tw = 1; $tw <= 4; $tw++)
-                                    <th class="{{ in_array($tw, $triwulanAktif ?? []) ? 'tw-selected' : '' }}">TW{{ $tw }}</th>
-                                @endfor
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @forelse($group['items'] as $index => $item)
-                                <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td class="text-start">
-                                        <div class="recap-subcategory">
-                                            {{ $item['sub_kategori_km'] }}
-                                        </div>
-                                    </td>
-                                    <td class="recap-description">
-                                        {{ $item['keterangan'] }}
-                                    </td>
-
+                <div class="ketualab-monitoring-lab__records">
+                    @forelse($group['items'] as $index => $item)
+                        @php $itemProgress = min((int) ($item['persentase'] ?? 0), 100); @endphp
+                        <article class="ketualab-monitoring-lab__record">
+                            <header>
+                                <div><span>{{ $index + 1 }}</span><h5>{{ $item['sub_kategori_km'] }}</h5><p>{{ $item['keterangan'] }}</p></div>
+                                <span class="badge-monitor badge-{{ $item['status_class'] }}">{{ $item['status'] }}</span>
+                            </header>
+                            <dl>
+                                <div><dt>Target periode</dt><dd>{{ $item['target_periode'] }}</dd></div>
+                                <div><dt>Realisasi periode</dt><dd>{{ $item['realisasi_periode'] }}</dd></div>
+                                <div><dt>Sudah dibagi</dt><dd>{{ $item['sudah_dibagi'] }}</dd></div>
+                                <div><dt>Belum dibagi</dt><dd>{{ $item['belum_dibagi'] }}</dd></div>
+                                <div><dt>Tenggat</dt><dd>{{ $item['tenggat_periode'] }}</dd></div>
+                            </dl>
+                            <div class="ketualab-monitoring-lab__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $itemProgress }}" aria-label="Progress {{ $item['sub_kategori_km'] }} {{ $itemProgress }} persen"><span style="width:{{ $itemProgress }}%"></span></div>
+                            <p class="ketualab-monitoring-lab__status-line">{{ $itemProgress }}% · {{ $item['status_tenggat'] }}</p>
+                            <table class="ketualab-monitoring-lab__period-table">
+                                <thead><tr><th scope="col">Periode</th><th scope="col">Target</th><th scope="col">Realisasi</th></tr></thead>
+                                <tbody>
                                     @for($tw = 1; $tw <= 4; $tw++)
-                                        <td class="{{ in_array($tw, $triwulanAktif ?? []) ? 'tw-selected' : '' }}">
-                                            {{ data_get($item, 'target_tw.' . $tw, 0) }}
-                                        </td>
+                                        <tr><th scope="row">TW{{ $tw }}</th><td>{{ data_get($item, 'target_tw.' . $tw, 0) }}</td><td>{{ data_get($item, 'realisasi_tw.' . $tw, 0) }}</td></tr>
                                     @endfor
-
-                                    <td class="total-period-cell">{{ $item['target_periode'] }}</td>
-
-                                    @for($tw = 1; $tw <= 4; $tw++)
-                                        <td class="{{ in_array($tw, $triwulanAktif ?? []) ? 'tw-selected' : '' }}">
-                                            {{ data_get($item, 'realisasi_tw.' . $tw, 0) }}
-                                        </td>
-                                    @endfor
-
-                                    <td class="realisasi-cell">{{ $item['realisasi_periode'] }}</td>
-                                    <td class="distribution-cell">{{ $item['sudah_dibagi'] }}</td>
-                                    <td class="distribution-pending">{{ $item['belum_dibagi'] }}</td>
-                                    <td class="deadline-text">{{ $item['tenggat_periode'] }}</td>
-
-                                    <td>
-                                        <span class="badge-monitor badge-{{ $item['status_tenggat_class'] }}">
-                                            {{ $item['status_tenggat'] }}
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <div style="min-width:90px;">
-                                            <div class="progress-track" style="margin:0 0 4px;">
-                                                <div class="progress-fill" style="width: {{ min($item['persentase'], 100) }}%"></div>
-                                            </div>
-                                            <div class="small text-muted">{{ min($item['persentase'], 100) }}%</div>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <span class="badge-monitor badge-{{ $item['status_class'] }}">
-                                            {{ $item['status'] }}
-                                        </span>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="21">
-                                        <div class="empty-category">
-                                            Belum ada data KM kategori {{ $group['kategori'] }} pada tahun {{ $tahun }}.
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                                </tbody>
+                            </table>
+                        </article>
+                    @empty
+                        <div class="empty-category">Belum ada data KM kategori {{ $group['kategori'] }} pada tahun {{ $tahun }}.</div>
+                    @endforelse
                 </div>
             </div>
         @endforeach
