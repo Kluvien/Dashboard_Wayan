@@ -31,14 +31,13 @@
     .ketuakk-km-overview__table { border:0!important; border-radius:0; }
     .ketuakk-km-overview__table th,.ketuakk-km-overview__table td { padding:11px 16px!important; border-bottom:1px solid #EEF2F7!important; }
     .km-table th {
-        white-space: nowrap;
         vertical-align: middle;
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .km-table td {
         vertical-align: middle;
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .km-table th,
@@ -151,6 +150,7 @@
         background: #E5E7EB;
         color: #475569;
     }
+    .ketuakk-km-overview__records{border-top:1px solid #D5DCE5}.ketuakk-km-overview__record{border-bottom:1px solid #E5EAF0}.ketuakk-km-overview__record-header{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:20px;align-items:center;padding:16px 20px;background:#F3F6F9}.ketuakk-km-overview__record-header h2{margin:2px 0;color:#1F2937;font-size:17px}.ketuakk-km-overview__record-header p{margin:0;color:#5B6472;font-size:14px}.ketuakk-km-overview__record-header dl{display:flex;gap:18px;margin:0}.ketuakk-km-overview__record-header dt,.ketuakk-km-overview__category-list dt,.ketuakk-km-overview__summary-list dt{color:#5B6472;font-size:13px}.ketuakk-km-overview__record-header dd,.ketuakk-km-overview__category-list dd,.ketuakk-km-overview__summary-list dd{margin:2px 0 0;color:#1F2937;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}.ketuakk-km-overview__record-body{padding:14px 20px 18px}.ketuakk-km-overview__record-body p{color:#374151;font-size:14px;line-height:1.5}.ketuakk-km-overview__period-table{width:100%;border-collapse:collapse;color:#374151;font-size:14px}.ketuakk-km-overview__period-table th,.ketuakk-km-overview__period-table td{padding:9px 12px;border-bottom:1px solid #E5EAF0}.ketuakk-km-overview__period-table thead th{background:#EEF2F6;font-size:13px;text-align:left}.ketuakk-km-overview__period-table td:nth-child(2){text-align:right;font-weight:700;font-variant-numeric:tabular-nums}.ketuakk-km-overview__category-list,.ketuakk-km-overview__summary-list{display:grid;gap:5px;margin:0}.ketuakk-km-overview__category-list div,.ketuakk-km-overview__summary-list div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px}@media(max-width:850px){.ketuakk-km-overview__record-header{grid-template-columns:1fr}.ketuakk-km-overview__record-header dl{flex-wrap:wrap}}
 </style>
 
 <section class="ketuakk-km-overview__panel" aria-labelledby="km-overview-title">
@@ -191,129 +191,39 @@
         </div>
     </header>
 
-    <div class="table-responsive">
-        <table class="table align-middle mb-0 km-table ketuakk-km-overview__table">
-            <thead>
-                <tr>
-                    <th rowspan="2">No</th>
-                    <th rowspan="2">Kategori KM</th>
-                    <th rowspan="2">Jenis KM</th>
-                    <th rowspan="2">Sub Kategori</th>
-                    <th rowspan="2">Keterangan</th>
-
-                    <th colspan="4" class="tw-header">
-                        Target KM per Triwulan
-                    </th>
-
-                    <th colspan="4" class="due-header">
-                        Tenggat per Triwulan
-                    </th>
-
-                    <th rowspan="2">Total Target</th>
-                    <th rowspan="2">Sudah Turun</th>
-                    <th rowspan="2">Sisa Belum Turun</th>
-                    <th rowspan="2">Aksi</th>
-                </tr>
-
-                <tr>
-                    <th class="period-cell tw-start">TW 1</th>
-                    <th class="period-cell">TW 2</th>
-                    <th class="period-cell">TW 3</th>
-                    <th class="period-cell tw-end">TW 4</th>
-
-                    <th class="period-cell due-start">TW 1</th>
-                    <th class="period-cell">TW 2</th>
-                    <th class="period-cell">TW 3</th>
-                    <th class="period-cell due-end">TW 4</th>
-                </tr>
-            </thead>
-
-            <tbody>
+    <div class="ketuakk-km-overview__records">
                 @forelse($targetRows as $index => $item)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-
-                        <td class="fw-bold">
-                            {{ $item['kategori_km'] ?? '-' }}
-                        </td>
-
-                        <td>{{ $item['jenis_km'] ?? '-' }}</td>
-
-                        <td>{{ $item['sub_kategori_km'] ?? '-' }}</td>
-
-                        <td style="min-width: 180px;">
-                            {{ $item['keterangan'] ?? '-' }}
-                        </td>
-
-                        <td class="period-cell tw-start">
-                            {{ $item['triwulan_1'] ?? 0 }}
-                        </td>
-
-                        <td class="period-cell">
-                            {{ $item['triwulan_2'] ?? 0 }}
-                        </td>
-
-                        <td class="period-cell">
-                            {{ $item['triwulan_3'] ?? 0 }}
-                        </td>
-
-                        <td class="period-cell tw-end">
-                            {{ $item['triwulan_4'] ?? 0 }}
-                        </td>
-
-                        @foreach([1, 2, 3, 4] as $tw)
-                            @php
-                                $tanggalSelesai = $item['tanggal_selesai_tw' . $tw] ?? null;
-                            @endphp
-
-                            <td class="due-date-cell {{ $tw === 1 ? 'due-start' : '' }} {{ $tw === 4 ? 'due-end' : '' }}">
-                                @if(!empty($tanggalSelesai))
-                                    <span class="due-date-value">
-                                        <i class="bi bi-calendar-event"></i>
-                                        {{ $formatDueDate($tanggalSelesai) }}
-                                    </span>
-                                @else
-                                    <span class="due-date-empty">-</span>
-                                @endif
-                            </td>
-                        @endforeach
-
-                        <td class="fw-bold text-center">
-                            {{ $item['total_target'] ?? 0 }}
-                        </td>
-
-                        <td class="fw-bold text-center text-primary">
-                            {{ $item['sudah_turun'] ?? 0 }}
-                        </td>
-
-                        <td class="fw-bold text-center text-warning">
-                            {{ $item['sisa_belum_turun'] ?? 0 }}
-                        </td>
-
-                        <td class="text-center">
+                    <article class="ketuakk-km-overview__record">
+                        <header class="ketuakk-km-overview__record-header">
+                            <div><span>{{ $index + 1 }} · Tahun {{ $tahun }}</span><h2>{{ $item['kategori_km'] ?? '-' }}</h2><p>{{ $item['jenis_km'] ?? '-' }} · {{ $item['sub_kategori_km'] ?? '-' }}</p></div>
+                            <dl><div><dt>Total target</dt><dd>{{ $item['total_target'] ?? 0 }}</dd></div><div><dt>Sudah didistribusikan</dt><dd>{{ $item['sudah_turun'] ?? 0 }}</dd></div><div><dt>Sisa</dt><dd>{{ $item['sisa_belum_turun'] ?? 0 }}</dd></div></dl>
+                            <div class="ketuakk-km-overview__record-action">
                             @if(($item['sisa_belum_turun'] ?? 0) > 0)
                                 <a
                                     href="/ketuakk/km-lab-riset/create?id_target={{ $item['id_target'] }}"
                                     class="btn btn-primary btn-sm">
                                     <i class="bi bi-arrow-down-circle me-1"></i>
-                                    Turunkan KM
+                                    Distribusikan KM
                                 </a>
                             @else
                                 <button class="btn btn-secondary btn-sm" disabled>
                                     Sudah Habis
                                 </button>
                             @endif
-                        </td>
-                    </tr>
+                            </div>
+                        </header>
+                        <div class="ketuakk-km-overview__record-body">
+                            <p><strong>Keterangan:</strong> {{ $item['keterangan'] ?? '-' }}</p>
+                            <table class="ketuakk-km-overview__period-table"><thead><tr><th scope="col">Periode</th><th scope="col">Target</th><th scope="col">Tanggal Mulai</th><th scope="col">Tanggal Selesai</th></tr></thead><tbody>
+                                @foreach([1,2,3,4] as $tw)
+                                    <tr><th scope="row">TW {{ $tw }}</th><td>{{ $item['triwulan_'.$tw] ?? 0 }}</td><td>{{ !empty($item['tanggal_mulai_tw'.$tw]) ? $formatDueDate($item['tanggal_mulai_tw'.$tw]) : '-' }}</td><td>{{ !empty($item['tanggal_selesai_tw'.$tw]) ? $formatDueDate($item['tanggal_selesai_tw'.$tw]) : '-' }}</td></tr>
+                                @endforeach
+                            </tbody></table>
+                        </div>
+                    </article>
                 @empty
-                    <tr>
-                        <td colspan="17" class="text-center text-muted py-4">
-                            Belum ada data target KM Kelompok Keahlian pada tahun ini.
-                        </td>
-                    </tr>
+                    <div class="text-center text-muted py-4">Belum ada data target KM Kelompok Keahlian pada tahun ini.</div>
                 @endforelse
-            </tbody>
-        </table>
     </div>
 </section>
 
@@ -334,29 +244,7 @@
     <div class="table-responsive">
         <table class="table align-middle mb-0 km-table">
             <thead>
-                <tr>
-                    <th rowspan="2">No</th>
-                    <th rowspan="2">Nama Lab Riset</th>
-
-                    <th colspan="5" class="group-header">
-                        KM Didistribusikan ke Lab
-                    </th>
-
-                    <th rowspan="2">Total Turun</th>
-                    <th rowspan="2">Sudah Dibagi ke Anggota</th>
-                    <th rowspan="2">Sisa KM</th>
-                    <th rowspan="2">Progress</th>
-                    <th rowspan="2">Status</th>
-                    <th rowspan="2">Aksi</th>
-                </tr>
-
-                <tr>
-                    @foreach($kategoriDefault as $kategori)
-                        <th class="text-center">
-                            {{ strtoupper($kategori) }}
-                        </th>
-                    @endforeach
-                </tr>
+                <tr><th>No</th><th>Lab Riset</th><th>Distribusi per Kategori</th><th>Ringkasan</th><th>Aksi</th></tr>
             </thead>
 
             <tbody>
@@ -368,39 +256,18 @@
                             {{ $lab['nama_lab'] ?? '-' }}
                         </td>
 
-                        @foreach($kategoriDefault as $kategori)
-                            <td class="text-center fw-bold">
-                                {{ $lab['jumlah_per_kategori'][$kategori] ?? 0 }}
-                            </td>
-                        @endforeach
-
-                        <td class="text-center fw-bold">
-                            {{ $lab['total_turun'] ?? 0 }}
-                        </td>
-
-                        <td class="text-center fw-bold">
-                            {{ $lab['sudah_dibagi_ke_anggota'] ?? 0 }}
-                        </td>
-
-                        <td class="text-center fw-bold">
-                            {{ $lab['sisa_km'] ?? 0 }}
-                        </td>
-
-                        <td style="min-width: 145px;">
+                        <td><dl class="ketuakk-km-overview__category-list">@foreach($kategoriDefault as $kategori)<div><dt>{{ $kategori }}</dt><dd>{{ $lab['jumlah_per_kategori'][$kategori] ?? 0 }}</dd></div>@endforeach</dl></td>
+                        <td><dl class="ketuakk-km-overview__summary-list"><div><dt>Total didistribusikan</dt><dd>{{ $lab['total_turun'] ?? 0 }}</dd></div><div><dt>Sudah dibagi</dt><dd>{{ $lab['sudah_dibagi_ke_anggota'] ?? 0 }}</dd></div><div><dt>Sisa KM</dt><dd>{{ $lab['sisa_km'] ?? 0 }}</dd></div></dl>
                             <div class="progress-thin">
                                 <div
                                     class="progress-bar"
                                     role="progressbar"
-                                    style="width: {{ $lab['progress'] ?? 0 }}%;">
+                                    aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ min(max((int)($lab['progress'] ?? 0),0),100) }}"
+                                    aria-label="Progress {{ $lab['nama_lab'] ?? 'lab' }} {{ $lab['progress'] ?? 0 }} persen"
+                                    style="width: {{ min(max((int)($lab['progress'] ?? 0),0),100) }}%;">
                                 </div>
                             </div>
-
-                            <div class="small mt-1 text-center">
-                                {{ $lab['progress'] ?? 0 }}%
-                            </div>
-                        </td>
-
-                        <td>
+                            <div class="small mt-1">{{ $lab['progress'] ?? 0 }}%</div>
                             @if(($lab['status'] ?? '') === 'Selesai')
                                 <span class="status-pill status-success">
                                     Selesai
@@ -426,7 +293,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="13" class="text-center text-muted py-4">
+                        <td colspan="5" class="text-center text-muted py-4">
                             Belum ada data Lab Riset.
                         </td>
                     </tr>

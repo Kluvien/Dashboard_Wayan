@@ -35,114 +35,13 @@
 @endphp
 
 <style>
-    .km-table th,
-    .km-table td {
-        vertical-align: middle;
-        font-size: 13px;
-    }
-
-    .km-table th {
-        white-space: nowrap;
-        font-weight: 800;
-        text-transform: uppercase;
-    }
-
-    .km-table th,
-    .km-table td {
-        border-bottom: 1px solid #E5E7EB !important;
-    }
-
-    .group-header {
-        background: #F3F6FB !important;
-        text-align: center;
-        font-weight: 800 !important;
-    }
-
-    .tw-start {
-        border-left: 2px solid #CBD5E1 !important;
-    }
-
-    .tw-end {
-        border-right: 2px solid #CBD5E1 !important;
-    }
-
-    .km-detail-category {
-        font-size: 14px;
-        font-weight: 800;
-        color: #0F172A;
-        margin-bottom: 7px;
-    }
-
-    .km-detail-meta {
-        display: flex;
-        gap: 7px;
-        margin-top: 4px;
-        color: #64748B;
-        font-size: 12px;
-        white-space: normal;
-    }
-
-    .km-detail-meta strong {
-        min-width: 88px;
-        color: #475569;
-    }
-
-    .period-cell {
-        text-align: center;
-        font-weight: 800;
-    }
-
-    .period-subtext {
-        display: block;
-        margin-top: 4px;
-        color: #64748B;
-        font-size: 11px;
-        font-weight: 600;
-    }
-
-    .deadline-date {
-        display: inline-block;
-        color: #334155;
-        font-size: 12px;
-        font-weight: 600;
-        font-variant-numeric: tabular-nums;
-        white-space: nowrap;
-    }
-
-    .deadline-date i {
-        color: #477EF7;
-    }
-
-    .deadline-empty {
-        color: #94A3B8;
-        font-weight: 700;
-    }
-
-    .remaining-badge {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 36px;
-        padding: 5px 9px;
-        border-radius: 6px;
-        background: #F8FAFC;
-        color: #334155;
-        font-size: 12px;
-        font-weight: 800;
-    }
-
-    .remaining-badge.empty {
-        background: #F1F5F9;
-        color: #64748B;
-    }
-
     .status-pill {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         padding: 6px 11px;
         border-radius: 6px;
-        font-size: 11px;
+        font-size: 13px;
         font-weight: 800;
         white-space: nowrap;
     }
@@ -178,21 +77,61 @@
 
     .ketualab-assignment__section { margin-bottom: 16px; overflow: hidden; background: #FFF; border: 1px solid #E2E8F0; border-radius: 14px; }
     .ketualab-assignment__section-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 18px 22px; border-bottom: 1px solid #EEF2F7; }
-    .ketualab-assignment__section-title { margin: 0; color: #0F172A; font-size: 17px; font-weight: 700; }
+    .ketualab-assignment__section-title { margin: 0; color: #1F2937; font-size: 18px; font-weight: 700; }
     .ketualab-assignment__section-description { margin: 5px 0 0; color: #64748B; font-size: 13px; }
-    .ketualab-assignment__scroll { overflow-x: auto; }
+    .ketualab-assignment__records { min-width: 0; }
+    .ketualab-assignment__record { padding: 18px 22px; border-bottom: 1px solid #E5EAF0; }
+    .ketualab-assignment__record:last-child { border-bottom: 0; }
+    .ketualab-assignment__record-header { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: start; margin-bottom: 14px; }
+    .ketualab-assignment__record-title { margin: 0; color: #1F2937; font-size: 18px; font-weight: 700; line-height: 1.4; overflow-wrap: anywhere; }
+    .ketualab-assignment__record-subtitle { margin: 4px 0 0; color: #5B6472; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+    .ketualab-assignment__record-description { margin: 10px 0 0; color: #374151; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+    .ketualab-assignment__record-summary { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px 18px; margin: 0; }
+    .ketualab-assignment__record-summary div { min-width: 82px; }
+    .ketualab-assignment__record-summary dt { color: #5B6472; font-size: 13px; font-weight: 600; }
+    .ketualab-assignment__record-summary dd { margin: 2px 0 0; color: #1F2937; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .ketualab-assignment__record-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 12px; }
+    .ketualab-assignment__period-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .ketualab-assignment__period-table th,
+    .ketualab-assignment__period-table td { padding: 10px 12px; border-bottom: 1px solid #E5EAF0; color: #374151; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+    .ketualab-assignment__period-table thead th { background: #EEF2F6; color: #374151; font-size: 13px; font-weight: 700; text-align: left; }
+    .ketualab-assignment__period-table tbody th { color: #1F2937; font-weight: 700; }
+    .ketualab-assignment__period-table td:nth-child(2),
+    .ketualab-assignment__period-table td:nth-child(3),
+    .ketualab-assignment__period-table td:nth-child(4) { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .ketualab-assignment__history-table,
+    .ketualab-assignment__member-table { width: 100%; table-layout: fixed; }
+    .ketualab-assignment__history-table th,
+    .ketualab-assignment__history-table td,
+    .ketualab-assignment__member-table th,
+    .ketualab-assignment__member-table td { padding: 10px 12px; color: #374151; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; vertical-align: top; }
+    .ketualab-assignment__history-table th,
+    .ketualab-assignment__member-table th { background: #EEF2F6; color: #374151; font-size: 13px; font-weight: 700; }
+    .ketualab-assignment__identity { color: #1F2937; font-weight: 700; }
+    .ketualab-assignment__meta { margin-top: 3px; color: #5B6472; font-size: 13px; }
+    .ketualab-assignment__values { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 12px; margin: 0; }
+    .ketualab-assignment__values dt { color: #5B6472; font-size: 13px; font-weight: 500; }
+    .ketualab-assignment__values dd { margin: 0; color: #1F2937; font-size: 14px; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
     .ketualab-assignment__table { width: 100%; margin: 0; }
-    .ketualab-assignment__table > thead > tr > th { padding: 11px 16px; background: #F8FAFC; border: 0; border-bottom: 1px solid #CBD5E1; color: #334155; font-size: 11px; font-weight: 700; text-transform: uppercase; vertical-align: middle; }
-    .ketualab-assignment__table > tbody > tr > td { height: auto; padding: 10px 14px; border: 0; border-bottom: 1px solid #EEF2F7; color: #334155; font-size: 13px; vertical-align: middle; }
+    .ketualab-assignment__table > thead > tr > th { padding: 11px 16px; background: #EEF2F6; border: 0; border-bottom: 1px solid #D5DCE5; color: #374151; font-size: 13px; font-weight: 700; vertical-align: middle; }
+    .ketualab-assignment__table > tbody > tr > td { height: auto; padding: 10px 14px; border: 0; border-bottom: 1px solid #E5EAF0; color: #374151; font-size: 14px; vertical-align: middle; }
     .ketualab-assignment__number { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
-    .ketualab-assignment__action { min-height: 32px; padding: 5px 9px; border-radius: 7px; font-size: 12px; font-weight: 700; }
+    .ketualab-assignment__action { min-height: 40px; padding: 7px 11px; border-radius: 7px; font-size: 14px; font-weight: 700; }
+    .ketualab-assignment__filter { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; min-width: 0; }
+    .ketualab-assignment__filter .form-select { width: auto; min-width: 0; min-height: 44px; font-size: 14px; }
+    .ketualab-assignment__filter .btn,
+    .ketualab-assignment__record-actions .btn { min-height: 40px; font-size: 14px; }
+    .ketualab-assignment__modal .form-select,
+    .ketualab-assignment__modal .form-control { width: 100%; min-width: 0; min-height: 44px; font-size: 14px; }
+    .ketualab-assignment__modal .form-label { font-size: 14px; }
+    .ketualab-assignment__modal .modal-body { overflow-y: auto; overflow-x: visible; }
 
     .modal-km-info-item.full {
         grid-column: span 2;
     }
 
     .modal-km-info-label {
-        font-size: 11px;
+        font-size: 13px;
         font-weight: 800;
         color: #64748B;
         text-transform: uppercase;
@@ -232,14 +171,14 @@
 
     .modal-tw-sisa {
         color: #15803D;
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 800;
     }
 
     .modal-tw-tenggat {
         margin-bottom: 10px;
         color: #64748B;
-        font-size: 11px;
+        font-size: 13px;
         font-weight: 700;
     }
 
@@ -262,6 +201,12 @@
     }
 
     @media (max-width: 768px) {
+        .ketualab-assignment__record { padding: 16px; }
+        .ketualab-assignment__record-header { grid-template-columns: minmax(0, 1fr); }
+        .ketualab-assignment__record-summary { justify-content: flex-start; }
+        .ketualab-assignment__period-table { table-layout: auto; }
+        .ketualab-assignment__period-table th,
+        .ketualab-assignment__period-table td { padding: 9px 7px; }
         .modal-km-info {
             grid-template-columns: 1fr;
         }
@@ -306,8 +251,8 @@
         </div>
 
         <div class="d-flex align-items-center gap-2 flex-wrap">
-            <form method="GET" action="/ketualab/penurunan-km" class="d-flex align-items-center gap-2">
-                <select name="tahun" class="form-select" style="min-width: 120px;">
+            <form method="GET" action="/ketualab/penurunan-km" class="ketualab-assignment__filter">
+                <select name="tahun" class="form-select">
                     @foreach($tahunOptions as $itemTahun)
                         <option
                             value="{{ $itemTahun }}"
@@ -340,43 +285,8 @@
         </div>
     </header>
 
-    <div class="table-responsive ketualab-assignment__scroll">
-        <table class="table km-table ketualab-assignment__table">
-            <thead>
-                <tr>
-                    <th rowspan="2">No</th>
-                    <th rowspan="2">Detail KM</th>
-
-                    <th colspan="4" class="group-header">
-                        KM Lab per Triwulan
-                    </th>
-
-                    <th colspan="4" class="group-header">
-                        Tenggat per Triwulan
-                    </th>
-
-                    <th rowspan="2">Total KM</th>
-                    <th rowspan="2">Sudah Dibagi</th>
-                    <th rowspan="2">Sisa KM</th>
-                    <th rowspan="2">Status</th>
-                    <th rowspan="2">Aksi</th>
-                </tr>
-
-                <tr>
-                    <th class="text-center tw-start">TW 1</th>
-                    <th class="text-center">TW 2</th>
-                    <th class="text-center">TW 3</th>
-                    <th class="text-center tw-end">TW 4</th>
-
-                    <th class="text-center tw-start">TW 1</th>
-                    <th class="text-center">TW 2</th>
-                    <th class="text-center">TW 3</th>
-                    <th class="text-center tw-end">TW 4</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @forelse($dataKmLab as $index => $km)
+    <div class="ketualab-assignment__records">
+        @forelse($dataKmLab as $index => $km)
                     @php
                         $statusClass = match($km->status ?? 'Belum Ada KM') {
                             'Selesai' => 'status-success',
@@ -384,77 +294,45 @@
                             default => 'status-secondary',
                         };
                     @endphp
-
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-
-                        <td style="min-width: 300px;">
-                            <div class="km-detail-category">
-                                {{ $km->kategori_km ?? '-' }}
+                    <article class="ketualab-assignment__record">
+                        <header class="ketualab-assignment__record-header">
+                            <div>
+                                <h3 class="ketualab-assignment__record-title">
+                                    {{ $index + 1 }}. {{ $km->kategori_km ?? '-' }}
+                                </h3>
+                                <p class="ketualab-assignment__record-subtitle">{{ $km->sub_kategori_display ?? '-' }}</p>
+                                <p class="ketualab-assignment__record-description">{{ $km->keterangan ?? '-' }}</p>
                             </div>
-
-                            <div class="km-detail-meta">
-                                <strong>Sub Kategori:</strong>
-                                <span>{{ $km->sub_kategori_display ?? '-' }}</span>
-                            </div>
-
-                            <div class="km-detail-meta">
-                                <strong>Keterangan:</strong>
-                                <span>{{ $km->keterangan ?? '-' }}</span>
-                            </div>
-                        </td>
-
-                        @foreach([1, 2, 3, 4] as $tw)
-                            @php
-                                $jumlahTw = (int) ($km->{'triwulan_' . $tw} ?? 0);
-                                $sisaTw = (int) ($km->{'sisa_tw' . $tw} ?? 0);
-                            @endphp
-
-                            <td class="period-cell {{ $tw === 1 ? 'tw-start' : '' }} {{ $tw === 4 ? 'tw-end' : '' }}">
-                                {{ $jumlahTw }}
-
-                                <span class="period-subtext">
-                                    Sisa: {{ $sisaTw }}
-                                </span>
-                            </td>
-                        @endforeach
-
-                        @foreach([1, 2, 3, 4] as $tw)
-                            @php
-                                $jumlahTw = (int) ($km->{'triwulan_' . $tw} ?? 0);
-                                $tenggat = $km->{'tanggal_selesai_tw' . $tw} ?? null;
-                            @endphp
-
-                            <td class="text-center {{ $tw === 1 ? 'tw-start' : '' }} {{ $tw === 4 ? 'tw-end' : '' }}">
-                                @if($jumlahTw > 0 && !empty($tenggat))
-                                    <span class="deadline-date">{{ $formatTanggal($tenggat) }}</span>
-                                @else
-                                    <span class="deadline-empty">-</span>
-                                @endif
-                            </td>
-                        @endforeach
-
-                        <td class="ketualab-assignment__number">
-                            {{ $km->jumlah_km ?? 0 }}
-                        </td>
-
-                        <td class="ketualab-assignment__number">
-                            {{ $km->sudah_assign ?? 0 }}
-                        </td>
-
-                        <td class="text-center">
-                            <span class="remaining-badge {{ ($km->sisa_km ?? 0) <= 0 ? 'empty' : '' }}">
-                                {{ $km->sisa_km ?? 0 }}
-                            </span>
-                        </td>
-
-                        <td>
+                            <dl class="ketualab-assignment__record-summary">
+                                <div><dt>Total KM</dt><dd>{{ $km->jumlah_km ?? 0 }}</dd></div>
+                                <div><dt>Sudah Dibagi</dt><dd>{{ $km->sudah_assign ?? 0 }}</dd></div>
+                                <div><dt>Total Sisa</dt><dd>{{ $km->sisa_km ?? 0 }}</dd></div>
+                            </dl>
+                        </header>
+                        <table class="ketualab-assignment__period-table">
+                            <thead><tr><th scope="col">Periode</th><th scope="col">KM Diterima</th><th scope="col">Sudah Dibagi</th><th scope="col">Sisa</th><th scope="col">Tenggat</th></tr></thead>
+                            <tbody>
+                                @foreach([1, 2, 3, 4] as $tw)
+                                    @php
+                                        $jumlahTw = (int) ($km->{'triwulan_' . $tw} ?? 0);
+                                        $sudahDibagiTw = (int) ($km->{'sudah_assign_tw' . $tw} ?? 0);
+                                        $sisaTw = (int) ($km->{'sisa_tw' . $tw} ?? 0);
+                                        $tenggat = $km->{'tanggal_selesai_tw' . $tw} ?? null;
+                                    @endphp
+                                    <tr>
+                                        <th scope="row">TW {{ $tw }}</th>
+                                        <td>{{ $jumlahTw }}</td>
+                                        <td>{{ $sudahDibagiTw }}</td>
+                                        <td>{{ $sisaTw }}</td>
+                                        <td>{{ $jumlahTw > 0 && !empty($tenggat) ? $formatTanggal($tenggat) : '-' }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <div class="ketualab-assignment__record-actions">
                             <span class="status-pill {{ $statusClass }}">
                                 {{ $km->status ?? 'Belum Ada KM' }}
                             </span>
-                        </td>
-
-                        <td>
                             @if(($km->sisa_km ?? 0) > 0)
                                 <button
                                     type="button"
@@ -486,43 +364,33 @@
                                     Selesai
                                 </button>
                             @endif
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="15">
-                            <div class="empty-state">
-                                Belum ada KM yang diberikan oleh Ketua KK ke Lab ini.
-                            </div>
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                        </div>
+                    </article>
+        @empty
+            <div class="empty-state">Belum ada KM yang diberikan oleh Ketua KK ke Lab ini.</div>
+        @endforelse
     </div>
 </section>
 
-<div class="card mb-4">
-    <div class="mb-3">
-        <h4 class="fw-bold mb-1">Riwayat Assign KM ke Anggota</h4>
+<section class="ketualab-assignment__section">
+    <header class="ketualab-assignment__section-header">
+        <div>
+        <h2 class="ketualab-assignment__section-title">Riwayat Pembagian KM ke Anggota</h2>
         <p class="text-muted mb-0">
             Riwayat pembagian KM dari Ketua Lab kepada anggota Lab.
         </p>
-    </div>
+        </div>
+    </header>
 
-    <div class="table-responsive">
-        <table class="table align-middle mb-0 km-table">
+    <div>
+        <table class="table align-middle mb-0 ketualab-assignment__history-table">
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Detail KM</th>
-                    <th>Nama Anggota</th>
-                    <th>NIDN</th>
-                    <th>JAD</th>
-                    <th>Pembagian per Triwulan</th>
-                    <th>Total KM</th>
-                    <th>Tanggal Assign</th>
-                    <th>Aksi</th>
+                    <th scope="col">No</th>
+                    <th scope="col">Anggota</th>
+                    <th scope="col">Detail KM</th>
+                    <th scope="col">Pembagian</th>
+                    <th scope="col">Waktu Pembagian</th>
                 </tr>
             </thead>
 
@@ -537,78 +405,41 @@
 
                     <tr>
                         <td>{{ $index + 1 }}</td>
-
-                        <td style="min-width: 240px;">
-                            <div class="fw-bold">
-                                {{ $assign->kategori_km ?? '-' }}
-                            </div>
-
-                            <div class="small text-muted mt-1">
-                                {{ $subKategori }}
-                            </div>
-
-                            <div class="small text-muted mt-1">
-                                {{ $assign->keterangan ?? '-' }}
-                            </div>
-                        </td>
-
-                        <td class="fw-bold">
-                            {{ $assign->nama_dosen ?? $assign->username ?? '-' }}
-                        </td>
-
-                        <td>{{ $assign->nidn ?? '-' }}</td>
-
                         <td>
-                            <span class="badge bg-primary">
-                                {{ $assign->jad ?? 'AA' }}
-                            </span>
+                            <div class="ketualab-assignment__identity">{{ $assign->nama_dosen ?? $assign->username ?? '-' }}</div>
+                            <div class="ketualab-assignment__meta">NIDN: {{ $assign->nidn ?? '-' }}</div>
+                            <div class="ketualab-assignment__meta">JAD: {{ $assign->jad ?? 'AA' }}</div>
                         </td>
-
                         <td>
-                            <div class="d-flex flex-wrap gap-1">
+                            <div class="ketualab-assignment__identity">{{ $assign->kategori_km ?? '-' }}</div>
+                            <div class="ketualab-assignment__meta">{{ $subKategori }}</div>
+                            <div class="ketualab-assignment__meta">{{ $assign->keterangan ?? '-' }}</div>
+                        </td>
+                        <td>
+                            <dl class="ketualab-assignment__values">
                                 @foreach([1, 2, 3, 4] as $tw)
                                     @php
                                         $jumlahTw = (int) ($assign->{'triwulan_' . $tw} ?? 0);
                                     @endphp
-
-                                    @if($jumlahTw > 0)
-                                        <span class="badge bg-light text-dark border">
-                                            TW{{ $tw }}: {{ $jumlahTw }}
-                                        </span>
-                                    @endif
+                                    <dt>TW{{ $tw }}</dt><dd>{{ $jumlahTw }}</dd>
                                 @endforeach
-
-                                @if(
-                                    (int) ($assign->triwulan_1 ?? 0) <= 0 &&
-                                    (int) ($assign->triwulan_2 ?? 0) <= 0 &&
-                                    (int) ($assign->triwulan_3 ?? 0) <= 0 &&
-                                    (int) ($assign->triwulan_4 ?? 0) <= 0
-                                )
-                                    <span class="text-muted">-</span>
-                                @endif
-                            </div>
+                                <dt>Total</dt><dd>{{ $assign->jumlah_km ?? 0 }}</dd>
+                            </dl>
                         </td>
-
-                        <td class="fw-bold">
-                            {{ $assign->jumlah_km ?? 0 }}
-                        </td>
-
                         <td>
-                            {{ $formatTanggal($assign->created_at ?? null) }}
-                        </td>
-
-                        <td>
+                            <div>{{ $formatTanggal($assign->created_at ?? null) }}</div>
+                            <div class="ketualab-assignment__meta">{{ !empty($assign->created_at) ? \Carbon\Carbon::parse($assign->created_at)->format('H:i') : '-' }}</div>
                             <form
                                 action="/ketualab/penurunan-km/assign/{{ $assign->id_km_anggota }}"
                                 method="POST"
                                 class="js-delete-form"
-                                data-message="Apakah Anda yakin ingin menghapus assign KM anggota ini?">
+                                data-message="Apakah Anda yakin ingin menghapus pembagian KM anggota ini?">
 
                                 @csrf
                                 @method('DELETE')
                                 <input type="hidden" name="tahun" value="{{ $tahun }}">
 
-                                <button type="submit" class="btn btn-delete btn-sm">
+                                <button type="submit" class="btn btn-delete btn-sm mt-2">
                                     Hapus
                                 </button>
                             </form>
@@ -616,7 +447,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="9">
+                        <td colspan="5">
                             <div class="empty-state">
                                 Belum ada riwayat pembagian KM kepada anggota.
                             </div>
@@ -626,26 +457,26 @@
             </tbody>
         </table>
     </div>
-</div>
+</section>
 
-<div class="card">
-    <div class="mb-3">
-        <h4 class="fw-bold mb-1">Daftar Anggota Lab</h4>
+<section class="ketualab-assignment__section">
+    <header class="ketualab-assignment__section-header">
+        <div>
+        <h2 class="ketualab-assignment__section-title">Daftar Anggota Lab</h2>
         <p class="text-muted mb-0">
             Data anggota yang dapat menerima pembagian KM dari Ketua Lab.
         </p>
-    </div>
+        </div>
+    </header>
 
-    <div class="table-responsive">
-        <table class="table align-middle mb-0 km-table">
+    <div>
+        <table class="table align-middle mb-0 ketualab-assignment__member-table">
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Nama Anggota</th>
-                    <th>NIDN</th>
-                    <th>Email</th>
-                    <th>JAD</th>
-                    <th>Bobot Saran</th>
+                    <th scope="col">No</th>
+                    <th scope="col">Identitas</th>
+                    <th scope="col">Posisi</th>
+                    <th scope="col">Bobot Saran</th>
                 </tr>
             </thead>
 
@@ -658,27 +489,17 @@
                     <tr>
                         <td>{{ $index + 1 }}</td>
 
-                        <td class="fw-bold">
-                            {{ $item->nama_dosen ?? $item->username }}
-                        </td>
-
-                        <td>{{ $item->nidn ?? '-' }}</td>
-
-                        <td>{{ $item->email ?? '-' }}</td>
-
                         <td>
-                            <span class="badge bg-primary">{{ $jad }}</span>
-
-                            <div class="small text-muted mt-1">
-                                {{ $jadLabel[$jad] ?? 'Non-Jabatan Fungsional Akademik' }}
-                            </div>
+                            <div class="ketualab-assignment__identity">{{ $item->nama_dosen ?? $item->username }}</div>
+                            <div class="ketualab-assignment__meta">NIDN: {{ $item->nidn ?? '-' }}</div>
+                            <div class="ketualab-assignment__meta">{{ $item->email ?? '-' }}</div>
                         </td>
-
-                        <td>{{ $bobotJad[$jad] ?? 0.6 }}</td>
+                        <td><div class="ketualab-assignment__identity">{{ $jad }}</div><div class="ketualab-assignment__meta">{{ $jadLabel[$jad] ?? 'Non-Jabatan Fungsional Akademik' }}</div></td>
+                        <td class="ketualab-assignment__number">{{ $bobotJad[$jad] ?? 0.6 }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6">
+                        <td colspan="4">
                             <div class="empty-state">
                                 Belum ada anggota pada Lab ini.
                             </div>
@@ -688,9 +509,9 @@
             </tbody>
         </table>
     </div>
-</div>
+</section>
 
-<div class="modal fade" id="assignKmModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade ketualab-assignment__modal" id="assignKmModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0" style="border-radius: 18px;">
             <form action="/ketualab/penurunan-km" method="POST" id="assignKmForm">

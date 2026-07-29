@@ -20,9 +20,8 @@
 <style>
     .km-table th,
     .history-table th {
-        white-space: nowrap;
         vertical-align: middle;
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .km-table td,
@@ -96,7 +95,6 @@
     }
 
     .ketuakk-lab-km__action {
-        white-space: nowrap;
     }
 
     .ketuakk-lab-km__context {
@@ -322,7 +320,6 @@
         flex: 0 0 auto;
         color: #64748B;
         font-size: 12px;
-        white-space: nowrap;
     }
 
     .ketuakk-lab-km__labs-count strong {
@@ -355,7 +352,6 @@
         line-height: 1.35;
         text-transform: uppercase;
         vertical-align: middle;
-        white-space: nowrap;
     }
 
     .ketuakk-lab-km__labs-table thead tr:first-child th[rowspan] {
@@ -586,7 +582,6 @@
         line-height: 1.35;
         text-transform: uppercase;
         vertical-align: middle;
-        white-space: nowrap;
     }
 
     .ketuakk-lab-km__history-table tbody tr {
@@ -621,7 +616,6 @@
 
     .ketuakk-lab-km__history-cell--time {
         min-width: 132px;
-        white-space: nowrap;
     }
 
     .ketuakk-lab-km__history-timestamp {
@@ -794,6 +788,7 @@
             border-left: 0;
         }
     }
+    .ketuakk-lab-km__category-list,.ketuakk-lab-km__summary-list,.ketuakk-lab-km__distribution-list{display:grid;gap:5px;margin:0}.ketuakk-lab-km__category-list div,.ketuakk-lab-km__summary-list div,.ketuakk-lab-km__distribution-list div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px}.ketuakk-lab-km__category-list dt,.ketuakk-lab-km__summary-list dt,.ketuakk-lab-km__distribution-list dt{color:#5B6472;font-size:13px}.ketuakk-lab-km__category-list dd,.ketuakk-lab-km__summary-list dd,.ketuakk-lab-km__distribution-list dd{margin:0;color:#1F2937;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}.ketuakk-lab-km__labs-table,.ketuakk-lab-km__history-table{width:100%;table-layout:auto}.ketuakk-lab-km__labs-table td,.ketuakk-lab-km__history-table td{font-size:14px;line-height:1.5;overflow-wrap:anywhere}.ketuakk-lab-km__labs-cell--progress .ketuakk-lab-km__labs-status,.ketuakk-lab-km__labs-cell--progress .ketuakk-lab-km__labs-detail{display:inline-flex;margin-top:8px}.ketuakk-lab-km__labs-detail{min-height:40px;align-items:center}
 </style>
 
 @if(session('success'))
@@ -828,7 +823,7 @@
 
             <a href="/ketuakk/km-lab-riset/create" class="btn btn-primary ketuakk-lab-km__action">
                 <i class="bi bi-plus-lg me-1"></i>
-                Turunkan KM ke Lab
+                Distribusikan KM ke Lab
             </a>
         </div>
     </div>
@@ -979,29 +974,7 @@
 
     <div class="table-responsive ketuakk-lab-km__labs-scroll">
         <table class="table align-middle ketuakk-lab-km__labs-table">
-            <thead>
-                <tr>
-                    <th rowspan="2" class="ketuakk-lab-km__labs-cell--index">No</th>
-                    <th rowspan="2" class="ketuakk-lab-km__labs-cell--identity">Nama Lab Riset</th>
-                    <th
-                        colspan="{{ count($kategoriDefault) }}"
-                        class="ketuakk-lab-km__labs-group">
-                        KM Didistribusikan ke Lab
-                    </th>
-                    <th rowspan="2" class="ketuakk-lab-km__labs-cell--number">Total Turun</th>
-                    <th rowspan="2" class="ketuakk-lab-km__labs-cell--number">Sudah Dibagi ke Anggota</th>
-                    <th rowspan="2" class="ketuakk-lab-km__labs-cell--number">Sisa KM</th>
-                    <th rowspan="2" class="ketuakk-lab-km__labs-cell--progress">Progress</th>
-                    <th rowspan="2" class="ketuakk-lab-km__labs-cell--status">Status</th>
-                    <th rowspan="2" class="ketuakk-lab-km__labs-cell--action">Aksi</th>
-                </tr>
-
-                <tr>
-                    @foreach($kategoriDefault as $kategori)
-                        <th class="ketuakk-lab-km__labs-cell--number">{{ $kategori }}</th>
-                    @endforeach
-                </tr>
-            </thead>
+            <thead><tr><th>No</th><th>Lab Riset</th><th>Distribusi per Kategori</th><th>Ringkasan</th><th>Progress/Aksi</th></tr></thead>
 
             <tbody>
                 @forelse($dataLab as $index => $lab)
@@ -1029,24 +1002,8 @@
                             </div>
                         </td>
 
-                        @foreach($kategoriDefault as $kategori)
-                            <td class="ketuakk-lab-km__labs-cell--number">
-                                {{ data_get($lab, 'turun_per_kategori.' . $kategori, 0) }}
-                            </td>
-                        @endforeach
-
-                        <td class="ketuakk-lab-km__labs-cell--number">
-                            {{ $totalTurun }}
-                        </td>
-
-                        <td class="ketuakk-lab-km__labs-cell--number">
-                            {{ $totalAssign }}
-                        </td>
-
-                        <td class="ketuakk-lab-km__labs-cell--number">
-                            {{ $sisaKm }}
-                        </td>
-
+                        <td><dl class="ketuakk-lab-km__category-list">@foreach($kategoriDefault as $kategori)<div><dt>{{ $kategori }}</dt><dd>{{ data_get($lab,'turun_per_kategori.'.$kategori,0) }}</dd></div>@endforeach</dl></td>
+                        <td><dl class="ketuakk-lab-km__summary-list"><div><dt>Total didistribusikan</dt><dd>{{ $totalTurun }}</dd></div><div><dt>Sudah dibagi</dt><dd>{{ $totalAssign }}</dd></div><div><dt>Sisa KM</dt><dd>{{ $sisaKm }}</dd></div></dl></td>
                         <td class="ketuakk-lab-km__labs-cell--progress">
                             <div
                                 class="ketuakk-lab-km__labs-progress"
@@ -1064,15 +1021,9 @@
                             <div class="ketuakk-lab-km__labs-progress-value">
                                 {{ $persentase }}%
                             </div>
-                        </td>
-
-                        <td class="ketuakk-lab-km__labs-cell--status">
                             <span class="ketuakk-lab-km__labs-status {{ $statusClass }}">
                                 {{ $status }}
                             </span>
-                        </td>
-
-                        <td class="ketuakk-lab-km__labs-cell--action">
                             <a
                                 href="/ketuakk/km-lab-riset/{{ data_get($lab, 'id_lab') }}?tahun={{ $tahun }}"
                                 class="btn btn-sm btn-outline-primary ketuakk-lab-km__labs-detail">
@@ -1082,7 +1033,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="{{ $jumlahKolomLab }}">
+                        <td colspan="5">
                             <div class="ketuakk-lab-km__labs-empty">
                                 <strong>Belum ada Lab Riset.</strong>
                                 Tambahkan data Lab Riset terlebih dahulu pada menu Data Master.
@@ -1114,20 +1065,7 @@
     <div class="table-responsive ketuakk-lab-km__history-scroll">
         <table class="table align-middle ketuakk-lab-km__history-table">
             <thead>
-                <tr>
-                    <th class="ketuakk-lab-km__history-cell--index">No</th>
-                    <th class="ketuakk-lab-km__history-cell--time">Waktu Penurunan</th>
-                    <th class="ketuakk-lab-km__history-cell--lab">Lab Riset</th>
-                    <th>Kategori KM</th>
-                    <th>Sub Kategori / Jenis KM</th>
-                    <th>Keterangan</th>
-                    <th class="ketuakk-lab-km__history-cell--number">TW 1</th>
-                    <th class="ketuakk-lab-km__history-cell--number">TW 2</th>
-                    <th class="ketuakk-lab-km__history-cell--number">TW 3</th>
-                    <th class="ketuakk-lab-km__history-cell--number">TW 4</th>
-                    <th class="ketuakk-lab-km__history-cell--number ketuakk-lab-km__history-cell--total">Total Turun</th>
-                    <th>Status</th>
-                </tr>
+                <tr><th>No</th><th>Waktu Distribusi</th><th>Lab Riset</th><th>Detail KM</th><th>Jumlah Distribusi</th></tr>
             </thead>
 
             <tbody>
@@ -1171,45 +1109,8 @@
                             </div>
                         </td>
 
-                        <td>
-                            <span class="ketuakk-lab-km__history-category">
-                                {{ $riwayat->kategori_km ?? '-' }}
-                            </span>
-                        </td>
-
-                        <td>
-                            <div class="ketuakk-lab-km__history-subcategory">
-                                {{ $riwayat->sub_kategori_km ?? '-' }}
-                            </div>
-                        </td>
-
-                        <td>
-                            <div class="ketuakk-lab-km__history-notes">
-                                {{ $riwayat->keterangan ?? '-' }}
-                            </div>
-                        </td>
-
-                        <td class="ketuakk-lab-km__history-cell--number">
-                            {{ (int) ($riwayat->triwulan_1 ?? 0) }}
-                        </td>
-
-                        <td class="ketuakk-lab-km__history-cell--number">
-                            {{ (int) ($riwayat->triwulan_2 ?? 0) }}
-                        </td>
-
-                        <td class="ketuakk-lab-km__history-cell--number">
-                            {{ (int) ($riwayat->triwulan_3 ?? 0) }}
-                        </td>
-
-                        <td class="ketuakk-lab-km__history-cell--number">
-                            {{ (int) ($riwayat->triwulan_4 ?? 0) }}
-                        </td>
-
-                        <td class="ketuakk-lab-km__history-cell--number ketuakk-lab-km__history-cell--total">
-                            {{ (int) ($riwayat->jumlah_km ?? 0) }}
-                        </td>
-
-                        <td class="ketuakk-lab-km__history-cell--status">
+                        <td><strong>{{ $riwayat->kategori_km ?? '-' }}</strong><div class="ketuakk-lab-km__history-subcategory">{{ $riwayat->sub_kategori_km ?? '-' }}</div><div class="ketuakk-lab-km__history-notes">{{ $riwayat->keterangan ?? '-' }}</div></td>
+                        <td><dl class="ketuakk-lab-km__distribution-list">@foreach([1,2,3,4] as $tw)<div><dt>TW{{ $tw }}</dt><dd>{{ (int)($riwayat->{'triwulan_'.$tw} ?? 0) }}</dd></div>@endforeach<div><dt>Total didistribusikan</dt><dd>{{ (int)($riwayat->jumlah_km ?? 0) }}</dd></div></dl>
                             <span class="ketuakk-lab-km__history-status {{ $statusKmClass }}">
                                 {{ $statusKm }}
                             </span>
@@ -1217,7 +1118,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="12">
+                        <td colspan="5">
                             <div class="ketuakk-lab-km__history-empty">
                                 <strong>Belum ada riwayat distribusi KM.</strong>
                                 Riwayat akan muncul setelah Ketua KK mendistribusikan KM kepada Lab Riset.

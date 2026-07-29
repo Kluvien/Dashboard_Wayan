@@ -17,7 +17,7 @@
 <style>
     .report-filter-card {
         border: 1px solid #DDE5F0;
-        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+        box-shadow: none;
     }
 
     .report-filter-grid {
@@ -48,13 +48,13 @@
     }
 
     .report-filter-help {
-        font-size: 12px;
+        font-size: 13px;
         color: #64748B;
         margin-top: 6px;
     }
 
     .download-panel {
-        background: linear-gradient(135deg, #EFF6FF 0%, #F8FAFC 100%);
+        background: #F3F6F9;
         border: 1px solid #BFDBFE;
         border-radius: 14px;
         padding: 16px;
@@ -68,7 +68,7 @@
     }
 
     .download-panel-text {
-        font-size: 12px;
+        font-size: 13px;
         color: #475569;
         margin-bottom: 12px;
     }
@@ -82,13 +82,6 @@
     .report-card-value.lab-name {
         font-size: 18px;
         line-height: 1.35;
-    }
-
-    .report-table th,
-    .report-table td {
-        white-space: nowrap;
-        vertical-align: middle;
-        font-size: 13px;
     }
 
     .progress-soft {
@@ -110,7 +103,7 @@
         justify-content: center;
         border-radius: 999px;
         padding: 6px 10px;
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 800;
         white-space: nowrap;
     }
@@ -140,7 +133,7 @@
 
     .detail-category-header {
         padding: 14px 16px;
-        background: linear-gradient(135deg, #EFF6FF 0%, #F8FAFC 100%);
+        background: #F3F6F9;
         border-bottom: 1px solid #DDE5F0;
     }
 
@@ -154,45 +147,7 @@
     .detail-category-meta {
         margin-top: 4px;
         color: #64748B;
-        font-size: 12px;
-    }
-
-    .detail-target-table th,
-    .detail-target-table td {
-        font-size: 12px;
-        white-space: nowrap;
-        vertical-align: middle;
-    }
-
-    .detail-target-table td.detail-description {
-        white-space: normal;
-        min-width: 210px;
-    }
-
-    .detail-target-table .group-heading {
-        background: #EFF6FF;
-        color: #1E3A8A;
-        text-align: center;
-        font-weight: 800;
-        border-bottom: 1px solid #BFDBFE;
-    }
-
-    .period-table th,
-    .period-table td {
-        font-size: 12px;
-        vertical-align: top;
-    }
-
-    .period-chip {
-        display: inline-block;
-        padding: 5px 8px;
-        border-radius: 8px;
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        color: #334155;
-        white-space: nowrap;
-        font-size: 11px;
-        font-weight: 700;
+        font-size: 13px;
     }
 
     .info-chip {
@@ -204,7 +159,7 @@
         background: #EEF4FF;
         border: 1px solid #BFDBFE;
         color: #1D4ED8;
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 700;
     }
 
@@ -216,7 +171,19 @@
             grid-column: span 12;
         }
     }
-    .ketualab-laporan__target-records{border-top:1px solid #D5DCE5}.ketualab-laporan__target-record{padding:14px 16px 18px;border-bottom:1px solid #E5EAF0}.ketualab-laporan__target-record header{display:flex;justify-content:space-between;gap:16px}.ketualab-laporan__target-record h6{margin:0;color:#1F2937;font-size:15px}.ketualab-laporan__target-record header p{margin:3px 0 0;color:#5B6472;font-size:14px}.ketualab-laporan__target-record dl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:12px 0}.ketualab-laporan__target-record dt{color:#5B6472;font-size:13px}.ketualab-laporan__target-record dd{margin:2px 0 0;color:#1F2937;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}.ketualab-laporan__progress{height:6px;overflow:hidden;border-radius:999px;background:#E5EAF0;margin-bottom:12px}.ketualab-laporan__progress span{display:block;height:100%;background:#2457A6}.ketualab-laporan__period-table{width:100%;border-collapse:collapse;color:#374151;font-size:14px}.ketualab-laporan__period-table th,.ketualab-laporan__period-table td{padding:9px 12px;border-bottom:1px solid #E5EAF0}.ketualab-laporan__period-table thead th{background:#EEF2F6;font-size:13px;text-align:left}.ketualab-laporan__period-table td:nth-child(2),.ketualab-laporan__period-table td:nth-child(3){text-align:right;font-weight:700;font-variant-numeric:tabular-nums}@media(max-width:700px){.ketualab-laporan__target-record dl{grid-template-columns:repeat(2,minmax(0,1fr))}.ketualab-laporan__target-record header{flex-direction:column}}
+    .ketualab-laporan__rekap-table { width: 100%; table-layout: fixed; }
+    .ketualab-laporan__rekap-table th,
+    .ketualab-laporan__rekap-table td { padding: 10px 12px; border-bottom: 1px solid #E5EAF0; color: #374151; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; vertical-align: top; }
+    .ketualab-laporan__rekap-table th { background: #EEF2F6; font-size: 13px; font-weight: 700; }
+    .ketualab-laporan__metric-list { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 12px; margin: 0; }
+    .ketualab-laporan__metric-list dt { color: #5B6472; font-size: 13px; font-weight: 500; }
+    .ketualab-laporan__metric-list dd { margin: 0; color: #1F2937; font-size: 14px; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+    .ketualab-laporan__filter .form-control,
+    .ketualab-laporan__filter .form-select { width: 100%; min-width: 0; min-height: 44px; font-size: 14px; }
+    .ketualab-laporan__filter .form-label { font-size: 14px; color: #374151; }
+    .ketualab-laporan__filter-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .ketualab-laporan__filter-actions .btn { min-height: 40px; }
+    .ketualab-laporan__target-records{border-top:1px solid #D5DCE5}.ketualab-laporan__target-record{padding:14px 16px 18px;border-bottom:1px solid #E5EAF0}.ketualab-laporan__target-record header{display:flex;justify-content:space-between;gap:16px}.ketualab-laporan__target-record h6{margin:0;color:#1F2937;font-size:16px}.ketualab-laporan__target-record header p{margin:3px 0 0;color:#5B6472;font-size:14px}.ketualab-laporan__target-record dl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:12px 0}.ketualab-laporan__target-record dt{color:#5B6472;font-size:13px}.ketualab-laporan__target-record dd{margin:2px 0 0;color:#1F2937;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}.ketualab-laporan__progress{height:6px;overflow:hidden;border-radius:999px;background:#E5EAF0;margin-bottom:12px}.ketualab-laporan__progress span{display:block;height:100%;background:#2457A6}.ketualab-laporan__period-table{width:100%;border-collapse:collapse;table-layout:fixed;color:#374151;font-size:14px}.ketualab-laporan__period-table th,.ketualab-laporan__period-table td{padding:9px 12px;border-bottom:1px solid #E5EAF0;line-height:1.5;overflow-wrap:anywhere}.ketualab-laporan__period-table thead th{background:#EEF2F6;font-size:13px;text-align:left}.ketualab-laporan__period-table td:nth-child(2),.ketualab-laporan__period-table td:nth-child(3),.ketualab-laporan__period-table td:nth-child(4){text-align:right;font-weight:700;font-variant-numeric:tabular-nums}@media(max-width:700px){.ketualab-laporan__target-record dl{grid-template-columns:repeat(2,minmax(0,1fr))}.ketualab-laporan__target-record header{flex-direction:column}.ketualab-laporan__period-table th,.ketualab-laporan__period-table td{padding:8px 6px}}
 </style>
 
 <section class="card report-filter-card mb-4" aria-labelledby="ketualab-report-title">
@@ -245,7 +212,7 @@
         </div>
     @endif
 
-    <form id="reportFilterForm" method="GET" action="/ketualab/laporan">
+    <form id="reportFilterForm" class="ketualab-laporan__filter" method="GET" action="/ketualab/laporan">
         <div class="report-filter-grid">
             <div class="filter-col-6">
                 <div class="report-filter-section h-100">
@@ -356,7 +323,7 @@
             </div>
 
             <div class="filter-col-12">
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div class="ketualab-laporan__filter-actions justify-content-between align-items-center">
                     <button type="submit" class="btn btn-primary px-4">
                         <i class="bi bi-eye me-1"></i>
                         Tampilkan Laporan
@@ -442,7 +409,7 @@
 <div class="row g-4 mb-4">
     <div class="col-md-3">
         <div class="card h-100">
-            <p class="text-muted mb-1">KM Turun dari KK</p>
+            <p class="text-muted mb-1">KM Diterima dari Ketua KK</p>
             <p class="report-card-value text-primary">{{ $summary['total_km_turun'] ?? 0 }}</p>
         </div>
     </div>
@@ -473,19 +440,14 @@
     <h4 class="fw-bold mb-3">Rekap Kategori KM</h4>
 
     <div class="table-responsive">
-        <table class="table align-middle mb-0 report-table">
+        <table class="table align-middle mb-0 ketualab-laporan__rekap-table">
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Kategori KM</th>
-                    <th>KM Turun</th>
-                    <th>Sudah Dibagi</th>
-                    <th>Belum Dibagi</th>
-                    <th>Target Periode</th>
-                    <th>Realisasi</th>
-                    <th>Sisa Realisasi</th>
-                    <th>Progress</th>
-                    <th>Status</th>
+                    <th scope="col">No</th>
+                    <th scope="col">Kategori KM</th>
+                    <th scope="col">Distribusi dan Pembagian</th>
+                    <th scope="col">Capaian</th>
+                    <th scope="col">Progress</th>
                 </tr>
             </thead>
 
@@ -500,25 +462,32 @@
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td class="fw-bold">{{ $item['nama'] ?? $item['kategori'] ?? '-' }}</td>
-                        <td>{{ $item['km_turun'] ?? 0 }}</td>
-                        <td class="text-success fw-bold">{{ $item['km_assign'] ?? 0 }}</td>
-                        <td class="text-warning fw-bold">{{ $item['sisa_assign'] ?? 0 }}</td>
-                        <td>{{ $item['target'] ?? 0 }}</td>
-                        <td class="text-success fw-bold">{{ $item['realisasi'] ?? 0 }}</td>
-                        <td class="text-warning fw-bold">{{ $item['sisa'] ?? 0 }}</td>
-                        <td style="min-width: 180px;">
-                            <div class="progress-soft mb-1">
-                                <div class="progress-soft-fill" style="width: {{ $item['persentase'] ?? 0 }}%;"></div>
-                            </div>
-                            <div class="small text-muted">{{ $item['persentase'] ?? 0 }}%</div>
+                        <td>
+                            <dl class="ketualab-laporan__metric-list">
+                                <dt>KM Diterima</dt><dd>{{ $item['km_turun'] ?? 0 }}</dd>
+                                <dt>Sudah Dibagi</dt><dd>{{ $item['km_assign'] ?? 0 }}</dd>
+                                <dt>Belum Dibagi</dt><dd>{{ $item['sisa_assign'] ?? 0 }}</dd>
+                            </dl>
                         </td>
                         <td>
+                            <dl class="ketualab-laporan__metric-list">
+                                <dt>Target Periode</dt><dd>{{ $item['target'] ?? 0 }}</dd>
+                                <dt>Realisasi</dt><dd>{{ $item['realisasi'] ?? 0 }}</dd>
+                                <dt>Sisa Realisasi</dt><dd>{{ $item['sisa'] ?? 0 }}</dd>
+                            </dl>
+                        </td>
+                        <td>
+                            @php $rekapProgress = min(max((float) ($item['persentase'] ?? 0), 0), 100); @endphp
+                            <div class="progress-soft mb-1" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $rekapProgress }}" aria-label="Progress {{ $item['nama'] ?? $item['kategori'] ?? 'kategori' }} {{ $item['persentase'] ?? 0 }} persen">
+                                <div class="progress-soft-fill" style="width: {{ $rekapProgress }}%;"></div>
+                            </div>
+                            <div class="small text-muted">{{ $item['persentase'] ?? 0 }}%</div>
                             <span class="status-pill {{ $statusClass }}">{{ $status }}</span>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="10" class="text-center text-muted py-4">
+                        <td colspan="5" class="text-center text-muted py-4">
                             Belum ada data rekap kategori.
                         </td>
                     </tr>
@@ -546,7 +515,7 @@
                 <div>
                     <h5 class="detail-category-title">{{ $kategori['kategori'] ?? '-' }}</h5>
                     <div class="detail-category-meta">
-                        {{ $kategori['jumlah_sub_kategori'] ?? 0 }} sub kategori/jenis KM
+                        {{ $kategori['jumlah_sub_kategori'] ?? 0 }} subkategori/jenis KM
                         · Target periode: {{ $kategori['target_periode'] ?? 0 }}
                         · Realisasi periode: {{ $kategori['realisasi_periode'] ?? 0 }}
                     </div>
@@ -564,11 +533,11 @@
                             @php $rowProgress = min(max((float) ($row['persentase'] ?? 0), 0), 100); @endphp
                             <article class="ketualab-laporan__target-record">
                                 <header><div><span>{{ $row['no'] ?? '-' }}</span><h6>{{ $row['sub_kategori'] ?? '-' }}</h6><p>{{ $row['keterangan'] ?? '-' }}</p></div><span class="status-pill {{ $statusClass }}">{{ $status }}</span></header>
-                                <dl><div><dt>Target tahunan</dt><dd>{{ $row['target_total_tahunan'] ?? 0 }}</dd></div><div><dt>Target periode</dt><dd>{{ $row['target_periode'] ?? 0 }}</dd></div><div><dt>Realisasi tahunan</dt><dd>{{ $row['realisasi_total_tahunan'] ?? 0 }}</dd></div><div><dt>Realisasi periode</dt><dd>{{ $row['realisasi_periode'] ?? 0 }}</dd></div><div><dt>Sudah dibagi</dt><dd>{{ $row['sudah_assign'] ?? 0 }}</dd></div><div><dt>Belum dibagi</dt><dd>{{ $row['sisa_assign'] ?? 0 }}</dd></div><div><dt>Sisa realisasi</dt><dd>{{ $row['sisa_realisasi'] ?? 0 }}</dd></div><div><dt>Progress</dt><dd>{{ $row['persentase'] ?? 0 }}%</dd></div></dl>
+                                <dl><div><dt>Total KM diterima</dt><dd>{{ $row['target_total_tahunan'] ?? 0 }}</dd></div><div><dt>Target periode</dt><dd>{{ $row['target_periode'] ?? 0 }}</dd></div><div><dt>Total realisasi</dt><dd>{{ $row['realisasi_total_tahunan'] ?? 0 }}</dd></div><div><dt>Realisasi periode</dt><dd>{{ $row['realisasi_periode'] ?? 0 }}</dd></div><div><dt>Total dibagi</dt><dd>{{ $row['sudah_assign'] ?? 0 }}</dd></div><div><dt>Belum dibagi</dt><dd>{{ $row['sisa_assign'] ?? 0 }}</dd></div><div><dt>Sisa realisasi</dt><dd>{{ $row['sisa_realisasi'] ?? 0 }}</dd></div><div><dt>Progress</dt><dd>{{ $row['persentase'] ?? 0 }}%</dd></div></dl>
                                 <div class="ketualab-laporan__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $rowProgress }}" aria-label="Progress {{ $row['sub_kategori'] ?? 'subkategori' }} {{ $row['persentase'] ?? 0 }} persen"><span style="width:{{ $rowProgress }}%"></span></div>
-                                <table class="ketualab-laporan__period-table"><thead><tr><th scope="col">Periode</th><th scope="col">Target</th><th scope="col">Realisasi</th><th scope="col">Tenggat</th></tr></thead><tbody>
+                                <table class="ketualab-laporan__period-table"><thead><tr><th scope="col">Periode</th><th scope="col">KM Diterima</th><th scope="col">Dibagi</th><th scope="col">Realisasi</th><th scope="col">Tenggat</th></tr></thead><tbody>
                                     @for($tw = 1; $tw <= 4; $tw++)
-                                        <tr><th scope="row">TW {{ $tw }}</th><td>{{ $row['target_tw' . $tw] ?? 0 }}</td><td>{{ $row['realisasi_tw' . $tw] ?? 0 }}</td><td>{{ $row['tanggal_mulai_tw' . $tw] ?? '-' }} → {{ $row['tanggal_selesai_tw' . $tw] ?? '-' }}</td></tr>
+                                        <tr><th scope="row">TW {{ $tw }}</th><td>{{ $row['target_tw' . $tw] ?? 0 }}</td><td aria-label="Data pembagian per triwulan tidak tersedia">-</td><td>{{ $row['realisasi_tw' . $tw] ?? 0 }}</td><td>{{ $row['tanggal_mulai_tw' . $tw] ?? '-' }} → {{ $row['tanggal_selesai_tw' . $tw] ?? '-' }}</td></tr>
                                     @endfor
                                 </tbody></table>
                             </article>
@@ -592,17 +561,14 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table align-middle mb-0 report-table">
+            <table class="table align-middle mb-0 ketualab-laporan__rekap-table">
                 <thead>
                     <tr>
-                        <th>No</th>
-                        <th>Nama Anggota</th>
-                        <th>Keterangan</th>
-                        <th>Target</th>
-                        <th>Realisasi</th>
-                        <th>Sisa</th>
-                        <th>Progress</th>
-                        <th>Status</th>
+                        <th scope="col">No</th>
+                        <th scope="col">Anggota</th>
+                        <th scope="col">Capaian</th>
+                        <th scope="col">Progress</th>
+                        <th scope="col">Status</th>
                     </tr>
                 </thead>
 
@@ -616,14 +582,12 @@
                         @endphp
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td class="fw-bold">{{ $item['nama'] ?? '-' }}</td>
-                            <td>{{ $item['keterangan'] ?? '-' }}</td>
-                            <td>{{ $item['target'] ?? 0 }}</td>
-                            <td>{{ $item['realisasi'] ?? 0 }}</td>
-                            <td>{{ $item['sisa'] ?? 0 }}</td>
-                            <td style="min-width: 180px;">
-                                <div class="progress-soft mb-1">
-                                    <div class="progress-soft-fill" style="width: {{ $item['persentase'] ?? 0 }}%;"></div>
+                            <td><div class="fw-bold">{{ $item['nama'] ?? '-' }}</div><div class="text-muted mt-1">{{ $item['keterangan'] ?? '-' }}</div></td>
+                            <td><dl class="ketualab-laporan__metric-list"><dt>Target</dt><dd>{{ $item['target'] ?? 0 }}</dd><dt>Realisasi</dt><dd>{{ $item['realisasi'] ?? 0 }}</dd><dt>Sisa</dt><dd>{{ $item['sisa'] ?? 0 }}</dd></dl></td>
+                            <td>
+                                @php $memberProgress = min(max((float) ($item['persentase'] ?? 0), 0), 100); @endphp
+                                <div class="progress-soft mb-1" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $memberProgress }}" aria-label="Progress {{ $item['nama'] ?? 'anggota' }} {{ $item['persentase'] ?? 0 }} persen">
+                                    <div class="progress-soft-fill" style="width: {{ $memberProgress }}%;"></div>
                                 </div>
                                 <div class="small text-muted">{{ $item['persentase'] ?? 0 }}%</div>
                             </td>
@@ -631,7 +595,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center text-muted py-4">
+                            <td colspan="5" class="text-center text-muted py-4">
                                 Tidak ada data pada ruang lingkup dan periode ini.
                             </td>
                         </tr>
@@ -647,17 +611,14 @@
         <h4 class="fw-bold mb-3">Riwayat Aktivitas Anggota</h4>
 
         <div class="table-responsive">
-            <table class="table align-middle mb-0 report-table">
+            <table class="table align-middle mb-0 ketualab-laporan__rekap-table">
                 <thead>
                     <tr>
-                        <th>No</th>
-                        <th>Kategori</th>
-                        <th>Sub Kategori</th>
-                        <th>Judul Aktivitas</th>
-                        <th>Tanggal Mulai</th>
-                        <th>Tanggal Selesai</th>
-                        <th>Status</th>
-                        <th>Bukti</th>
+                        <th scope="col">No</th>
+                        <th scope="col">Aktivitas</th>
+                        <th scope="col">Periode</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Bukti</th>
                     </tr>
                 </thead>
 
@@ -665,11 +626,8 @@
                     @forelse($pdfAktivitasRows as $index => $aktivitas)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td class="fw-bold">{{ $aktivitas['kategori_km'] ?? '-' }}</td>
-                            <td>{{ $aktivitas['sub_kategori_km'] ?? '-' }}</td>
-                            <td>{{ $aktivitas['judul_aktivitas'] ?? '-' }}</td>
-                            <td>{{ $aktivitas['tanggal_mulai'] ?? '-' }}</td>
-                            <td>{{ $aktivitas['tanggal_selesai'] ?? '-' }}</td>
+                            <td><div class="fw-bold">{{ $aktivitas['judul_aktivitas'] ?? '-' }}</div><div class="text-muted mt-1">{{ $aktivitas['kategori_km'] ?? '-' }} · {{ $aktivitas['sub_kategori_km'] ?? '-' }}</div></td>
+                            <td><div>{{ $aktivitas['tanggal_mulai'] ?? '-' }}</div><div class="text-muted mt-1">s.d. {{ $aktivitas['tanggal_selesai'] ?? '-' }}</div></td>
                             <td><span class="badge bg-success">{{ $aktivitas['status_progress'] ?? 'Accepted' }}</span></td>
                             <td>
                                 @if(!empty($aktivitas['bukti_url']))
@@ -683,7 +641,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center text-muted py-4">
+                            <td colspan="5" class="text-center text-muted py-4">
                                 Belum ada aktivitas yang diterima pada periode ini.
                             </td>
                         </tr>

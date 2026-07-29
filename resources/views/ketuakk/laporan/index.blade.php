@@ -72,14 +72,13 @@
     }
 
     .report-table th {
-        white-space: nowrap;
         vertical-align: middle;
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .report-table td {
         vertical-align: middle;
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .progress-soft {
@@ -103,7 +102,6 @@
         padding: 6px 10px;
         font-size: 12px;
         font-weight: 800;
-        white-space: nowrap;
     }
 
     .status-success {
@@ -145,8 +143,7 @@
 
     .detail-target-table th,
     .detail-target-table td {
-        font-size: 12px;
-        white-space: nowrap;
+        font-size: 14px;
         vertical-align: middle;
     }
 
@@ -176,7 +173,6 @@
         background: #F8FAFC;
         border: 1px solid #E2E8F0;
         color: #334155;
-        white-space: nowrap;
         font-size: 11px;
         font-weight: 700;
     }
@@ -600,7 +596,6 @@
         font-weight: 700;
         letter-spacing: .03em;
         text-transform: uppercase;
-        white-space: nowrap;
     }
 
     .ketuakk-report__table tbody tr:hover > td,
@@ -731,7 +726,6 @@
         color: #334155;
         font-size: 12px;
         font-weight: 500;
-        white-space: nowrap;
         font-variant-numeric: tabular-nums;
     }
 
@@ -881,6 +875,7 @@
             border-bottom: 0;
         }
     }
+    .ketuakk-report,.ketuakk-report__section,.ketuakk-report__category{min-width:0}.ketuakk-report__target-records{border-top:1px solid #D5DCE5}.ketuakk-report__target-record{padding:14px 16px 18px;border-bottom:1px solid #E5EAF0}.ketuakk-report__target-record header{display:flex;justify-content:space-between;gap:16px}.ketuakk-report__target-record h4{margin:2px 0;color:#1F2937;font-size:16px}.ketuakk-report__target-record header p{margin:0;color:#5B6472;font-size:14px;line-height:1.5}.ketuakk-report__target-record header>div:last-child{display:flex;gap:10px;align-items:center}.ketuakk-report__target-record dl{display:flex;gap:24px;margin:12px 0}.ketuakk-report__target-record dt{color:#5B6472;font-size:13px}.ketuakk-report__target-record dd{margin:2px 0 0;color:#1F2937;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}.ketuakk-report__target-progress{height:6px;overflow:hidden;border-radius:999px;background:#E5EAF0;margin-bottom:12px}.ketuakk-report__target-progress span{display:block;height:100%;background:#2457A6}.ketuakk-report__compact-table{width:100%;border-collapse:collapse;color:#374151;font-size:14px}.ketuakk-report__compact-table th,.ketuakk-report__compact-table td{padding:9px 10px;border-bottom:1px solid #E5EAF0;overflow-wrap:anywhere}.ketuakk-report__compact-table thead th{background:#EEF2F6;color:#374151;font-size:13px;text-align:left}.ketuakk-report__compact-table td:nth-child(2),.ketuakk-report__compact-table td:nth-child(3),.ketuakk-report__compact-table td:nth-child(4){text-align:right;font-weight:700;font-variant-numeric:tabular-nums}@media(max-width:700px){.ketuakk-report__target-record header{flex-direction:column}.ketuakk-report__target-record dl{flex-wrap:wrap}}
 </style>
 
 <section class="ketuakk-report" aria-labelledby="ketuakk-report-title">
@@ -1243,35 +1238,7 @@
                 </div>
             </div>
 
-            <div class="table-responsive ketuakk-report__scroll">
-                <table class="table align-middle mb-0 detail-target-table ketuakk-report__table ketuakk-report__table--detail">
-                    <thead>
-                        <tr>
-                            <th rowspan="2">No</th>
-                            <th rowspan="2">Sub Kategori / Jenis KM</th>
-                            <th rowspan="2">Keterangan</th>
-                            <th scope="colgroup" colspan="6" class="ketuakk-report__group-heading">Target KM</th>
-                            <th scope="colgroup" colspan="6" class="ketuakk-report__group-heading">Realisasi KM</th>
-                            <th rowspan="2">Sisa</th>
-                            <th rowspan="2">Progress</th>
-                            <th rowspan="2">Status</th>
-                        </tr>
-                        <tr>
-                            <th>TW 1</th>
-                            <th>TW 2</th>
-                            <th>TW 3</th>
-                            <th>TW 4</th>
-                            <th>Total Tahun</th>
-                            <th>Periode</th>
-                            <th>TW 1</th>
-                            <th>TW 2</th>
-                            <th>TW 3</th>
-                            <th>TW 4</th>
-                            <th>Total Tahun</th>
-                            <th>Periode</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            <div class="ketuakk-report__target-records">
                         @forelse($kategori['rows'] ?? [] as $row)
                             @php
                                 $statusClass = match($row['status'] ?? '') {
@@ -1281,91 +1248,11 @@
                                     default => 'status-warning',
                                 };
                             @endphp
-                            <tr>
-                                <td>{{ $row['no'] ?? '-' }}</td>
-                                <td class="fw-bold">{{ $row['sub_kategori'] ?? '-' }}</td>
-                                <td class="detail-description">{{ $row['keterangan'] ?? '-' }}</td>
-
-                                <td>{{ $row['target_tw1'] ?? 0 }}</td>
-                                <td>{{ $row['target_tw2'] ?? 0 }}</td>
-                                <td>{{ $row['target_tw3'] ?? 0 }}</td>
-                                <td>{{ $row['target_tw4'] ?? 0 }}</td>
-                                <td class="fw-bold">{{ $row['target_total_tahunan'] ?? 0 }}</td>
-                                <td class="fw-bold text-primary">{{ $row['target_periode'] ?? 0 }}</td>
-
-                                <td>{{ $row['realisasi_tw1'] ?? 0 }}</td>
-                                <td>{{ $row['realisasi_tw2'] ?? 0 }}</td>
-                                <td>{{ $row['realisasi_tw3'] ?? 0 }}</td>
-                                <td>{{ $row['realisasi_tw4'] ?? 0 }}</td>
-                                <td class="fw-bold text-success">{{ $row['realisasi_total_tahunan'] ?? 0 }}</td>
-                                <td class="fw-bold text-success">{{ $row['realisasi_periode'] ?? 0 }}</td>
-
-                                <td class="fw-bold text-warning">{{ $row['sisa_periode'] ?? 0 }}</td>
-                                <td>{{ $row['persentase'] ?? 0 }}%</td>
-                                <td>
-                                    <span class="ketuakk-report__status {{ ($row['status'] ?? '') === 'Tercapai' ? 'ketuakk-report__status--success' : 'ketuakk-report__status--warning' }}">
-                                        {{ $row['status'] ?? '-' }}
-                                    </span>
-                                </td>
-                            </tr>
+                            @php $rowProgress=min(max((float)($row['persentase']??0),0),100); @endphp
+                            <article class="ketuakk-report__target-record"><header><div><span>{{ $row['no']??'-' }}</span><h4>{{ $row['sub_kategori']??'-' }}</h4><p>{{ $row['keterangan']??'-' }}</p></div><div><span class="ketuakk-report__status {{ ($row['status']??'')==='Tercapai'?'ketuakk-report__status--success':'ketuakk-report__status--warning' }}">{{ $row['status']??'-' }}</span><strong>{{ $row['persentase']??0 }}%</strong></div></header><dl><div><dt>Total target</dt><dd>{{ $row['target_total_tahunan']??0 }}</dd></div><div><dt>Total realisasi</dt><dd>{{ $row['realisasi_total_tahunan']??0 }}</dd></div><div><dt>Sisa periode</dt><dd>{{ $row['sisa_periode']??0 }}</dd></div></dl><div class="ketuakk-report__target-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $rowProgress }}" aria-label="Progress {{ $row['sub_kategori']??'target' }} {{ $row['persentase']??0 }} persen"><span style="width:{{ $rowProgress }}%"></span></div><table class="ketuakk-report__compact-table"><thead><tr><th scope="col">Periode</th><th scope="col">Target</th><th scope="col">Realisasi</th><th scope="col">Sisa</th><th scope="col">Tenggat</th></tr></thead><tbody>@for($tw=1;$tw<=4;$tw++)@php $targetTw=(int)($row['target_tw'.$tw]??0);$realisasiTw=(int)($row['realisasi_tw'.$tw]??0); @endphp<tr><th scope="row">TW {{ $tw }}</th><td>{{ $targetTw }}</td><td>{{ $realisasiTw }}</td><td>{{ max($targetTw-$realisasiTw,0) }}</td><td>{{ $row['tanggal_mulai_tw'.$tw]??'-' }} → {{ $row['tanggal_selesai_tw'.$tw]??'-' }}</td></tr>@endfor</tbody></table></article>
                         @empty
-                            <tr>
-                                <td colspan="18" class="ketuakk-report__empty">
-                                    Belum ada detail target KM dalam kategori ini.
-                                </td>
-                            </tr>
+                            <div class="ketuakk-report__empty">Belum ada detail target KM dalam kategori ini.</div>
                         @endforelse
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="ketuakk-report__deadline">
-                <div class="ketuakk-report__deadline-title">Tenggat Penyelesaian per Triwulan</div>
-
-                <div class="table-responsive ketuakk-report__scroll">
-                    <table class="table table-sm align-middle mb-0 period-table ketuakk-report__table ketuakk-report__table--deadline">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Sub Kategori / Jenis KM</th>
-                                <th>TW 1</th>
-                                <th>TW 2</th>
-                                <th>TW 3</th>
-                                <th>TW 4</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($kategori['rows'] ?? [] as $row)
-                                <tr>
-                                    <td>{{ $row['no'] ?? '-' }}</td>
-                                    <td class="fw-bold">{{ $row['sub_kategori'] ?? '-' }}</td>
-                                    <td>
-                                        <span class="ketuakk-report__date-range">
-                                            {{ $row['tanggal_mulai_tw1'] ?? '-' }} → {{ $row['tanggal_selesai_tw1'] ?? '-' }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="ketuakk-report__date-range">
-                                            {{ $row['tanggal_mulai_tw2'] ?? '-' }} → {{ $row['tanggal_selesai_tw2'] ?? '-' }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="ketuakk-report__date-range">
-                                            {{ $row['tanggal_mulai_tw3'] ?? '-' }} → {{ $row['tanggal_selesai_tw3'] ?? '-' }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="ketuakk-report__date-range">
-                                            {{ $row['tanggal_mulai_tw4'] ?? '-' }} → {{ $row['tanggal_selesai_tw4'] ?? '-' }}
-                                        </span>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr><td colspan="6" class="ketuakk-report__empty">Belum ada tenggat penyelesaian pada kategori ini.</td></tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </section>
     @empty
